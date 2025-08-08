@@ -1,6 +1,2 @@
-VERSION=$(date "+%Y%m%d%H%M%S")
-
-docker build -t docker.radiohemp.buzzlabs.com.br/apps/fluffychat:$VERSION .
-docker push docker.radiohemp.buzzlabs.com.br/apps/fluffychat:$VERSION
-
-echo docker.radiohemp.buzzlabs.com.br/apps/fluffychat:$VERSION
+docker build --no-cache -t docker.radiohemp.buzzlabs.com.br/apps/fluffychat:release-prod -f Dockerfile .
+docker push docker.radiohemp.buzzlabs.com.br/apps/fluffychat:release-prod
