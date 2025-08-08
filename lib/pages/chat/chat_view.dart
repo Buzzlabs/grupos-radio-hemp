@@ -376,7 +376,8 @@ class ChatView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (controller.activeLive != null)
+                    if (controller.activeLive != null &&
+                        !controller.isLivePreviewOpen)
                       VideoStreaming(
                         title: controller.activeLive!.title,
                         playbackUrl: controller.activeLive!.playbackUrl,

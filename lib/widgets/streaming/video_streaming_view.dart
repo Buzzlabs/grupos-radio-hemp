@@ -32,7 +32,7 @@ class VideoStreamingView extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    final defaultWidth = isMobileMode ? screenWidth * 0.9 : screenWidth * 0.4;
+    final defaultWidth = isMobileMode ? screenWidth * 0.9 : screenWidth * 0.3;
     controller.initializeIfNeeded(defaultWidth);
 
     return ValueListenableBuilder<Offset>(
@@ -41,7 +41,8 @@ class VideoStreamingView extends StatelessWidget {
         return ValueListenableBuilder<double>(
           valueListenable: controller.widthNotifier,
           builder: (context, width, __) {
-            final height = width / (16 / 9);
+            const aspectRatio = 16 / 9;
+            final height = width / aspectRatio;
             final boxHeight = height + 50;
             final fixedLeft = (screenWidth - width) / 2;
 
@@ -78,24 +79,54 @@ class VideoStreamingView extends StatelessWidget {
                             isMobileMode,
                           );
                         },
-                        child: Row(
-                          children: [
-                            const Icon(Icons.fiber_manual_record,
-                                color: Colors.red),
-                            const SizedBox(width: 5),
-                            Text(
-                              title.isNotEmpty
-                                  ? '${(L10n.of(context).live).toUpperCase()} - $title'
-                                  : (L10n.of(context).live).toUpperCase(),
-                              style: TextStyle(
-                                color: theme.colorScheme.onSecondary,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
+                        child: SizedBox(
+                          width: width,
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.fiber_manual_record,
+                                color: Colors.red,
                               ),
-                            ),
-                            const Spacer(),
-                            if (isAdmin && !isPreview) _buildAdminMenu(context),
-                          ],
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Tooltip(
+                                    key: ValueKey('tooltip-$viewId-$title'),
+                                    message: title.isNotEmpty
+                                        ? '${(L10n.of(context).live).toUpperCase()} - $title'
+                                        : (L10n.of(context).live).toUpperCase(),
+                                    preferBelow: false,
+                                    verticalOffset: 20,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black87,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    textStyle:
+                                        const TextStyle(color: Colors.white),
+                                    child: Text(
+                                      title.isNotEmpty
+                                          ? '${(L10n.of(context).live).toUpperCase()} - $title'
+                                          : (L10n.of(context).live)
+                                              .toUpperCase(),
+                                      style: TextStyle(
+                                        color: theme.colorScheme.onSecondary,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign
+                                          .left, // garante alinhamento interno
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              if (isAdmin && !isPreview)
+                                _buildAdminMenu(context),
+                            ],
+                          ),
                         ),
                       ),
                     ),

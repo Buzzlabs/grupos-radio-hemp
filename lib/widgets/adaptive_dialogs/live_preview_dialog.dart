@@ -18,13 +18,13 @@ class LivePreviewDialog extends StatefulWidget {
     this.title,
   });
 
-  static void show(
+  static Future<void> show(
     BuildContext context, {
     required String roomId,
     required String roomName,
     String? title,
-  }) {
-    showDialog(
+  }) async {
+    await showDialog(
       context: context,
       useRootNavigator: true,
       builder: (_) => LivePreviewDialog(
@@ -51,6 +51,7 @@ class _LivePreviewDialogState extends State<LivePreviewDialog> {
   @override
   void initState() {
     super.initState();
+
     previewTitle = widget.title ?? '';
     titleController.text = previewTitle;
   }
@@ -196,9 +197,7 @@ class _LivePreviewDialogState extends State<LivePreviewDialog> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
+                    const SizedBox(height: 15),
                     Text(
                       latestDebugInfo ?? '',
                       style: TextStyle(
@@ -223,9 +222,17 @@ class _LivePreviewDialogState extends State<LivePreviewDialog> {
                                       EdgeInsets.symmetric(horizontal: 16.0),
                                   child: LinearProgressIndicator(),
                                 )
-                              : Text(
-                                  l10n.showLiveForRoom(widget.roomName),
-                                  style: const TextStyle(fontSize: 16),
+                              : Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0,
+                                  ),
+                                  child: Text(
+                                    l10n.showLiveForRoom(widget.roomName),
+                                    style: const TextStyle(fontSize: 16),
+                                    softWrap: true,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                         ),
                       ),

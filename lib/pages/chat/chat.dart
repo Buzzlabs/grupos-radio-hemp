@@ -118,6 +118,8 @@ class ChatController extends State<ChatPageWithRoom>
   late final FocusNode inputFocus;
   StreamSubscription<html.Event>? onFocusSub;
 
+  StreamSubscription? _liveWidgetsSubscription;
+
   Timer? typingCoolDown;
   Timer? typingTimeout;
   bool currentlyTyping = false;
@@ -173,6 +175,8 @@ class ChatController extends State<ChatPageWithRoom>
   String pendingText = '';
 
   bool showEmojiPicker = false;
+
+  bool isLivePreviewOpen = false;
 
   void recreateChat() async {
     final room = this.room;
@@ -518,6 +522,7 @@ class ChatController extends State<ChatPageWithRoom>
   @override
   void dispose() {
     timeline?.cancelSubscriptions();
+    _liveWidgetsSubscription?.cancel();
     timeline = null;
     inputFocus.removeListener(_inputFocusListener);
     onFocusSub?.cancel();
@@ -1337,17 +1342,6 @@ class ChatController extends State<ChatPageWithRoom>
     _displayChatDetailsColumn.value = !_displayChatDetailsColumn.value;
   }
 
-  void _updateLiveStatus(bool isActive) {
-    final currentStatus = VideoStreamingModel.liveStatus.value[room.id];
-    if (currentStatus != isActive) {
-      VideoStreamingModel.liveStatus.value = {
-        ...VideoStreamingModel.liveStatus.value,
-        room.id: isActive,
-      };
-    }
-    AudioState.mutedNotifier.value = isActive;
-  }
-
   void _updateActiveLive(VideoStreamingModel? live) {
     if (activeLive != live && mounted) {
       setState(() {
@@ -1359,7 +1353,7 @@ class ChatController extends State<ChatPageWithRoom>
   void _listenToLiveWidgets() {
     final client = Matrix.of(context).client;
 
-    client.onRoomState.stream.listen((event) {
+    _liveWidgetsSubscription = client.onRoomState.stream.listen((event) {
       if (event.roomId != room.id) return;
 
       final state = event.state;
@@ -1373,11 +1367,11 @@ class ChatController extends State<ChatPageWithRoom>
 
       if (data == null) {
         _updateActiveLive(null);
-        _updateLiveStatus(false);
+        AudioState.mutedNotifier.value = false;
       } else {
         final live = VideoStreamingModel.fromWidgetStateEvent(state);
         _updateActiveLive(live);
-        _updateLiveStatus(true);
+        AudioState.mutedNotifier.value = true;
       }
     });
   }
@@ -1389,7 +1383,6 @@ class ChatController extends State<ChatPageWithRoom>
     final event = stateEvents[VideoStreamingModel.stateKey];
     if (event == null) {
       _updateActiveLive(null);
-      _updateLiveStatus(false);
       return;
     }
 
@@ -1398,17 +1391,32 @@ class ChatController extends State<ChatPageWithRoom>
 
     if (data == null) {
       _updateActiveLive(null);
-      _updateLiveStatus(false);
     } else {
       final live = VideoStreamingModel.fromWidgetStateEvent(event);
       _updateActiveLive(live);
-      _updateLiveStatus(true);
+      AudioState.mutedNotifier.value = true;
     }
   }
 
   Future<void> closeLiveWidget() async {
+    final confirmed = await showOkCancelAlertDialog(
+      context: context,
+      title: L10n.of(context).confirm.toUpperCase(),
+      message: L10n.of(context).closeLiveConfirm,
+      okLabel: L10n.of(context).confirm,
+      cancelLabel: L10n.of(context).cancel,
+      isDestructive: true,
+    );
+
+    if (confirmed != OkCancelResult.ok) return;
+
+    final client = Matrix.of(context).client;
+    final room = client.getRoomById(roomId);
+
     try {
-      await VideoStreamingModel.removeLiveWidget(room);
+      if (room != null) {
+        await VideoStreamingModel.removeLiveWidget(room);
+      }
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -1422,7 +1430,7 @@ class ChatController extends State<ChatPageWithRoom>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(L10n.of(context).liveCloseError(e.toString)),
+            content: Text(L10n.of(context).liveCloseError(e.toString())),
             duration: const Duration(seconds: 3),
           ),
         );
@@ -1430,13 +1438,19 @@ class ChatController extends State<ChatPageWithRoom>
     }
   }
 
-  void editLiveWidget() {
-    LivePreviewDialog.show(
+  void editLiveWidget() async {
+    isLivePreviewOpen = true;
+    setState(() {});
+
+    await LivePreviewDialog.show(
       context,
       roomId: roomId,
       roomName: room.name,
       title: activeLive?.title,
     );
+
+    isLivePreviewOpen = false;
+    setState(() {});
   }
 
   @override
