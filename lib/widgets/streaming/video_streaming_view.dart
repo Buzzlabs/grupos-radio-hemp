@@ -89,22 +89,36 @@ class VideoStreamingView extends StatelessWidget {
                               ),
                               const SizedBox(width: 5),
                               Expanded(
-                                child: Tooltip(
-                                  key: ValueKey('tooltip-$viewId-$title'),
-                                  message: title.isNotEmpty
-                                      ? '${(L10n.of(context).live).toUpperCase()} - $title'
-                                      : (L10n.of(context).live).toUpperCase(),
-                                  child: Text(
-                                    title.isNotEmpty
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Tooltip(
+                                    key: ValueKey('tooltip-$viewId-$title'),
+                                    message: title.isNotEmpty
                                         ? '${(L10n.of(context).live).toUpperCase()} - $title'
                                         : (L10n.of(context).live).toUpperCase(),
-                                    style: TextStyle(
-                                      color: theme.colorScheme.onSecondary,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
+                                    preferBelow: false,
+                                    verticalOffset: 20,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black87,
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                    textStyle:
+                                        const TextStyle(color: Colors.white),
+                                    child: Text(
+                                      title.isNotEmpty
+                                          ? '${(L10n.of(context).live).toUpperCase()} - $title'
+                                          : (L10n.of(context).live)
+                                              .toUpperCase(),
+                                      style: TextStyle(
+                                        color: theme.colorScheme.onSecondary,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign
+                                          .left, // garante alinhamento interno
+                                    ),
                                   ),
                                 ),
                               ),
