@@ -1447,7 +1447,6 @@ class ChatController extends State<ChatPageWithRoom>
       roomId: roomId,
       roomName: room.name,
       title: activeLive?.title,
-      aspectRatio: activeLive?.aspectRatio,
     );
 
     isLivePreviewOpen = false;

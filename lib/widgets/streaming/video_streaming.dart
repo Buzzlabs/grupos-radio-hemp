@@ -14,7 +14,6 @@ import 'ivs_player.dart';
 class VideoStreaming extends StatefulWidget {
   final String playbackUrl;
   final String title;
-  final String aspectRatio;
   final bool isAdmin;
   final bool? isPreview;
   final void Function(String debugInfo)? onDebugInfoChanged;
@@ -26,7 +25,6 @@ class VideoStreaming extends StatefulWidget {
     required this.playbackUrl,
     required this.title,
     required this.isAdmin,
-    this.aspectRatio = '16:9',
     this.onClose,
     this.onEdit,
     this.isPreview = false,
@@ -40,10 +38,10 @@ class VideoStreaming extends StatefulWidget {
 class VideoStreamingController extends State<VideoStreaming> {
   final positionNotifier = ValueNotifier<Offset>(const Offset(16, 16));
   final widthNotifier = ValueNotifier<double>(0);
-  late double aspectRatioValue;
+  final aspectRatio = 16 / 9;
 
   double get width => widthNotifier.value;
-  double get height => width / aspectRatioValue;
+  double get height => width / aspectRatio;
   Offset get position => positionNotifier.value;
 
   bool get isPreview => widget.isPreview ?? false;
@@ -66,10 +64,8 @@ class VideoStreamingController extends State<VideoStreaming> {
   void resize(double deltaX, double screenWidth) {
     if (!mounted) return;
 
-    final maxWidthFactor = aspectRatioValue == 16 / 9 ? 0.65 : 0.55;
-
     final newWidth =
-        (width + deltaX).clamp(screenWidth * 0.3, screenWidth * maxWidthFactor);
+        (width + deltaX).clamp(screenWidth * 0.3, screenWidth * 0.65);
     widthNotifier.value = newWidth;
   }
 
@@ -90,8 +86,6 @@ class VideoStreamingController extends State<VideoStreaming> {
     super.initState();
     _widgetMounted = true;
 
-    aspectRatioValue = VideoStreamingModel.parseAspectRatio(widget.aspectRatio);
-
     viewId = 'ivs-player-${DateTime.now().millisecondsSinceEpoch}';
 
     _createHtmlElements();
@@ -100,18 +94,6 @@ class VideoStreamingController extends State<VideoStreaming> {
     Future.delayed(const Duration(milliseconds: 100), () {
       if (_widgetMounted) _initIvsPlayerAndStream();
     });
-  }
-
-  @override
-  void didUpdateWidget(covariant VideoStreaming oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (widget.aspectRatio != oldWidget.aspectRatio) {
-      final newAspectRatio =
-          VideoStreamingModel.parseAspectRatio(widget.aspectRatio);
-      aspectRatioValue = newAspectRatio;
-      setState(() {});
-    }
   }
 
   void _createHtmlElements() {

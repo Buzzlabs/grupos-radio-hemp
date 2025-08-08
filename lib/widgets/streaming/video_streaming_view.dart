@@ -41,7 +41,8 @@ class VideoStreamingView extends StatelessWidget {
         return ValueListenableBuilder<double>(
           valueListenable: controller.widthNotifier,
           builder: (context, width, __) {
-            final height = width / controller.aspectRatioValue;
+            const aspectRatio = 16 / 9;
+            final height = width / aspectRatio;
             final boxHeight = height + 50;
             final fixedLeft = (screenWidth - width) / 2;
 
@@ -89,6 +90,7 @@ class VideoStreamingView extends StatelessWidget {
                               const SizedBox(width: 5),
                               Expanded(
                                 child: Tooltip(
+                                  key: ValueKey('tooltip-$viewId-$title'),
                                   message: title.isNotEmpty
                                       ? '${(L10n.of(context).live).toUpperCase()} - $title'
                                       : (L10n.of(context).live).toUpperCase(),

@@ -10,21 +10,18 @@ class LivePreviewDialog extends StatefulWidget {
   final String roomId;
   final String roomName;
   final String? title;
-  final String? aspectRatio;
 
   const LivePreviewDialog({
     super.key,
     required this.roomId,
     required this.roomName,
     this.title,
-    this.aspectRatio = '16:9',
   });
 
   static Future<void> show(
     BuildContext context, {
     required String roomId,
     required String roomName,
-    String? aspectRatio,
     String? title,
   }) async {
     await showDialog(
@@ -34,7 +31,6 @@ class LivePreviewDialog extends StatefulWidget {
         roomId: roomId,
         roomName: roomName,
         title: title,
-        aspectRatio: aspectRatio ?? '16:9',
       ),
     );
   }
@@ -52,26 +48,12 @@ class _LivePreviewDialogState extends State<LivePreviewDialog> {
   String? titleError;
   String previewTitle = '';
 
-  late String aspectRatioString;
-  late double aspectRatioValue;
-
   @override
   void initState() {
     super.initState();
 
     previewTitle = widget.title ?? '';
     titleController.text = previewTitle;
-
-    aspectRatioString = widget.aspectRatio ?? '16:9';
-    aspectRatioValue = VideoStreamingModel.parseAspectRatio(aspectRatioString);
-  }
-
-  void _changeAspectRatio(String newAspectRatio) {
-    setState(() {
-      aspectRatioString = newAspectRatio;
-      aspectRatioValue =
-          VideoStreamingModel.parseAspectRatio(aspectRatioString);
-    });
   }
 
   Future<void> _submit() async {
@@ -94,7 +76,6 @@ class _LivePreviewDialogState extends State<LivePreviewDialog> {
     final model = VideoStreamingModel(
       title: title,
       playbackUrl: playbackUrl,
-      aspectRatio: aspectRatioString,
     );
 
     if (room != null) {
@@ -198,7 +179,7 @@ class _LivePreviewDialogState extends State<LivePreviewDialog> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: AspectRatio(
-                        aspectRatio: aspectRatioValue,
+                        aspectRatio: 16 / 9,
                         child: VideoStreaming(
                           title: previewTitle,
                           playbackUrl: playbackUrl,
@@ -224,59 +205,6 @@ class _LivePreviewDialogState extends State<LivePreviewDialog> {
                         fontSize: 12,
                       ),
                       textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () => _changeAspectRatio('16:9'),
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: aspectRatioString == '16:9'
-                                  ? theme.colorScheme.primary
-                                  : Colors.transparent,
-                              side: BorderSide(
-                                color: theme.colorScheme.tertiary,
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                            ),
-                            child: Text(
-                              '16:9',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: aspectRatioString == '16:9'
-                                    ? theme.colorScheme.onPrimary
-                                    : theme.colorScheme.primary,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () => _changeAspectRatio('3:2'),
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: aspectRatioString == '3:2'
-                                  ? theme.colorScheme.primary
-                                  : Colors.transparent,
-                              side: BorderSide(
-                                color: theme.colorScheme.tertiary,
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                            ),
-                            child: Text(
-                              '3:2',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: aspectRatioString == '3:2'
-                                    ? theme.colorScheme.onPrimary
-                                    : theme.colorScheme.primary,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                     const SizedBox(height: 32),
                     Padding(
