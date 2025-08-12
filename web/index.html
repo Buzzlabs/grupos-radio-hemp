@@ -1,132 +1,150 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
     <base href="$FLUTTER_BASE_HREF" />
 
     <meta charset="UTF-8" />
     <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
 
-    <!-- Open Graph -->
     <meta property="og:title" content="Radio Hemp" />
-    <meta
-      property="og:description"
-      content="A frequência da cannabis legal no Brasil."
-    />
-    <meta
-      property="og:image"
-      content="https://grupos.radiohemp.com/icons/radio-icon-192.png"
-    />
+    <meta property="og:description" content="A frequência da cannabis legal no Brasil." />
+    <meta property="og:image" content="https://grupos.radiohemp.com/icons/radio-icon-192.png" />
     <meta property="og:url" content="https://grupos.radiohemp.com/" />
     <meta property="og:type" content="website" />
 
-    <!-- Twitter Card (opcional, mas recomendado) -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Radio Hemp" />
-    <meta
-      name="twitter:description"
-      content="A frequência da cannabis legal no Brasil."
-    />
-    <meta
-      name="twitter:image"
-      content="https://grupos.radiohemp.com/icons/radio-icon-192.png"
-    />
+    <meta name="twitter:description" content="A frequência da cannabis legal no Brasil." />
+    <meta name="twitter:image" content="https://grupos.radiohemp.com/icons/radio-icon-192.png" />
 
-    <meta
-      name="description"
-      content="A frequência da cannabis legal no Brasil."
-    />
+    <meta name="description" content="A frequência da cannabis legal no Brasil." />
 
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="RadioHemp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="apple-touch-icon" href="icons/radio-icon-192.png" />
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.ico" />
+
+    <link rel="apple-touch-icon" href="./icons/radio-icon-192.png" />
+    <link rel="icon" type="image/png" href="./favicon.ico" />
+    <link rel="manifest" href="./manifest.json" />
+
     <title>Radio Hemp</title>
-    <link rel="manifest" href="manifest.json" />
-    <link rel="stylesheet" type="text/css" href="splash/style.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap"
-      rel="stylesheet"
-/>
-    <!-- This script adds the flutter initialization JS code -->
-    <script src="flutter.js" defer></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet" />
+
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #ffffff;
+        background-size: 100% 100%;
+      }
+      #splash {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+      }
+      .logo {
+        width: 50vw;
+        max-width: 250px;
+        height: auto;
+        object-fit: contain;
+        animation: pulse 1.2s ease-in-out infinite;
+      }
+      #messages {
+        font-family: 'Fredoka', sans-serif;
+        font-size: 1.3rem;
+        color: #888;
+        height: 30px;
+        width: 100%;
+        text-align: center;
+        overflow: hidden;
+      }
+      .message-slide {
+        animation: slideDownFade 0.5s ease;
+      }
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.07); }
+      }
+      @keyframes slideDownFade {
+        from { transform: translateY(-100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+      @media (prefers-color-scheme: dark) {
+        body { background-color: #212529; }
+      }
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="./splash/style.css" />
+
+    <script src="./flutter.js" defer></script>
     <script src="https://player.live-video.net/1.30.0/amazon-ivs-player.min.js"></script>
   </head>
 
- <body>
-  <script>
-    window.addEventListener('load', function (ev) {
-      {{flutter_js}}
-      {{flutter_build_config}}
+  <body>
+    <script>
+      window.addEventListener('load', function () {
+        {{flutter_js}}
+        {{flutter_build_config}}
 
-      _flutter.loader.load({
-        serviceWorker: {
-          serviceWorkerVersion: {{flutter_service_worker_version}},
-          },
-        onEntrypointLoaded: function (engineInitializer) {
-          engineInitializer.initializeEngine({ useColorEmoji: true }).then(function (appRunner) {
-            appRunner.runApp();
-          });
-        }
+        _flutter.loader.load({
+          serviceWorker: { serviceWorkerVersion: {{flutter_service_worker_version}} },
+          onEntrypointLoaded: function (engineInitializer) {
+            engineInitializer.initializeEngine({ useColorEmoji: true }).then(function (appRunner) {
+              appRunner.runApp();
+            });
+          }
         });
 
-    const messages = [
-      "Sintonizando na frequência... 📻",
-      "Está preparado? 👀",
-      "Conectando com a galera... 🌿",
-      "Ajustando o volume... 🔊",
-      "Aquecendo para a live... 🔥",
-      "Carregando o conteúdo... ⏳",
-      "Entrando no ritmo... 🎙️",
-      "Preparando a próxima batida... 🎼",
-      "Deixando tudo no ponto... 🎚️",
-      "Aquecendo o estúdio... 🎛️",
-    ];
+        const messages = [
+          "Sintonizando na frequência... 📻",
+          "Está preparado? 👀",
+          "Conectando com a galera... 🌿",
+          "Ajustando o volume... 🔊",
+          "Aquecendo para a live... 🔥",
+          "Carregando o conteúdo... ⏳",
+          "Entrando no ritmo... 🎙️",
+          "Preparando a próxima batida... 🎼",
+          "Deixando tudo no ponto... 🎚️",
+          "Aquecendo o estúdio... 🎛️",
+        ];
 
-    const container = document.getElementById("messages");
-    let index = 0;
+        const container = document.getElementById("messages");
+        let index = 0;
 
-    function showNextMessage() {
-      const newMessage = document.createElement("div");
-      newMessage.classList.add("message-slide");
-      newMessage.textContent = messages[index];
-    
-      while (container.firstChild) {
-        container.removeChild(container.firstChild);
-      }
-    
-      container.appendChild(newMessage);
-    
-      index = (index + 1) % messages.length;
-    }
+        function showNextMessage() {
+          const el = document.createElement("div");
+          el.classList.add("message-slide");
+          el.textContent = messages[index];
 
-    showNextMessage();
+          while (container.firstChild) container.removeChild(container.firstChild);
+          container.appendChild(el);
 
-    setInterval(showNextMessage, 1500);
-    });
-  </script>
+          index = (index + 1) % messages.length;
+        }
 
-  <div id="splash">
-    <img class="logo pulse" src="splash/img/light-1x.svg" alt="Logo Radio Hemp" />
-  <div id="messages">
-    <div id="messageText" class="message-slide"></div>
-  </div>
-</div>
+        showNextMessage();
+        setInterval(showNextMessage, 1500);
+      });
+    </script>
 
-</body>
+    <div id="splash">
+      <img
+        class="logo pulse"
+        src="./splash/img/light-1x.svg"
+        alt="Logo Radio Hemp"
+        width="250" height="250" 
+        style="max-width:250px;width:50vw;height:auto"
+      />
+      <div id="messages">
+        <div id="messageText" class="message-slide"></div>
+      </div>
+    </div>
+  </body>
 </html>
