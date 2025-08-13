@@ -119,7 +119,7 @@ class LoginView extends StatelessWidget {
                           prefixIcon: const Icon(Icons.account_box_outlined),
                           errorText: controller.usernameError,
                           errorStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
+                            color: Theme.of(context).colorScheme.error,
                           ),
                           labelText: L10n.of(context).emailOrUsername,
                         ),
@@ -147,7 +147,7 @@ class LoginView extends StatelessWidget {
                           prefixIcon: const Icon(Icons.lock_outlined),
                           errorText: controller.passwordError,
                           errorStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
+                            color: Theme.of(context).colorScheme.error,
                           ),
                           suffixIcon: IconButton(
                             onPressed: controller.toggleShowPassword,

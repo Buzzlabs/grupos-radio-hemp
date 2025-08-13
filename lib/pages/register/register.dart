@@ -164,12 +164,33 @@ class RegisterController extends State<Register> {
   }
 
   Future<bool?> _waitForUser(BuildContext context) {
+    final theme = Theme.of(context);
     return showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
         title: Text(L10n.of(context).dialogVerifyEmailTitle.toUpperCase()),
-        content: Text(L10n.of(context).dialogVerifyEmailContent),
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 256),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                L10n.of(context).dialogVerifyEmailContent,
+                style:
+                    TextStyle(color: theme.colorScheme.onSurface, fontSize: 18),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                L10n.of(context).checkSpam,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ],
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),

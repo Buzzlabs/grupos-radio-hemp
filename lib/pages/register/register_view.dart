@@ -117,7 +117,7 @@ class RegisterView extends StatelessWidget {
                           prefixIcon: const Icon(Icons.email_outlined),
                           errorText: controller.emailError,
                           errorStyle: TextStyle(
-                            color: theme.colorScheme.secondary,
+                            color: theme.colorScheme.error,
                           ),
                           labelText: L10n.of(context).email,
                         ),
@@ -143,7 +143,7 @@ class RegisterView extends StatelessWidget {
                           prefixIcon: const Icon(Icons.account_box_outlined),
                           errorText: controller.usernameError,
                           errorStyle: TextStyle(
-                            color: theme.colorScheme.secondary,
+                            color: theme.colorScheme.error,
                           ),
                           labelText: L10n.of(context).username,
                         ),
@@ -170,7 +170,7 @@ class RegisterView extends StatelessWidget {
                           prefixIcon: const Icon(Icons.lock_outlined),
                           errorText: controller.passwordError,
                           errorStyle: TextStyle(
-                            color: theme.colorScheme.secondary,
+                            color: theme.colorScheme.error,
                           ),
                           suffixIcon: IconButton(
                             onPressed: controller.toggleShowPassword,

@@ -47,7 +47,7 @@ Future<String?> showTextInputDialog({
             ),
           ),
           content: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 256),
+            constraints: const BoxConstraints(maxWidth: 285),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -68,6 +68,7 @@ Future<String?> showTextInputDialog({
                       maxLines: maxLines,
                       maxLength: maxLength,
                       keyboardType: keyboardType,
+                      obscureText: obscureText,
                     );
                   },
                 ),

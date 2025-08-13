@@ -182,7 +182,7 @@ class LoginController extends State<Login> {
         useRootNavigator: false,
         context: context,
         title: L10n.of(context).passwordForgotten,
-        message: L10n.of(context).enterAnEmailAddress,
+        message: L10n.of(context).enterYourEmailAdress,
         okLabel: L10n.of(context).ok,
         cancelLabel: L10n.of(context).cancel,
         initialText:
@@ -203,21 +203,28 @@ class LoginController extends State<Login> {
     final password = await showTextInputDialog(
       useRootNavigator: false,
       context: context,
-      title: L10n.of(context).passwordForgotten,
-      message: L10n.of(context).chooseAStrongPassword,
+      title: L10n.of(context).passwordForgotten.toUpperCase(),
+      message: L10n.of(context).pleaseEnterYourNewPassword,
       okLabel: L10n.of(context).ok,
       cancelLabel: L10n.of(context).cancel,
       hintText: '******',
       obscureText: true,
       minLines: 1,
       maxLines: 1,
+      validator: (input) {
+        if (!passwordIsValid(input.trim())) {
+          return L10n.of(context).pleaseUseAStrongPasswordShort;
+        }
+        return null;
+      },
     );
     if (password == null) return;
     final ok = await showOkAlertDialog(
       useRootNavigator: false,
       context: context,
-      title: L10n.of(context).weSentYouAnEmail,
+      title: L10n.of(context).weSentYouAnEmail.toUpperCase(),
       message: L10n.of(context).pleaseClickOnLink,
+      detail: L10n.of(context).checkSpam,
       okLabel: L10n.of(context).iHaveClickedOnLink,
     );
     if (ok != OkCancelResult.ok) return;
@@ -248,6 +255,22 @@ class LoginController extends State<Login> {
       passwordController.text = password;
       login();
     }
+  }
+
+  bool passwordIsValid(String password) {
+    if (password.isEmpty) {
+      return false;
+    }
+
+    final validPasswordRegex = RegExp(
+      r'^(?=.*[0-9])(?=.*[!@#\$%^&*()_+{}\[\]:;<>,.?~\\/-])[A-Za-z\d!@#\$%^&*()_+{}\[\]:;<>,.?~\\/-]{6,}$',
+    );
+
+    if (!validPasswordRegex.hasMatch(password)) {
+      return false;
+    }
+
+    return true;
   }
 
   static int sendAttempt = 0;

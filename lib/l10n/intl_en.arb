@@ -981,6 +981,7 @@
     "type": "String",
     "placeholders": {}
   },
+  "enterYourEmailAdress": "Enter your email address",
   "homeserver": "Homeserver",
   "@homeserver": {},
   "enterYourHomeserver": "Enter your homeserver",
@@ -1656,6 +1657,7 @@
     "type": "String",
     "placeholders": {}
   },
+  "pleaseEnterYourNewPassword": "Please enter your new password",
   "pleaseEnterYourPin": "Please enter your pin",
   "@pleaseEnterYourPin": {
     "type": "String",
@@ -3385,6 +3387,7 @@
   "errorGeneric": "Oops... something went wrong! Please try again later",
   "dialogVerifyEmailTitle": "Verify your email",
   "dialogVerifyEmailContent": "Click the verification link that was sent",
+  "checkSpam": "Can't find it? Check your spam folder and mark it as 'Not junk'",
   "buttonOkClicked": "Ok, I’ve clicked it",
   "errorUsernameInUse": "This username is already taken",
   "errorInvalidUsername": "Invalid username format",
@@ -3399,6 +3402,7 @@
   "createAnAccountPrompt": "Create an account",
   "signUp": "Sign up",
   "pleaseUseAStrongPassword": "Use at least 6 characters, including a number and a special character.",
+  "pleaseUseAStrongPasswordShort": "Use at least 6 characters, including a number and a special character.",
   "joinTheTransformation": "Join the transformation!",
   "loading": "Loading...",
   "untitled": "Untitled",

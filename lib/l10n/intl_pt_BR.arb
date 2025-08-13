@@ -968,6 +968,7 @@
         "type": "String",
         "placeholders": {}
     },
+    "enterYourEmailAdress": "Digite o endereço de e-mail da sua conta",
     "homeserver": "Servidor de origem",
     "@homeserver": {},
     "enterYourHomeserver": "Digite seu servidor de origem",
@@ -1643,6 +1644,7 @@
     "type": "String",
     "placeholders": {}
   },
+  "pleaseEnterYourNewPassword": "Por favor, insira a nova senha",
   "pleaseEnterYourPin": "Por favor, insira seu PIN",
   "@pleaseEnterYourPin": {
     "type": "String",
@@ -3287,6 +3289,7 @@
 "errorGeneric": "Ops... algo deu errado! Tente novamente mais tarde!",
 "dialogVerifyEmailTitle": "Verifique seu e-mail",
 "dialogVerifyEmailContent": "Clique no link de verificação que foi enviado",
+"checkSpam": "Não achou? Olhe na caixa de spam e marque 'Não é lixo eletrônico'",
 "buttonOkClicked": "Ok, já cliquei",
 "errorUsernameInUse": "Esse nome de usuário já está sendo usado",
 "errorInvalidUsername": "Formato de nome de usuário inválido",
@@ -3301,6 +3304,7 @@
 "createAnAccountPrompt": "Crie uma conta",
 "signUp": "Cadastrar",
 "pleaseUseAStrongPassword": "Mínimo de 6 letras, 1 número e 1 símbolo.",
+"pleaseUseAStrongPasswordShort": "Min 6 letras, 1 num e 1 símbolo.",
 "joinTheTransformation": "Faça parte da transformação!",
 "loading": "Carregando...",
 "untitled": "Sem título",

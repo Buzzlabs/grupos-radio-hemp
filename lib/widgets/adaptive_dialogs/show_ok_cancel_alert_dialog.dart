@@ -58,6 +58,7 @@ Future<OkCancelResult?> showOkAlertDialog({
   required BuildContext context,
   required String title,
   String? message,
+  String? detail,
   String? okLabel,
   bool useRootNavigator = true,
 }) =>
@@ -71,9 +72,12 @@ Future<OkCancelResult?> showOkAlertDialog({
         ),
         content: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 256),
-          child: message == null
-              ? null
-              : SelectableLinkify(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (message != null)
+                SelectableLinkify(
                   text: message,
                   textScaleFactor: MediaQuery.textScalerOf(context).scale(1),
                   linkStyle: TextStyle(
@@ -82,9 +86,22 @@ Future<OkCancelResult?> showOkAlertDialog({
                   ),
                   options: const LinkifyOptions(humanize: false),
                   onOpen: (url) => UrlLauncher(context, url.url).launchUrl(),
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontSize: 18,
+                  ),
                 ),
+              if (detail != null) ...[
+                const SizedBox(height: 8),
+                Text(
+                  detail,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ],
+            ],
+          ),
         ),
         actions: [
           AdaptiveDialogAction(
