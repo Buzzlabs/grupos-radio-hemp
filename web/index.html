@@ -40,6 +40,7 @@
         background: #ffffff;
         background-size: 100% 100%;
       }
+
       #splash {
         position: absolute;
         inset: 0;
@@ -48,14 +49,19 @@
         align-items: center;
         justify-content: center;
         gap: 40px;
+        transition: opacity 0.6s ease;
+        background: inherit;
       }
+
       .logo {
         width: 50vw;
         max-width: 250px;
         height: auto;
         object-fit: contain;
         animation: pulse 1.2s ease-in-out infinite;
+        transition: opacity 0.4s ease;
       }
+
       #messages {
         font-family: 'Fredoka', sans-serif;
         font-size: 1.3rem;
@@ -65,24 +71,35 @@
         text-align: center;
         overflow: hidden;
       }
+
       .message-slide {
         animation: slideDownFade 0.5s ease;
       }
+
+      .fade-out .logo {
+        opacity: 0;
+      }
+
+      .fade-out {
+        opacity: 0;
+      }
+
       @keyframes pulse {
         0%, 100% { transform: scale(1); }
         50% { transform: scale(1.07); }
       }
+
       @keyframes slideDownFade {
         from { transform: translateY(-100%); opacity: 0; }
         to { transform: translateY(0); opacity: 1; }
       }
+
       @media (prefers-color-scheme: dark) {
         body { background-color: #212529; }
       }
     </style>
 
     <link rel="stylesheet" type="text/css" href="./splash/style.css" />
-
     <script src="./flutter.js" defer></script>
     <script src="https://player.live-video.net/1.30.0/amazon-ivs-player.min.js"></script>
   </head>
@@ -98,6 +115,19 @@
           onEntrypointLoaded: function (engineInitializer) {
             engineInitializer.initializeEngine({ useColorEmoji: true }).then(function (appRunner) {
               appRunner.runApp();
+
+              const checkInterval = setInterval(() => {
+                const flutterRoot = document.querySelector('flt-glass-pane, canvas');
+                if (flutterRoot && flutterRoot.offsetHeight > 0) {
+                  clearInterval(checkInterval);
+
+                  const splash = document.getElementById("splash");
+                  if (splash) {
+                    splash.classList.add('fade-out');
+                    splash.addEventListener('transitionend', () => splash.remove());
+                  }
+                }
+              }, 100);
             });
           }
         });
@@ -141,7 +171,6 @@
         alt="Logo Radio Hemp"
         width="250"
         height="250"
-        style="max-width:250px;width:50vw;height:auto"
       />
       <div id="messages">
         <div id="messageText" class="message-slide"></div>
