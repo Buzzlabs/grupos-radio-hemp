@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluffychat/l10n/l10n.dart';
-import 'package:web/web.dart' as web;
 
 class AudioPlayerStreaming extends StatefulWidget {
   const AudioPlayerStreaming({super.key});
@@ -41,29 +39,12 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
   static const double _paddingValue = 15.0;
   static const double _borderRadius = 12.0;
 
-  bool get _isIOS => defaultTargetPlatform == TargetPlatform.iOS;
-
-  void _setHtmlAudioMuted(bool muted) {
-    try {
-      final audios = web.document.getElementsByTagName('audio');
-      for (var i = 0; i < audios.length; i++) {
-        final el = audios.item(i);
-        if (el is web.HTMLAudioElement) {
-          el.muted = muted;
-        }
-      }
-    } catch (_) {}
-  }
-
   @override
   void initState() {
     super.initState();
 
     AudioState.mutedNotifier.value = true;
     volume = 0.0;
-    if (_isIOS) {
-      _setHtmlAudioMuted(true);
-    }
 
     _initAudio();
     _fetchNowPlaying();
@@ -72,16 +53,14 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
     _startProgressTimer();
 
     _muteListener = () async {
-      if (!_isIOS) {
-        if (AudioState.mutedNotifier.value) {
-          _lastNonZeroVolume = volume > 0 ? volume : _lastNonZeroVolume;
-          volume = 0.0;
-          await player.setVolume(0.0);
-        } else {
-          final v = _lastNonZeroVolume > 0 ? _lastNonZeroVolume : 0.8;
-          volume = v;
-          await player.setVolume(v);
-        }
+      if (AudioState.mutedNotifier.value) {
+        _lastNonZeroVolume = volume > 0 ? volume : _lastNonZeroVolume;
+        volume = 0.0;
+        await player.setVolume(0.0);
+      } else {
+        final v = _lastNonZeroVolume > 0 ? _lastNonZeroVolume : 0.8;
+        volume = v;
+        await player.setVolume(v);
       }
       if (mounted) setState(() {});
     };
@@ -214,10 +193,11 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
 
                           if (isMutedNow) {
                             AudioState.mutedNotifier.value = false;
-                            if (_isIOS) _setHtmlAudioMuted(false);
 
                             if (!_everPlayed) {
-                              player.play();
+                              try {
+                                await player.play();
+                              } catch (_) {}
                               _everPlayed = true;
                             }
 
@@ -225,6 +205,7 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
                                 ? _lastNonZeroVolume
                                 : 0.8;
                             volume = v;
+
                             await player.setVolume(v);
 
                             if (player.processingState ==
@@ -239,7 +220,7 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
                             _lastNonZeroVolume =
                                 volume > 0 ? volume : _lastNonZeroVolume;
                             AudioState.mutedNotifier.value = true;
-                            if (_isIOS) _setHtmlAudioMuted(true);
+                            volume = 0.0;
                             await player.setVolume(0.0);
                           }
 
@@ -270,36 +251,34 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
                           value: volume,
                           min: 0,
                           max: 1,
-                          onChanged: _isIOS
-                              ? null
-                              : (v) async {
-                                  volume = v;
-                                  await player.setVolume(v);
+                          onChanged: (v) async {
+                            volume = v;
+                            await player.setVolume(v);
 
-                                  if (v == 0) {
-                                    if (!AudioState.mutedNotifier.value) {
-                                      AudioState.mutedNotifier.value = true;
-                                    }
-                                  } else {
-                                    _lastNonZeroVolume = v;
-                                    if (AudioState.mutedNotifier.value) {
-                                      AudioState.mutedNotifier.value = false;
-                                    }
-                                    if (!_everPlayed) {
-                                      if (player.processingState ==
-                                              ProcessingState.idle ||
-                                          player.processingState ==
-                                              ProcessingState.loading) {
-                                        try {
-                                          await player.load();
-                                        } catch (_) {}
-                                      }
-                                      await player.play();
-                                      _everPlayed = true;
-                                    }
-                                  }
-                                  if (mounted) setState(() {});
-                                },
+                            if (v == 0) {
+                              if (!AudioState.mutedNotifier.value) {
+                                AudioState.mutedNotifier.value = true;
+                              }
+                            } else {
+                              _lastNonZeroVolume = v;
+                              if (AudioState.mutedNotifier.value) {
+                                AudioState.mutedNotifier.value = false;
+                              }
+                              if (!_everPlayed) {
+                                if (player.processingState ==
+                                        ProcessingState.idle ||
+                                    player.processingState ==
+                                        ProcessingState.loading) {
+                                  try {
+                                    await player.load();
+                                  } catch (_) {}
+                                }
+                                await player.play();
+                                _everPlayed = true;
+                              }
+                            }
+                            if (mounted) setState(() {});
+                          },
                         ),
                       ),
                     ),
