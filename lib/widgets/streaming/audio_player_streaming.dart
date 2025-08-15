@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:js_interop';
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluffychat/l10n/l10n.dart';
+import 'package:web/web.dart' as web;
 
 class AudioPlayerStreaming extends StatefulWidget {
   const AudioPlayerStreaming({super.key});
@@ -15,9 +19,10 @@ class AudioPlayerStreaming extends StatefulWidget {
 
 class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
   final player = AudioPlayer();
+  web.HTMLAudioElement? _htmlAudioElement;
 
   double volume = 0.0;
-  double _lastNonZeroVolume = 0.8;
+  double _lastNonZeroVolume = 0.3;
   bool _everPlayed = false;
 
   String title = 'Carregando...';
@@ -32,6 +37,7 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
   String? _lastSongTitle;
 
   VoidCallback? _muteListener;
+  web.EventListener? _iosUnlockHandler;
 
   static const double _artSize = 70.0;
   static const double _buttonSize = 40.0;
@@ -39,12 +45,18 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
   static const double _paddingValue = 15.0;
   static const double _borderRadius = 12.0;
 
+  bool get isIOSWeb {
+    if (!kIsWeb) return false;
+    return true;
+  }
+
   @override
   void initState() {
     super.initState();
 
     AudioState.mutedNotifier.value = true;
     volume = 0.0;
+    _lastNonZeroVolume = 0.3;
 
     _initAudio();
     _fetchNowPlaying();
@@ -53,24 +65,155 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
     _startProgressTimer();
 
     _muteListener = () async {
-      if (AudioState.mutedNotifier.value) {
-        _lastNonZeroVolume = volume > 0 ? volume : _lastNonZeroVolume;
-        volume = 0.0;
-        await player.setVolume(0.0);
-      } else {
-        final v = _lastNonZeroVolume > 0 ? _lastNonZeroVolume : 0.8;
-        volume = v;
-        await player.setVolume(v);
-      }
-      if (mounted) setState(() {});
+      await _handleMuteChange();
     };
-
     AudioState.mutedNotifier.addListener(_muteListener!);
   }
 
   void _initAudio() async {
-    await player.setUrl(dotenv.env['AUDIO_PLAYER_URL'] ?? '');
-    await player.setVolume(volume);
+    final streamUrl = dotenv.env['AUDIO_PLAYER_URL'] ?? '';
+
+    if (isIOSWeb) {
+      try {
+        _htmlAudioElement = web.HTMLAudioElement();
+        final el = _htmlAudioElement!;
+        el.src = streamUrl;
+        el.preload = 'none';
+        el.crossOrigin = 'anonymous';
+        el.muted = true;
+        el.setAttribute('playsinline', 'true');
+        el.setAttribute('webkit-playsinline', 'true');
+
+        el.style.position = 'fixed';
+        el.style.left = '-9999px';
+        el.style.opacity = '0';
+
+        el.addEventListener(
+          'error',
+          ((web.Event event) {
+            debugPrint('Erro no HTML Audio: $event');
+          }).toJS,
+        );
+
+        web.document.body!.appendChild(el);
+        el.load();
+
+        _installIOSAudioUnlock();
+      } catch (e) {
+        debugPrint('Erro ao criar HTMLAudioElement (iOS): $e');
+      }
+    } else {
+      try {
+        await player.setUrl(streamUrl);
+        await player.setVolume(volume);
+      } catch (e) {
+        debugPrint('Erro ao inicializar just_audio: $e');
+      }
+    }
+  }
+
+  void _installIOSAudioUnlock() {
+    if (!isIOSWeb || _htmlAudioElement == null) return;
+
+    _iosUnlockHandler = ((web.Event e) {
+      try {
+        _htmlAudioElement!.muted = true;
+        _htmlAudioElement!.play().toDart.then((_) {
+          _htmlAudioElement!.pause();
+          _htmlAudioElement!.currentTime = 0;
+        }).catchError((_) {});
+      } finally {
+        if (_iosUnlockHandler != null) {
+          web.window
+              .removeEventListener('touchstart', _iosUnlockHandler!, true.toJS);
+          web.window
+              .removeEventListener('touchend', _iosUnlockHandler!, true.toJS);
+          web.window.removeEventListener(
+              'pointerdown', _iosUnlockHandler!, true.toJS);
+          web.window
+              .removeEventListener('click', _iosUnlockHandler!, true.toJS);
+          _iosUnlockHandler = null;
+        }
+      }
+    }).toJS;
+
+    web.window.addEventListener('touchstart', _iosUnlockHandler, true.toJS);
+    web.window.addEventListener('touchend', _iosUnlockHandler, true.toJS);
+    web.window.addEventListener('pointerdown', _iosUnlockHandler, true.toJS);
+    web.window.addEventListener('click', _iosUnlockHandler, true.toJS);
+  }
+
+  Future<void> _handleMuteChange() async {
+    final shouldMute = AudioState.mutedNotifier.value;
+
+    try {
+      if (isIOSWeb && _htmlAudioElement != null) {
+        _htmlAudioElement!.muted = shouldMute;
+        if (!shouldMute) {
+          volume = (_lastNonZeroVolume > 0 ? _lastNonZeroVolume : 0.3);
+        }
+        if (mounted) setState(() {});
+        return;
+      }
+
+      if (shouldMute) {
+        _lastNonZeroVolume = volume > 0 ? volume : _lastNonZeroVolume;
+        volume = 0.0;
+        await player.setVolume(0.0);
+      } else {
+        final targetVolume = _lastNonZeroVolume > 0 ? _lastNonZeroVolume : 0.3;
+        volume = targetVolume;
+        await player.setVolume(targetVolume);
+
+        if (!_everPlayed) {
+          try {
+            if (player.processingState == ProcessingState.idle ||
+                player.processingState == ProcessingState.loading) {
+              await player.load();
+            }
+            await player.play();
+            _everPlayed = true;
+          } catch (e) {
+            debugPrint('Erro ao iniciar reprodução: $e');
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Erro ao mutar/desmutar: $e');
+    }
+
+    if (mounted) setState(() {});
+  }
+
+  Future<void> _toggleMuteAndMaybePlay() async {
+    if (!isIOSWeb || _htmlAudioElement == null) return;
+
+    final el = _htmlAudioElement!;
+    final wasMuted = AudioState.mutedNotifier.value;
+
+    if (wasMuted) {
+      el.muted = false;
+
+      if (el.readyState < 2) {
+        el.load();
+      }
+
+      try {
+        await el.play().toDart;
+        _everPlayed = true;
+        AudioState.mutedNotifier.value = false;
+      } catch (e) {
+        debugPrint('iOS: play() rejeitado: $e');
+      }
+    } else {
+      try {
+        el.pause();
+      } catch (_) {}
+      el.muted = true;
+      AudioState.mutedNotifier.value = true;
+    }
+
+    if (mounted) setState(() {});
   }
 
   void _startProgressTimer() {
@@ -121,7 +264,8 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
           });
         }
       }
-    } catch (_) {
+    } catch (e) {
+      debugPrint('Erro ao buscar metadata: $e');
     } finally {
       if (mounted) setState(() => _isLoadingMetadata = false);
     }
@@ -134,7 +278,27 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
     if (_muteListener != null) {
       AudioState.mutedNotifier.removeListener(_muteListener!);
     }
-    player.dispose();
+
+    if (_iosUnlockHandler != null) {
+      web.window
+          .removeEventListener('touchstart', _iosUnlockHandler!, true.toJS);
+      web.window.removeEventListener('touchend', _iosUnlockHandler!, true.toJS);
+      web.window
+          .removeEventListener('pointerdown', _iosUnlockHandler!, true.toJS);
+      web.window.removeEventListener('click', _iosUnlockHandler!, true.toJS);
+      _iosUnlockHandler = null;
+    }
+
+    if (isIOSWeb && _htmlAudioElement != null) {
+      try {
+        _htmlAudioElement!.pause();
+        _htmlAudioElement!.remove();
+      } catch (e) {
+        debugPrint('Erro no cleanup: $e');
+      }
+    } else {
+      player.dispose();
+    }
     super.dispose();
   }
 
@@ -142,6 +306,47 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
     final minutes = d.inMinutes;
     final seconds = (d.inSeconds % 60).toString().padLeft(2, '0');
     return "$minutes:$seconds";
+  }
+
+  Future<void> _setVolume(double newVolume) async {
+    try {
+      if (isIOSWeb && _htmlAudioElement != null) {
+        _htmlAudioElement!.volume = newVolume;
+      } else {
+        await player.setVolume(newVolume);
+      }
+
+      volume = newVolume;
+
+      if (newVolume == 0) {
+        if (!AudioState.mutedNotifier.value) {
+          AudioState.mutedNotifier.value = true;
+        }
+      } else {
+        _lastNonZeroVolume = newVolume;
+        if (AudioState.mutedNotifier.value) {
+          AudioState.mutedNotifier.value = false;
+        }
+
+        if (!_everPlayed) {
+          if (isIOSWeb && _htmlAudioElement != null) {
+            try {
+              await _htmlAudioElement!.play().toDart;
+              _everPlayed = true;
+            } catch (_) {}
+          } else {
+            if (player.processingState == ProcessingState.idle ||
+                player.processingState == ProcessingState.loading) {
+              await player.load();
+            }
+            await player.play();
+            _everPlayed = true;
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Erro ao definir volume: $e');
+    }
   }
 
   @override
@@ -168,11 +373,11 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
             ValueListenableBuilder<bool>(
               valueListenable: AudioState.mutedNotifier,
               builder: (context, isMuted, _) {
-                final volumeIcon = (isMuted || volume == 0)
+                final volumeIcon = isMuted
                     ? Icons.volume_off
-                    : volume > 0.5
+                    : (isIOSWeb
                         ? Icons.volume_up
-                        : Icons.volume_down;
+                        : (volume > 0.5 ? Icons.volume_up : Icons.volume_down));
 
                 return Row(
                   children: [
@@ -189,42 +394,16 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
                           padding: EdgeInsets.zero,
                         ),
                         onPressed: () async {
-                          final isMutedNow = AudioState.mutedNotifier.value;
-
-                          if (isMutedNow) {
-                            AudioState.mutedNotifier.value = false;
-
-                            if (!_everPlayed) {
-                              try {
-                                await player.play();
-                              } catch (_) {}
-                              _everPlayed = true;
+                          try {
+                            if (isIOSWeb) {
+                              await _toggleMuteAndMaybePlay();
+                            } else {
+                              final isMutedNow = AudioState.mutedNotifier.value;
+                              AudioState.mutedNotifier.value = !isMutedNow;
                             }
-
-                            final v = _lastNonZeroVolume > 0
-                                ? _lastNonZeroVolume
-                                : 0.8;
-                            volume = v;
-
-                            await player.setVolume(v);
-
-                            if (player.processingState ==
-                                    ProcessingState.idle ||
-                                player.processingState ==
-                                    ProcessingState.loading) {
-                              try {
-                                await player.load();
-                              } catch (_) {}
-                            }
-                          } else {
-                            _lastNonZeroVolume =
-                                volume > 0 ? volume : _lastNonZeroVolume;
-                            AudioState.mutedNotifier.value = true;
-                            volume = 0.0;
-                            await player.setVolume(0.0);
+                          } catch (e) {
+                            debugPrint('Erro no botão mute: $e');
                           }
-
-                          if (mounted) setState(() {});
                         },
                         child: Icon(
                           volumeIcon,
@@ -235,52 +414,9 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: SliderTheme(
-                        data: SliderTheme.of(context).copyWith(
-                          activeTrackColor: theme.colorScheme.onTertiary,
-                          inactiveTrackColor: theme.colorScheme.onTertiary,
-                          thumbColor: theme.colorScheme.primary,
-                          overlayColor:
-                              theme.colorScheme.primary.withValues(alpha: 0.2),
-                          overlayShape:
-                              const RoundSliderOverlayShape(overlayRadius: 12),
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 8),
-                        ),
-                        child: Slider(
-                          value: volume,
-                          min: 0,
-                          max: 1,
-                          onChanged: (v) async {
-                            volume = v;
-                            await player.setVolume(v);
-
-                            if (v == 0) {
-                              if (!AudioState.mutedNotifier.value) {
-                                AudioState.mutedNotifier.value = true;
-                              }
-                            } else {
-                              _lastNonZeroVolume = v;
-                              if (AudioState.mutedNotifier.value) {
-                                AudioState.mutedNotifier.value = false;
-                              }
-                              if (!_everPlayed) {
-                                if (player.processingState ==
-                                        ProcessingState.idle ||
-                                    player.processingState ==
-                                        ProcessingState.loading) {
-                                  try {
-                                    await player.load();
-                                  } catch (_) {}
-                                }
-                                await player.play();
-                                _everPlayed = true;
-                              }
-                            }
-                            if (mounted) setState(() {});
-                          },
-                        ),
-                      ),
+                      child: isIOSWeb
+                          ? _buildIOSVolumeIndicator(theme)
+                          : _buildVolumeSlider(theme),
                     ),
                   ],
                 );
@@ -288,6 +424,58 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildVolumeSlider(ThemeData theme) {
+    return SliderTheme(
+      data: SliderTheme.of(context).copyWith(
+        activeTrackColor: theme.colorScheme.onTertiary,
+        inactiveTrackColor: theme.colorScheme.onTertiary,
+        thumbColor: theme.colorScheme.primary,
+        overlayColor: theme.colorScheme.primary.withValues(alpha: 0.2),
+        overlayShape: const RoundSliderOverlayShape(overlayRadius: 12),
+        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+      ),
+      child: Slider(
+        value: volume,
+        min: 0,
+        max: 1,
+        onChanged: (v) async {
+          await _setVolume(v);
+          if (mounted) setState(() {});
+        },
+      ),
+    );
+  }
+
+  Widget _buildIOSVolumeIndicator(ThemeData theme) {
+    final isPlaying = !AudioState.mutedNotifier.value;
+
+    return Container(
+      height: 4,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(2),
+        color: theme.colorScheme.onTertiary.withValues(alpha: 0.3),
+      ),
+      child: Row(
+        children: [
+          if (isPlaying) ...[
+            Expanded(
+              flex: 8,
+              child: Container(
+                height: 4,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  color: theme.colorScheme.primary,
+                ),
+              ),
+            ),
+            const Expanded(flex: 2, child: SizedBox()),
+          ] else
+            const Expanded(child: SizedBox()),
+        ],
       ),
     );
   }
