@@ -384,6 +384,7 @@ class ChatView extends StatelessWidget {
                         isAdmin: controller.room.ownPowerLevel == 100,
                         onClose: controller.closeLiveWidget,
                         onEdit: controller.editLiveWidget,
+                        isInputFocused: controller.isInputFocused,
                       ),
                     if (controller.dragging)
                       Container(

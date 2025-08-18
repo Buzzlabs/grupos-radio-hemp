@@ -124,6 +124,7 @@ class ChatController extends State<ChatPageWithRoom>
   Timer? typingTimeout;
   bool currentlyTyping = false;
   bool dragging = false;
+  bool _initialSyncDone = false;
 
   void onDragEntered(_) => setState(() => dragging = true);
 
@@ -175,6 +176,8 @@ class ChatController extends State<ChatPageWithRoom>
   String pendingText = '';
 
   bool showEmojiPicker = false;
+
+  bool isInputFocused = false;
 
   bool isLivePreviewOpen = false;
 
@@ -748,6 +751,10 @@ class ChatController extends State<ChatPageWithRoom>
     if (showEmojiPicker && inputFocus.hasFocus) {
       setState(() => showEmojiPicker = false);
     }
+
+    setState(() {
+      isInputFocused = inputFocus.hasFocus;
+    });
   }
 
   void sendLocationAction() async {
@@ -1367,12 +1374,17 @@ class ChatController extends State<ChatPageWithRoom>
 
       if (data == null) {
         _updateActiveLive(null);
-        AudioState.mutedNotifier.value = false;
+
+        if (_initialSyncDone) {
+          AudioState.mutedNotifier.value = false;
+        }
       } else {
         final live = VideoStreamingModel.fromWidgetStateEvent(state);
         _updateActiveLive(live);
         AudioState.mutedNotifier.value = true;
       }
+
+      _initialSyncDone = true;
     });
   }
 

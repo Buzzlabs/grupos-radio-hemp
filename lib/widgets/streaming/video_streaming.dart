@@ -16,6 +16,7 @@ class VideoStreaming extends StatefulWidget {
   final String title;
   final bool isAdmin;
   final bool? isPreview;
+  final bool? isInputFocused;
   final void Function(String debugInfo)? onDebugInfoChanged;
   final VoidCallback? onClose;
   final VoidCallback? onEdit;
@@ -28,6 +29,7 @@ class VideoStreaming extends StatefulWidget {
     this.onClose,
     this.onEdit,
     this.isPreview = false,
+    this.isInputFocused = false,
     this.onDebugInfoChanged,
   });
 

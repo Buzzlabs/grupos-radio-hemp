@@ -42,15 +42,26 @@ class VideoStreamingView extends StatelessWidget {
           valueListenable: controller.widthNotifier,
           builder: (context, width, __) {
             const aspectRatio = 16 / 9;
-            final height = width / aspectRatio;
-            final boxHeight = height + 50;
-            final fixedLeft = (screenWidth - width) / 2;
+            final normalHeight = width / aspectRatio;
+
+            final screenWidth = MediaQuery.of(context).size.width;
+
+            final maxHeight =
+                (isMobileMode && controller.widget.isInputFocused == true)
+                    ? screenHeight * 0.25
+                    : normalHeight;
+
+            final adjustedHeight = normalHeight.clamp(0, maxHeight);
+            final adjustedWidth = adjustedHeight * aspectRatio;
+
+            final boxHeight = adjustedHeight + 50;
+            final fixedLeft = (screenWidth - adjustedWidth) / 2;
 
             final content = Material(
               color: Colors.transparent,
               child: Container(
-                width: width,
-                height: boxHeight,
+                width: adjustedWidth,
+                height: boxHeight.toDouble(),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.surface,
