@@ -1,180 +1,193 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <base href="$FLUTTER_BASE_HREF" />
 
-    <meta charset="UTF-8" />
-    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+<head>
+  <base href="$FLUTTER_BASE_HREF" />
 
-    <meta property="og:title" content="Radio Hemp" />
-    <meta property="og:description" content="A frequência da cannabis legal no Brasil." />
-    <meta property="og:image" content="https://grupos.radiohemp.com/icons/radio-icon-192.png" />
-    <meta property="og:url" content="https://grupos.radiohemp.com/" />
-    <meta property="og:type" content="website" />
+  <meta charset="UTF-8" />
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Radio Hemp" />
-    <meta name="twitter:description" content="A frequência da cannabis legal no Brasil." />
-    <meta name="twitter:image" content="https://grupos.radiohemp.com/icons/radio-icon-192.png" />
+  <meta property="og:title" content="Radio Hemp" />
+  <meta property="og:description" content="A frequência da cannabis legal no Brasil." />
+  <meta property="og:image" content="https://grupos.radiohemp.com/icons/radio-icon-192.png" />
+  <meta property="og:url" content="https://grupos.radiohemp.com/" />
+  <meta property="og:type" content="website" />
 
-    <meta name="description" content="A frequência da cannabis legal no Brasil." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Radio Hemp" />
+  <meta name="twitter:description" content="A frequência da cannabis legal no Brasil." />
+  <meta name="twitter:image" content="https://grupos.radiohemp.com/icons/radio-icon-192.png" />
 
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="RadioHemp" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A frequência da cannabis legal no Brasil." />
 
-    <link rel="apple-touch-icon" href="./icons/radio-icon-192.png" />
-    <link rel="icon" type="image/png" href="./favicon.ico" />
-    <link rel="manifest" href="./manifest.json" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="RadioHemp" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Radio Hemp</title>
+  <link rel="apple-touch-icon" href="./icons/radio-icon-192.png" />
+  <link rel="icon" type="image/png" href="./favicon.ico" />
+  <link rel="manifest" href="./manifest.json" />
 
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet" />
+  <title>Grupos - Radio Hemp</title>
 
-    <style>
-      html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        background: #ffffff;
-        background-size: 100% 100%;
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet" />
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #ffffff;
+      background-size: 100% 100%;
+    }
+
+    #splash {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      transition: opacity 0.6s ease;
+      background: inherit;
+    }
+
+    .logo {
+      width: 50vw;
+      max-width: 250px;
+      height: auto;
+      object-fit: contain;
+      animation: pulse 1.2s ease-in-out infinite;
+      transition: opacity 0.4s ease;
+    }
+
+    #messages {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.3rem;
+      color: #888;
+      height: 30px;
+      width: 100%;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .message-slide {
+      animation: slideDownFade 0.5s ease;
+    }
+
+    .fade-out .logo {
+      opacity: 0;
+    }
+
+    .fade-out {
+      opacity: 0;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
       }
 
-      #splash {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 40px;
-        transition: opacity 0.6s ease;
-        background: inherit;
+      50% {
+        transform: scale(1.07);
       }
+    }
 
-      .logo {
-        width: 50vw;
-        max-width: 250px;
-        height: auto;
-        object-fit: contain;
-        animation: pulse 1.2s ease-in-out infinite;
-        transition: opacity 0.4s ease;
-      }
-
-      #messages {
-        font-family: 'Fredoka', sans-serif;
-        font-size: 1.3rem;
-        color: #888;
-        height: 30px;
-        width: 100%;
-        text-align: center;
-        overflow: hidden;
-      }
-
-      .message-slide {
-        animation: slideDownFade 0.5s ease;
-      }
-
-      .fade-out .logo {
+    @keyframes slideDownFade {
+      from {
+        transform: translateY(-100%);
         opacity: 0;
       }
 
-      .fade-out {
-        opacity: 0;
+      to {
+        transform: translateY(0);
+        opacity: 1;
       }
+    }
 
-      @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.07); }
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #212529;
       }
+    }
+  </style>
 
-      @keyframes slideDownFade {
-        from { transform: translateY(-100%); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
+  <link rel="stylesheet" type="text/css" href="./splash/style.css" />
+  <script src="./flutter.js" defer></script>
+  <script src="https://player.live-video.net/1.30.0/amazon-ivs-player.min.js"></script>
+</head>
+
+<body>
+  <script>
+    window.addEventListener('load', function () {
+      { { flutter_js } }
+      { { flutter_build_config } }
+
+      _flutter.loader.load({
+        serviceWorker: { serviceWorkerVersion: {{ flutter_service_worker_version }} },
+      onEntrypointLoaded: function (engineInitializer) {
+        engineInitializer.initializeEngine({ useColorEmoji: true }).then(function (appRunner) {
+          appRunner.runApp();
+
+          const checkInterval = setInterval(() => {
+            const flutterRoot = document.querySelector('flt-glass-pane, canvas');
+            if (flutterRoot && flutterRoot.offsetHeight > 0) {
+              clearInterval(checkInterval);
+
+              const splash = document.getElementById("splash");
+              if (splash) {
+                splash.classList.add('fade-out');
+                splash.addEventListener('transitionend', () => splash.remove());
+              }
+            }
+          }, 100);
+        });
       }
-
-      @media (prefers-color-scheme: dark) {
-        body { background-color: #212529; }
-      }
-    </style>
-
-    <link rel="stylesheet" type="text/css" href="./splash/style.css" />
-    <script src="./flutter.js" defer></script>
-    <script src="https://player.live-video.net/1.30.0/amazon-ivs-player.min.js"></script>
-  </head>
-
-  <body>
-    <script>
-      window.addEventListener('load', function () {
-        {{flutter_js}}
-        {{flutter_build_config}}
-
-        _flutter.loader.load({
-          serviceWorker: { serviceWorkerVersion: {{flutter_service_worker_version}} },
-          onEntrypointLoaded: function (engineInitializer) {
-            engineInitializer.initializeEngine({ useColorEmoji: true }).then(function (appRunner) {
-              appRunner.runApp();
-
-              const checkInterval = setInterval(() => {
-                const flutterRoot = document.querySelector('flt-glass-pane, canvas');
-                if (flutterRoot && flutterRoot.offsetHeight > 0) {
-                  clearInterval(checkInterval);
-
-                  const splash = document.getElementById("splash");
-                  if (splash) {
-                    splash.classList.add('fade-out');
-                    splash.addEventListener('transitionend', () => splash.remove());
-                  }
-                }
-              }, 100);
-            });
-          }
         });
 
-        const messages = [
-          "Sintonizando na frequência... 📻",
-          "Está preparado? 👀",
-          "Conectando com a galera... 🌿",
-          "Ajustando o volume... 🔊",
-          "Aquecendo para a live... 🔥",
-          "Carregando o conteúdo... ⏳",
-          "Entrando no ritmo... 🎙️",
-          "Preparando a próxima batida... 🎼",
-          "Deixando tudo no ponto... 🎚️",
-          "Aquecendo o estúdio... 🎛️",
-        ];
+    const messages = [
+      "Sintonizando na frequência... 📻",
+      "Está preparado? 👀",
+      "Conectando com a galera... 🌿",
+      "Ajustando o volume... 🔊",
+      "Aquecendo para a live... 🔥",
+      "Carregando o conteúdo... ⏳",
+      "Entrando no ritmo... 🎙️",
+      "Preparando a próxima batida... 🎼",
+      "Deixando tudo no ponto... 🎚️",
+      "Aquecendo o estúdio... 🎛️",
+    ];
 
-        const container = document.getElementById("messages");
-        let index = 0;
+    const container = document.getElementById("messages");
+    let index = 0;
 
-        function showNextMessage() {
-          const el = document.createElement("div");
-          el.classList.add("message-slide");
-          el.textContent = messages[index];
+    function showNextMessage() {
+      const el = document.createElement("div");
+      el.classList.add("message-slide");
+      el.textContent = messages[index];
 
-          while (container.firstChild) container.removeChild(container.firstChild);
-          container.appendChild(el);
+      while (container.firstChild) container.removeChild(container.firstChild);
+      container.appendChild(el);
 
-          index = (index + 1) % messages.length;
-        }
+      index = (index + 1) % messages.length;
+    }
 
-        showNextMessage();
-        setInterval(showNextMessage, 1500);
+    showNextMessage();
+    setInterval(showNextMessage, 1500);
       });
-    </script>
+  </script>
 
-    <div id="splash">
-      <img
-        class="logo"
-        src="./splash/img/light-1x.svg"
-        alt="Logo Radio Hemp"
-        width="250"
-        height="250"
-      />
-      <div id="messages">
-        <div id="messageText" class="message-slide"></div>
-      </div>
+  <div id="splash">
+    <img class="logo" src="./splash/img/light-1x.svg" alt="Logo Radio Hemp" width="250" height="250" />
+    <div id="messages">
+      <div id="messageText" class="message-slide"></div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>
