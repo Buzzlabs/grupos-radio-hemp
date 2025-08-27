@@ -87,6 +87,7 @@ abstract class AppRoutes {
     ),
     GoRoute(
       path: '/login',
+      redirect: loggedInRedirect,
       builder: (context, state) {
         final extra = state.extra;
         if (extra == null || extra is! Client) {
@@ -95,13 +96,13 @@ abstract class AppRoutes {
           });
           return const SizedBox.shrink();
         }
-
         final client = extra;
         return Login(client: client);
       },
     ),
     GoRoute(
       path: '/register',
+      redirect: loggedInRedirect,
       builder: (context, state) {
         final extra = state.extra;
         if (extra == null || extra is! Client) {
@@ -110,7 +111,6 @@ abstract class AppRoutes {
           });
           return const SizedBox.shrink();
         }
-
         final client = extra;
         return Register(client: client);
       },

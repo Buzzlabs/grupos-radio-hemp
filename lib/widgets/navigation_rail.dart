@@ -60,6 +60,20 @@ class SpacesNavigationRail extends StatelessWidget {
                         children: [
                           const SizedBox(height: 6),
                           NaviRailItem(
+                            isSelected: false,
+                            onTap: () async {
+                              await launchUrl(
+                                Uri.parse('https:/chat.radiohemp.com'),
+                                mode: LaunchMode.externalApplication,
+                              );
+                            },
+                            icon: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: SvgPicture.asset('assets/icons/home.svg'),
+                            ),
+                            toolTip: L10n.of(context).menuHome,
+                          ),
+                          NaviRailItem(
                             isSelected: activeSpaceId == null && !isSettings,
                             onTap: onGoToChats,
                             icon: Padding(

@@ -78,6 +78,22 @@ class ClientChooserButton extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: SvgPicture.asset(
+                'assets/icons/home.svg',
+                width: 30,
+              ),
+            ),
+            const SizedBox(width: 18),
+            Text(L10n.of(context).menuHome),
+          ],
+        ),
+      ),
+      PopupMenuItem(
+        value: SettingsAction.store,
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: SvgPicture.asset(
                 'assets/icons/store.svg',
                 width: 30,
               ),

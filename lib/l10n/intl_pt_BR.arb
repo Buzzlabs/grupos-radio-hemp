@@ -3294,6 +3294,7 @@
 "errorUsernameInUse": "Esse nome de usuário já está sendo usado",
 "errorInvalidUsername": "Formato de nome de usuário inválido",
 "menuStore": "Loja",
+"menuHome": "Home",
 "menuCourse": "Cursos",
 "menuNews": "Notícias",
 "menuPodcasts": "Podcasts",

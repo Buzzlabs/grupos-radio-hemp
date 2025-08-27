@@ -3392,6 +3392,7 @@
   "errorUsernameInUse": "This username is already taken",
   "errorInvalidUsername": "Invalid username format",
   "menuStore": "Store",
+  "menuHome": "Home",
   "menuCourse": "Cultivation course",
   "menuNews": "News",
   "menuPodcasts": "Podcasts",
