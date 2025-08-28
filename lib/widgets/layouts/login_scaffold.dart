@@ -6,12 +6,14 @@ class LoginScaffold extends StatelessWidget {
   final Widget body;
   final AppBar? appBar;
   final bool enforceMobileMode;
+  final double maxHeight;
 
   const LoginScaffold({
     super.key,
     required this.body,
     this.appBar,
     this.enforceMobileMode = false,
+    this.maxHeight = 600,
   });
 
   @override
@@ -63,9 +65,9 @@ class LoginScaffold extends StatelessWidget {
             elevation: theme.appBarTheme.scrolledUnderElevation ?? 4,
             shadowColor: theme.appBarTheme.shadowColor,
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
+              constraints: BoxConstraints(
                 maxWidth: 480,
-                maxHeight: 600,
+                maxHeight: maxHeight,
                 minWidth: 300,
                 minHeight: 400,
               ),

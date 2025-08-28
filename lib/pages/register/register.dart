@@ -26,23 +26,89 @@ class RegisterController extends State<Register> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final FocusNode usernameFocusNode = FocusNode();
 
   String? emailError;
   String? usernameError;
   String? passwordError;
+  String? isAdultError;
   String? genericError;
 
   bool loading = false;
   bool showPassword = false;
+  bool isAdult = false;
+
+  final FocusNode usernameFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
+  final FocusNode emailFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    emailFocusNode.addListener(() {
+      if (!emailFocusNode.hasFocus) {
+        emailIsValid();
+      } else {
+        setState(() => emailError = null);
+      }
+    });
+
+    usernameFocusNode.addListener(() {
+      if (!usernameFocusNode.hasFocus) {
+        usernameIsValid();
+      } else {
+        setState(() => usernameError = null);
+      }
+    });
+
+    passwordFocusNode.addListener(() {
+      if (!passwordFocusNode.hasFocus) {
+        passwordIsValid();
+      } else {
+        setState(() => passwordError = null);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    usernameController.dispose();
+    passwordController.dispose();
+    emailFocusNode.dispose();
+    usernameFocusNode.dispose();
+    passwordFocusNode.dispose();
+    super.dispose();
+  }
 
   void toggleShowPassword() =>
       setState(() => showPassword = !loading && !showPassword);
+
+  void toggleIsAdult(bool? value) {
+    setState(() {
+      isAdult = value ?? false;
+
+      if (isAdult) {
+        isAdultError = null;
+      }
+    });
+  }
 
   Future<void> register() async {
     final isEmailValid = emailIsValid();
     final isUsernameValid = usernameIsValid();
     final isPasswordValid = passwordIsValid();
+
+    if (!isAdult) {
+      setState(() {
+        isAdultError = L10n.of(context).isAdultError;
+      });
+      return;
+    } else {
+      setState(() {
+        isAdultError = null;
+      });
+    }
 
     if (!isEmailValid || !isUsernameValid || !isPasswordValid) return;
 
@@ -74,7 +140,7 @@ class RegisterController extends State<Register> {
       r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$',
     );
 
-    final email = emailController.text.trim(); // remove espaços acidentais
+    final email = emailController.text.trim();
 
     if (email.isEmpty) {
       setState(() => emailError = L10n.of(context).errorMissingEmail);

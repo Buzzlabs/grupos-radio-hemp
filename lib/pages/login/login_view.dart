@@ -96,7 +96,7 @@ class LoginView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextField(
@@ -107,9 +107,9 @@ class LoginView extends StatelessWidget {
                         ),
                         readOnly: controller.loading,
                         autocorrect: false,
-                        autofocus: true,
                         onChanged: controller.checkWellKnownWithCoolDown,
                         controller: controller.usernameController,
+                        focusNode: controller.usernameFocusNode,
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.emailAddress,
                         autofillHints: controller.loading
@@ -119,13 +119,13 @@ class LoginView extends StatelessWidget {
                           prefixIcon: const Icon(Icons.account_box_outlined),
                           errorText: controller.usernameError,
                           errorStyle: TextStyle(
-                            color: Theme.of(context).colorScheme.error,
-                          ),
+                              color: Theme.of(context).colorScheme.error,
+                              fontSize: 15),
                           labelText: L10n.of(context).emailOrUsername,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextField(
@@ -140,6 +140,7 @@ class LoginView extends StatelessWidget {
                             ? null
                             : [AutofillHints.password],
                         controller: controller.passwordController,
+                        focusNode: controller.passwordFocusNode,
                         textInputAction: TextInputAction.go,
                         obscureText: !controller.showPassword,
                         onSubmitted: (_) => controller.login(),
@@ -148,6 +149,7 @@ class LoginView extends StatelessWidget {
                           errorText: controller.passwordError,
                           errorStyle: TextStyle(
                             color: Theme.of(context).colorScheme.error,
+                            fontSize: 15,
                           ),
                           suffixIcon: IconButton(
                             onPressed: controller.toggleShowPassword,

@@ -3429,5 +3429,7 @@
   "closeLive": "Close live",
   "closeLiveConfirm": "Do you want to end the live for everyone?",
   "liveOptions": "Live options",
-  "liveStartedSuccess": "Live started successfully!"
+  "liveStartedSuccess": "Live started successfully!",
+  "isAdult": "I am over 18 years old",
+  "isAdultError": "You must confirm that you are over 18 years old"
   }

@@ -3331,5 +3331,7 @@
 "closeLive": "Encerrar",
 "closeLiveConfirm": "Deseja encerrar a live para todos?",
 "liveOptions": "Opções da live",
-"liveStartedSuccess": "Live exibida com sucesso!"
+"liveStartedSuccess": "Live exibida com sucesso!",
+"isAdult": "Tenho mais de 18 anos",
+"isAdultError": "Você deve confirmar que tem mais de 18 anos"
 }

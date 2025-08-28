@@ -30,12 +30,12 @@ class RegisterView extends StatelessWidget {
 
     final screenHeight = MediaQuery.of(context).size.height;
 
-    final mobileAppBarHeight = screenHeight * 0.15;
+    final mobileAppBarHeight = screenHeight * 0.13;
     final mobileAppBarTitlePaddingTop = mobileAppBarHeight - 18;
-    final mobileImagePadding = screenHeight * 0.13;
+    final mobileImagePadding = screenHeight * 0.1;
 
     const desktopAppBarHeight = 75.0;
-    const desktopAppBarTitlePaddingTop = 25.0;
+    const desktopAppBarTitlePaddingTop = 30.0;
     const desktopImagePadding = 40.0;
 
     final toolBarHeight =
@@ -47,6 +47,7 @@ class RegisterView extends StatelessWidget {
         isMobileMode ? mobileImagePadding : desktopImagePadding;
 
     return LoginScaffold(
+      maxHeight: 680,
       appBar: AppBar(
         backgroundColor: isMobileMode
             ? theme.colorScheme.surface
@@ -109,6 +110,7 @@ class RegisterView extends StatelessWidget {
                         readOnly: controller.loading,
                         autocorrect: false,
                         controller: controller.emailController,
+                        focusNode: controller.emailFocusNode,
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.emailAddress,
                         autofillHints:
@@ -118,12 +120,13 @@ class RegisterView extends StatelessWidget {
                           errorText: controller.emailError,
                           errorStyle: TextStyle(
                             color: theme.colorScheme.error,
+                            fontSize: 15,
                           ),
                           labelText: L10n.of(context).email,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextField(
@@ -134,6 +137,7 @@ class RegisterView extends StatelessWidget {
                         readOnly: controller.loading,
                         autocorrect: false,
                         controller: controller.usernameController,
+                        focusNode: controller.usernameFocusNode,
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.text,
                         autofillHints: controller.loading
@@ -144,12 +148,13 @@ class RegisterView extends StatelessWidget {
                           errorText: controller.usernameError,
                           errorStyle: TextStyle(
                             color: theme.colorScheme.error,
+                            fontSize: 15,
                           ),
                           labelText: L10n.of(context).username,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextField(
@@ -160,6 +165,7 @@ class RegisterView extends StatelessWidget {
                         readOnly: controller.loading,
                         autocorrect: false,
                         controller: controller.passwordController,
+                        focusNode: controller.passwordFocusNode,
                         textInputAction: TextInputAction.go,
                         obscureText: !controller.showPassword,
                         onSubmitted: (_) => controller.register(),
@@ -171,6 +177,7 @@ class RegisterView extends StatelessWidget {
                           errorText: controller.passwordError,
                           errorStyle: TextStyle(
                             color: theme.colorScheme.error,
+                            fontSize: 15,
                           ),
                           suffixIcon: IconButton(
                             onPressed: controller.toggleShowPassword,
@@ -183,6 +190,44 @@ class RegisterView extends StatelessWidget {
                           ),
                           labelText: L10n.of(context).password,
                         ),
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: controller.isAdult,
+                                activeColor: theme.colorScheme.secondary,
+                                checkColor: theme.colorScheme.onSecondary,
+                                onChanged: controller.toggleIsAdult,
+                              ),
+                              Text(
+                                L10n.of(context).isAdult,
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSecondary,
+                                  fontFamily: 'Roboto',
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (controller.isAdultError != null)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 18, top: 4.0),
+                              child: Text(
+                                controller.isAdultError!,
+                                style: TextStyle(
+                                  color: theme.colorScheme.error,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 20),

@@ -25,10 +25,46 @@ class Login extends StatefulWidget {
 class LoginController extends State<Login> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
   String? usernameError;
   String? passwordError;
   bool loading = false;
   bool showPassword = false;
+
+  final FocusNode usernameFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    usernameFocusNode.addListener(() {
+      if (!usernameFocusNode.hasFocus) {
+        if (usernameController.text.isEmpty) {
+          setState(
+            () => usernameError = L10n.of(context).pleaseEnterYourUsername,
+          );
+        } else {
+          setState(() => usernameError = null);
+        }
+      } else {
+        setState(() => usernameError = null);
+      }
+    });
+
+    passwordFocusNode.addListener(() {
+      if (!passwordFocusNode.hasFocus) {
+        if (passwordController.text.isEmpty) {
+          setState(
+              () => passwordError = L10n.of(context).pleaseEnterYourPassword);
+        } else {
+          setState(() => passwordError = null);
+        }
+      } else {
+        setState(() => usernameError = null);
+      }
+    });
+  }
 
   void toggleShowPassword() =>
       setState(() => showPassword = !loading && !showPassword);
