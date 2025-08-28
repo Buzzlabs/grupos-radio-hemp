@@ -396,15 +396,15 @@ abstract class AppRoutes {
                   ),
                   redirect: loggedOutRedirect,
                 ),
-                GoRoute(
-                  path: 'encryption',
-                  pageBuilder: (context, state) => defaultPageBuilder(
-                    context,
-                    state,
-                    const ChatEncryptionSettings(),
-                  ),
-                  redirect: loggedOutRedirect,
-                ),
+                // GoRoute(
+                //   path: 'encryption',
+                //   pageBuilder: (context, state) => defaultPageBuilder(
+                //     context,
+                //     state,
+                //     const ChatEncryptionSettings(),
+                //   ),
+                //   redirect: loggedOutRedirect,
+                // ),
                 GoRoute(
                   path: 'invite',
                   pageBuilder: (context, state) => defaultPageBuilder(
