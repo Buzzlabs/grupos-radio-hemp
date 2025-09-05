@@ -79,6 +79,7 @@ dependencies:
   share_plus: ^11.0.0
   shared_preferences: ^2.2.0 # Pinned because https://github.com/flutter/flutter/issues/118401
   slugify: ^2.0.0
+  socket_io_client: ^2.0.3+1
   sqflite_common_ffi: ^2.3.6
   sqlcipher_flutter_libs: ^0.6.7
   swipe_to_action: ^0.3.0
@@ -93,7 +94,7 @@ dependencies:
   wakelock_plus: ^1.2.2
   webrtc_interface: ^1.0.13
   web: ^1.1.1
-  
+
 dev_dependencies:
   flutter_lints: ^3.0.0
   flutter_native_splash: ^2.0.3+1

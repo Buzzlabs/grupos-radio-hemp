@@ -8,6 +8,8 @@ import 'package:just_audio/just_audio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluffychat/l10n/l10n.dart';
 import 'package:web/web.dart' as web;
+import 'package:fluffychat/utils/socket_client.dart';
+import 'package:provider/provider.dart';
 
 class AudioPlayerStreaming extends StatefulWidget {
   const AudioPlayerStreaming({super.key});
@@ -43,6 +45,8 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
   StreamSubscription<PlayerState>? _playerStateSub;
 
   late AnimationController _glowController;
+
+  late SocketClient socketClient;
 
   static const double _artSize = 70.0;
   static const double _buttonSize = 40.0;
@@ -88,6 +92,8 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
       duration: const Duration(milliseconds: 2800),
     )..repeat(reverse: true);
 
+    socketClient = Provider.of<SocketClient>(context, listen: false);
+
     AudioState.mutedNotifier.value = true;
 
     volume = 0.5;
@@ -125,6 +131,7 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
 
   @override
   void dispose() {
+    socketClient.leaveAudio();
     _progressTimer?.cancel();
     _cancelEdgeAndStale();
     _loadingSafetyTimer?.cancel();
@@ -227,6 +234,7 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
       _loadingSafetyTimer?.cancel();
       try {
         await player.stop();
+        socketClient.leaveAudio();
       } catch (_) {}
       if (mounted) setState(() => _isLoadingAudio = false);
       return;
@@ -234,6 +242,7 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
 
     _setMuted(false);
     await _startStream();
+    socketClient.joinAudio();
   }
 
   Future<void> _applyMutedState() async {
@@ -699,6 +708,34 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
               ),
             ],
           ),
+        ),
+        // 👥 Mostrar ouvintes sempre, independente do play
+        ValueListenableBuilder<int>(
+          valueListenable: socketClient.audioViewers,
+          builder: (context, viewers, _) {
+            if (viewers <= 0) return const SizedBox.shrink();
+            return Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.headset,
+                    size: 18,
+                    color: theme.colorScheme.onTertiaryContainer,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    viewers.toString(),
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.onTertiaryContainer,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ],
     );

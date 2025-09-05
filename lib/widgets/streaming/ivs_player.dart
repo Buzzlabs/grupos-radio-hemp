@@ -1,7 +1,12 @@
+import 'dart:convert';
 import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 import 'package:flutter/foundation.dart';
 import 'package:web/web.dart' as web;
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+const CHANNEL_ID = -99;
 
 enum IvsPlayerState {
   playing('PLAYING'),
@@ -55,6 +60,9 @@ extension type IVSPlayerJS(JSObject _) implements JSAny {
 
   external double getLiveLatency();
   external double getBufferDuration();
+
+  external JSObject getQuality();
+  external JSObject getSessionData();
 }
 
 extension type PlayerStateChangeEventJS(JSObject _) implements JSAny {
@@ -91,4 +99,41 @@ IVSPlayerJS? createIVSPlayerIfAvailable() {
 class IVSPlayerEvent {
   static const String error = 'PlayerError';
   static const String stateChanged = 'PlayerStateChange';
+}
+
+Future<void> postAnalytics(IVSPlayerJS ivsPlayer) async {
+  final quality = ivsPlayer.getQuality();
+  final session = ivsPlayer.getSessionData();
+
+  final body = {
+    "channelId": CHANNEL_ID,
+    "ip": session.getProperty<JSString>('USER-IP'.toJS).toDart,
+    "browserName": web.window.navigator.userAgent,
+    "os": web.window.navigator.platform,
+    "userAgent": web.window.navigator.userAgent,
+    "tz": DateTime.now().timeZoneName,
+    "quality": quality.getProperty<JSString>('name'.toJS).toDart,
+    "codecs": quality.getProperty<JSString>('codecs'.toJS).toDart,
+    "bitrate": quality.getProperty<JSNumber>('bitrate'.toJS).toDartDouble,
+    "framerate": quality.getProperty<JSNumber>('framerate'.toJS).toDartDouble,
+    "latency": ivsPlayer.getLiveLatency(),
+    "buffer": ivsPlayer.getBufferDuration(),
+  };
+
+  final siteUrl = dotenv.env['SITE_URL'] ?? 'http://localhost:3333';
+  final url = Uri.parse('$siteUrl/api/player/analytics');
+
+  final response = await http.post(
+    url,
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode(body),
+  );
+
+  if (response.statusCode == 200) {
+    debugPrint('[Analytics] Dados enviados com sucesso!');
+  } else {
+    throw Exception(
+      'Erro ${response.statusCode}: ${response.reasonPhrase}',
+    );
+  }
 }

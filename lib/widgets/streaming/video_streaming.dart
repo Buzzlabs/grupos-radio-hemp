@@ -8,7 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:web/web.dart' as web;
 import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
-
+import 'package:fluffychat/utils/socket_client.dart';
+import 'package:provider/provider.dart';
 import 'ivs_player.dart';
 
 class VideoStreaming extends StatefulWidget {
@@ -47,6 +48,8 @@ class VideoStreamingController extends State<VideoStreaming> {
   Offset get position => positionNotifier.value;
 
   bool get isPreview => widget.isPreview ?? false;
+
+  late final SocketClient socketClient;
 
   void initializeIfNeeded(double defaultWidth) {
     if (widthNotifier.value == 0) {
@@ -89,6 +92,10 @@ class VideoStreamingController extends State<VideoStreaming> {
     _widgetMounted = true;
 
     viewId = 'ivs-player-${DateTime.now().millisecondsSinceEpoch}';
+
+    socketClient = Provider.of<SocketClient>(context, listen: false);
+    socketClient.joinLive();
+    socketClient.joinLive();
 
     _createHtmlElements();
     _registerView();
@@ -317,6 +324,10 @@ class VideoStreamingController extends State<VideoStreaming> {
       if (currentStatus == IvsPlayerState.playing) {
         _updateDebugInfo('Polling: player tocando, nada a fazer.',
             playerStatus: currentStatus);
+
+        if (ivsPlayer != null) {
+          postAnalytics(ivsPlayer!);
+        }
         return;
       }
 
@@ -347,6 +358,8 @@ class VideoStreamingController extends State<VideoStreaming> {
     ivsPlayer?.pause();
     ivsPlayer = null;
     videoElement = null;
+
+    socketClient?.leaveLive();
     _updateDebugInfo('Widget VideoStreaming descartado.',
         playerStatus: IvsPlayerState.unknown);
     super.dispose();
