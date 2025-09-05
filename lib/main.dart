@@ -63,9 +63,7 @@ Future<void> startGui(List<Client> clients, SharedPreferences store) async {
   await firstClient?.roomsLoading;
   await firstClient?.accountDataLoading;
 
-  final socketClient = SocketClient(
-    url: dotenv.env['SOCKET_URL'] ?? 'http://localhost:3333',
-  );
+  final socketClient = SocketClient();
   socketClient.connect();
 
   runApp(

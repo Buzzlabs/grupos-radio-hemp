@@ -1,13 +1,15 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SocketClient {
   IO.Socket? socket;
-  final String url;
 
   final ValueNotifier<int> liveViewers = ValueNotifier<int>(0);
+  final String url;
 
-  SocketClient({this.url = 'http://localhost:3333'});
+  SocketClient({String? url})
+      : url = url ?? dotenv.env['SOCKET_URL'] ?? 'http://localhost:3333';
 
   void connect() {
     if (socket != null && socket!.connected) {

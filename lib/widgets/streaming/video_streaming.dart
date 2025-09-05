@@ -94,7 +94,10 @@ class VideoStreamingController extends State<VideoStreaming> {
     viewId = 'ivs-player-${DateTime.now().millisecondsSinceEpoch}';
 
     socketClient = Provider.of<SocketClient>(context, listen: false);
-    socketClient.joinLive();
+
+    if (widget.isPreview == false) {
+      socketClient.joinLive();
+    }
 
     _createHtmlElements();
     _registerView();
@@ -359,8 +362,10 @@ class VideoStreamingController extends State<VideoStreaming> {
     videoElement = null;
 
     socketClient.leaveLive();
-    _updateDebugInfo('Widget VideoStreaming descartado.',
-        playerStatus: IvsPlayerState.unknown);
+    _updateDebugInfo(
+      'Widget VideoStreaming descartado.',
+      playerStatus: IvsPlayerState.unknown,
+    );
     super.dispose();
   }
 

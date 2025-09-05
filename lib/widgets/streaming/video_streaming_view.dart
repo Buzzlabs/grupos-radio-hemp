@@ -106,7 +106,7 @@ class _VideoStreamingViewState extends State<VideoStreamingView> {
   }
 
   Widget _buildHeader(double width) {
-    final socket = widget.controller.socketClient;
+    final socketClient = widget.controller.socketClient;
 
     return SizedBox(
       width: width,
@@ -134,7 +134,7 @@ class _VideoStreamingViewState extends State<VideoStreamingView> {
           const SizedBox(width: 8),
 
           ValueListenableBuilder<int>(
-            valueListenable: socket.liveViewers,
+            valueListenable: socketClient.liveViewers,
             builder: (context, viewers, _) {
               if (viewers <= 0) return const SizedBox.shrink();
               return Row(
