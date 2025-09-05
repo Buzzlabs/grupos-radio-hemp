@@ -28,7 +28,6 @@ import 'chat_emoji_picker.dart';
 import 'chat_input_row.dart';
 import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/widgets/streaming/video_streaming.dart';
-import 'package:fluffychat/utils/socket_client.dart';
 
 enum _EventContextAction { info, report }
 
@@ -380,15 +379,12 @@ class ChatView extends StatelessWidget {
                         !controller.isLivePreviewOpen)
                       Builder(
                         builder: (context) {
-                          controller.socketClient.connect();
-
                           return VideoStreaming(
                             title: controller.activeLive!.title,
                             playbackUrl: controller.activeLive!.playbackUrl,
                             isAdmin: controller.room.ownPowerLevel == 100,
                             isPreview: false,
                             onClose: () {
-                              controller.socketClient.disconnect();
                               controller.closeLiveWidget();
                             },
                             onEdit: controller.editLiveWidget,

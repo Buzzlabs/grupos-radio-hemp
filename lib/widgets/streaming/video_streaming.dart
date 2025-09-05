@@ -95,7 +95,6 @@ class VideoStreamingController extends State<VideoStreaming> {
 
     socketClient = Provider.of<SocketClient>(context, listen: false);
     socketClient.joinLive();
-    socketClient.joinLive();
 
     _createHtmlElements();
     _registerView();
@@ -359,7 +358,7 @@ class VideoStreamingController extends State<VideoStreaming> {
     ivsPlayer = null;
     videoElement = null;
 
-    socketClient?.leaveLive();
+    socketClient.leaveLive();
     _updateDebugInfo('Widget VideoStreaming descartado.',
         playerStatus: IvsPlayerState.unknown);
     super.dispose();

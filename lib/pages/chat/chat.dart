@@ -46,8 +46,6 @@ import 'send_location_dialog.dart';
 import '../../widgets/streaming/video_streaming_model.dart';
 import '../../widgets/adaptive_dialogs/live_preview_dialog.dart';
 import '../../widgets/streaming/audio_player_streaming.dart';
-import 'package:fluffychat/utils/socket_client.dart';
-import 'package:provider/provider.dart';
 
 class ChatPage extends StatelessWidget {
   final String roomId;
@@ -121,8 +119,6 @@ class ChatController extends State<ChatPageWithRoom>
   StreamSubscription<html.Event>? onFocusSub;
 
   StreamSubscription? _liveWidgetsSubscription;
-
-  late SocketClient socketClient;
 
   Timer? typingCoolDown;
   Timer? typingTimeout;
@@ -345,8 +341,6 @@ class ChatController extends State<ChatPageWithRoom>
     _displayChatDetailsColumn = ValueNotifier(
       AppSettings.displayChatDetailsColumn.getItem(Matrix.of(context).store),
     );
-
-    socketClient = Provider.of<SocketClient>(context, listen: false);
 
     sendingClient = Matrix.of(context).client;
     readMarkerEventId = room.hasNewMessages ? room.fullyRead : '';
@@ -1383,13 +1377,11 @@ class ChatController extends State<ChatPageWithRoom>
 
         if (_initialSyncDone) {
           AudioState.mutedNotifier.value = false;
-          socketClient.joinAudio();
         }
       } else {
         final live = VideoStreamingModel.fromWidgetStateEvent(state);
         _updateActiveLive(live);
         AudioState.mutedNotifier.value = true;
-        socketClient.leaveAudio();
       }
 
       _initialSyncDone = true;
