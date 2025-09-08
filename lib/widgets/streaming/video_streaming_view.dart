@@ -79,7 +79,23 @@ class _VideoStreamingViewState extends State<VideoStreamingView> {
                 ),
                 child: Column(
                   children: [
-                    _buildHeader(adjustedWidth),
+                    MouseRegion(
+                      cursor: SystemMouseCursors.move,
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onPanUpdate: (details) {
+                          final maxLeft = screenWidth - width - 16 - 460;
+                          final maxTop = screenHeight - boxHeight - 16 - 70;
+                          widget.controller.setPosition(
+                            widget.controller.position + details.delta,
+                            maxLeft,
+                            maxTop,
+                            isMobileMode,
+                          );
+                        },
+                        child: _buildHeader(adjustedWidth),
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     Expanded(
                       child: ClipRRect(
@@ -87,6 +103,27 @@ class _VideoStreamingViewState extends State<VideoStreamingView> {
                         child: HtmlElementView(viewType: widget.viewId),
                       ),
                     ),
+                    if (!isMobileMode && !widget.isPreview)
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: GestureDetector(
+                          onPanUpdate: (details) => widget.controller
+                              .resize(details.delta.dx, screenWidth),
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.resizeUpLeftDownRight,
+                            child: Container(
+                              width: 20,
+                              height: 20,
+                              margin: const EdgeInsets.only(top: 8, right: 5),
+                              child: Icon(
+                                Icons.open_in_full,
+                                size: 15,
+                                color: theme.colorScheme.onSurface,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
