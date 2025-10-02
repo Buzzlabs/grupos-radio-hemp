@@ -327,9 +327,6 @@ class VideoStreamingController extends State<VideoStreaming> {
         _updateDebugInfo('Polling: player tocando, nada a fazer.',
             playerStatus: currentStatus);
 
-        if (ivsPlayer != null) {
-          postAnalytics(ivsPlayer!);
-        }
         return;
       }
 
