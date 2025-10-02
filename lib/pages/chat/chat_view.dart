@@ -28,6 +28,7 @@ import 'chat_emoji_picker.dart';
 import 'chat_input_row.dart';
 import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/widgets/streaming/video_streaming.dart';
+import 'package:fluffychat/widgets/pinned_message_widget.dart';
 
 enum _EventContextAction { info, report }
 
@@ -283,6 +284,19 @@ class ChatView extends StatelessWidget {
                         child: SafeArea(
                           child: Column(
                             children: <Widget>[
+                              SizedBox(height: 1),
+                              Material(
+                                elevation: 4, // controla a sombra
+                                color: theme.colorScheme
+                                    .surface, // ou transparente, se quiser
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    bottom: Radius.circular(
+                                        12), // <-- arredonda só a parte de baixo
+                                  ),
+                                ),
+                                child: PinnedMessageWidget(),
+                              ),
                               Expanded(
                                 child: GestureDetector(
                                   onTap: controller.clearSingleSelectedEvent,
