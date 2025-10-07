@@ -1,10 +1,13 @@
-import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:fluffychat/config/themes.dart';
+import 'package:fluffychat/widgets/streams_widget.dart';
 
 class LiveCard extends StatelessWidget {
+  final LiveShow live;
+
   const LiveCard({
+    required this.live,
     super.key,
   });
 
@@ -18,13 +21,12 @@ class LiveCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-       
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // thumbnail da live
+          // --- THUMBNAIL ---
           Stack(
             children: [
               ClipRRect(
@@ -32,81 +34,90 @@ class LiveCard extends StatelessWidget {
                   topLeft: Radius.circular(16),
                   topRight: Radius.circular(16),
                 ),
-                child: Image.asset(
-                  'assets/images/live_thumbnail.jpg', // thumbnail da live
+                child: Image.network(
+                  live.thumbnailUrl, // vem do objeto
                   height: 130,
                   width: double.infinity,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Icon(Icons.broken_image, size: 80),
                 ),
               ),
-              // indicador "AO VIVO"
 
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.redAccent,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    'AO VIVO',
-                    style: GoogleFonts.righteous(
-                      textStyle: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
+              // --- Indicador "AO VIVO" ---
+              if (live.isLive)
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      'AO VIVO',
+                      style: GoogleFonts.righteous(
+                        textStyle: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
-          // título
+
+          // --- CONTEÚDO TEXTO ---
           Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Avatar + título
                 Row(
                   children: [
                     CircleAvatar(
                       radius: 15,
-                      child: Image.asset(
-                        'assets/images/live_avatar.jpg', // avatar do streamer
-                        width: 40,
-                        height: 40,
-                        fit: BoxFit.cover,
-                      ),
-                ),
-                const SizedBox(width: 8),
-                    Text(
-                      'Título da Live',
-                      style: TextStyle(
-                        color: theme.colorScheme.onSecondary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                      backgroundImage: NetworkImage(live.avatarUrl),
+                      onBackgroundImageError: (_, __) {},
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        live.title, // título da live
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: theme.colorScheme.onSecondary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ],
                 ),
+
                 const SizedBox(height: 8),
-                // data e categoria
+
+                // Data + Categoria + ícone
                 Row(
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3),
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.onSecondaryContainer.withOpacity(0.15),
+                        color: theme.colorScheme.onSecondaryContainer
+                            .withOpacity(0.15),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        '17 de Junho',
+                        live.date, // data da live
                         style: TextStyle(
                           color: theme.colorScheme.onSecondary,
                           fontSize: 13,
@@ -124,7 +135,7 @@ class LiveCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        'Música',
+                        live.category, // categoria
                         style: TextStyle(
                           color: theme.colorScheme.onSecondary,
                           fontSize: 12,
@@ -132,12 +143,12 @@ class LiveCard extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Icon(Icons.share,
-                            size: 18, color: theme.colorScheme.onSecondary),
-                      ],
+                    IconButton(
+                      icon: Icon(Icons.share,
+                          size: 18, color: theme.colorScheme.onSecondary),
+                      onPressed: () {
+                        // ação de compartilhar
+                      },
                     ),
                   ],
                 ),
