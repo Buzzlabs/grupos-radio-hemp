@@ -24,9 +24,11 @@ class StreamsWidget extends StatefulWidget {
   final String streamsWidgetTag;
   final VoidCallback? onShowMorePressed;
   final VoidCallback? onBackPressed;
+  final int numLivesShowing;
 
   const StreamsWidget({
     required this.streamsWidgetTag,
+    required this.numLivesShowing,
     this.onShowMorePressed,
     this.onBackPressed,
     super.key,
@@ -38,11 +40,12 @@ class StreamsWidget extends StatefulWidget {
 
 class _StreamsWidget extends State<StreamsWidget> {
   List<LiveShow> lives = [];
-  int visibleCount = 3;
+  late int visibleCount;
 
   @override
   void initState() {
     super.initState();
+    visibleCount = widget.numLivesShowing;
     _fetchLives();
   }
 
@@ -108,13 +111,7 @@ class _StreamsWidget extends State<StreamsWidget> {
 
   void _showMore() {
     setState(() {
-      visibleCount += 3;
-    });
-  }
-
-  void _showLess() {
-    setState(() {
-      visibleCount = 3;
+      visibleCount += widget.numLivesShowing;
     });
   }
 
@@ -123,13 +120,12 @@ class _StreamsWidget extends State<StreamsWidget> {
     final theme = Theme.of(context);
     final visibleLives = lives.take(visibleCount).toList();
 
-    final isExpanded = visibleCount >= lives.length;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // ===== Cabeçalho com título + botão voltar (quando expandido) =====
-        Row(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               widget.streamsWidgetTag,
@@ -139,15 +135,21 @@ class _StreamsWidget extends State<StreamsWidget> {
                 fontWeight: FontWeight.w100,
               ),
             ),
-            if (visibleCount > 3) // se mostrar mais foi clicado
+            if (visibleCount >
+                widget.numLivesShowing) // se mostrar mais foi clicado
               TextButton(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                ),
                 onPressed: () {
-                  setState(() => visibleCount = 3);
+                  setState(() => visibleCount = widget.numLivesShowing);
                   widget.onBackPressed?.call(); // <<==== avisa o pai
                 },
                 child: const Text(
                   '< Voltar',
-                  style: TextStyle(fontSize: 14),
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
                 ),
               ),
           ],
@@ -167,8 +169,8 @@ class _StreamsWidget extends State<StreamsWidget> {
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: widget.numLivesShowing,
               mainAxisSpacing: 16,
               crossAxisSpacing: 16,
               childAspectRatio: 1.2,

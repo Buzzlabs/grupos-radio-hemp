@@ -13,70 +13,78 @@ class Teste extends StatefulWidget {
 
 class _TesteState extends State<Teste> {
   bool showBottomMenu = false;
-  bool destaqueExpandido = false;
   String? secaoExpandida; // null = nenhuma expandida
+  String selectedTab = 'rolou';
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isMobileMode =
-        widget.enforceMobileMode || !FluffyThemes.isColumnMode(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobileMode = widget.enforceMobileMode || screenWidth < 1200;
 
     return Scaffold(
       backgroundColor: theme.colorScheme.primary,
-      body: Stack(
-        children: [
-          Container(color: Colors.blueGrey[900]),
+      body: isMobileMode ? _buildMobileLayout(theme) : _buildWebLayout(theme),
+    );
+  }
 
-          // Botão para abrir/fechar a gaveta
-          Positioned(
-            top: 50,
-            right: 30,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white24,
-                foregroundColor: Colors.white,
-              ),
-              onPressed: () {
-                setState(() => showBottomMenu = !showBottomMenu);
-              },
-              child: Text(showBottomMenu ? 'Fechar gaveta' : 'Abrir gaveta'),
+  // === Layout principal da versão Web ===
+  Widget _buildWebLayout(ThemeData theme) {
+    return Stack(
+      children: [
+        Container(color: Colors.blueGrey[900]),
+
+        // === Botão para abrir/fechar a gaveta ===
+        Positioned(
+          top: 50,
+          right: 30,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white24,
+              foregroundColor: Colors.white,
             ),
+            onPressed: () {
+              setState(() => showBottomMenu = !showBottomMenu);
+            },
+            child: Text(showBottomMenu ? 'Fechar gaveta' : 'Abrir gaveta'),
           ),
+        ),
 
-          // === GAVETA ANIMADA ===
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeOut,
-            left: 0,
-            right: 0,
-            bottom: showBottomMenu ? 0 : -550,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 600,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.onPrimary,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black45,
-                      blurRadius: 12,
-                      offset: Offset(0, -4),
-                    ),
-                  ],
+        // === GAVETA ANIMADA ===
+        AnimatedPositioned(
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeOut,
+          left: 0,
+          right: 0,
+          bottom: showBottomMenu ? 0 : -550,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: 600,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.onPrimary,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // --- Alça visual ---
-                      const SizedBox(height: 8),
-                      Center(
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black45,
+                    blurRadius: 12,
+                    offset: Offset(0, -4),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // --- Alça visual (PUXADOR) ---
+                    const SizedBox(height: 8),
+                    Center(
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click, // mostra a “mãozinha”
                         child: GestureDetector(
                           onTap: () =>
                               setState(() => showBottomMenu = !showBottomMenu),
@@ -91,28 +99,97 @@ class _TesteState extends State<Teste> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 8),
+                    ),
+                    const SizedBox(height: 8),
 
-                      // --- Conteúdo principal (2/3 e 1/3) ---
+                    // === CONTEÚDO DA GAVETA ===
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // ===== Coluna esquerda =====
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'ROLOU POR AQUI',
+                                  style: GoogleFonts.righteous(
+                                    textStyle: TextStyle(
+                                      color: theme.colorScheme.primary,
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.w100,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Expanded(
+                                  child: SingleChildScrollView(
+                                    physics: const BouncingScrollPhysics(),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        if (secaoExpandida == null ||
+                                            secaoExpandida == 'destaques')
+                                          StreamsWidget(
+                                            numLivesShowing: 3,
+                                            streamsWidgetTag: '🔥 Destaques',
+                                            onShowMorePressed: () {
+                                              setState(() =>
+                                                  secaoExpandida = 'destaques');
+                                            },
+                                            onBackPressed: () {
+                                              setState(
+                                                  () => secaoExpandida = null);
+                                            },
+                                          ),
+                                        const SizedBox(height: 24),
+                                        if (secaoExpandida == null ||
+                                            secaoExpandida == 'amendoshow')
+                                          StreamsWidget(
+                                            numLivesShowing: 3,
+                                            streamsWidgetTag: '🥜 Amendoshow',
+                                            onShowMorePressed: () {
+                                              setState(() => secaoExpandida =
+                                                  'amendoshow');
+                                            },
+                                            onBackPressed: () {
+                                              setState(
+                                                () => secaoExpandida = null,
+                                              );
+                                            },
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
 
-                      Expanded(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // ===== Coluna esquerda (2/3) =====
-                            Expanded(
-                              flex: 2,
+                          const SizedBox(width: 24),
+
+                          // ===== Coluna direita =====
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.surface,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              padding: const EdgeInsets.all(16),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'ROLOU POR AQUI',
+                                    'PRÓXIMOS EVENTOS',
                                     style: GoogleFonts.righteous(
                                       textStyle: TextStyle(
                                         color: theme.colorScheme.primary,
                                         fontSize: 25,
                                         fontWeight: FontWeight.w100,
-                                        decoration: TextDecoration.none,
                                       ),
                                     ),
                                   ),
@@ -121,40 +198,30 @@ class _TesteState extends State<Teste> {
                                     child: SingleChildScrollView(
                                       physics: const BouncingScrollPhysics(),
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
                                         children: [
-                                          // === Destaques ===
-                                          if (secaoExpandida == null ||
-                                              secaoExpandida == 'destaques')
-                                            StreamsWidget(
-                                              streamsWidgetTag: '🔥 Destaques',
-                                              onShowMorePressed: () {
-                                                setState(() => secaoExpandida =
-                                                    'destaques');
-                                              },
-                                              onBackPressed: () {
-                                                setState(() =>
-                                                    secaoExpandida = null);
-                                              },
+                                          for (var i = 0; i < 6; i++) ...[
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  bottom: 12),
+                                              height: 70,
+                                              decoration: BoxDecoration(
+                                                color: Colors.black87,
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  'Evento #$i',
+                                                  style: GoogleFonts.righteous(
+                                                    textStyle: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
                                             ),
-
-                                          const SizedBox(height: 24),
-
-                                          // === Amendoshow ===
-                                          if (secaoExpandida == null ||
-                                              secaoExpandida == 'amendoshow')
-                                            StreamsWidget(
-                                              streamsWidgetTag: '🥜 Amendoshow',
-                                              onShowMorePressed: () {
-                                                setState(() => secaoExpandida =
-                                                    'amendoshow');
-                                              },
-                                              onBackPressed: () {
-                                                setState(() =>
-                                                    secaoExpandida = null);
-                                              },
-                                            ),
+                                          ],
                                         ],
                                       ),
                                     ),
@@ -162,80 +229,182 @@ class _TesteState extends State<Teste> {
                                 ],
                               ),
                             ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
-                            const SizedBox(width: 24),
+  // === Layout para Mobile ===
+  Widget _buildMobileLayout(ThemeData theme) {
+    return Stack(
+      children: [
+        Container(
+          color: Colors.blueGrey[900],
+        ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.7, // 70% da tela
+            decoration: BoxDecoration(
+              color: theme.colorScheme.onPrimary,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
+              ),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 8,
+                  offset: Offset(0, -2),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8),
+                  Center(
+                    child: GestureDetector(
+                      onTap: () =>
+                          setState(() => showBottomMenu = !showBottomMenu),
+                      child: Container(
+                        width: 40,
+                        height: 5,
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[600],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildTabButton(theme, 'Rolou por aqui', 'rolou'),
+                      _buildTabButton(theme, 'Próximos eventos', 'eventos'),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
 
-                            // ===== Coluna direita (1/3) =====
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: theme.colorScheme.surface,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                padding: const EdgeInsets.all(16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'PRÓXIMOS EVENTOS',
-                                      style: GoogleFonts.righteous(
-                                        textStyle: TextStyle(
-                                          color: theme.colorScheme.primary,
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.w100,
-                                          decoration: TextDecoration.none,
-                                        ),
-                                      ),
+                  // 🔽 troque "Expanded" por "Expanded" dentro de um widget com altura fixa
+                  Expanded(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      switchInCurve: Curves.easeOut,
+                      switchOutCurve: Curves.easeIn,
+                      child: selectedTab == 'rolou'
+                          ? SingleChildScrollView(
+                              key: const ValueKey('rolou'),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (secaoExpandida == null ||
+                                      secaoExpandida == 'destaques')
+                                    StreamsWidget(
+                                      numLivesShowing: 2,
+                                      streamsWidgetTag: '🔥 Destaques',
+                                      onShowMorePressed: () {
+                                        setState(
+                                            () => secaoExpandida = 'destaques');
+                                      },
+                                      onBackPressed: () {
+                                        setState(() => secaoExpandida = null);
+                                      },
                                     ),
-                                    const SizedBox(height: 16),
-                                    // eventos (placeholder)
-                                    Expanded(
-                                      child: SingleChildScrollView(
-                                        physics: const BouncingScrollPhysics(),
-                                        child: Column(
-                                          children: [
-                                            for (var i = 0; i < 6; i++) ...[
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    bottom: 12),
-                                                height: 70,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.black87,
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    'Evento #$i',
-                                                    style:
-                                                        GoogleFonts.righteous(
-                                                      textStyle:
-                                                          const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 16,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ],
+                                  const SizedBox(height: 24),
+                                  if (secaoExpandida == null ||
+                                      secaoExpandida == 'amendoshow')
+                                    StreamsWidget(
+                                      numLivesShowing: 2,
+                                      streamsWidgetTag: '🥜 Amendoshow',
+                                      onShowMorePressed: () {
+                                        setState(() =>
+                                            secaoExpandida = 'amendoshow');
+                                      },
+                                      onBackPressed: () {
+                                        setState(() => secaoExpandida = null);
+                                      },
+                                    ),
+                                ],
+                              ),
+                            )
+                          : SingleChildScrollView(
+                              key: const ValueKey('eventos'),
+                              child: Column(
+                                children: [
+                                  for (var i = 0; i < 7; i++) ...[
+                                    Container(
+                                      margin: const EdgeInsets.only(bottom: 12),
+                                      height: 70,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black87,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Evento #$i',
+                                          style: GoogleFonts.righteous(
+                                            textStyle: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ],
-                                ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTabButton(ThemeData theme, String label, String id) {
+    final isSelected = selectedTab == id;
+    return GestureDetector(
+      onTap: () => setState(() => selectedTab = id),
+      child: Column(
+        children: [
+          Text(
+            label.toUpperCase(),
+            style: GoogleFonts.righteous(
+              textStyle: TextStyle(
+                color:
+                    isSelected ? theme.colorScheme.primary : Colors.grey[600],
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            height: 3,
+            width: 80,
+            color: isSelected ? theme.colorScheme.primary : Colors.transparent,
           ),
         ],
       ),

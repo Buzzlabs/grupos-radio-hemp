@@ -145,7 +145,7 @@ class LiveCard extends StatelessWidget {
                     const Spacer(),
                     IconButton(
                       icon: Icon(Icons.share,
-                          size: 18, color: theme.colorScheme.onSecondary),
+                          size: 18, color: theme.colorScheme.onSecondary,),
                       onPressed: () {
                         // ação de compartilhar
                       },

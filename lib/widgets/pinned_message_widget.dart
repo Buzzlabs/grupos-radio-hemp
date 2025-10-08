@@ -46,7 +46,7 @@ class PinnedMessageWidget extends StatelessWidget {
         const SizedBox(width: 24),
         if (!isMobileMode)
           Padding(
-            padding: const EdgeInsets.only(right: 16), 
+            padding: const EdgeInsets.only(right: 16),
             child: ElevatedButton(
               onPressed: () {
                 // ação do botão "Acessar 🔥"
@@ -84,15 +84,15 @@ class PinnedMessageWidget extends StatelessWidget {
           ? MouseRegion(
               cursor: SystemMouseCursors.click, // muda para "mãozinha"
               child: InkWell( // torna todo o container clicável
-                borderRadius: const BorderRadius.vertical( 
+                borderRadius: const BorderRadius.vertical(
                   bottom: Radius.circular(12),
                 ),
                 onTap: () {
                   // ação quando clica no fixado no modo mobile
                 },
-                child: Padding( 
+                child: Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 15), 
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
                   child: content,
                 ),
               ),
@@ -110,4 +110,4 @@ class PinnedMessageWidget extends StatelessWidget {
 // This code defines a Flutter widget called PinnedMessageWidget. It displays a pinned message bar
 // with an icon, a message, and a button. The layout adapts based on whether it's in mobile mode or not.
 // In mobile mode, the entire bar is clickable, while in non-mobile mode, only the button is clickable.
-// 
+//
