@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fluffychat/widgets/live_card.dart';
 import 'package:fluffychat/config/themes.dart';
 
-// Modelo de dados da Live
 class LiveShow {
   final String title;
   final String category;
@@ -22,27 +21,33 @@ class LiveShow {
 }
 
 class StreamsWidget extends StatefulWidget {
-  const StreamsWidget({super.key});
+  final String streamsWidgetTag;
+  final VoidCallback? onShowMorePressed;
+  final VoidCallback? onBackPressed;
+
+  const StreamsWidget({
+    required this.streamsWidgetTag,
+    this.onShowMorePressed,
+    this.onBackPressed,
+    super.key,
+  });
 
   @override
   State<StreamsWidget> createState() => _StreamsWidget();
 }
 
 class _StreamsWidget extends State<StreamsWidget> {
-  // classe privada que gerencia o estado
   List<LiveShow> lives = [];
   int visibleCount = 3;
 
   @override
   void initState() {
-    // inicializa
     super.initState();
     _fetchLives();
   }
 
-  // Simula busca de lives (substitua por chamada de API)
   Future<void> _fetchLives() async {
-    await Future.delayed(const Duration(seconds: 1)); // simula carregamento
+    await Future.delayed(const Duration(seconds: 1));
     final fetchedLives = [
       LiveShow(
         title: 'Título da Live 1',
@@ -73,6 +78,27 @@ class _StreamsWidget extends State<StreamsWidget> {
         thumbnailUrl: 'assets/images/live_thumbnail.jpg',
         avatarUrl: 'assets/images/live_avatar.jpg',
       ),
+      LiveShow(
+        title: 'Título da Live 5',
+        category: 'Música',
+        date: '9 de Junho',
+        thumbnailUrl: 'assets/images/live_thumbnail.jpg',
+        avatarUrl: 'assets/images/live_avatar.jpg',
+      ),
+      LiveShow(
+        title: 'Título da Live 6',
+        category: 'Música',
+        date: '10 de Junho',
+        thumbnailUrl: 'assets/images/live_thumbnail.jpg',
+        avatarUrl: 'assets/images/live_avatar.jpg',
+      ),
+      LiveShow(
+        title: 'Título da Live 7',
+        category: 'Música',
+        date: '10 de Junho',
+        thumbnailUrl: 'assets/images/live_thumbnail.jpg',
+        avatarUrl: 'assets/images/live_avatar.jpg',
+      ),
     ];
 
     setState(() {
@@ -86,106 +112,120 @@ class _StreamsWidget extends State<StreamsWidget> {
     });
   }
 
+  void _showLess() {
+    setState(() {
+      visibleCount = 3;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final visibleLives = lives.take(visibleCount).toList();
 
-    return Expanded(
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    final isExpanded = visibleCount >= lives.length;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // ===== Cabeçalho com título + botão voltar (quando expandido) =====
+        Row(
           children: [
             Text(
-              '🔥 Destaques',
+              widget.streamsWidgetTag,
               style: TextStyle(
                 color: theme.colorScheme.primary,
                 fontSize: 20,
                 fontWeight: FontWeight.w100,
-                decoration: TextDecoration.none,
               ),
             ),
-            const SizedBox(height: 24),
-            // Se estiver carregando:
-            if (lives.isEmpty)
-              const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: CircularProgressIndicator(),
-                ),
-              )
-            else
-              // Grade de cards
-              GridView.builder(
-                shrinkWrap: true,
-                physics:
-                    const NeverScrollableScrollPhysics(), // GridView vem com scroll
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, // num de colunas
-                  mainAxisSpacing: 16, // espaço vertical
-                  crossAxisSpacing: 16, // espaço horizontal
-                  childAspectRatio: 1.2, // proporção dos cards
-                ),
-                itemCount: visibleLives.length,
-                itemBuilder: (context, index) {
-                  return LiveCard(live: visibleLives[index]);
+            if (visibleCount > 3) // se mostrar mais foi clicado
+              TextButton(
+                onPressed: () {
+                  setState(() => visibleCount = 3);
+                  widget.onBackPressed?.call(); // <<==== avisa o pai
                 },
-              ),
-
-            const SizedBox(height: 10),
-
-            // Botão "Mostrar mais"
-            if (visibleCount < lives.length)
-              Align(
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Linha antes
-                    Expanded(
-                      child: SizedBox(
-                        child: Divider(
-                          color: theme.colorScheme.primary,
-                          thickness: 1,
-                          endIndent: 8,
-                        ),
-                      ),
-                    ),
-                    // Texto clicável
-                    TextButton(
-                      onPressed: _showMore,
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero, // remove espaço extra
-                        minimumSize:
-                            const Size(0, 0), // evita botão muito grande
-                        tapTargetSize:
-                            MaterialTapTargetSize.shrinkWrap, // área justa
-                      ),
-                      child: Text(
-                        'Mostrar mais >',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: theme.colorScheme.primary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    // Linha depois
-                    Expanded(
-                      child: SizedBox(
-                        child: Divider(
-                          color: theme.colorScheme.primary,
-                          thickness: 1,
-                          indent: 8,
-                        ),
-                      ),
-                    ),
-                  ],
+                child: const Text(
+                  '< Voltar',
+                  style: TextStyle(fontSize: 14),
                 ),
-              )
+              ),
           ],
         ),
-      ),
+
+        const SizedBox(height: 24),
+
+        // ===== Conteúdo =====
+        if (lives.isEmpty)
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: CircularProgressIndicator(),
+            ),
+          )
+        else
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              childAspectRatio: 1.2,
+            ),
+            itemCount: visibleLives.length,
+            itemBuilder: (context, index) {
+              return LiveCard(live: visibleLives[index]);
+            },
+          ),
+
+        const SizedBox(height: 10),
+
+        // ===== Botão Mostrar mais =====
+        // Botão "Mostrar mais"
+        if (visibleCount < lives.length)
+          Align(
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: Divider(
+                    color: theme.colorScheme.primary,
+                    thickness: 1,
+                    endIndent: 8,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    _showMore();
+                    widget.onShowMorePressed?.call(); // <<==== avisa o pai
+                  },
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(0, 0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    'Mostrar mais >',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Divider(
+                    color: theme.colorScheme.primary,
+                    thickness: 1,
+                    indent: 8,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
     );
   }
 }
