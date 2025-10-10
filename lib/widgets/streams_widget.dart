@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluffychat/widgets/live_card.dart';
-import 'package:fluffychat/config/themes.dart';
 
+// ATENÇÃO!! COLOQUEI - assets/images_for_live_card/ NO PUBSPEC.YAML
 class LiveShow {
   final String title;
   final String category;
@@ -25,10 +25,12 @@ class StreamsWidget extends StatefulWidget {
   final VoidCallback? onShowMorePressed;
   final VoidCallback? onBackPressed;
   final int numLivesShowing;
+  final bool enforceMobileMode;
 
   const StreamsWidget({
     required this.streamsWidgetTag,
     required this.numLivesShowing,
+    this.enforceMobileMode = false,
     this.onShowMorePressed,
     this.onBackPressed,
     super.key,
@@ -39,7 +41,8 @@ class StreamsWidget extends StatefulWidget {
 }
 
 class _StreamsWidget extends State<StreamsWidget> {
-  List<LiveShow> lives = [];
+  List<LiveShow> allLives = [];
+  List<LiveShow> filteredLives = [];
   late int visibleCount;
 
   @override
@@ -53,60 +56,83 @@ class _StreamsWidget extends State<StreamsWidget> {
     await Future.delayed(const Duration(seconds: 1));
     final fetchedLives = [
       LiveShow(
-        title: 'Título da Live 1',
+        title: 'Amendoshow com Ygor Amendoim',
         category: 'Música',
-        date: '17 de Junho',
-        thumbnailUrl: 'assets/images/live_thumbnail.jpg',
-        avatarUrl: 'assets/images/live_avatar.jpg',
-        isLive: true,
+        date: '17 de Julho',
+        thumbnailUrl: 'assets/images_for_live_card/thumbnail_Amendoshow.png',
+        avatarUrl: 'assets/logo_single_comfundo.png',
+        isLive: false,
       ),
       LiveShow(
-        title: 'Título da Live 2',
+        title: 'THShow com Igor Seco e Nhock',
         category: 'Podcast',
-        date: '15 de Junho',
-        thumbnailUrl: 'assets/images/live_thumbnail.jpg',
-        avatarUrl: 'assets/images/live_avatar.jpg',
+        date: '17 de Julho',
+        thumbnailUrl: 'assets/images_for_live_card/thumbnail_THShow.png',
+        avatarUrl: 'assets/logo_single_comfundo.png',
       ),
       LiveShow(
-        title: 'Título da Live 3',
-        category: 'Cultura',
-        date: '12 de Junho',
-        thumbnailUrl: 'assets/images/live_thumbnail.jpg',
-        avatarUrl: 'assets/images/live_avatar.jpg',
-      ),
-      LiveShow(
-        title: 'Título da Live 4',
+        title: 'O Fino do Ronald com Ronald Rios',
         category: 'Música',
-        date: '10 de Junho',
-        thumbnailUrl: 'assets/images/live_thumbnail.jpg',
-        avatarUrl: 'assets/images/live_avatar.jpg',
+        date: '17 de Julho',
+        thumbnailUrl: 'assets/images_for_live_card/thumbnail_FinoRonald.png',
+        avatarUrl: 'assets/logo_single_comfundo.png',
       ),
       LiveShow(
-        title: 'Título da Live 5',
+        title: 'Amendoshow com Ygor Amendoim',
         category: 'Música',
-        date: '9 de Junho',
-        thumbnailUrl: 'assets/images/live_thumbnail.jpg',
-        avatarUrl: 'assets/images/live_avatar.jpg',
+        date: '10 de Julho',
+        thumbnailUrl: 'assets/images_for_live_card/thumbnail_Amendoshow.png',
+        avatarUrl: 'assets/logo_single_comfundo.png',
       ),
       LiveShow(
-        title: 'Título da Live 6',
-        category: 'Música',
-        date: '10 de Junho',
-        thumbnailUrl: 'assets/images/live_thumbnail.jpg',
-        avatarUrl: 'assets/images/live_avatar.jpg',
+        title: 'THShow com Igor Seco e Nhock',
+        category: 'Podcast',
+        date: '9 de Julho',
+        thumbnailUrl: 'assets/images_for_live_card/thumbnail_THShow.png',
+        avatarUrl: 'assets/logo_single_comfundo.png',
       ),
       LiveShow(
-        title: 'Título da Live 7',
+        title: 'O Fino do Ronald com Ronald Rios',
         category: 'Música',
-        date: '10 de Junho',
-        thumbnailUrl: 'assets/images/live_thumbnail.jpg',
-        avatarUrl: 'assets/images/live_avatar.jpg',
+        date: '8 de Julho',
+        thumbnailUrl: 'assets/images_for_live_card/thumbnail_FinoRonald.png',
+        avatarUrl: 'assets/logo_single_comfundo.png',
+      ),
+      LiveShow(
+        title: 'Amendoshow com Ygor Amendoim',
+        category: 'Música',
+        date: '8 de Julho',
+        thumbnailUrl: 'assets/images_for_live_card/thumbnail_Amendoshow.png',
+        avatarUrl: 'assets/logo_single_comfundo.png',
       ),
     ];
 
     setState(() {
-      lives = fetchedLives;
+      allLives = fetchedLives;
+      _applyFilter();
     });
+  }
+
+  // === FILTRA POR TÓPICO ===
+  void _applyFilter() {
+    final tag = widget.streamsWidgetTag.trim();
+    if (tag.contains('Destaques')) {
+      filteredLives = allLives;
+    } else if (tag.contains('Amendoshow')) {
+      filteredLives = allLives
+          .where((live) => live.title.toLowerCase().contains('amendoshow'))
+          .toList();
+    } else if (tag.contains('THShow')) {
+      filteredLives = allLives
+          .where((live) => live.title.toLowerCase().contains('thshow'))
+          .toList();
+    } else if (tag.contains('O Fino')) {
+      filteredLives = allLives
+          .where((live) => live.title.toLowerCase().contains('fino'))
+          .toList();
+    } else {
+      filteredLives = allLives;
+    }
   }
 
   void _showMore() {
@@ -118,12 +144,11 @@ class _StreamsWidget extends State<StreamsWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final visibleLives = lives.take(visibleCount).toList();
-
+    final visibleLives = filteredLives.take(visibleCount).toList();
+    // === TÓPICO e botão VOLTAR ===
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // ===== Cabeçalho com título + botão voltar (quando expandido) =====
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -135,30 +160,21 @@ class _StreamsWidget extends State<StreamsWidget> {
                 fontWeight: FontWeight.w100,
               ),
             ),
-            if (visibleCount >
-                widget.numLivesShowing) // se mostrar mais foi clicado
+            if (visibleCount > widget.numLivesShowing)
               TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                ),
+                style: TextButton.styleFrom(padding: EdgeInsets.zero),
                 onPressed: () {
                   setState(() => visibleCount = widget.numLivesShowing);
-                  widget.onBackPressed?.call(); // <<==== avisa o pai
+                  widget.onBackPressed?.call();
                 },
-                child: const Text(
-                  '< Voltar',
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
+                child: const Text('< Voltar', style: TextStyle(fontSize: 14)),
               ),
           ],
         ),
 
         const SizedBox(height: 24),
-
-        // ===== Conteúdo =====
-        if (lives.isEmpty)
+        // === LIVE CARDS ===
+        if (filteredLives.isEmpty)
           const Center(
             child: Padding(
               padding: EdgeInsets.all(20),
@@ -166,66 +182,91 @@ class _StreamsWidget extends State<StreamsWidget> {
             ),
           )
         else
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: widget.numLivesShowing,
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
-              childAspectRatio: 1.2,
-            ),
-            itemCount: visibleLives.length,
-            itemBuilder: (context, index) {
-              return LiveCard(live: visibleLives[index]);
-            },
-          ),
+          Column(
+            children: [
+              LayoutBuilder(
+                // regula os LiveCard
+                builder: (context, constraints) {
+                  final screenWidth = constraints.maxWidth;
+                  final isMobileMode =
+                      widget.enforceMobileMode || screenWidth < 1200;
 
-        const SizedBox(height: 10),
+                  int columns = widget.numLivesShowing;
 
-        // ===== Botão Mostrar mais =====
-        // Botão "Mostrar mais"
-        if (visibleCount < lives.length)
-          Align(
-            alignment: Alignment.center,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  child: Divider(
-                    color: theme.colorScheme.primary,
-                    thickness: 1,
-                    endIndent: 8,
+                  if (isMobileMode && screenWidth < 500) {
+                    columns = 1;
+                  }
+
+                  const spacing = 16.0;
+                  const horizontalPadding = 32.0;
+                  final totalSpacing = (columns - 1) * spacing;
+                  final availableWidth =
+                      screenWidth - totalSpacing - horizontalPadding;
+                  final itemWidth =
+                      (availableWidth / columns) - (isMobileMode ? 4 : 0);
+
+                  return Wrap(
+                    spacing: spacing,
+                    runSpacing: 8,
+                    alignment: WrapAlignment.start,
+                    children: visibleLives.map((live) {
+                      return SizedBox(
+                        width: itemWidth,
+                        child: LiveCard(live: live),
+                      );
+                    }).toList(),
+                  );
+                },
+              ),
+              // === botão MOSTRAR MAIS ===
+              if (visibleCount < filteredLives.length)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: 1,
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          color: theme.colorScheme.onSecondaryContainer
+                              .withOpacity(0.2),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          _showMore();
+                          widget.onShowMorePressed?.call();
+                        },
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
+                          minimumSize: const Size(0, 0),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: Text(
+                          'Mostrar mais >',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          height: 1,
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          color: theme.colorScheme.onSecondaryContainer
+                              .withOpacity(0.2),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    _showMore();
-                    widget.onShowMorePressed?.call(); // <<==== avisa o pai
-                  },
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: const Size(0, 0),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: Text(
-                    'Mostrar mais >',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Divider(
-                    color: theme.colorScheme.primary,
-                    thickness: 1,
-                    indent: 8,
-                  ),
-                ),
-              ],
-            ),
+            ],
           ),
       ],
     );

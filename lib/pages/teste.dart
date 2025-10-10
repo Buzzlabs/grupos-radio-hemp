@@ -28,13 +28,13 @@ class _TesteState extends State<Teste> {
     );
   }
 
-  // === Layout principal da versão Web ===
+  // === LAYOUT WEB ===
   Widget _buildWebLayout(ThemeData theme) {
     return Stack(
       children: [
         Container(color: Colors.blueGrey[900]),
 
-        // === Botão para abrir/fechar a gaveta ===
+        // === botão ABRIR/FECHAR A GAVETA ===
         Positioned(
           top: 50,
           right: 30,
@@ -80,11 +80,11 @@ class _TesteState extends State<Teste> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // --- Alça visual (PUXADOR) ---
+                    // === PUXADOR ===
                     const SizedBox(height: 8),
                     Center(
                       child: MouseRegion(
-                        cursor: SystemMouseCursors.click, // mostra a “mãozinha”
+                        cursor: SystemMouseCursors.click,
                         child: GestureDetector(
                           onTap: () =>
                               setState(() => showBottomMenu = !showBottomMenu),
@@ -107,7 +107,7 @@ class _TesteState extends State<Teste> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // ===== Coluna esquerda =====
+                          // ===== COLUNA ESQUERDA =====
                           Expanded(
                             flex: 2,
                             child: Column(
@@ -243,7 +243,7 @@ class _TesteState extends State<Teste> {
     );
   }
 
-  // === Layout para Mobile ===
+  // === LAYOUT MOBILE === (ação de deslizar incompleto)
   Widget _buildMobileLayout(ThemeData theme) {
     return Stack(
       children: [
@@ -255,7 +255,7 @@ class _TesteState extends State<Teste> {
           left: 0,
           right: 0,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.7, // 70% da tela
+            height: MediaQuery.of(context).size.height * 0.7,
             decoration: BoxDecoration(
               color: theme.colorScheme.onPrimary,
               borderRadius: const BorderRadius.only(
@@ -300,8 +300,6 @@ class _TesteState extends State<Teste> {
                     ],
                   ),
                   const SizedBox(height: 16),
-
-                  // 🔽 troque "Expanded" por "Expanded" dentro de um widget com altura fixa
                   Expanded(
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
@@ -382,6 +380,7 @@ class _TesteState extends State<Teste> {
     );
   }
 
+  // === ABAS ===
   Widget _buildTabButton(ThemeData theme, String label, String id) {
     final isSelected = selectedTab == id;
     return GestureDetector(
