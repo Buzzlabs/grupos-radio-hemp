@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fluffychat/widgets/live_card.dart';
 
-// ATENÇÃO!! COLOQUEI - assets/images_for_live_card/ NO PUBSPEC.YAML
 class LiveShow {
   final String title;
   final String category;
   final String date;
   final String thumbnailUrl;
+  final String videoUrl;
   final String avatarUrl;
   final bool isLive;
 
@@ -16,6 +16,7 @@ class LiveShow {
     required this.date,
     required this.thumbnailUrl,
     required this.avatarUrl,
+    required this.videoUrl,
     this.isLive = false,
   });
 }
@@ -24,13 +25,20 @@ class StreamsWidget extends StatefulWidget {
   final String streamsWidgetTag;
   final VoidCallback? onShowMorePressed;
   final VoidCallback? onBackPressed;
-  final int numLivesShowing;
+
+  final int numColumns;
+  final int initialVisibleCount;
+  final int loadMoreCount;
   final bool enforceMobileMode;
+  final bool showHeader;
 
   const StreamsWidget({
     required this.streamsWidgetTag,
-    required this.numLivesShowing,
+    this.numColumns = 3,
+    this.initialVisibleCount = 3,
+    this.loadMoreCount = 3,
     this.enforceMobileMode = false,
+    this.showHeader = true,
     this.onShowMorePressed,
     this.onBackPressed,
     super.key,
@@ -48,7 +56,7 @@ class _StreamsWidget extends State<StreamsWidget> {
   @override
   void initState() {
     super.initState();
-    visibleCount = widget.numLivesShowing;
+    visibleCount = widget.initialVisibleCount;
     _fetchLives();
   }
 
@@ -61,6 +69,7 @@ class _StreamsWidget extends State<StreamsWidget> {
         date: '17 de Julho',
         thumbnailUrl: 'assets/images_for_live_card/thumbnail_Amendoshow.png',
         avatarUrl: 'assets/logo_single_comfundo.png',
+        videoUrl: '',
         isLive: false,
       ),
       LiveShow(
@@ -68,6 +77,7 @@ class _StreamsWidget extends State<StreamsWidget> {
         category: 'Podcast',
         date: '17 de Julho',
         thumbnailUrl: 'assets/images_for_live_card/thumbnail_THShow.png',
+        videoUrl: '',
         avatarUrl: 'assets/logo_single_comfundo.png',
       ),
       LiveShow(
@@ -75,6 +85,7 @@ class _StreamsWidget extends State<StreamsWidget> {
         category: 'Música',
         date: '17 de Julho',
         thumbnailUrl: 'assets/images_for_live_card/thumbnail_FinoRonald.png',
+        videoUrl: '',
         avatarUrl: 'assets/logo_single_comfundo.png',
       ),
       LiveShow(
@@ -82,6 +93,7 @@ class _StreamsWidget extends State<StreamsWidget> {
         category: 'Música',
         date: '10 de Julho',
         thumbnailUrl: 'assets/images_for_live_card/thumbnail_Amendoshow.png',
+        videoUrl: '',
         avatarUrl: 'assets/logo_single_comfundo.png',
       ),
       LiveShow(
@@ -89,6 +101,7 @@ class _StreamsWidget extends State<StreamsWidget> {
         category: 'Podcast',
         date: '9 de Julho',
         thumbnailUrl: 'assets/images_for_live_card/thumbnail_THShow.png',
+        videoUrl: '',
         avatarUrl: 'assets/logo_single_comfundo.png',
       ),
       LiveShow(
@@ -96,6 +109,7 @@ class _StreamsWidget extends State<StreamsWidget> {
         category: 'Música',
         date: '8 de Julho',
         thumbnailUrl: 'assets/images_for_live_card/thumbnail_FinoRonald.png',
+        videoUrl: '',
         avatarUrl: 'assets/logo_single_comfundo.png',
       ),
       LiveShow(
@@ -103,6 +117,7 @@ class _StreamsWidget extends State<StreamsWidget> {
         category: 'Música',
         date: '8 de Julho',
         thumbnailUrl: 'assets/images_for_live_card/thumbnail_Amendoshow.png',
+        videoUrl: '',
         avatarUrl: 'assets/logo_single_comfundo.png',
       ),
     ];
@@ -137,7 +152,7 @@ class _StreamsWidget extends State<StreamsWidget> {
 
   void _showMore() {
     setState(() {
-      visibleCount += widget.numLivesShowing;
+      visibleCount += widget.loadMoreCount;
     });
   }
 
@@ -145,34 +160,35 @@ class _StreamsWidget extends State<StreamsWidget> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final visibleLives = filteredLives.take(visibleCount).toList();
-    // === TÓPICO e botão VOLTAR ===
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.streamsWidgetTag,
-              style: TextStyle(
-                color: theme.colorScheme.primary,
-                fontSize: 20,
-                fontWeight: FontWeight.w100,
+        if (widget.showHeader)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.streamsWidgetTag,
+                style: TextStyle(
+                  color: theme.colorScheme.primary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w100,
+                ),
               ),
-            ),
-            if (visibleCount > widget.numLivesShowing)
-              TextButton(
-                style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                onPressed: () {
-                  setState(() => visibleCount = widget.numLivesShowing);
-                  widget.onBackPressed?.call();
-                },
-                child: const Text('< Voltar', style: TextStyle(fontSize: 14)),
-              ),
-          ],
-        ),
+              if (visibleCount > widget.initialVisibleCount)
+                TextButton(
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                  onPressed: () {
+                    setState(() => visibleCount = widget.initialVisibleCount);
+                    widget.onBackPressed?.call();
+                  },
+                  child: const Text('< Voltar', style: TextStyle(fontSize: 14)),
+                ),
+              const SizedBox(height: 24),
+            ],
+          ),
 
-        const SizedBox(height: 24),
         // === LIVE CARDS ===
         if (filteredLives.isEmpty)
           const Center(
@@ -185,13 +201,12 @@ class _StreamsWidget extends State<StreamsWidget> {
           Column(
             children: [
               LayoutBuilder(
-                // regula os LiveCard
                 builder: (context, constraints) {
                   final screenWidth = constraints.maxWidth;
                   final isMobileMode =
                       widget.enforceMobileMode || screenWidth < 1200;
 
-                  int columns = widget.numLivesShowing;
+                  int columns = widget.numColumns;
 
                   if (isMobileMode && screenWidth < 500) {
                     columns = 1;
@@ -218,6 +233,7 @@ class _StreamsWidget extends State<StreamsWidget> {
                   );
                 },
               ),
+
               // === botão MOSTRAR MAIS ===
               if (visibleCount < filteredLives.length)
                 Padding(

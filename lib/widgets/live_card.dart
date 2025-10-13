@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluffychat/config/themes.dart';
 import 'package:fluffychat/widgets/streams_widget.dart';
+import 'package:go_router/go_router.dart';
 
 class LiveCard extends StatelessWidget {
   final LiveShow live;
@@ -29,6 +30,7 @@ class LiveCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           onTap: () {
             // ação de navegação para o link da live
+            context.goNamed('tela_video', extra: live);
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

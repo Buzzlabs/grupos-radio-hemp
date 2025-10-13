@@ -134,7 +134,10 @@ class _TesteState extends State<Teste> {
                                         if (secaoExpandida == null ||
                                             secaoExpandida == 'destaques')
                                           StreamsWidget(
-                                            numLivesShowing: 3,
+                                            initialVisibleCount: 3,
+                                            loadMoreCount: 3,
+                                            numColumns: 3,
+                                            showHeader: true,
                                             streamsWidgetTag: '🔥 Destaques',
                                             onShowMorePressed: () {
                                               setState(() =>
@@ -149,7 +152,10 @@ class _TesteState extends State<Teste> {
                                         if (secaoExpandida == null ||
                                             secaoExpandida == 'amendoshow')
                                           StreamsWidget(
-                                            numLivesShowing: 3,
+                                            initialVisibleCount: 3,
+                                            loadMoreCount: 3,
+                                            numColumns: 3,
+                                            showHeader: true,
                                             streamsWidgetTag: '🥜 Amendoshow',
                                             onShowMorePressed: () {
                                               setState(() => secaoExpandida =
@@ -243,7 +249,7 @@ class _TesteState extends State<Teste> {
     );
   }
 
-  // === LAYOUT MOBILE === (ação de deslizar incompleto)
+  // === LAYOUT MOBILE === (ação de deslizar incompleto e não testado)
   Widget _buildMobileLayout(ThemeData theme) {
     return Stack(
       children: [
@@ -314,7 +320,9 @@ class _TesteState extends State<Teste> {
                                   if (secaoExpandida == null ||
                                       secaoExpandida == 'destaques')
                                     StreamsWidget(
-                                      numLivesShowing: 2,
+                                      numColumns: 2,
+                                      initialVisibleCount: 2,
+                                      loadMoreCount: 2,
                                       streamsWidgetTag: '🔥 Destaques',
                                       onShowMorePressed: () {
                                         setState(
@@ -328,7 +336,9 @@ class _TesteState extends State<Teste> {
                                   if (secaoExpandida == null ||
                                       secaoExpandida == 'amendoshow')
                                     StreamsWidget(
-                                      numLivesShowing: 2,
+                                      numColumns: 2,
+                                      initialVisibleCount: 2,
+                                      loadMoreCount: 2,
                                       streamsWidgetTag: '🥜 Amendoshow',
                                       onShowMorePressed: () {
                                         setState(() =>

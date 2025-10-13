@@ -2,7 +2,6 @@ import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 class PinnedMessageWidget extends StatelessWidget {
-
   final bool enforceMobileMode;
 
   const PinnedMessageWidget({
@@ -17,8 +16,10 @@ class PinnedMessageWidget extends StatelessWidget {
         enforceMobileMode || !FluffyThemes.isColumnMode(context);
 
     final content = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,  // força o "bloco da esquerda" e o botão a ficarem nos cantos opostos
-      crossAxisAlignment: CrossAxisAlignment.center, // garante que ambos fiquem no mesmo nível vertical
+      mainAxisAlignment: MainAxisAlignment
+          .spaceBetween, // força o "bloco da esquerda" e o botão a ficarem nos cantos opostos
+      crossAxisAlignment: CrossAxisAlignment
+          .center, // garante que ambos fiquem no mesmo nível vertical
       children: [
         Expanded(
           child: Row(
@@ -83,7 +84,8 @@ class PinnedMessageWidget extends StatelessWidget {
       child: isMobileMode
           ? MouseRegion(
               cursor: SystemMouseCursors.click, // muda para "mãozinha"
-              child: InkWell( // torna todo o container clicável
+              child: InkWell(
+                // torna todo o container clicável
                 borderRadius: const BorderRadius.vertical(
                   bottom: Radius.circular(12),
                 ),
@@ -98,8 +100,7 @@ class PinnedMessageWidget extends StatelessWidget {
               ),
             )
           : Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
               child: content,
             ),
     );
