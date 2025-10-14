@@ -234,8 +234,8 @@ class _StreamsWidget extends State<StreamsWidget> {
                 },
               ),
 
-              // === botão MOSTRAR MAIS ===
-              if (visibleCount < filteredLives.length)
+              // === botão MOSTRAR MAIS (somente se showHeader for true) ===
+              if (widget.showHeader && visibleCount < filteredLives.length)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Row(
@@ -256,9 +256,7 @@ class _StreamsWidget extends State<StreamsWidget> {
                         },
                         style: TextButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 4,
-                          ),
+                              horizontal: 12, vertical: 4),
                           minimumSize: const Size(0, 0),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),

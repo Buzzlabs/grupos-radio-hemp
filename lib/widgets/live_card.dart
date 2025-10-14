@@ -91,6 +91,7 @@ class LiveCard extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 15,
+                          backgroundColor: Colors.transparent,
                           backgroundImage: NetworkImage(live.avatarUrl),
                           onBackgroundImageError: (_, __) {},
                         ),

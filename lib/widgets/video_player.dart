@@ -17,42 +17,48 @@ class VideoPlayer extends StatefulWidget {
 class _VideoPlayerState extends State<VideoPlayer> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        AspectRatio(
-          aspectRatio: 1,
-          child: Container(
-            color: Colors.black12,
-            child: const Center(
-              child: Icon(
-                Icons.play_circle_fill,
-                size: 64,
-                color: Colors.grey,
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.all(5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AspectRatio(
+            aspectRatio: 16 / 9,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black12,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.play_circle_fill,
+                  size: 64,
+                  color: Colors.grey,
+                ),
               ),
             ),
           ),
-        ),
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
+          const SizedBox(height: 16),
+          Row(
             children: [
               CircleAvatar(
                 radius: 24,
+                backgroundColor: Colors.transparent,
                 backgroundImage: NetworkImage(
                   widget.live.avatarUrl.isNotEmpty
                       ? widget.live.avatarUrl
                       : 'https://via.placeholder.com/150',
                 ),
-                // remove onBackgroundImageError para ver se aparece o erro no console
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   widget.live.title,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 15,
+                  style: TextStyle(
+                    color: theme.colorScheme.onSecondary,
+                    fontSize: 24,
                     fontWeight: FontWeight.w500,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -60,8 +66,8 @@ class _VideoPlayerState extends State<VideoPlayer> {
               ),
             ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
