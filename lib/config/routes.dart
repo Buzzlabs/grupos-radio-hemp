@@ -31,7 +31,7 @@ import 'package:fluffychat/widgets/matrix.dart';
 import 'package:fluffychat/widgets/share_scaffold_dialog.dart';
 import 'package:fluffychat/guard/guard.dart';
 import 'package:fluffychat/pages/teste.dart';
-import 'package:fluffychat/pages/tela_video.dart';
+import 'package:fluffychat/pages/screen_video.dart';
 import 'package:fluffychat/widgets/streams_widget.dart';
 
 abstract class AppRoutes {
@@ -85,8 +85,8 @@ abstract class AppRoutes {
       ),
     ),
     GoRoute(
-      name: 'tela_video',
-      path: '/tela_video',
+      name: 'screen_video',
+      path: '/screen_video',
       builder: (context, state) {
         // Pega o objeto LiveShow que foi passado no extra
         final live = state.extra as LiveShow?;
@@ -99,7 +99,7 @@ abstract class AppRoutes {
           );
         }
 
-        return TelaVideo(live: live);
+        return ScreenVideo(live: live);
       },
     ),
     GoRoute(

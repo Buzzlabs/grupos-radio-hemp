@@ -30,7 +30,7 @@ class LiveCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           onTap: () {
             // ação de navegação para o link da live
-            context.goNamed('tela_video', extra: live);
+            context.goNamed('screen_video', extra: live);
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:fluffychat/widgets/video_player.dart';
+import 'package:fluffychat/widgets/video_player_view.dart';
 import 'package:fluffychat/widgets/streams_widget.dart';
 import 'package:matrix/matrix.dart';
 import 'package:go_router/go_router.dart';
 
-class TelaVideo extends StatelessWidget {
+class ScreenVideo extends StatelessWidget {
   final LiveShow live;
 
-  const TelaVideo({
+  const ScreenVideo({
     required this.live,
     super.key,
   });

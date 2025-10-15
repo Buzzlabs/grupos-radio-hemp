@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluffychat/widgets/live_card.dart';
+import 'dart:convert';
+import 'dart:async';
+import 'package:http/http.dart' as http;
 
 class LiveShow {
   final String title;
@@ -61,71 +64,45 @@ class _StreamsWidget extends State<StreamsWidget> {
   }
 
   Future<void> _fetchLives() async {
-    await Future.delayed(const Duration(seconds: 1));
-    final fetchedLives = [
-      LiveShow(
-        title: 'Amendoshow com Ygor Amendoim',
-        category: 'Música',
-        date: '17 de Julho',
-        thumbnailUrl: 'assets/images_for_live_card/thumbnail_Amendoshow.png',
-        avatarUrl: 'assets/logo_single_comfundo.png',
-        videoUrl: '',
-        isLive: false,
-      ),
-      LiveShow(
-        title: 'THShow com Igor Seco e Nhock',
-        category: 'Podcast',
-        date: '17 de Julho',
-        thumbnailUrl: 'assets/images_for_live_card/thumbnail_THShow.png',
-        videoUrl: '',
-        avatarUrl: 'assets/logo_single_comfundo.png',
-      ),
-      LiveShow(
-        title: 'O Fino do Ronald com Ronald Rios',
-        category: 'Música',
-        date: '17 de Julho',
-        thumbnailUrl: 'assets/images_for_live_card/thumbnail_FinoRonald.png',
-        videoUrl: '',
-        avatarUrl: 'assets/logo_single_comfundo.png',
-      ),
-      LiveShow(
-        title: 'Amendoshow com Ygor Amendoim',
-        category: 'Música',
-        date: '10 de Julho',
-        thumbnailUrl: 'assets/images_for_live_card/thumbnail_Amendoshow.png',
-        videoUrl: '',
-        avatarUrl: 'assets/logo_single_comfundo.png',
-      ),
-      LiveShow(
-        title: 'THShow com Igor Seco e Nhock',
-        category: 'Podcast',
-        date: '9 de Julho',
-        thumbnailUrl: 'assets/images_for_live_card/thumbnail_THShow.png',
-        videoUrl: '',
-        avatarUrl: 'assets/logo_single_comfundo.png',
-      ),
-      LiveShow(
-        title: 'O Fino do Ronald com Ronald Rios',
-        category: 'Música',
-        date: '8 de Julho',
-        thumbnailUrl: 'assets/images_for_live_card/thumbnail_FinoRonald.png',
-        videoUrl: '',
-        avatarUrl: 'assets/logo_single_comfundo.png',
-      ),
-      LiveShow(
-        title: 'Amendoshow com Ygor Amendoim',
-        category: 'Música',
-        date: '8 de Julho',
-        thumbnailUrl: 'assets/images_for_live_card/thumbnail_Amendoshow.png',
-        videoUrl: '',
-        avatarUrl: 'assets/logo_single_comfundo.png',
-      ),
-    ];
+    final baseUrl = 'http://localhost:3333';
+    final url = Uri.parse('$baseUrl/dashboard/api/streams');
 
-    setState(() {
-      allLives = fetchedLives;
-      _applyFilter();
-    });
+    try {
+      final response = await http.get(url).timeout(const Duration(seconds: 8));
+
+      if (response.statusCode != 200) {
+        throw Exception('HTTP ${response.statusCode}');
+      }
+
+      final decoded = jsonDecode(response.body);
+      if (decoded is! List) {
+        throw Exception('Resposta inesperada: esperava um array JSON');
+      }
+
+      final List<LiveShow> fetchedLives = decoded.map<LiveShow>((dynamic item) {
+        final map = item as Map<String, dynamic>;
+        return LiveShow(
+          title: map['title'] as String? ?? 'Sem título',
+          category: (map['isLive'] == true) ? 'Ao vivo' : 'Gravação',
+          date: map['recordedRelativeTime'] as String? ?? '',
+          thumbnailUrl: map['latestThumbnail'] as String? ?? '',
+          avatarUrl:
+              map['avatarUrl'] as String? ?? 'assets/logo_single_comfundo.png',
+          videoUrl: map['masterPlaylistUrl'] as String? ?? '',
+          isLive: map['isLive'] as bool? ?? false,
+        );
+      }).toList();
+
+      if (!mounted) return;
+      setState(() {
+        allLives = fetchedLives;
+        _applyFilter();
+      });
+    } on TimeoutException catch (_) {
+      debugPrint('Requisição expirou');
+    } catch (e, st) {
+      debugPrint('Erro ao buscar lives: $e\n$st');
+    }
   }
 
   // === FILTRA POR TÓPICO ===
@@ -190,12 +167,13 @@ class _StreamsWidget extends State<StreamsWidget> {
           ),
 
         // === LIVE CARDS ===
-        if (filteredLives.isEmpty)
+        if (allLives.isEmpty)
           const Center(
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: CircularProgressIndicator(),
-            ),
+            child: CircularProgressIndicator(),
+          )
+        else if (filteredLives.isEmpty)
+          const Center(
+            child: Text('Nenhuma live encontrada'),
           )
         else
           Column(
@@ -224,7 +202,7 @@ class _StreamsWidget extends State<StreamsWidget> {
                     spacing: spacing,
                     runSpacing: 8,
                     alignment: WrapAlignment.start,
-                    children: visibleLives.map((live) {
+                    children: filteredLives.take(visibleCount).map((live) {
                       return SizedBox(
                         width: itemWidth,
                         child: LiveCard(live: live),
@@ -234,7 +212,7 @@ class _StreamsWidget extends State<StreamsWidget> {
                 },
               ),
 
-              // === botão MOSTRAR MAIS (somente se showHeader for true) ===
+              // === botão MOSTRAR MAIS ===
               if (widget.showHeader && visibleCount < filteredLives.length)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),

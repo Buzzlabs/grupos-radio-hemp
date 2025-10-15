@@ -119,7 +119,6 @@ flutter:
   generate: true
   uses-material-design: true
   assets:
-    - assets/images_for_live_card/
     - assets/
     - assets/sounds/
     - assets/vodozemac/

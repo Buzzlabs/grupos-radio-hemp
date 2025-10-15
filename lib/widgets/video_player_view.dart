@@ -66,6 +66,24 @@ class _VideoPlayerState extends State<VideoPlayer> {
               ),
             ],
           ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8,
+              vertical: 3,
+            ),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.onSecondaryContainer.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              widget.live.date,
+              style: TextStyle(
+                color: theme.colorScheme.onSecondary,
+                fontSize: 13,
+              ),
+            ),
+          ),
         ],
       ),
     );

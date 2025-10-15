@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluffychat/config/themes.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluffychat/widgets/streams_widget.dart';
+import 'package:fluffychat/widgets/events_table.dart';
 
 class Teste extends StatefulWidget {
   final bool enforceMobileMode;
@@ -186,54 +187,7 @@ class _TesteState extends State<Teste> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               padding: const EdgeInsets.all(16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'PRÓXIMOS EVENTOS',
-                                    style: GoogleFonts.righteous(
-                                      textStyle: TextStyle(
-                                        color: theme.colorScheme.primary,
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.w100,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Expanded(
-                                    child: SingleChildScrollView(
-                                      physics: const BouncingScrollPhysics(),
-                                      child: Column(
-                                        children: [
-                                          for (var i = 0; i < 6; i++) ...[
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  bottom: 12),
-                                              height: 70,
-                                              decoration: BoxDecoration(
-                                                color: Colors.black87,
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  'Evento #$i',
-                                                  style: GoogleFonts.righteous(
-                                                    textStyle: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              child: const EventsTable(),
                             ),
                           ),
                         ],
