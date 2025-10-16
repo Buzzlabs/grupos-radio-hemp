@@ -14,7 +14,6 @@ class Events {
     required this.start,
   });
 
-  // Construtor para criar Events a partir do JSON
   factory Events.fromJson(Map<String, dynamic> json) {
     final startJson = json['start'] as Map<String, dynamic>? ?? {};
     final dateTimeStr = startJson['dateTime'] ?? startJson['date'] ?? '';
@@ -26,7 +25,8 @@ class Events {
 }
 
 class EventsTable extends StatefulWidget {
-  const EventsTable({super.key});
+  final bool showHeader;
+  const EventsTable({required this.showHeader, super.key});
 
   @override
   State<EventsTable> createState() => _EventsTableState();
@@ -47,13 +47,13 @@ class _EventsTableState extends State<EventsTable> {
       }
 
       final decoded = jsonDecode(response.body);
-      if (decoded is! List) {
-        throw Exception('Resposta inesperada: esperava um array JSON');
+      final items = decoded['items'];
+      if (items == null || items is! List) {
+        throw Exception('Campo "items" ausente ou inválido');
       }
 
-      final List<Events> fetchedEvents = decoded.map<Events>((dynamic item) {
-        return Events.fromJson(item as Map<String, dynamic>);
-      }).toList();
+      final fetchedEvents =
+          items.map<Events>((dynamic item) => Events.fromJson(item)).toList();
 
       if (!mounted) return;
       setState(() {
@@ -76,30 +76,23 @@ class _EventsTableState extends State<EventsTable> {
     final today = DateTime.now();
     final tomorrow = today.add(const Duration(days: 1));
 
-    if (eventDate.year == today.year &&
-        eventDate.month == today.month &&
-        eventDate.day == today.day) {
-      return theme.colorScheme.primary; // Hoje
-    } else if (eventDate.year == tomorrow.year &&
-        eventDate.month == tomorrow.month &&
-        eventDate.day == tomorrow.day) {
-      return theme.colorScheme.secondary; // Amanhã
+    if (_isSameDay(eventDate, today)) {
+      return theme.colorScheme.primary;
     } else {
-      return theme.colorScheme.secondary; // Futuro
+      return theme.colorScheme.secondary;
     }
   }
+
+  bool _isSameDay(DateTime a, DateTime b) =>
+      a.year == b.year && a.month == b.month && a.day == b.day;
 
   String _formatDate(DateTime eventDate) {
     final today = DateTime.now();
     final tomorrow = today.add(const Duration(days: 1));
 
-    if (eventDate.year == today.year &&
-        eventDate.month == today.month &&
-        eventDate.day == today.day) {
+    if (_isSameDay(eventDate, today)) {
       return 'Hoje';
-    } else if (eventDate.year == tomorrow.year &&
-        eventDate.month == tomorrow.month &&
-        eventDate.day == tomorrow.day) {
+    } else if (_isSameDay(eventDate, tomorrow)) {
       return 'Amanhã';
     } else {
       return '${eventDate.day}/${eventDate.month}';
@@ -123,16 +116,17 @@ class _EventsTableState extends State<EventsTable> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'PRÓXIMOS EVENTOS',
-            style: GoogleFonts.righteous(
-              textStyle: TextStyle(
-                color: theme.colorScheme.primary,
-                fontSize: 25,
-                fontWeight: FontWeight.w100,
+          if (widget.showHeader)
+            Text(
+              'PRÓXIMOS EVENTOS',
+              style: GoogleFonts.righteous(
+                textStyle: TextStyle(
+                  color: theme.colorScheme.primary,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w100,
+                ),
               ),
             ),
-          ),
           const SizedBox(height: 16),
           Expanded(
             child: allEvents.isEmpty
@@ -146,52 +140,60 @@ class _EventsTableState extends State<EventsTable> {
 
                         return Container(
                           margin: const EdgeInsets.only(bottom: 12),
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color:
-                                theme.colorScheme.onSurface.withOpacity(0.05),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 60,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 4),
-                                decoration: BoxDecoration(
-                                  color: eventColor,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      _formatDate(dateTime),
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12),
+                          child: IntrinsicHeight(
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 12,
+                                  decoration: BoxDecoration(
+                                    color: eventColor,
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(25),
+                                      bottomLeft: Radius.circular(25),
                                     ),
-                                    Text(
-                                      _formatTime(dateTime),
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 12),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: eventColor.withOpacity(0.05),
+                                      borderRadius: const BorderRadius.only(
+                                        topRight: Radius.circular(12),
+                                        bottomRight: Radius.circular(12),
+                                      ),
                                     ),
-                                  ],
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${_formatDate(dateTime)} \n ${_formatTime(dateTime)}',
+                                          style: TextStyle(
+                                            color: eventColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Flexible(
+                                          child: Text(
+                                            event.summary,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  event.summary,
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       }).toList(),

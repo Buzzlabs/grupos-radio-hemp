@@ -57,8 +57,12 @@ class VideoStreamingController extends State<VideoStreaming> {
     }
   }
 
-  void setPosition(Offset newPosition, double maxWidth, double maxHeight,
-      bool isMobileMode) {
+  void setPosition(
+    Offset newPosition,
+    double maxWidth,
+    double maxHeight,
+    bool isMobileMode,
+  ) {
     if (!mounted) return;
 
     final dx = isMobileMode ? position.dx : newPosition.dx.clamp(16, maxWidth);
@@ -122,8 +126,10 @@ class VideoStreamingController extends State<VideoStreaming> {
       ..backgroundColor = 'black'
       ..objectFit = 'cover';
     htmlElementsCreated = true;
-    _updateDebugInfo('Elemento de vídeo HTML criado.',
-        playerStatus: _getCurrentPlayerStatus());
+    _updateDebugInfo(
+      'Elemento de vídeo HTML criado.',
+      playerStatus: _getCurrentPlayerStatus(),
+    );
   }
 
   void _registerView() {
@@ -132,11 +138,15 @@ class VideoStreamingController extends State<VideoStreaming> {
         viewId,
         (int id) => videoElement!,
       );
-      _updateDebugInfo('View factory registrada.',
-          playerStatus: _getCurrentPlayerStatus());
+      _updateDebugInfo(
+        'View factory registrada.',
+        playerStatus: _getCurrentPlayerStatus(),
+      );
     } on PlatformException catch (e) {
-      _updateDebugInfo('Erro ao registrar view factory: $e',
-          playerStatus: _getCurrentPlayerStatus());
+      _updateDebugInfo(
+        'Erro ao registrar view factory: $e',
+        playerStatus: _getCurrentPlayerStatus(),
+      );
     }
   }
 
@@ -179,8 +189,9 @@ class VideoStreamingController extends State<VideoStreaming> {
 
         if (ivsPlayer == null) {
           _updateDebugInfo(
-              'IVS Player SDK não carregado/pronto. Tentando novamente em 3s.',
-              playerStatus: IvsPlayerState.error);
+            'IVS Player SDK não carregado/pronto. Tentando novamente em 3s.',
+            playerStatus: IvsPlayerState.error,
+          );
           Future.delayed(const Duration(seconds: 3), () {
             if (_widgetMounted) _initIvsPlayerAndStream();
           });
@@ -199,8 +210,9 @@ class VideoStreamingController extends State<VideoStreaming> {
         );
       } catch (e) {
         _updateDebugInfo(
-            'Erro ao criar/anexar IVS Player: $e. Tentando novamente em 3s.',
-            playerStatus: IvsPlayerState.error);
+          'Erro ao criar/anexar IVS Player: $e. Tentando novamente em 3s.',
+          playerStatus: IvsPlayerState.error,
+        );
         Future.delayed(const Duration(seconds: 3), () {
           if (_widgetMounted) _initIvsPlayerAndStream();
         });
@@ -226,8 +238,10 @@ class VideoStreamingController extends State<VideoStreaming> {
 
   void _setupEventListeners() {
     if (ivsPlayer == null) return;
-    _updateDebugInfo('Configurando event listeners do IVS Player.',
-        playerStatus: _getCurrentPlayerStatus());
+    _updateDebugInfo(
+      'Configurando event listeners do IVS Player.',
+      playerStatus: _getCurrentPlayerStatus(),
+    );
 
     final onStateChange = (JSAny event) {
       try {
@@ -252,8 +266,10 @@ class VideoStreamingController extends State<VideoStreaming> {
                 newState == IvsPlayerState.ready) &&
             !_isLive) {
           if (newState != IvsPlayerState.playing) {
-            _updateDebugInfo('Estado ${newState.value}. Tentando play...',
-                playerStatus: newState);
+            _updateDebugInfo(
+              'Estado ${newState.value}. Tentando play...',
+              playerStatus: newState,
+            );
           }
 
           ivsPlayer?.play();
@@ -289,33 +305,43 @@ class VideoStreamingController extends State<VideoStreaming> {
 
     ivsPlayer!.addEventListener(IVSPlayerEvent.stateChanged, onStateChange);
     ivsPlayer!.addEventListener(IVSPlayerEvent.error, onError);
-    _updateDebugInfo('Event listeners configurados.',
-        playerStatus: _getCurrentPlayerStatus());
+    _updateDebugInfo(
+      'Event listeners configurados.',
+      playerStatus: _getCurrentPlayerStatus(),
+    );
   }
 
   void _handleIsLiveChange() {
     if (_isLive) {
-      _updateDebugInfo('Player está tocando.',
-          playerStatus: IvsPlayerState.playing);
+      _updateDebugInfo(
+        'Player está tocando.',
+        playerStatus: IvsPlayerState.playing,
+      );
       _stopPlaybackPolling();
     } else {
-      _updateDebugInfo('Player não está tocando.',
-          playerStatus: _getCurrentPlayerStatus());
+      _updateDebugInfo(
+        'Player não está tocando.',
+        playerStatus: _getCurrentPlayerStatus(),
+      );
       _startPlaybackPolling();
     }
   }
 
   void _startPlaybackPolling() {
     if (_playbackPollTimer != null && _playbackPollTimer!.isActive) {
-      _updateDebugInfo('Polling ativo.',
-          playerStatus: _getCurrentPlayerStatus());
+      _updateDebugInfo(
+        'Polling ativo.',
+        playerStatus: _getCurrentPlayerStatus(),
+      );
       return;
     }
 
     _playbackPollTimer?.cancel();
 
-    _updateDebugInfo('Iniciando polling...',
-        playerStatus: _getCurrentPlayerStatus());
+    _updateDebugInfo(
+      'Iniciando polling...',
+      playerStatus: _getCurrentPlayerStatus(),
+    );
     _playbackPollTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       if (!_widgetMounted) {
         _stopPlaybackPolling();
@@ -324,14 +350,18 @@ class VideoStreamingController extends State<VideoStreaming> {
       final currentStatus = _getCurrentPlayerStatus();
 
       if (currentStatus == IvsPlayerState.playing) {
-        _updateDebugInfo('Polling: player tocando, nada a fazer.',
-            playerStatus: currentStatus);
+        _updateDebugInfo(
+          'Polling: player tocando, nada a fazer.',
+          playerStatus: currentStatus,
+        );
 
         return;
       }
 
-      _updateDebugInfo('Polling: tentando recarregar stream.',
-          playerStatus: currentStatus);
+      _updateDebugInfo(
+        'Polling: tentando recarregar stream.',
+        playerStatus: currentStatus,
+      );
 
       try {
         ivsPlayer?.load(widget.playbackUrl);
@@ -345,8 +375,10 @@ class VideoStreamingController extends State<VideoStreaming> {
     if (_playbackPollTimer != null) {
       _playbackPollTimer!.cancel();
       _playbackPollTimer = null;
-      _updateDebugInfo('Polling parado.',
-          playerStatus: _getCurrentPlayerStatus());
+      _updateDebugInfo(
+        'Polling parado.',
+        playerStatus: _getCurrentPlayerStatus(),
+      );
     }
   }
 

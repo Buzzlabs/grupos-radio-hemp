@@ -1,28 +1,10 @@
+// streams_widget.dart
 import 'package:flutter/material.dart';
 import 'package:fluffychat/widgets/live_card.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-
-class LiveShow {
-  final String title;
-  final String category;
-  final String date;
-  final String thumbnailUrl;
-  final String videoUrl;
-  final String avatarUrl;
-  final bool isLive;
-
-  LiveShow({
-    required this.title,
-    required this.category,
-    required this.date,
-    required this.thumbnailUrl,
-    required this.avatarUrl,
-    required this.videoUrl,
-    this.isLive = false,
-  });
-}
+import 'package:fluffychat/pages/lives_data.dart'; // lista global de LiveShow
 
 class StreamsWidget extends StatefulWidget {
   final String streamsWidgetTag;
@@ -48,11 +30,10 @@ class StreamsWidget extends StatefulWidget {
   });
 
   @override
-  State<StreamsWidget> createState() => _StreamsWidget();
+  State<StreamsWidget> createState() => _StreamsWidgetState();
 }
 
-class _StreamsWidget extends State<StreamsWidget> {
-  List<LiveShow> allLives = [];
+class _StreamsWidgetState extends State<StreamsWidget> {
   List<LiveShow> filteredLives = [];
   late int visibleCount;
 
@@ -82,6 +63,7 @@ class _StreamsWidget extends State<StreamsWidget> {
       final List<LiveShow> fetchedLives = decoded.map<LiveShow>((dynamic item) {
         final map = item as Map<String, dynamic>;
         return LiveShow(
+          id: map['streamId'] as String? ?? 'id',
           title: map['title'] as String? ?? 'Sem título',
           category: (map['isLive'] == true) ? 'Ao vivo' : 'Gravação',
           date: map['recordedRelativeTime'] as String? ?? '',
@@ -93,9 +75,11 @@ class _StreamsWidget extends State<StreamsWidget> {
         );
       }).toList();
 
+      // Atualiza a lista global
+      allLives = fetchedLives;
+
       if (!mounted) return;
       setState(() {
-        allLives = fetchedLives;
         _applyFilter();
       });
     } on TimeoutException catch (_) {
@@ -105,20 +89,20 @@ class _StreamsWidget extends State<StreamsWidget> {
     }
   }
 
-  // === FILTRA POR TÓPICO ===
   void _applyFilter() {
-    final tag = widget.streamsWidgetTag.trim();
-    if (tag.contains('Destaques')) {
+    final tag = widget.streamsWidgetTag.trim().toLowerCase();
+
+    if (tag.contains('destaques')) {
       filteredLives = allLives;
-    } else if (tag.contains('Amendoshow')) {
+    } else if (tag.contains('amendoshow')) {
       filteredLives = allLives
           .where((live) => live.title.toLowerCase().contains('amendoshow'))
           .toList();
-    } else if (tag.contains('THShow')) {
+    } else if (tag.contains('thshow')) {
       filteredLives = allLives
           .where((live) => live.title.toLowerCase().contains('thshow'))
           .toList();
-    } else if (tag.contains('O Fino')) {
+    } else if (tag.contains('o fino')) {
       filteredLives = allLives
           .where((live) => live.title.toLowerCase().contains('fino'))
           .toList();
@@ -165,16 +149,10 @@ class _StreamsWidget extends State<StreamsWidget> {
               const SizedBox(height: 24),
             ],
           ),
-
-        // === LIVE CARDS ===
         if (allLives.isEmpty)
-          const Center(
-            child: CircularProgressIndicator(),
-          )
+          const Center(child: CircularProgressIndicator())
         else if (filteredLives.isEmpty)
-          const Center(
-            child: Text('Nenhuma live encontrada'),
-          )
+          const Center(child: Text('Nenhuma live encontrada'))
         else
           Column(
             children: [
@@ -183,7 +161,6 @@ class _StreamsWidget extends State<StreamsWidget> {
                   final screenWidth = constraints.maxWidth;
                   final isMobileMode =
                       widget.enforceMobileMode || screenWidth < 1200;
-
                   int columns = widget.numColumns;
 
                   if (isMobileMode && screenWidth < 500) {
@@ -202,17 +179,15 @@ class _StreamsWidget extends State<StreamsWidget> {
                     spacing: spacing,
                     runSpacing: 8,
                     alignment: WrapAlignment.start,
-                    children: filteredLives.take(visibleCount).map((live) {
-                      return SizedBox(
-                        width: itemWidth,
-                        child: LiveCard(live: live),
-                      );
-                    }).toList(),
+                    children: visibleLives
+                        .map((live) => SizedBox(
+                              width: itemWidth,
+                              child: LiveCard(live: live),
+                            ))
+                        .toList(),
                   );
                 },
               ),
-
-              // === botão MOSTRAR MAIS ===
               if (widget.showHeader && visibleCount < filteredLives.length)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),

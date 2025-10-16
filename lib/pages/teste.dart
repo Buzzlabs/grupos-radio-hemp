@@ -187,7 +187,9 @@ class _TesteState extends State<Teste> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               padding: const EdgeInsets.all(16),
-                              child: const EventsTable(),
+                              child: const EventsTable(
+                                showHeader: true,
+                              ),
                             ),
                           ),
                         ],
@@ -305,32 +307,17 @@ class _TesteState extends State<Teste> {
                                 ],
                               ),
                             )
-                          : SingleChildScrollView(
-                              key: const ValueKey('eventos'),
-                              child: Column(
-                                children: [
-                                  for (var i = 0; i < 7; i++) ...[
-                                    Container(
-                                      margin: const EdgeInsets.only(bottom: 12),
-                                      height: 70,
-                                      decoration: BoxDecoration(
-                                        color: Colors.black87,
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          'Evento #$i',
-                                          style: GoogleFonts.righteous(
-                                            textStyle: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ],
+                          : Expanded(
+                              flex: 1,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.surface,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                padding: const EdgeInsets.all(16),
+                                child: const EventsTable(
+                                  showHeader: false,
+                                ),
                               ),
                             ),
                     ),

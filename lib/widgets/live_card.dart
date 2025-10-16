@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:fluffychat/config/themes.dart';
 import 'package:fluffychat/widgets/streams_widget.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fluffychat/pages/lives_data.dart';
+import 'package:flutter/services.dart';
 
 class LiveCard extends StatelessWidget {
   final LiveShow live;
@@ -29,8 +31,8 @@ class LiveCard extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
           onTap: () {
-            // ação de navegação para o link da live
-            context.goNamed('screen_video', extra: live);
+            // Vai para a tela de vídeo passando o ID na URL
+            context.go('/screen_video/${live.id}');
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,7 +157,12 @@ class LiveCard extends StatelessWidget {
                         InkWell(
                           borderRadius: BorderRadius.circular(50),
                           onTap: () {
-                            // ação de compartilhar
+                            final shareLink =
+                                'https://localhost/screen_video/${live.id}';
+                            Clipboard.setData(ClipboardData(text: shareLink));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Link copiado!')),
+                            );
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(6),

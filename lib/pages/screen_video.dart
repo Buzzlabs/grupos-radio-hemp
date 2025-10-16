@@ -3,6 +3,7 @@ import 'package:fluffychat/widgets/video_player_view.dart';
 import 'package:fluffychat/widgets/streams_widget.dart';
 import 'package:matrix/matrix.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fluffychat/pages/lives_data.dart';
 
 class ScreenVideo extends StatelessWidget {
   final LiveShow live;
@@ -38,7 +39,7 @@ class ScreenVideo extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    VideoPlayer(live: live),
+                    VideoPlayerWidget(live: live),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: StreamsWidget(
@@ -65,7 +66,7 @@ class ScreenVideo extends StatelessWidget {
                           child: Column(
                             children: [
                               const SizedBox(height: 45),
-                              VideoPlayer(live: live),
+                              VideoPlayerWidget(live: live),
                             ],
                           ),
                         ),

@@ -32,6 +32,7 @@ import 'package:fluffychat/widgets/share_scaffold_dialog.dart';
 import 'package:fluffychat/guard/guard.dart';
 import 'package:fluffychat/pages/teste.dart';
 import 'package:fluffychat/pages/screen_video.dart';
+import 'package:fluffychat/pages/lives_data.dart';
 import 'package:fluffychat/widgets/streams_widget.dart';
 
 abstract class AppRoutes {
@@ -84,24 +85,39 @@ abstract class AppRoutes {
         const Teste(),
       ),
     ),
+    // Definindo a rota
     GoRoute(
       name: 'screen_video',
-      path: '/screen_video',
+      path: '/screen_video/:id',
       builder: (context, state) {
-        // Pega o objeto LiveShow que foi passado no extra
-        final live = state.extra as LiveShow?;
+        final id = state.pathParameters['id']!;
 
-        if (live == null) {
-          // Se não tem LiveShow, mostra uma tela de erro
-          return Scaffold(
-            appBar: AppBar(title: const Text('Erro')),
-            body: const Center(child: Text('LiveShow não encontrado')),
-          );
+        // Tenta buscar na lista global primeiro
+        final live = getLiveById(id);
+
+        if (live != null) {
+          return ScreenVideo(live: live);
         }
 
-        return ScreenVideo(live: live);
+        // Se não tiver na lista, busca do backend
+        return Scaffold(
+          appBar: AppBar(title: const Text('Carregando live')),
+          body: FutureBuilder<LiveShow?>(
+            future: fetchLiveById(id),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError || snapshot.data == null) {
+                return const Center(child: Text('Live não encontrada'));
+              } else {
+                return ScreenVideo(live: snapshot.data!);
+              }
+            },
+          ),
+        );
       },
     ),
+
     GoRoute(
       path: '/login',
       redirect: loggedInRedirect,
