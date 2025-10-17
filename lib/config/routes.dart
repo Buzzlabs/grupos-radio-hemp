@@ -101,7 +101,6 @@ abstract class AppRoutes {
 
         // Se não tiver na lista, busca do backend
         return Scaffold(
-          appBar: AppBar(title: const Text('Carregando live')),
           body: FutureBuilder<LiveShow?>(
             future: fetchLiveById(id),
             builder: (context, snapshot) {

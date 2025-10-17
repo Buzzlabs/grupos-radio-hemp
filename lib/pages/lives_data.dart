@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
 /// Lista global de lives. Preencha ela ao buscar do backend.
 List<LiveShow> allLives = [];
 
@@ -14,15 +15,23 @@ LiveShow? getLiveById(String id) {
 
 Future<LiveShow?> fetchLiveById(String id) async {
   try {
-    final url = Uri.parse('http://localhost:3333/dashboard/api/streams/$id');
+    final url = Uri.parse('http://localhost:3333/dashboard/api/streams');
     final response = await http.get(url);
 
     if (response.statusCode != 200) return null;
 
-    final map = jsonDecode(response.body) as Map<String, dynamic>;
+    final decoded = jsonDecode(response.body) as List<dynamic>;
+
+    // procura o item que tem o id desejado
+    final map = decoded.firstWhere(
+      (item) => item['id'].toString() == id,
+      orElse: () => null,
+    ) as Map<String, dynamic>?;
+
+    if (map == null) return null;
 
     return LiveShow(
-      id: map['streamId'] ?? id,
+      id: map['id']?.toString() ?? 'id',
       title: map['title'] ?? 'Sem título',
       category: map['isLive'] == true ? 'Ao vivo' : 'Gravação',
       date: map['recordedRelativeTime'] ?? '',
@@ -31,7 +40,8 @@ Future<LiveShow?> fetchLiveById(String id) async {
       videoUrl: map['masterPlaylistUrl'] ?? '',
       isLive: map['isLive'] ?? false,
     );
-  } catch (e) {
+  } catch (e, st) {
+    print('Erro em fetchLiveById: $e\n$st');
     return null;
   }
 }

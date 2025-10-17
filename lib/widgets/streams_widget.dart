@@ -63,9 +63,9 @@ class _StreamsWidgetState extends State<StreamsWidget> {
       final List<LiveShow> fetchedLives = decoded.map<LiveShow>((dynamic item) {
         final map = item as Map<String, dynamic>;
         return LiveShow(
-          id: map['streamId'] as String? ?? 'id',
+          id: (map['id']?.toString() ?? 'id'),
           title: map['title'] as String? ?? 'Sem título',
-          category: (map['isLive'] == true) ? 'Ao vivo' : 'Gravação',
+          category: (map['isLive'] == true) ? 'Ao vivo' : 'Gravação', // alterar
           date: map['recordedRelativeTime'] as String? ?? '',
           thumbnailUrl: map['latestThumbnail'] as String? ?? '',
           avatarUrl:
