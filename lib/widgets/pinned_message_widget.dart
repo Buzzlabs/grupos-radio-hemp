@@ -104,5 +104,3 @@ class PinnedMessageWidget extends StatelessWidget {
     );
   }
 }
-
-

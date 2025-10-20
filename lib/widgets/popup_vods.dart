@@ -198,7 +198,7 @@ class PopUpVodsState extends State<PopUpVods> {
   Widget _buildMobileLayout(ThemeData theme) {
     const double _dragOffset = 0;
     double _mobileHeight = MediaQuery.of(context).size.height * 0.7;
-    const double _peekHeight = 60; // parte visível quando fechada
+    const double _peekHeight = 52; // parte visível quando fechada
 
     return Stack(
       children: [
@@ -253,12 +253,31 @@ class PopUpVodsState extends State<PopUpVods> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildTabButton(theme, 'Rolou por aqui', 'rolou'),
-                      _buildTabButton(theme, 'Próximos eventos', 'eventos'),
-                    ],
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: constraints
+                                .maxWidth, // garante centralização se couber
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(width: 16),
+                              _buildTabButton(
+                                  theme, 'Rolou por aqui', 'rolou', 200),
+                              const SizedBox(width: 24),
+                              _buildTabButton(
+                                  theme, 'Próximos eventos', 'eventos', 250),
+                              const SizedBox(width: 16),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 16),
                   Expanded(
@@ -331,20 +350,27 @@ class PopUpVodsState extends State<PopUpVods> {
   }
 
   // === ABAS ===
-  Widget _buildTabButton(ThemeData theme, String label, String id) {
+  Widget _buildTabButton(
+      ThemeData theme, String label, String id, double width) {
     final isSelected = selectedTab == id;
     return GestureDetector(
       onTap: () => setState(() => selectedTab = id),
       child: Column(
         children: [
-          Text(
-            label.toUpperCase(),
-            style: GoogleFonts.righteous(
-              textStyle: TextStyle(
-                color:
-                    isSelected ? theme.colorScheme.primary : Colors.grey[600],
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
+          SizedBox(
+            width: width, // Define a largura máxima da aba
+            child: Text(
+              label.toUpperCase(),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.righteous(
+                textStyle: TextStyle(
+                  color:
+                      isSelected ? theme.colorScheme.primary : Colors.grey[600],
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
           ),

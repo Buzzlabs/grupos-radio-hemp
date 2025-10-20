@@ -1,9 +1,10 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:fluffychat/config/themes.dart';
-import 'package:fluffychat/widgets/streams_widget.dart';
 import 'package:fluffychat/pages/lives_data.dart';
 import 'package:flutter/services.dart';
+import 'package:video_player_web_hls/video_player_web_hls.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
   final LiveShow live;
@@ -15,25 +16,30 @@ class VideoPlayerWidget extends StatefulWidget {
 }
 
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
-  late VideoPlayerController _controller;
+  VideoPlayerController? _controller;
   bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
+
+    // 👇 controller normal (HLS é tratado automaticamente na Web)
     _controller = VideoPlayerController.network(widget.live.videoUrl)
       ..initialize().then((_) {
-        setState(() {
-          _isInitialized = true;
-        });
-        _controller.play();
+        if (mounted) {
+          setState(() => _isInitialized = true);
+        }
+        _controller!.setLooping(true);
+        _controller!.play();
+      }).catchError((error) {
+        debugPrint('Erro ao inicializar vídeo: $error');
       });
-    _controller.setLooping(true);
   }
 
+  // evita vazamento de memória
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -48,26 +54,25 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         children: [
           _isInitialized
               ? AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
+                  aspectRatio: _controller!.value.aspectRatio,
                   child: Stack(
                     children: [
-                      VideoPlayer(_controller),
-                      // Botão play/pause opcional
+                      VideoPlayer(_controller!),
                       Positioned.fill(
                         child: Center(
                           child: IconButton(
                             iconSize: 64,
                             icon: Icon(
-                              _controller.value.isPlaying
+                              _controller!.value.isPlaying
                                   ? Icons.pause_circle_filled
                                   : Icons.play_circle_filled,
                               color: Colors.white70,
                             ),
                             onPressed: () {
                               setState(() {
-                                _controller.value.isPlaying
-                                    ? _controller.pause()
-                                    : _controller.play();
+                                _controller!.value.isPlaying
+                                    ? _controller!.pause()
+                                    : _controller!.play();
                               });
                             },
                           ),

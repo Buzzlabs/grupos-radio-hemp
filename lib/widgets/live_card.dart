@@ -117,43 +117,47 @@ class LiveCard extends StatelessWidget {
                     // === DATA + CATEGORIA + COMPARTILHAR ===
                     Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 3,
-                          ),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.onSecondaryContainer
-                                .withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            live.date,
-                            style: TextStyle(
-                              color: theme.colorScheme.onSecondary,
-                              fontSize: 13,
-                            ),
+                        Flexible(
+                          child: Wrap(
+                            spacing: 6,
+                            runSpacing: 4,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.onSecondaryContainer
+                                      .withOpacity(0.15),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  live.date,
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSecondary,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.primary
+                                      .withOpacity(0.15),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  live.category,
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSecondary,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 3,
-                          ),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.primary.withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            live.category,
-                            style: TextStyle(
-                              color: theme.colorScheme.onSecondary,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                        const Spacer(),
                         InkWell(
                           borderRadius: BorderRadius.circular(50),
                           onTap: () {
@@ -174,7 +178,7 @@ class LiveCard extends StatelessWidget {
                           ),
                         ),
                       ],
-                    ),
+                    )
                   ],
                 ),
               ),
