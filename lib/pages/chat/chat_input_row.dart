@@ -41,146 +41,83 @@ class ChatInputRow extends StatelessWidget {
       foregroundColor: theme.colorScheme.onTertiaryContainer,
     );
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: controller.selectMode
-          ? <Widget>[
-              if (controller.selectedEvents
-                  .every((event) => event.status == EventStatus.error))
-                SizedBox(
-                  height: height,
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      foregroundColor: theme.colorScheme.secondary,
+    return AnimatedPadding(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeOut,
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: controller.selectMode
+            ? <Widget>[
+                if (controller.selectedEvents
+                    .every((event) => event.status == EventStatus.error))
+                  SizedBox(
+                    height: height,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        foregroundColor: theme.colorScheme.secondary,
+                      ),
+                      onPressed: controller.deleteErrorEventsAction,
+                      child: Row(
+                        children: <Widget>[
+                          const Icon(Icons.delete),
+                          Text(L10n.of(context).delete),
+                        ],
+                      ),
                     ),
-                    onPressed: controller.deleteErrorEventsAction,
-                    child: Row(
-                      children: <Widget>[
-                        const Icon(Icons.delete),
-                        Text(L10n.of(context).delete),
-                      ],
+                  )
+                else
+                  SizedBox(
+                    height: height,
+                    child: TextButton(
+                      style: selectedTextButtonStyle,
+                      onPressed: controller.forwardEventsAction,
+                      child: Row(
+                        children: <Widget>[
+                          const Icon(Icons.keyboard_arrow_left_outlined),
+                          Text(L10n.of(context).forward),
+                        ],
+                      ),
                     ),
                   ),
-                )
-              else
-                SizedBox(
-                  height: height,
-                  child: TextButton(
-                    style: selectedTextButtonStyle,
-                    onPressed: controller.forwardEventsAction,
-                    child: Row(
-                      children: <Widget>[
-                        const Icon(Icons.keyboard_arrow_left_outlined),
-                        Text(L10n.of(context).forward),
-                      ],
-                    ),
-                  ),
-                ),
-              controller.selectedEvents.length == 1
-                  ? controller.selectedEvents.first
-                          .getDisplayEvent(controller.timeline!)
-                          .status
-                          .isSent
-                      ? SizedBox(
-                          height: height,
-                          child: TextButton(
-                            style: selectedTextButtonStyle,
-                            onPressed: controller.replyAction,
-                            child: Row(
-                              children: <Widget>[
-                                Text(L10n.of(context).reply),
-                                const Icon(Icons.keyboard_arrow_right),
-                              ],
+                controller.selectedEvents.length == 1
+                    ? controller.selectedEvents.first
+                            .getDisplayEvent(controller.timeline!)
+                            .status
+                            .isSent
+                        ? SizedBox(
+                            height: height,
+                            child: TextButton(
+                              style: selectedTextButtonStyle,
+                              onPressed: controller.replyAction,
+                              child: Row(
+                                children: <Widget>[
+                                  Text(L10n.of(context).reply),
+                                  const Icon(Icons.keyboard_arrow_right),
+                                ],
+                              ),
                             ),
-                          ),
-                        )
-                      : SizedBox(
-                          height: height,
-                          child: TextButton(
-                            style: selectedTextButtonStyle,
-                            onPressed: controller.sendAgainAction,
-                            child: Row(
-                              children: <Widget>[
-                                Text(L10n.of(context).tryToSendAgain),
-                                const SizedBox(width: 4),
-                                const Icon(Icons.send_outlined, size: 16),
-                              ],
+                          )
+                        : SizedBox(
+                            height: height,
+                            child: TextButton(
+                              style: selectedTextButtonStyle,
+                              onPressed: controller.sendAgainAction,
+                              child: Row(
+                                children: <Widget>[
+                                  Text(L10n.of(context).tryToSendAgain),
+                                  const SizedBox(width: 4),
+                                  const Icon(Icons.send_outlined, size: 16),
+                                ],
+                              ),
                             ),
-                          ),
-                        )
-                  : const SizedBox.shrink(),
-            ]
-          : <Widget>[
-              const SizedBox(width: 4),
-              AnimatedContainer(
-                duration: FluffyThemes.animationDuration,
-                curve: FluffyThemes.animationCurve,
-                width: controller.sendController.text.isNotEmpty ? 0 : height,
-                height: height,
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(),
-                clipBehavior: Clip.hardEdge,
-                child: PopupMenuButton<String>(
-                  useRootNavigator: true,
-                  icon: const Icon(Icons.add_circle_outline),
-                  iconColor: theme.colorScheme.onSecondary,
-                  onSelected: controller.onAddPopupMenuButtonSelected,
-                  itemBuilder: (BuildContext context) =>
-                      <PopupMenuEntry<String>>[
-                    if (PlatformInfos.isMobile)
-                      PopupMenuItem<String>(
-                        value: 'location',
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: theme.colorScheme.tertiary,
-                            foregroundColor: theme.colorScheme.onSecondary,
-                            child: const Icon(Icons.gps_fixed_outlined),
-                          ),
-                          title: Text(L10n.of(context).shareLocation),
-                          contentPadding: const EdgeInsets.all(0),
-                        ),
-                      ),
-                    PopupMenuItem<String>(
-                      value: 'image',
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: theme.colorScheme.tertiary,
-                          foregroundColor: theme.colorScheme.onSecondary,
-                          child: const Icon(Icons.photo_outlined),
-                        ),
-                        title: Text(L10n.of(context).sendImage),
-                        contentPadding: const EdgeInsets.all(0),
-                      ),
-                    ),
-                    PopupMenuItem<String>(
-                      value: 'video',
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: theme.colorScheme.tertiary,
-                          foregroundColor: theme.colorScheme.onSecondary,
-                          child: const Icon(Icons.video_camera_back_outlined),
-                        ),
-                        title: Text(L10n.of(context).sendVideo),
-                        contentPadding: const EdgeInsets.all(0),
-                      ),
-                    ),
-                    PopupMenuItem<String>(
-                      value: 'file',
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: theme.colorScheme.tertiary,
-                          foregroundColor: theme.colorScheme.onSecondary,
-                          child: const Icon(Icons.attachment_outlined),
-                        ),
-                        title: Text(L10n.of(context).sendFile),
-                        contentPadding: const EdgeInsets.all(0),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (PlatformInfos.isMobile)
+                          )
+                    : const SizedBox.shrink(),
+              ]
+            : <Widget>[
+                const SizedBox(width: 4),
                 AnimatedContainer(
                   duration: FluffyThemes.animationDuration,
                   curve: FluffyThemes.animationCurve,
@@ -189,148 +126,218 @@ class ChatInputRow extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: const BoxDecoration(),
                   clipBehavior: Clip.hardEdge,
-                  child: PopupMenuButton(
+                  child: PopupMenuButton<String>(
                     useRootNavigator: true,
-                    icon: const Icon(Icons.camera_alt_outlined),
+                    icon: const Icon(Icons.add_circle_outline),
+                    iconColor: theme.colorScheme.onSecondary,
                     onSelected: controller.onAddPopupMenuButtonSelected,
-                    iconColor: theme.colorScheme.onPrimaryContainer,
-                    itemBuilder: (context) => [
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuEntry<String>>[
+                      if (PlatformInfos.isMobile)
+                        PopupMenuItem<String>(
+                          value: 'location',
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: theme.colorScheme.tertiary,
+                              foregroundColor: theme.colorScheme.onSecondary,
+                              child: const Icon(Icons.gps_fixed_outlined),
+                            ),
+                            title: Text(L10n.of(context).shareLocation),
+                            contentPadding: const EdgeInsets.all(0),
+                          ),
+                        ),
                       PopupMenuItem<String>(
-                        value: 'camera-video',
+                        value: 'image',
                         child: ListTile(
                           leading: CircleAvatar(
                             backgroundColor: theme.colorScheme.tertiary,
                             foregroundColor: theme.colorScheme.onSecondary,
-                            child: const Icon(Icons.videocam_outlined),
+                            child: const Icon(Icons.photo_outlined),
                           ),
-                          title: Text(L10n.of(context).recordAVideo),
+                          title: Text(L10n.of(context).sendImage),
                           contentPadding: const EdgeInsets.all(0),
                         ),
                       ),
                       PopupMenuItem<String>(
-                        value: 'camera',
+                        value: 'video',
                         child: ListTile(
                           leading: CircleAvatar(
                             backgroundColor: theme.colorScheme.tertiary,
                             foregroundColor: theme.colorScheme.onSecondary,
-                            child: const Icon(Icons.camera_alt_outlined),
+                            child: const Icon(Icons.video_camera_back_outlined),
                           ),
-                          title: Text(L10n.of(context).takeAPhoto),
+                          title: Text(L10n.of(context).sendVideo),
+                          contentPadding: const EdgeInsets.all(0),
+                        ),
+                      ),
+                      PopupMenuItem<String>(
+                        value: 'file',
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: theme.colorScheme.tertiary,
+                            foregroundColor: theme.colorScheme.onSecondary,
+                            child: const Icon(Icons.attachment_outlined),
+                          ),
+                          title: Text(L10n.of(context).sendFile),
                           contentPadding: const EdgeInsets.all(0),
                         ),
                       ),
                     ],
                   ),
                 ),
-              Container(
-                height: height,
-                width: height,
-                alignment: Alignment.center,
-                child: IconButton(
-                  tooltip: L10n.of(context).emojis,
-                  color: theme.colorScheme.onSecondary,
-                  icon: PageTransitionSwitcher(
-                    transitionBuilder: (
-                      Widget child,
-                      Animation<double> primaryAnimation,
-                      Animation<double> secondaryAnimation,
-                    ) {
-                      return SharedAxisTransition(
-                        animation: primaryAnimation,
-                        secondaryAnimation: secondaryAnimation,
-                        transitionType: SharedAxisTransitionType.scaled,
-                        fillColor: Colors.transparent,
-                        child: child,
-                      );
-                    },
-                    child: Icon(
-                      controller.showEmojiPicker
-                          ? Icons.keyboard
-                          : Icons.add_reaction_outlined,
-                      key: ValueKey(controller.showEmojiPicker),
+                if (PlatformInfos.isMobile)
+                  AnimatedContainer(
+                    duration: FluffyThemes.animationDuration,
+                    curve: FluffyThemes.animationCurve,
+                    width:
+                        controller.sendController.text.isNotEmpty ? 0 : height,
+                    height: height,
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(),
+                    clipBehavior: Clip.hardEdge,
+                    child: PopupMenuButton(
+                      useRootNavigator: true,
+                      icon: const Icon(Icons.camera_alt_outlined),
+                      onSelected: controller.onAddPopupMenuButtonSelected,
+                      iconColor: theme.colorScheme.onPrimaryContainer,
+                      itemBuilder: (context) => [
+                        PopupMenuItem<String>(
+                          value: 'camera-video',
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: theme.colorScheme.tertiary,
+                              foregroundColor: theme.colorScheme.onSecondary,
+                              child: const Icon(Icons.videocam_outlined),
+                            ),
+                            title: Text(L10n.of(context).recordAVideo),
+                            contentPadding: const EdgeInsets.all(0),
+                          ),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'camera',
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: theme.colorScheme.tertiary,
+                              foregroundColor: theme.colorScheme.onSecondary,
+                              child: const Icon(Icons.camera_alt_outlined),
+                            ),
+                            title: Text(L10n.of(context).takeAPhoto),
+                            contentPadding: const EdgeInsets.all(0),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  onPressed: controller.emojiPickerAction,
-                ),
-              ),
-              if (Matrix.of(context).isMultiAccount &&
-                  Matrix.of(context).hasComplexBundles &&
-                  Matrix.of(context).currentBundle!.length > 1)
                 Container(
-                  width: height,
                   height: height,
+                  width: height,
                   alignment: Alignment.center,
-                  child: _ChatAccountPicker(controller),
-                ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 0.0),
-                  child: InputBar(
-                    room: controller.room,
-                    minLines: 1,
-                    maxLines: 8,
-                    autofocus: false,
-                    keyboardType: TextInputType.multiline,
-                    textInputAction:
-                        AppConfig.sendOnEnter == true && PlatformInfos.isMobile
-                            ? TextInputAction.send
-                            : null,
-                    onSubmitted: controller.onInputBarSubmitted,
-                    onSubmitImage: controller.sendImageFromClipBoard,
-                    focusNode: controller.inputFocus,
-                    controller: controller.sendController,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(
-                        left: 6.0,
-                        right: 6.0,
-                        bottom: 6.0,
-                        top: 3.0,
+                  child: IconButton(
+                    tooltip: L10n.of(context).emojis,
+                    color: theme.colorScheme.onSecondary,
+                    icon: PageTransitionSwitcher(
+                      transitionBuilder: (
+                        Widget child,
+                        Animation<double> primaryAnimation,
+                        Animation<double> secondaryAnimation,
+                      ) {
+                        return SharedAxisTransition(
+                          animation: primaryAnimation,
+                          secondaryAnimation: secondaryAnimation,
+                          transitionType: SharedAxisTransitionType.scaled,
+                          fillColor: Colors.transparent,
+                          child: child,
+                        );
+                      },
+                      child: Icon(
+                        controller.showEmojiPicker
+                            ? Icons.keyboard
+                            : Icons.add_reaction_outlined,
+                        key: ValueKey(controller.showEmojiPicker),
                       ),
-                      counter: const SizedBox.shrink(),
-                      hintText: L10n.of(context).writeAMessage,
-                      hintMaxLines: 1,
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      filled: false,
                     ),
-                    onChanged: controller.onInputBarChanged,
+                    onPressed: controller.emojiPickerAction,
                   ),
                 ),
-              ),
-              Container(
-                height: height,
-                width: height,
-                alignment: Alignment.center,
-                child: PlatformInfos.platformCanRecord &&
-                        controller.sendController.text.isEmpty
-                    ? FloatingActionButton.small(
-                        tooltip: L10n.of(context).voiceMessage,
-                        onPressed: controller.voiceMessageAction,
-                        elevation: 0,
-                        heroTag: null,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(height),
+                if (Matrix.of(context).isMultiAccount &&
+                    Matrix.of(context).hasComplexBundles &&
+                    Matrix.of(context).currentBundle!.length > 1)
+                  Container(
+                    width: height,
+                    height: height,
+                    alignment: Alignment.center,
+                    child: _ChatAccountPicker(controller),
+                  ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 0.0),
+                    child: InputBar(
+                      room: controller.room,
+                      minLines: 1,
+                      maxLines: 8,
+                      autofocus: false,
+                      keyboardType: TextInputType.multiline,
+                      textInputAction: AppConfig.sendOnEnter == true &&
+                              PlatformInfos.isMobile
+                          ? TextInputAction.send
+                          : null,
+                      onSubmitted: controller.onInputBarSubmitted,
+                      onSubmitImage: controller.sendImageFromClipBoard,
+                      focusNode: controller.inputFocus,
+                      controller: controller.sendController,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.only(
+                          left: 6.0,
+                          right: 6.0,
+                          bottom: 6.0,
+                          top: 3.0,
                         ),
-                        backgroundColor: theme.bubbleColor,
-                        foregroundColor: theme.onBubbleColor,
-                        child: const Icon(Icons.mic_none_outlined),
-                      )
-                    : FloatingActionButton.small(
-                        tooltip: L10n.of(context).send,
-                        onPressed: controller.send,
-                        elevation: 0,
-                        heroTag: null,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(height),
-                        ),
-                        backgroundColor: theme.bubbleColor,
-                        foregroundColor: theme.onBubbleColor,
-                        child: const Icon(Icons.send_outlined),
+                        counter: const SizedBox.shrink(),
+                        hintText: L10n.of(context).writeAMessage,
+                        hintMaxLines: 1,
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        filled: false,
                       ),
-              ),
-            ],
+                      onChanged: controller.onInputBarChanged,
+                    ),
+                  ),
+                ),
+                Container(
+                  height: height,
+                  width: height,
+                  alignment: Alignment.center,
+                  child: PlatformInfos.platformCanRecord &&
+                          controller.sendController.text.isEmpty
+                      ? FloatingActionButton.small(
+                          tooltip: L10n.of(context).voiceMessage,
+                          onPressed: controller.voiceMessageAction,
+                          elevation: 0,
+                          heroTag: null,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(height),
+                          ),
+                          backgroundColor: theme.bubbleColor,
+                          foregroundColor: theme.onBubbleColor,
+                          child: const Icon(Icons.mic_none_outlined),
+                        )
+                      : FloatingActionButton.small(
+                          tooltip: L10n.of(context).send,
+                          onPressed: controller.send,
+                          elevation: 0,
+                          heroTag: null,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(height),
+                          ),
+                          backgroundColor: theme.bubbleColor,
+                          foregroundColor: theme.onBubbleColor,
+                          child: const Icon(Icons.send_outlined),
+                        ),
+                ),
+              ],
+      ),
     );
   }
 }

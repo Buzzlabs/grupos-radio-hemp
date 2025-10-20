@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 
 class PinnedMessageWidget extends StatelessWidget {
   final bool enforceMobileMode;
+  final VoidCallback? onAcessarPressed;
 
   const PinnedMessageWidget({
     super.key,
     this.enforceMobileMode = false,
+    this.onAcessarPressed,
   });
 
   @override
@@ -49,9 +51,7 @@ class PinnedMessageWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: ElevatedButton(
-              onPressed: () {
-                // ação do botão "Acessar 🔥"
-              },
+              onPressed: onAcessarPressed,
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -89,9 +89,7 @@ class PinnedMessageWidget extends StatelessWidget {
                 borderRadius: const BorderRadius.vertical(
                   bottom: Radius.circular(12),
                 ),
-                onTap: () {
-                  // ação quando clica no fixado no modo mobile
-                },
+                onTap: onAcessarPressed,
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
@@ -107,8 +105,4 @@ class PinnedMessageWidget extends StatelessWidget {
   }
 }
 
-// Explanation of the code above:
-// This code defines a Flutter widget called PinnedMessageWidget. It displays a pinned message bar
-// with an icon, a message, and a button. The layout adapts based on whether it's in mobile mode or not.
-// In mobile mode, the entire bar is clickable, while in non-mobile mode, only the button is clickable.
-//
+

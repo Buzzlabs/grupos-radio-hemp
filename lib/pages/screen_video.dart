@@ -31,13 +31,19 @@ class ScreenVideo extends StatelessWidget {
                     // Botão de voltar
                     Padding(
                       padding: const EdgeInsets.only(left: 8, top: 8),
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        onPressed: () {
-                          context.go('/teste');
+                      child: Builder(
+                        builder: (context) {
+                          return IconButton(
+                            icon: const Icon(Icons.arrow_back),
+                            onPressed: () {
+                              context
+                                  .go('/rooms'); // funciona corretamente agora
+                            },
+                          );
                         },
                       ),
                     ),
+
                     const SizedBox(height: 8),
                     VideoPlayerWidget(live: live),
                     const Padding(
@@ -73,10 +79,14 @@ class ScreenVideo extends StatelessWidget {
                         Positioned(
                           top: 8,
                           left: 8,
-                          child: IconButton(
-                            icon: const Icon(Icons.arrow_back),
-                            onPressed: () {
-                              context.go('/teste');
+                          child: Builder(
+                            builder: (context) {
+                              return IconButton(
+                                icon: const Icon(Icons.arrow_back),
+                                onPressed: () {
+                                  context.go('/rooms'); // também funciona
+                                },
+                              );
                             },
                           ),
                         ),

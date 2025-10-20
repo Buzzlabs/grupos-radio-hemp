@@ -4,18 +4,25 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:fluffychat/widgets/streams_widget.dart';
 import 'package:fluffychat/widgets/events_table.dart';
 
-class Teste extends StatefulWidget {
+class PopUpVods extends StatefulWidget {
   final bool enforceMobileMode;
-  const Teste({super.key, this.enforceMobileMode = false});
+  const PopUpVods({super.key, this.enforceMobileMode = false});
 
   @override
-  State<Teste> createState() => _TesteState();
+  State<PopUpVods> createState() => PopUpVodsState();
 }
 
-class _TesteState extends State<Teste> {
+class PopUpVodsState extends State<PopUpVods> {
   bool showBottomMenu = false;
   String? secaoExpandida; // null = nenhuma expandida
   String selectedTab = 'rolou';
+
+  // === MÉTODO PÚBLICO PARA TOGGLE DA GAVETA ===
+  void toggleGaveta() {
+    setState(() {
+      showBottomMenu = !showBottomMenu;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +30,9 @@ class _TesteState extends State<Teste> {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobileMode = widget.enforceMobileMode || screenWidth < 1200;
 
-    return Scaffold(
-      backgroundColor: theme.colorScheme.primary,
-      body: isMobileMode ? _buildMobileLayout(theme) : _buildWebLayout(theme),
+    return Material(
+      type: MaterialType.transparency,
+      child: isMobileMode ? _buildMobileLayout(theme) : _buildWebLayout(theme),
     );
   }
 
@@ -33,24 +40,6 @@ class _TesteState extends State<Teste> {
   Widget _buildWebLayout(ThemeData theme) {
     return Stack(
       children: [
-        Container(color: Colors.blueGrey[900]),
-
-        // === botão ABRIR/FECHAR A GAVETA ===
-        Positioned(
-          top: 50,
-          right: 30,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white24,
-              foregroundColor: Colors.white,
-            ),
-            onPressed: () {
-              setState(() => showBottomMenu = !showBottomMenu);
-            },
-            child: Text(showBottomMenu ? 'Fechar gaveta' : 'Abrir gaveta'),
-          ),
-        ),
-
         // === GAVETA ANIMADA ===
         AnimatedPositioned(
           duration: const Duration(milliseconds: 400),
@@ -207,13 +196,20 @@ class _TesteState extends State<Teste> {
 
   // === LAYOUT MOBILE === (ação de deslizar incompleto e não testado)
   Widget _buildMobileLayout(ThemeData theme) {
+    const double _dragOffset = 0;
+    double _mobileHeight = MediaQuery.of(context).size.height * 0.7;
+    const double _peekHeight = 60; // parte visível quando fechada
+
     return Stack(
       children: [
-        Container(
-          color: Colors.blueGrey[900],
-        ),
-        Positioned(
-          bottom: 0,
+        AnimatedPositioned(
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeOut,
+          bottom: (_dragOffset != 0)
+              ? _dragOffset
+              : showBottomMenu
+                  ? 0
+                  : -_mobileHeight + _peekHeight,
           left: 0,
           right: 0,
           child: Container(
@@ -239,16 +235,19 @@ class _TesteState extends State<Teste> {
                 children: [
                   const SizedBox(height: 8),
                   Center(
-                    child: GestureDetector(
-                      onTap: () =>
-                          setState(() => showBottomMenu = !showBottomMenu),
-                      child: Container(
-                        width: 40,
-                        height: 5,
-                        margin: const EdgeInsets.symmetric(vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[600],
-                          borderRadius: BorderRadius.circular(10),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () =>
+                            toggleGaveta(), // chama a função para abrir/fechar
+                        child: Container(
+                          width: 40,
+                          height: 5,
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[600],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                       ),
                     ),

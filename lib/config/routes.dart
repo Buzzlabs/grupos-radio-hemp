@@ -30,7 +30,7 @@ import 'package:fluffychat/widgets/log_view.dart';
 import 'package:fluffychat/widgets/matrix.dart';
 import 'package:fluffychat/widgets/share_scaffold_dialog.dart';
 import 'package:fluffychat/guard/guard.dart';
-import 'package:fluffychat/pages/teste.dart';
+import 'package:fluffychat/widgets/popup_vods.dart';
 import 'package:fluffychat/pages/screen_video.dart';
 import 'package:fluffychat/pages/lives_data.dart';
 import 'package:fluffychat/widgets/streams_widget.dart';
@@ -78,15 +78,6 @@ abstract class AppRoutes {
       ),
     ),
     GoRoute(
-      path: '/teste',
-      pageBuilder: (context, state) => defaultPageBuilder(
-        context,
-        state,
-        const Teste(),
-      ),
-    ),
-    // Definindo a rota
-    GoRoute(
       name: 'screen_video',
       path: '/screen_video/:id',
       builder: (context, state) {
@@ -116,7 +107,6 @@ abstract class AppRoutes {
         );
       },
     ),
-
     GoRoute(
       path: '/login',
       redirect: loggedInRedirect,
