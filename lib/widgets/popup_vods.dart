@@ -142,6 +142,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                         if (secaoExpandida == null ||
                                             secaoExpandida == 'amendoshow')
                                           StreamsWidget(
+                                            filter: 'amendoshow',
                                             initialVisibleCount: 3,
                                             loadMoreCount: 3,
                                             numColumns: 3,
@@ -310,6 +311,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                   if (secaoExpandida == null ||
                                       secaoExpandida == 'amendoshow')
                                     StreamsWidget(
+                                      filter: 'amendoshow',
                                       numColumns: 2,
                                       initialVisibleCount: 2,
                                       loadMoreCount: 2,

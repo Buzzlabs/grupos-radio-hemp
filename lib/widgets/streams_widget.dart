@@ -4,12 +4,14 @@ import 'package:fluffychat/widgets/live_card.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'package:fluffychat/pages/lives_data.dart'; // lista global de LiveShow
+import 'package:fluffychat/pages/lives_data.dart';
+import 'package:path/path.dart'; // lista global de LiveShow
 
 class StreamsWidget extends StatefulWidget {
   final String streamsWidgetTag;
   final VoidCallback? onShowMorePressed;
   final VoidCallback? onBackPressed;
+  final String filter; 
 
   final int numColumns;
   final int initialVisibleCount;
@@ -18,6 +20,7 @@ class StreamsWidget extends StatefulWidget {
   final bool showHeader;
 
   const StreamsWidget({
+    this.filter = '',
     required this.streamsWidgetTag,
     this.numColumns = 3,
     this.initialVisibleCount = 3,
@@ -78,7 +81,7 @@ class _StreamsWidgetState extends State<StreamsWidget> {
       // Atualiza a lista global
       allLives = fetchedLives;
 
-      if (!mounted) return;
+      if (!equals(widget.filter, "")) return;
       setState(() {
         _applyFilter();
       });
@@ -90,25 +93,7 @@ class _StreamsWidgetState extends State<StreamsWidget> {
   }
 
   void _applyFilter() {
-    final tag = widget.streamsWidgetTag.trim().toLowerCase();
-
-    if (tag.contains('destaques')) {
-      filteredLives = allLives;
-    } else if (tag.contains('amendoshow')) {
-      filteredLives = allLives
-          .where((live) => live.title.toLowerCase().contains('amendoshow'))
-          .toList();
-    } else if (tag.contains('thshow')) {
-      filteredLives = allLives
-          .where((live) => live.title.toLowerCase().contains('thshow'))
-          .toList();
-    } else if (tag.contains('o fino')) {
-      filteredLives = allLives
-          .where((live) => live.title.toLowerCase().contains('fino'))
-          .toList();
-    } else {
-      filteredLives = allLives;
-    }
+    filteredLives = allLives.where((live) => live.title.toLowerCase().contains(widget.filter.toLowerCase())).toList();
   }
 
   void _showMore() {
