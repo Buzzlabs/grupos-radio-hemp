@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluffychat/config/themes.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:fluffychat/widgets/streams_widget.dart';
-import 'package:fluffychat/widgets/events_table.dart';
+import 'package:fluffychat/widgets/vods/vods_widget.dart';
+import 'package:fluffychat/widgets/vods/events_table.dart';
 
 class PopUpVods extends StatefulWidget {
   final bool enforceMobileMode;
@@ -196,140 +196,164 @@ class PopUpVodsState extends State<PopUpVods> {
   }
 
   // === LAYOUT MOBILE === (ação de deslizar incompleto e não testado)
+  // === LAYOUT MOBILE ===
   Widget _buildMobileLayout(ThemeData theme) {
-    const double _dragOffset = 0;
     double _mobileHeight = MediaQuery.of(context).size.height * 0.7;
     const double _peekHeight = 52; // parte visível quando fechada
+    double _dragOffset = showBottomMenu ? 0 : -_mobileHeight + _peekHeight;
 
     return Stack(
       children: [
         AnimatedPositioned(
-          duration: const Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 200),
           curve: Curves.easeOut,
-          bottom: (_dragOffset != 0)
-              ? _dragOffset
-              : showBottomMenu
-                  ? 0
-                  : -_mobileHeight + _peekHeight,
+          bottom: _dragOffset,
           left: 0,
           right: 0,
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.7,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.onPrimary,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
-              ),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 8,
-                  offset: Offset(0, -2),
+          child: GestureDetector(
+            onVerticalDragUpdate: (details) {
+              setState(() {
+                // move a gaveta junto com o dedo, limitando
+                _dragOffset = (_dragOffset - details.delta.dy)
+                    .clamp(-_mobileHeight + _peekHeight, 0);
+              });
+            },
+            onVerticalDragEnd: (details) {
+              setState(() {
+                // abre ou fecha dependendo da velocidade ou posição
+                if (details.primaryVelocity! < -200) {
+                  _dragOffset = 0;
+                  showBottomMenu = true;
+                } else if (details.primaryVelocity! > 200) {
+                  _dragOffset = -_mobileHeight + _peekHeight;
+                  showBottomMenu = false;
+                } else {
+                  if (_dragOffset > -_mobileHeight / 2) {
+                    _dragOffset = 0;
+                    showBottomMenu = true;
+                  } else {
+                    _dragOffset = -_mobileHeight + _peekHeight;
+                    showBottomMenu = false;
+                  }
+                }
+              });
+            },
+            child: Container(
+              height: _mobileHeight,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.onPrimary,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
                 ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 8),
-                  Center(
-                    child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () =>
-                            toggleGaveta(), // chama a função para abrir/fechar
-                        child: Container(
-                          width: 40,
-                          height: 5,
-                          margin: const EdgeInsets.symmetric(vertical: 8),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[600],
-                            borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 8,
+                    offset: Offset(0, -2),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 8),
+                    // puxador
+                    Center(
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () => toggleGaveta(),
+                          child: Container(
+                            width: 40,
+                            height: 5,
+                            margin: const EdgeInsets.symmetric(vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[600],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        physics: const BouncingScrollPhysics(),
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minWidth: constraints
-                                .maxWidth, // garante centralização se couber
+                    const SizedBox(height: 8),
+
+                    // abas e conteúdo
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: constraints.maxWidth,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 16),
+                                _buildTabButton(
+                                    theme, 'Rolou por aqui', 'rolou', 200),
+                                const SizedBox(width: 24),
+                                _buildTabButton(
+                                    theme, 'Próximos eventos', 'eventos', 250),
+                                const SizedBox(width: 16),
+                              ],
+                            ),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const SizedBox(width: 16),
-                              _buildTabButton(
-                                  theme, 'Rolou por aqui', 'rolou', 200),
-                              const SizedBox(width: 24),
-                              _buildTabButton(
-                                  theme, 'Próximos eventos', 'eventos', 250),
-                              const SizedBox(width: 16),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      switchInCurve: Curves.easeOut,
-                      switchOutCurve: Curves.easeIn,
-                      child: selectedTab == 'rolou'
-                          ? SingleChildScrollView(
-                              key: const ValueKey('rolou'),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  if (secaoExpandida == null ||
-                                      secaoExpandida == 'destaques')
-                                    StreamsWidget(
-                                      numColumns: 2,
-                                      initialVisibleCount: 2,
-                                      loadMoreCount: 2,
-                                      streamsWidgetTag: '🔥 Destaques',
-                                      onShowMorePressed: () {
-                                        setState(
-                                            () => secaoExpandida = 'destaques');
-                                      },
-                                      onBackPressed: () {
-                                        setState(() => secaoExpandida = null);
-                                      },
-                                    ),
-                                  const SizedBox(height: 24),
-                                  if (secaoExpandida == null ||
-                                      secaoExpandida == 'amendoshow')
-                                    StreamsWidget(
-                                      filter: 'amendoshow',
-                                      numColumns: 2,
-                                      initialVisibleCount: 2,
-                                      loadMoreCount: 2,
-                                      streamsWidgetTag: '🥜 Amendoshow',
-                                      onShowMorePressed: () {
-                                        setState(() =>
-                                            secaoExpandida = 'amendoshow');
-                                      },
-                                      onBackPressed: () {
-                                        setState(() => secaoExpandida = null);
-                                      },
-                                    ),
-                                ],
-                              ),
-                            )
-                          : Expanded(
-                              flex: 1,
-                              child: Container(
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        switchInCurve: Curves.easeOut,
+                        switchOutCurve: Curves.easeIn,
+                        child: selectedTab == 'rolou'
+                            ? SingleChildScrollView(
+                                key: const ValueKey('rolou'),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (secaoExpandida == null ||
+                                        secaoExpandida == 'destaques')
+                                      StreamsWidget(
+                                        numColumns: 2,
+                                        initialVisibleCount: 2,
+                                        loadMoreCount: 2,
+                                        streamsWidgetTag: '🔥 Destaques',
+                                        onShowMorePressed: () {
+                                          setState(() =>
+                                              secaoExpandida = 'destaques');
+                                        },
+                                        onBackPressed: () {
+                                          setState(() => secaoExpandida = null);
+                                        },
+                                      ),
+                                    const SizedBox(height: 24),
+                                    if (secaoExpandida == null ||
+                                        secaoExpandida == 'amendoshow')
+                                      StreamsWidget(
+                                        filter: 'amendoshow',
+                                        numColumns: 2,
+                                        initialVisibleCount: 2,
+                                        loadMoreCount: 2,
+                                        streamsWidgetTag: '🥜 Amendoshow',
+                                        onShowMorePressed: () {
+                                          setState(() =>
+                                              secaoExpandida = 'amendoshow');
+                                        },
+                                        onBackPressed: () {
+                                          setState(() => secaoExpandida = null);
+                                        },
+                                      ),
+                                  ],
+                                ),
+                              )
+                            : Container(
                                 decoration: BoxDecoration(
                                   color: theme.colorScheme.surface,
                                   borderRadius: BorderRadius.circular(20),
@@ -339,10 +363,10 @@ class PopUpVodsState extends State<PopUpVods> {
                                   showHeader: false,
                                 ),
                               ),
-                            ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

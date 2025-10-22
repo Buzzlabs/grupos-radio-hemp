@@ -30,10 +30,10 @@ import 'package:fluffychat/widgets/log_view.dart';
 import 'package:fluffychat/widgets/matrix.dart';
 import 'package:fluffychat/widgets/share_scaffold_dialog.dart';
 import 'package:fluffychat/guard/guard.dart';
-import 'package:fluffychat/widgets/popup_vods.dart';
-import 'package:fluffychat/pages/screen_video.dart';
+import 'package:fluffychat/widgets/vods/popup_vods.dart';
+import 'package:fluffychat/pages/screen_vod.dart';
 import 'package:fluffychat/pages/lives_data.dart';
-import 'package:fluffychat/widgets/streams_widget.dart';
+import 'package:fluffychat/widgets/vods/vods_widget.dart';
 
 abstract class AppRoutes {
   static FutureOr<String?> loggedInRedirect(
@@ -78,35 +78,20 @@ abstract class AppRoutes {
       ),
     ),
     GoRoute(
-      name: 'screen_video',
-      path: '/screen_video/:id',
-      builder: (context, state) {
-        final id = state.pathParameters['id']!;
+  name: 'screen_vod',
+  path: '/screen_vod/:id',
+  builder: (context, state) {
+    final id = state.pathParameters['id']!;
+    final live = getLiveById(id);
 
-        // Tenta buscar na lista global primeiro
-        final live = getLiveById(id);
+    // Se live existe localmente
+    if (live != null) return ScreenVideo(live: live);
 
-        if (live != null) {
-          return ScreenVideo(live: live);
-        }
+    // Se não, passa só o id e deixa o ScreenVideo buscar do backend
+    return ScreenVideo(liveId: id);
+  },
+),
 
-        // Se não tiver na lista, busca do backend
-        return Scaffold(
-          body: FutureBuilder<LiveShow?>(
-            future: fetchLiveById(id),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError || snapshot.data == null) {
-                return const Center(child: Text('Live não encontrada'));
-              } else {
-                return ScreenVideo(live: snapshot.data!);
-              }
-            },
-          ),
-        );
-      },
-    ),
     GoRoute(
       path: '/login',
       redirect: loggedInRedirect,

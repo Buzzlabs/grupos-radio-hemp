@@ -28,8 +28,8 @@ import 'chat_emoji_picker.dart';
 import 'chat_input_row.dart';
 import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/widgets/streaming/video_streaming.dart';
-import 'package:fluffychat/widgets/pinned_message_widget.dart';
-import 'package:fluffychat/widgets/popup_vods.dart';
+import 'package:fluffychat/widgets/vods/pinned_message_widget.dart';
+import 'package:fluffychat/widgets/vods/popup_vods.dart';
 
 final GlobalKey<PopUpVodsState> testeKey = GlobalKey<PopUpVodsState>();
 

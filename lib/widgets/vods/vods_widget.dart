@@ -1,6 +1,6 @@
 // streams_widget.dart
 import 'package:flutter/material.dart';
-import 'package:fluffychat/widgets/live_card.dart';
+import 'package:fluffychat/widgets/vods/live_card.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -11,7 +11,7 @@ class StreamsWidget extends StatefulWidget {
   final String streamsWidgetTag;
   final VoidCallback? onShowMorePressed;
   final VoidCallback? onBackPressed;
-  final String filter; 
+  final String filter;
 
   final int numColumns;
   final int initialVisibleCount;
@@ -46,6 +46,23 @@ class _StreamsWidgetState extends State<StreamsWidget> {
     visibleCount = widget.initialVisibleCount;
     _fetchLives();
   }
+  // varios live cards para teste
+  // Future<void> _fetchLives() async {
+  //   for (int i = 0; i < 5; i++) {
+  //     allLives.add(LiveShow(
+  //       id: 'id_$i',
+  //       title: 'Live Show $i',
+  //       category: 'Categoria $i',
+  //       date: 'Data $i',
+  //       thumbnailUrl: "https://vod.radiohemp.com/ivs/v1/324037287349/Owua07eBFR2k/2025/9/14/17/40/jUsmHY0dAIrr/media/thumbnails/thumb120.jpg",
+  //       avatarUrl: 'https://via.placeholder.com/50',
+  //       videoUrl: 'https://www.example.com/video$i',
+  //       isLive: i % 2 == 0,
+  //     ));
+
+  //     filteredLives = allLives;
+  //   }
+  // }
 
   Future<void> _fetchLives() async {
     final baseUrl = 'http://localhost:3333';
@@ -93,7 +110,10 @@ class _StreamsWidgetState extends State<StreamsWidget> {
   }
 
   void _applyFilter() {
-    filteredLives = allLives.where((live) => live.title.toLowerCase().contains(widget.filter.toLowerCase())).toList();
+    filteredLives = allLives
+        .where((live) =>
+            live.title.toLowerCase().contains(widget.filter.toLowerCase()))
+        .toList();
   }
 
   void _showMore() {

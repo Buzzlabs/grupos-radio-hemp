@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluffychat/config/themes.dart';
-import 'package:fluffychat/widgets/streams_widget.dart';
+import 'package:fluffychat/widgets/vods/vods_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluffychat/pages/lives_data.dart';
 import 'package:flutter/services.dart';
@@ -32,55 +32,57 @@ class LiveCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           onTap: () {
             // Vai para a tela de vídeo passando o ID na URL
-            context.go('/screen_video/${live.id}');
+            context.push('/screen_vod/${live.id}');
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // === THUMBNAIL ===
-              Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
+              AnimatedPadding(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.all(5),
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)
+                    ,),
+                      child: Image.network(
+                        live.thumbnailUrl,
+                        height: 160,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.broken_image, size: 80),
+                      ),
                     ),
-                    child: Image.network(
-                      live.thumbnailUrl,
-                      height: 160,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.broken_image, size: 80),
-                    ),
-                  ),
-
-                  // === INDICADOR "AO VIVO" ===
-                  if (live.isLive)
-                    Positioned(
-                      top: 8,
-                      right: 8,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.redAccent,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          'AO VIVO',
-                          style: GoogleFonts.righteous(
-                            textStyle: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
+                
+                    // === INDICADOR "AO VIVO" ===
+                    if (live.isLive)
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.redAccent,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            'AO VIVO',
+                            style: GoogleFonts.righteous(
+                              textStyle: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
 
               // === AVATAR + TÍTULO ===
@@ -162,7 +164,7 @@ class LiveCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(50),
                           onTap: () {
                             final shareLink =
-                                'https://localhost/screen_video/${live.id}';
+                                'https://localhost/screen_vod/${live.id}';
                             Clipboard.setData(ClipboardData(text: shareLink));
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Link copiado!')),
