@@ -90,9 +90,15 @@ class _ScreenVideoState extends State<ScreenVideo> {
                     Padding(
                       padding: const EdgeInsets.only(left: 8, top: 8),
                       child: IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        onPressed: () => context.pop(),
-                      ),
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () {
+                            final router = GoRouter.of(context);
+                            if (router.canPop()) {
+                              router.pop();
+                            } else {
+                              router.go('/rooms');
+                            }
+                          }),
                     ),
                     const SizedBox(height: 8),
                     VodPlayer(
@@ -140,9 +146,15 @@ class _ScreenVideoState extends State<ScreenVideo> {
                           top: 8,
                           left: 8,
                           child: IconButton(
-                            icon: const Icon(Icons.arrow_back),
-                            onPressed: () => context.pop(),
-                          ),
+                              icon: const Icon(Icons.arrow_back),
+                              onPressed: () {
+                                final router = GoRouter.of(context);
+                                if (router.canPop()) {
+                                  router.pop();
+                                } else {
+                                  router.go('/rooms');
+                                }
+                              }),
                         ),
                       ],
                     ),

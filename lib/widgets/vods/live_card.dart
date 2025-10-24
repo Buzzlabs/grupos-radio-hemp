@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:fluffychat/config/themes.dart';
-import 'package:fluffychat/widgets/vods/vods_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluffychat/pages/lives_data.dart';
 import 'package:flutter/services.dart';
+import 'package:fluffychat/widgets/streaming/audio_player_streaming.dart';
 
 class LiveCard extends StatelessWidget {
   final LiveShow live;
@@ -31,8 +30,13 @@ class LiveCard extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
           onTap: () {
-            // Vai para a tela de vídeo passando o ID na URL
-            context.push('/screen_vod/${live.id}');
+            AudioState.mutedNotifier.value = true;
+
+            final roomId = GoRouterState.of(context).pathParameters['roomid'];
+
+            if (roomId != null) {
+              context.go('/rooms/$roomId/screen_vod/${live.id}');
+            }
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,8 +48,9 @@ class LiveCard extends StatelessWidget {
                 child: Stack(
                   children: [
                     ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(10)
-                    ,),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),
+                      ),
                       child: Image.network(
                         live.thumbnailUrl,
                         height: 160,
@@ -55,7 +60,7 @@ class LiveCard extends StatelessWidget {
                             const Icon(Icons.broken_image, size: 80),
                       ),
                     ),
-                
+
                     // === INDICADOR "AO VIVO" ===
                     if (live.isLive)
                       Positioned(
