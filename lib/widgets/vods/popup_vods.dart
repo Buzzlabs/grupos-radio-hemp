@@ -139,25 +139,25 @@ class PopUpVodsState extends State<PopUpVods> {
                                             },
                                           ),
                                         const SizedBox(height: 24),
-                                        if (secaoExpandida == null ||
-                                            secaoExpandida == 'amendoshow')
-                                          StreamsWidget(
-                                            filter: 'amendoshow',
-                                            initialVisibleCount: 3,
-                                            loadMoreCount: 3,
-                                            numColumns: 3,
-                                            showHeader: true,
-                                            streamsWidgetTag: '🥜 Amendoshow',
-                                            onShowMorePressed: () {
-                                              setState(() => secaoExpandida =
-                                                  'amendoshow');
-                                            },
-                                            onBackPressed: () {
-                                              setState(
-                                                () => secaoExpandida = null,
-                                              );
-                                            },
-                                          ),
+                                        // if (secaoExpandida == null ||
+                                        //     secaoExpandida == 'amendoshow')
+                                        //   StreamsWidget(
+                                        //     filter: 'amendoshow',
+                                        //     initialVisibleCount: 3,
+                                        //     loadMoreCount: 3,
+                                        //     numColumns: 3,
+                                        //     showHeader: true,
+                                        //     streamsWidgetTag: '🥜 Amendoshow',
+                                        //     onShowMorePressed: () {
+                                        //       setState(() => secaoExpandida =
+                                        //           'amendoshow');
+                                        //     },
+                                        //     onBackPressed: () {
+                                        //       setState(
+                                        //         () => secaoExpandida = null,
+                                        //       );
+                                        //     },
+                                        //   ),
                                       ],
                                     ),
                                   ),
@@ -334,22 +334,22 @@ class PopUpVodsState extends State<PopUpVods> {
                                         },
                                       ),
                                     const SizedBox(height: 24),
-                                    if (secaoExpandida == null ||
-                                        secaoExpandida == 'amendoshow')
-                                      StreamsWidget(
-                                        filter: 'amendoshow',
-                                        numColumns: 2,
-                                        initialVisibleCount: 2,
-                                        loadMoreCount: 2,
-                                        streamsWidgetTag: '🥜 Amendoshow',
-                                        onShowMorePressed: () {
-                                          setState(() =>
-                                              secaoExpandida = 'amendoshow');
-                                        },
-                                        onBackPressed: () {
-                                          setState(() => secaoExpandida = null);
-                                        },
-                                      ),
+                                    // if (secaoExpandida == null ||
+                                    //     secaoExpandida == 'amendoshow')
+                                    //   StreamsWidget(
+                                    //     filter: 'amendoshow',
+                                    //     numColumns: 2,
+                                    //     initialVisibleCount: 2,
+                                    //     loadMoreCount: 2,
+                                    //     streamsWidgetTag: '🥜 Amendoshow',
+                                    //     onShowMorePressed: () {
+                                    //       setState(() =>
+                                    //           secaoExpandida = 'amendoshow');
+                                    //     },
+                                    //     onBackPressed: () {
+                                    //       setState(() => secaoExpandida = null);
+                                    //     },
+                                    //   ),
                                   ],
                                 ),
                               )

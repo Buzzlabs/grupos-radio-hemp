@@ -179,17 +179,29 @@ class _StreamsWidgetState extends State<StreamsWidget> {
                       screenWidth - totalSpacing - horizontalPadding;
                   final itemWidth =
                       (availableWidth / columns) - (isMobileMode ? 4 : 0);
+                  final rowsToShow =
+                      (widget.initialVisibleCount + widget.loadMoreCount) /
+                          widget.numColumns;
+                  final cardHeight = 150.0; // altura estimada do LiveCard
 
-                  return Wrap(
-                    spacing: spacing,
-                    runSpacing: 8,
-                    alignment: WrapAlignment.start,
-                    children: visibleLives
-                        .map((live) => SizedBox(
-                              width: itemWidth,
-                              child: LiveCard(live: live),
-                            ))
-                        .toList(),
+                  final wrapHeight = rowsToShow.ceil() * cardHeight +
+                      (rowsToShow.ceil() - 1) * spacing;
+
+                  return ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: wrapHeight,
+                    ),
+                    child: Wrap(
+                      spacing: spacing,
+                      runSpacing: 8,
+                      alignment: WrapAlignment.start,
+                      children: visibleLives
+                          .map((live) => SizedBox(
+                                width: itemWidth,
+                                child: LiveCard(live: live),
+                              ))
+                          .toList(),
+                    ),
                   );
                 },
               ),
