@@ -84,105 +84,85 @@ class _ScreenVideoState extends State<ScreenVideo> {
             if (isMobileMode) {
               // === Layout para MOBILE ===
               return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8, top: 8),
-                      child: IconButton(
-                          icon: const Icon(Icons.arrow_back),
-                          onPressed: () {
-                            final router = GoRouter.of(context);
-                            if (router.canPop()) {
-                              router.pop();
-                            } else {
-                              router.go('/rooms');
-                            }
-                          }),
-                    ),
-                    const SizedBox(height: 8),
-                    VodPlayer(
-                      avatarUrl: _live!.avatarUrl,
-                      playbackUrl: _live!.videoUrl,
-                      title: _live!.title,
-                      isAdmin: false,
-                    ),
-                    // const Padding(
-                    //   padding: EdgeInsets.all(8.0),
-                    //   child: StreamsWidget(
-                    //     numColumns: 2,
-                    //     initialVisibleCount: 4,
-                    //     loadMoreCount: 2,
-                    //     showHeader: false,
-                    //     enforceMobileMode: true,
-                    //     streamsWidgetTag: '🔥 Destaques',
-                    //   ),
-                    // ),
-                  ],
+                child: Container(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8, top: 8),
+                        child: IconButton(
+                            icon: const Icon(Icons.arrow_back),
+                            onPressed: () {
+                              final router = GoRouter.of(context);
+                              if (router.canPop()) {
+                                router.pop();
+                              } else {
+                                router.go('/rooms');
+                              }
+                            }),
+                      ),
+                      const SizedBox(height: 8),
+                      VodPlayer(
+                        avatarUrl: _live!.avatarUrl,
+                        playbackUrl: _live!.videoUrl,
+                        title: _live!.title,
+                        isAdmin: false,
+                        date: _live!.date,
+                        category: _live!.category,
+                        id: _live!.id,
+                      ),
+                      // const Padding(
+                      //   padding: EdgeInsets.all(8.0),
+                      //   child: StreamsWidget(
+                      //     numColumns: 2,
+                      //     initialVisibleCount: 4,
+                      //     loadMoreCount: 2,
+                      //     showHeader: false,
+                      //     enforceMobileMode: true,
+                      //     streamsWidgetTag: '🔥 Destaques',
+                      //   ),
+                      // ),
+                    ],
+                  ),
                 ),
               );
             } else {
               // === Layout para DESKTOP ===
-              return Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Stack(
-                      children: [
-                        SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              const SizedBox(height: 45),
-                              VodPlayer(
-                                avatarUrl: _live!.avatarUrl,
-                                playbackUrl: _live!.videoUrl,
-                                title: _live!.title,
-                                isAdmin: false,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          top: 8,
-                          left: 8,
-                          child: IconButton(
-                              icon: const Icon(Icons.arrow_back),
-                              onPressed: () {
-                                final router = GoRouter.of(context);
-                                if (router.canPop()) {
-                                  router.pop();
-                                } else {
-                                  router.go('/rooms');
-                                }
-                              }),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // const Expanded(
-                  //   flex: 1,
-                  //   child: Padding(
-                  //     padding: EdgeInsets.all(8.0),
-                  //     child: SingleChildScrollView(
-                  //       physics: BouncingScrollPhysics(),
-                  //       child: Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           StreamsWidget(
-                  //             numColumns: 1,
-                  //             initialVisibleCount: 3,
-                  //             loadMoreCount: 3,
-                  //             showHeader: false,
-                  //             enforceMobileMode: false,
-                  //             streamsWidgetTag: '🔥 Destaques',
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              );
+               return Stack(
+    children: [
+      /// Centraliza o player no meio da tela
+      Center(
+        child: VodPlayer(
+          avatarUrl: _live!.avatarUrl,
+          playbackUrl: _live!.videoUrl,
+          title: _live!.title,
+          isAdmin: false,
+          date: _live!.date,
+          category: _live!.category,
+          id: _live!.id,
+        ),
+      ),
+
+      /// Botão de voltar fixo no canto superior esquerdo
+      Positioned(
+        top: 8,
+        left: 8,
+        child: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            final router = GoRouter.of(context);
+            if (router.canPop()) {
+              router.pop();
+            } else {
+              router.go('/rooms');
+            }
+          },
+        ),
+      ),
+    ],
+  );
             }
           },
         ),

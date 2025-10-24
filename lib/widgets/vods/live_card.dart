@@ -168,8 +168,10 @@ class LiveCard extends StatelessWidget {
                         InkWell(
                           borderRadius: BorderRadius.circular(50),
                           onTap: () {
+                            final roomId = GoRouterState.of(context).pathParameters['roomid'];
+            
                             final shareLink =
-                                'https://localhost/screen_vod/${live.id}';
+                                'https://localhost//rooms/$roomId/screen_vod/${live.id}';
                             Clipboard.setData(ClipboardData(text: shareLink));
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Link copiado!')),

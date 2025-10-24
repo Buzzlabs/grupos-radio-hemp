@@ -12,6 +12,9 @@ class VodPlayer extends StatefulWidget {
   final String playbackUrl;
   final String avatarUrl;
   final String title;
+  final String date;
+  final String category;
+  final String id;
   final bool isAdmin;
   final bool? isPreview;
   final VoidCallback? onClose;
@@ -19,9 +22,12 @@ class VodPlayer extends StatefulWidget {
 
   const VodPlayer({
     super.key,
+    required this.id,
     required this.avatarUrl,
     required this.playbackUrl,
     required this.title,
+    required this.date,
+    required this.category,
     required this.isAdmin,
     this.onClose,
     this.onEdit,
@@ -149,6 +155,9 @@ void initState() {
   Widget build(BuildContext context) {
     return VodPlayerView(
       this,
+      date: widget.date,
+      category: widget.category,
+      id: widget.id,
       title: widget.title,
       playbackUrl: widget.playbackUrl,
       isAdmin: widget.isAdmin,
