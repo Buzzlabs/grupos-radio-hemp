@@ -1,4 +1,3 @@
-// streams_widget.dart
 import 'package:flutter/material.dart';
 import 'package:fluffychat/widgets/vods/live_card.dart';
 import 'dart:convert';
@@ -159,98 +158,88 @@ class _StreamsWidgetState extends State<StreamsWidget> {
         else if (filteredLives.isEmpty)
           const Center(child: Text('Nenhuma live encontrada'))
         else
-          Column(
-            children: [
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final screenWidth = constraints.maxWidth;
-                  final isMobileMode =
-                      widget.enforceMobileMode || screenWidth < 1200;
-                  int columns = widget.numColumns;
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final screenWidth = constraints.maxWidth;
+              final isMobileMode =
+                  widget.enforceMobileMode || screenWidth < 1200;
 
-                  if (isMobileMode && screenWidth < 500) {
-                    columns = 1;
-                  }
+              const spacing = 16.0;
+              const horizontalPadding = 16.0;
 
-                  const spacing = 16.0;
-                  const horizontalPadding = 32.0;
-                  final totalSpacing = (columns - 1) * spacing;
-                  final availableWidth =
-                      screenWidth - totalSpacing - horizontalPadding;
-                  final itemWidth =
-                      (availableWidth / columns) - (isMobileMode ? 4 : 0);
-                  final rowsToShow =
-                      (widget.initialVisibleCount + widget.loadMoreCount) /
-                          widget.numColumns;
-                  final cardHeight = 150.0; // altura estimada do LiveCard
+              // largura mínima do card
+              const minCardWidth = 250.0;
 
-                  final wrapHeight = rowsToShow.ceil() * cardHeight +
-                      (rowsToShow.ceil() - 1) * spacing;
+              // calcula o número máximo de colunas que cabem
+              int columns = (screenWidth / (minCardWidth + spacing)).floor();
+              if (columns < 1) columns = 1;
 
-                  return ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: wrapHeight,
-                    ),
-                    child: Wrap(
-                      spacing: spacing,
-                      runSpacing: 8,
-                      alignment: WrapAlignment.start,
-                      children: visibleLives
-                          .map((live) => SizedBox(
-                                width: itemWidth,
-                                child: LiveCard(live: live),
-                              ))
-                          .toList(),
-                    ),
+              // largura de cada card mantendo o spacing fixo
+              final totalSpacing =
+                  (columns - 1) * spacing + horizontalPadding * 2;
+              final itemWidth = (screenWidth - totalSpacing) / columns;
+
+              // proporção do LiveCard (largura/altura estimada)
+              const cardAspectRatio = 250 / 250;
+              final itemHeight = itemWidth / cardAspectRatio;
+
+              return Wrap(
+                spacing: spacing,
+                runSpacing: spacing,
+                children: visibleLives.map((live) {
+                  return SizedBox(
+                    width: itemWidth,
+                    height: itemHeight,
+                    child: LiveCard(live: live),
                   );
-                },
-              ),
-              if (widget.showHeader && visibleCount < filteredLives.length)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: 1,
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          color: theme.colorScheme.onSecondaryContainer
-                              .withOpacity(0.2),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          _showMore();
-                          widget.onShowMorePressed?.call();
-                        },
-                        style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 4),
-                          minimumSize: const Size(0, 0),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        child: Text(
-                          'Mostrar mais >',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: theme.colorScheme.primary,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          height: 1,
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          color: theme.colorScheme.onSecondaryContainer
-                              .withOpacity(0.2),
-                        ),
-                      ),
-                    ],
+                }).toList(),
+              );
+            },
+          ),
+        if (widget.showHeader && visibleCount < filteredLives.length)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 1,
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    color:
+                        theme.colorScheme.onSecondaryContainer.withOpacity(0.2),
                   ),
                 ),
-            ],
+                TextButton(
+                  onPressed: () {
+                    _showMore();
+                    widget.onShowMorePressed?.call();
+                  },
+                  style: TextButton.styleFrom(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    minimumSize: const Size(0, 0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    'Mostrar mais >',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    height: 1,
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    color:
+                        theme.colorScheme.onSecondaryContainer.withOpacity(0.2),
+                  ),
+                ),
+              ],
+            ),
           ),
       ],
     );
