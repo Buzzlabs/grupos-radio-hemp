@@ -45,6 +45,7 @@ class _VodsWidgetState extends State<VodsWidget> {
     visibleCount = widget.initialVisibleCount;
     _fetchLives();
   }
+
   // varios live cards para teste
   // Future<void> _fetchLives() async {
   //   for (int i = 0; i < 5; i++) {
@@ -53,10 +54,12 @@ class _VodsWidgetState extends State<VodsWidget> {
   //       title: 'Live Show $i',
   //       category: 'Categoria $i',
   //       date: 'Data $i',
-  //       thumbnailUrl: "https://vod.radiohemp.com/ivs/v1/324037287349/Owua07eBFR2k/2025/9/14/17/40/jUsmHY0dAIrr/media/thumbnails/thumb120.jpg",
-  //       avatarUrl: 'https://via.placeholder.com/50',
-  //       videoUrl: 'https://www.example.com/video$i',
-  //       isLive: i % 2 == 0,
+  //       thumbnailUrl:
+  //           "https://vod.radiohemp.com/ivs/v1/324037287349/Owua07eBFR2k/2025/9/14/17/40/jUsmHY0dAIrr/media/thumbnails/thumb120.jpg",
+  //       avatarUrl: 'assets/logo_single_comfundo.png',
+  //       videoUrl:
+  //           'https://vod.radiohemp.com/ivs/v1/324037287349/Owua07eBFR2k/2025/9/14/17/40/jUsmHY0dAIrr/media/hls/master.m3u8',
+  //       isLive: false,
   //     ));
 
   //     filteredLives = allLives;
@@ -183,19 +186,23 @@ class _VodsWidgetState extends State<VodsWidget> {
               double cardAspectRatio;
 
               // para colum = 1
-              if ((screenWidth / (minCardWidth + spacing))  >= 1.5 && (screenWidth / (minCardWidth + spacing)) < 2) {
+              if ((screenWidth / (minCardWidth + spacing)) >= 1.5 &&
+                  (screenWidth / (minCardWidth + spacing)) < 2) {
                 cardAspectRatio = 4 / 3.4; // mais achatado pra 1 coluna
               } else if ((screenWidth / (minCardWidth + spacing)) < 1.5) {
                 cardAspectRatio = 4 / 3.6; // um pouco mais alto
-              } 
+              }
               // para colum = 2
-              else if ((screenWidth / (minCardWidth + spacing)) >= 2.8 && (screenWidth / (minCardWidth + spacing)) <= 3) {
-                cardAspectRatio = 4 / 3.5; 
-              } else if ((screenWidth / (minCardWidth + spacing)) >= 2.5 && (screenWidth / (minCardWidth + spacing)) <= 2.8) {
+              else if ((screenWidth / (minCardWidth + spacing)) >= 2.8 &&
+                  (screenWidth / (minCardWidth + spacing)) <= 3) {
+                cardAspectRatio = 4 / 3.5;
+              } else if ((screenWidth / (minCardWidth + spacing)) >= 2.5 &&
+                  (screenWidth / (minCardWidth + spacing)) <= 2.8) {
                 cardAspectRatio = 4 / 3.78; // um pouco mais alto
-              } else if ((screenWidth / (minCardWidth + spacing)) >= 2 && (screenWidth / (minCardWidth + spacing)) < 2.5) {
+              } else if ((screenWidth / (minCardWidth + spacing)) >= 2 &&
+                  (screenWidth / (minCardWidth + spacing)) < 2.5) {
                 cardAspectRatio = 4 / 3.95; // um pouco mais alto
-              // para colum = 3
+                // para colum = 3
               } else {
                 cardAspectRatio = 1; // padrão 1:1
               }
