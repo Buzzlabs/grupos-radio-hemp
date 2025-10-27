@@ -123,7 +123,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                       children: [
                                         if (secaoExpandida == null ||
                                             secaoExpandida == 'destaques')
-                                          StreamsWidget(
+                                          VodsWidget(
                                             initialVisibleCount: 3,
                                             loadMoreCount: 3,
                                             numColumns: 3,
@@ -141,7 +141,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                         const SizedBox(height: 24),
                                         // if (secaoExpandida == null ||
                                         //     secaoExpandida == 'amendoshow')
-                                        //   StreamsWidget(
+                                        //   VodsWidget(
                                         //     filter: 'amendoshow',
                                         //     initialVisibleCount: 3,
                                         //     loadMoreCount: 3,
@@ -320,7 +320,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                   children: [
                                     if (secaoExpandida == null ||
                                         secaoExpandida == 'destaques')
-                                      StreamsWidget(
+                                      VodsWidget(
                                         numColumns: 2,
                                         initialVisibleCount: 2,
                                         loadMoreCount: 2,
@@ -336,7 +336,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                     const SizedBox(height: 24),
                                     // if (secaoExpandida == null ||
                                     //     secaoExpandida == 'amendoshow')
-                                    //   StreamsWidget(
+                                    //   VodsWidget(
                                     //     filter: 'amendoshow',
                                     //     numColumns: 2,
                                     //     initialVisibleCount: 2,

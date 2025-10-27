@@ -115,7 +115,7 @@ class _ScreenVideoState extends State<ScreenVideo> {
                       ),
                       // const Padding(
                       //   padding: EdgeInsets.all(8.0),
-                      //   child: StreamsWidget(
+                      //   child: VodsWidget(
                       //     numColumns: 2,
                       //     initialVisibleCount: 4,
                       //     loadMoreCount: 2,

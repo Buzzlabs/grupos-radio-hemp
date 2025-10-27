@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:fluffychat/pages/lives_data.dart';
 import 'package:path/path.dart'; // lista global de LiveShow
 
-class StreamsWidget extends StatefulWidget {
+class VodsWidget extends StatefulWidget {
   final String streamsWidgetTag;
   final VoidCallback? onShowMorePressed;
   final VoidCallback? onBackPressed;
@@ -18,7 +18,7 @@ class StreamsWidget extends StatefulWidget {
   final bool enforceMobileMode;
   final bool showHeader;
 
-  const StreamsWidget({
+  const VodsWidget({
     this.filter = '',
     required this.streamsWidgetTag,
     this.numColumns = 3,
@@ -32,10 +32,10 @@ class StreamsWidget extends StatefulWidget {
   });
 
   @override
-  State<StreamsWidget> createState() => _StreamsWidgetState();
+  State<VodsWidget> createState() => _VodsWidgetState();
 }
 
-class _StreamsWidgetState extends State<StreamsWidget> {
+class _VodsWidgetState extends State<VodsWidget> {
   List<LiveShow> filteredLives = [];
   late int visibleCount;
 
@@ -180,7 +180,25 @@ class _StreamsWidgetState extends State<StreamsWidget> {
               final itemWidth = (screenWidth - totalSpacing) / columns;
 
               // proporção do LiveCard (largura/altura estimada)
-              const cardAspectRatio = 250 / 250;
+              double cardAspectRatio;
+
+              // para colum = 1
+              if ((screenWidth / (minCardWidth + spacing))  >= 1.5 && (screenWidth / (minCardWidth + spacing)) < 2) {
+                cardAspectRatio = 4 / 3.4; // mais achatado pra 1 coluna
+              } else if ((screenWidth / (minCardWidth + spacing)) < 1.5) {
+                cardAspectRatio = 4 / 3.6; // um pouco mais alto
+              } 
+              // para colum = 2
+              else if ((screenWidth / (minCardWidth + spacing)) >= 2.8 && (screenWidth / (minCardWidth + spacing)) <= 3) {
+                cardAspectRatio = 4 / 3.5; 
+              } else if ((screenWidth / (minCardWidth + spacing)) >= 2.5 && (screenWidth / (minCardWidth + spacing)) <= 2.8) {
+                cardAspectRatio = 4 / 3.78; // um pouco mais alto
+              } else if ((screenWidth / (minCardWidth + spacing)) >= 2 && (screenWidth / (minCardWidth + spacing)) < 2.5) {
+                cardAspectRatio = 4 / 3.95; // um pouco mais alto
+              // para colum = 3
+              } else {
+                cardAspectRatio = 1; // padrão 1:1
+              }
               final itemHeight = itemWidth / cardAspectRatio;
 
               return Wrap(
