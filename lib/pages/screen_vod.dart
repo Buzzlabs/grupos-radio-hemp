@@ -130,39 +130,39 @@ class _ScreenVideoState extends State<ScreenVideo> {
               );
             } else {
               // === Layout para DESKTOP ===
-               return Stack(
-    children: [
-      /// Centraliza o player no meio da tela
-      Center(
-        child: VodPlayer(
-          avatarUrl: _live!.avatarUrl,
-          playbackUrl: _live!.videoUrl,
-          title: _live!.title,
-          isAdmin: false,
-          date: _live!.date,
-          category: _live!.category,
-          id: _live!.id,
-        ),
-      ),
+              return Stack(
+                children: [
+                  /// Centraliza o player no meio da tela
+                  Center(
+                    child: VodPlayer(
+                      avatarUrl: _live!.avatarUrl,
+                      playbackUrl: _live!.videoUrl,
+                      title: _live!.title,
+                      isAdmin: false,
+                      date: _live!.date,
+                      category: _live!.category,
+                      id: _live!.id,
+                    ),
+                  ),
 
-      /// Botão de voltar fixo no canto superior esquerdo
-      Positioned(
-        top: 8,
-        left: 8,
-        child: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            final router = GoRouter.of(context);
-            if (router.canPop()) {
-              router.pop();
-            } else {
-              router.go('/rooms');
-            }
-          },
-        ),
-      ),
-    ],
-  );
+                  /// Botão de voltar fixo no canto superior esquerdo
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () {
+                        final router = GoRouter.of(context);
+                        if (router.canPop()) {
+                          router.pop();
+                        } else {
+                          router.go('/rooms');
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              );
             }
           },
         ),

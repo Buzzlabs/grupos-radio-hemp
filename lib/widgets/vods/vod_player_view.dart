@@ -58,14 +58,14 @@ class VodPlayerView extends StatelessWidget {
           const SizedBox(height: 12),
 
           // Info tipo YouTube
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          SizedBox(
+            width: videoWidth,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                     CircleAvatar(
+                    CircleAvatar(
                       radius: 15,
                       backgroundColor: Colors.transparent,
                       backgroundImage: NetworkImage(avatarUrl),
@@ -86,61 +86,59 @@ class VodPlayerView extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 3),
-                                decoration: BoxDecoration(
-                                  color: theme.colorScheme.onSecondaryContainer
-                                      .withOpacity(0.15),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  date,
-                                  style: TextStyle(
-                                    color: theme.colorScheme.onSecondary,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ),
-                    const SizedBox(width: 8),
-                    Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 3),
-                                decoration: BoxDecoration(
-                                  color: theme.colorScheme.primary
-                                      .withOpacity(0.15),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  category,
-                                  style: TextStyle(
-                                    color: theme.colorScheme.onSecondary,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                              const Spacer(),
-                              IconButton(
-                                onPressed: () {
-                            final roomId = GoRouterState.of(context).pathParameters['roomid'];
-            
-                            final shareLink =
-                                'https://localhost//rooms/$roomId/screen_vod/${id}';
-                            Clipboard.setData(ClipboardData(text: shareLink));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Link copiado!')),
-                            );
-                          },
-                          icon: Icon(
-                              Icons.share,
-                              size: 18,
-                              color: theme.colorScheme.onSecondary,
-                            ),
-                            )
-                  ]
-                ),
+                Row(children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.onSecondaryContainer
+                          .withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      date,
+                      style: TextStyle(
+                        color: theme.colorScheme.onSecondary,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      category,
+                      style: TextStyle(
+                        color: theme.colorScheme.onSecondary,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      final roomId =
+                          GoRouterState.of(context).pathParameters['roomid'];
+
+                      final shareLink =
+                          'https://localhost//rooms/$roomId/screen_vod/${id}';
+                      Clipboard.setData(ClipboardData(text: shareLink));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Link copiado!')),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.share,
+                      size: 18,
+                      color: theme.colorScheme.onSecondary,
+                    ),
+                  )
+                ]),
               ],
             ),
           ),

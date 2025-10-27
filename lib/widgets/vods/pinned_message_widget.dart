@@ -64,7 +64,7 @@ class PinnedMessageWidget extends StatelessWidget {
                 minimumSize: const Size(130, 25),
               ),
               child: Text(
-                'Acessar agora 🎬',
+                'Assistir 🎬',
                 style: TextStyle(
                   color: theme.colorScheme.onSecondary,
                   fontSize: 15,

@@ -12,6 +12,7 @@ class VodsWidget extends StatefulWidget {
   final VoidCallback? onBackPressed;
   final String filter;
 
+  final bool isAdmin;
   final int numColumns;
   final int initialVisibleCount;
   final int loadMoreCount;
@@ -28,6 +29,7 @@ class VodsWidget extends StatefulWidget {
     this.showHeader = true,
     this.onShowMorePressed,
     this.onBackPressed,
+    this.isAdmin = false,
     super.key,
   });
 
@@ -47,76 +49,76 @@ class _VodsWidgetState extends State<VodsWidget> {
   }
 
   // varios live cards para teste
-  // Future<void> _fetchLives() async {
-  //   for (int i = 0; i < 5; i++) {
-  //     allLives.add(LiveShow(
-  //       id: 'id_$i',
-  //       title: 'Live Show $i',
-  //       category: 'Categoria $i',
-  //       date: 'Data $i',
-  //       thumbnailUrl:
-  //           "https://vod.radiohemp.com/ivs/v1/324037287349/Owua07eBFR2k/2025/9/14/17/40/jUsmHY0dAIrr/media/thumbnails/thumb120.jpg",
-  //       avatarUrl: 'assets/logo_single_comfundo.png',
-  //       videoUrl:
-  //           'https://vod.radiohemp.com/ivs/v1/324037287349/Owua07eBFR2k/2025/9/14/17/40/jUsmHY0dAIrr/media/hls/master.m3u8',
-  //       isLive: false,
-  //     ));
-
-  //     filteredLives = allLives;
-  //   }
-  // }
-
   Future<void> _fetchLives() async {
-    final baseUrl = 'http://localhost:3333';
-    final url = Uri.parse('$baseUrl/dashboard/api/streams');
+    for (int i = 0; i < 15; i++) {
+      allLives.add(LiveShow(
+        id: 'id_$i',
+        title: 'Live Show $i',
+        category: 'Categoria $i',
+        date: 'Data $i',
+        thumbnailUrl:
+            "https://vod.radiohemp.com/ivs/v1/324037287349/Owua07eBFR2k/2025/9/14/17/40/jUsmHY0dAIrr/media/thumbnails/thumb120.jpg",
+        avatarUrl: 'assets/logo_single_comfundo.png',
+        videoUrl:
+            'https://vod.radiohemp.com/ivs/v1/324037287349/Owua07eBFR2k/2025/9/14/17/40/jUsmHY0dAIrr/media/hls/master.m3u8',
+        isLive: false,
+      ));
 
-    try {
-      final response = await http.get(url).timeout(const Duration(seconds: 8));
-
-      if (response.statusCode != 200) {
-        throw Exception('HTTP ${response.statusCode}');
-      }
-
-      final decoded = jsonDecode(response.body);
-      if (decoded is! List) {
-        throw Exception('Resposta inesperada: esperava um array JSON');
-      }
-
-      final List<LiveShow> fetchedLives = decoded.map<LiveShow>((dynamic item) {
-        final map = item as Map<String, dynamic>;
-        return LiveShow(
-          id: (map['id']?.toString() ?? 'id'),
-          title: map['title'] as String? ?? 'Sem título',
-          category: (map['isLive'] == true) ? 'Ao vivo' : 'Gravação', // alterar
-          date: map['recordedRelativeTime'] as String? ?? '',
-          thumbnailUrl: map['latestThumbnail'] as String? ?? '',
-          avatarUrl:
-              map['avatarUrl'] as String? ?? 'assets/logo_single_comfundo.png',
-          videoUrl: map['masterPlaylistUrl'] as String? ?? '',
-          isLive: map['isLive'] as bool? ?? false,
-        );
-      }).toList();
-
-      // Atualiza a lista global
-      allLives = fetchedLives;
-
-      if (!equals(widget.filter, "")) return;
-      setState(() {
-        _applyFilter();
-      });
-    } on TimeoutException catch (_) {
-      debugPrint('Requisição expirou');
-    } catch (e, st) {
-      debugPrint('Erro ao buscar lives: $e\n$st');
+      filteredLives = allLives;
     }
   }
 
-  void _applyFilter() {
-    filteredLives = allLives
-        .where((live) =>
-            live.title.toLowerCase().contains(widget.filter.toLowerCase()))
-        .toList();
-  }
+  // Future<void> _fetchLives() async {
+  //   final baseUrl = 'http://localhost:3333';
+  //   final url = Uri.parse('$baseUrl/dashboard/api/streams');
+
+  //   try {
+  //     final response = await http.get(url).timeout(const Duration(seconds: 8));
+
+  //     if (response.statusCode != 200) {
+  //       throw Exception('HTTP ${response.statusCode}');
+  //     }
+
+  //     final decoded = jsonDecode(response.body);
+  //     if (decoded is! List) {
+  //       throw Exception('Resposta inesperada: esperava um array JSON');
+  //     }
+
+  //     final List<LiveShow> fetchedLives = decoded.map<LiveShow>((dynamic item) {
+  //       final map = item as Map<String, dynamic>;
+  //       return LiveShow(
+  //         id: (map['id']?.toString() ?? 'id'),
+  //         title: map['title'] as String? ?? 'Sem título',
+  //         category: (map['isLive'] == true) ? 'Ao vivo' : 'Gravação', // alterar
+  //         date: map['recordedRelativeTime'] as String? ?? '',
+  //         thumbnailUrl: map['latestThumbnail'] as String? ?? '',
+  //         avatarUrl:
+  //             map['avatarUrl'] as String? ?? 'assets/logo_single_comfundo.png',
+  //         videoUrl: map['masterPlaylistUrl'] as String? ?? '',
+  //         isLive: map['isLive'] as bool? ?? false,
+  //       );
+  //     }).toList();
+
+  //     // Atualiza a lista global
+  //     allLives = fetchedLives;
+
+  //     if (!equals(widget.filter, "")) return;
+  //     setState(() {
+  //       _applyFilter();
+  //     });
+  //   } on TimeoutException catch (_) {
+  //     debugPrint('Requisição expirou');
+  //   } catch (e, st) {
+  //     debugPrint('Erro ao buscar lives: $e\n$st');
+  //   }
+  // }
+
+  // void _applyFilter() {
+  //   filteredLives = allLives
+  //       .where((live) =>
+  //           live.title.toLowerCase().contains(widget.filter.toLowerCase()))
+  //       .toList();
+  // }
 
   void _showMore() {
     setState(() {
@@ -136,22 +138,34 @@ class _VodsWidgetState extends State<VodsWidget> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.streamsWidgetTag,
-                style: TextStyle(
-                  color: theme.colorScheme.primary,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w100,
-                ),
+              Row(
+                children: [
+                  const SizedBox(width: 24),
+                  Text(
+                    widget.streamsWidgetTag,
+                    style: TextStyle(
+                      color: theme.colorScheme.primary,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w100,
+                    ),
+                  ),
+                ],
               ),
               if (visibleCount > widget.initialVisibleCount)
-                TextButton(
-                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  onPressed: () {
-                    setState(() => visibleCount = widget.initialVisibleCount);
-                    widget.onBackPressed?.call();
-                  },
-                  child: const Text('< Voltar', style: TextStyle(fontSize: 14)),
+                Row(
+                  children: [
+                    const SizedBox(width: 24),
+                    TextButton(
+                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                      onPressed: () {
+                        setState(
+                            () => visibleCount = widget.initialVisibleCount);
+                        widget.onBackPressed?.call();
+                      },
+                      child: const Text('< Voltar',
+                          style: TextStyle(fontSize: 14)),
+                    ),
+                  ],
                 ),
               const SizedBox(height: 24),
             ],
@@ -207,17 +221,25 @@ class _VodsWidgetState extends State<VodsWidget> {
                 cardAspectRatio = 1; // padrão 1:1
               }
               final itemHeight = itemWidth / cardAspectRatio;
+              final wrapWidth = columns * itemWidth + (columns - 1) * spacing;
 
-              return Wrap(
-                spacing: spacing,
-                runSpacing: spacing,
-                children: visibleLives.map((live) {
-                  return SizedBox(
-                    width: itemWidth,
-                    height: itemHeight,
-                    child: LiveCard(live: live),
-                  );
-                }).toList(),
+              return Align(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: wrapWidth < screenWidth ? wrapWidth : screenWidth,
+                  child: Wrap(
+                    alignment: WrapAlignment.start,
+                    spacing: spacing,
+                    runSpacing: spacing,
+                    children: visibleLives.map((live) {
+                      return SizedBox(
+                        width: itemWidth,
+                        height: itemHeight,
+                        child: LiveCard(live: live),
+                      );
+                    }).toList(),
+                  ),
+                ),
               );
             },
           ),
