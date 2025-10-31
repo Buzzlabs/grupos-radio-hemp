@@ -66,7 +66,7 @@ class VodPlayerView extends StatelessWidget {
                 Row(
                   children: [
                     CircleAvatar(
-                      radius: 15,
+                      radius: 20,
                       backgroundColor: Colors.transparent,
                       backgroundImage: NetworkImage(avatarUrl),
                       onBackgroundImageError: (_, __) {},
@@ -104,21 +104,21 @@ class VodPlayerView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      category,
-                      style: TextStyle(
-                        color: theme.colorScheme.onSecondary,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   padding:
+                  //       const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  //   decoration: BoxDecoration(
+                  //     color: theme.colorScheme.primary.withOpacity(0.15),
+                  //     borderRadius: BorderRadius.circular(8),
+                  //   ),
+                  //   child: Text(
+                  //     category,
+                  //     style: TextStyle(
+                  //       color: theme.colorScheme.onSecondary,
+                  //       fontSize: 12,
+                  //     ),
+                  //   ),
+                  // ),
                   const Spacer(),
                   IconButton(
                     onPressed: () {

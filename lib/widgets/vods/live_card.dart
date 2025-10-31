@@ -28,7 +28,7 @@ class LiveCard extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(10),
             onTap: () {
               AudioState.mutedNotifier.value = true;
 
@@ -50,7 +50,6 @@ class LiveCard extends StatelessWidget {
                         aspectRatio: 16 / 9, // mantém proporção fixa
                         child: Image.network(
                           live.thumbnailUrl,
-                          width: double.infinity,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
                               const Icon(Icons.broken_image, size: 80),
@@ -84,7 +83,7 @@ class LiveCard extends StatelessWidget {
 
                 // === AVATAR + TÍTULO + INFO ===
                 Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.fromLTRB(10, 12, 16, 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -112,6 +111,7 @@ class LiveCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Flexible(
                             child: Wrap(
@@ -125,11 +125,11 @@ class LiveCard extends StatelessWidget {
                                     theme.colorScheme.onSecondaryContainer
                                         .withOpacity(0.15),
                                     13),
-                                _infoChip(
-                                    theme,
-                                    live.category,
-                                    theme.colorScheme.primary.withOpacity(0.15),
-                                    12),
+                                // _infoChip(
+                                //     theme,
+                                //     live.category,
+                                //     theme.colorScheme.primary.withOpacity(0.15),
+                                //     12),
                               ],
                             ),
                           ),

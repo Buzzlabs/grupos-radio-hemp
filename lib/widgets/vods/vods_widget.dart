@@ -40,90 +40,134 @@ class VodsWidget extends StatefulWidget {
 class _VodsWidgetState extends State<VodsWidget> {
   List<LiveShow> filteredLives = [];
   late int visibleCount;
+  bool isLoading = false;
+
+  int currentPage = 1;
+  int lastPage = 1;
+  int limit = 5; // quantos carregar a cada fetch
+  // int totalFakeLives = 30; // total de lives fake
 
   @override
   void initState() {
     super.initState();
     visibleCount = widget.initialVisibleCount;
-    _fetchLives();
+    limit = widget.initialVisibleCount;
+    // _fetchFakeLives(); // função teste
+    _fetchLives(); // função real do backend
   }
 
-  // varios live cards para teste
-  Future<void> _fetchLives() async {
-    for (int i = 0; i < 15; i++) {
-      allLives.add(LiveShow(
-        id: 'id_$i',
-        title: 'Live Show $i',
-        category: 'Categoria $i',
-        date: 'Data $i',
-        thumbnailUrl:
-            "https://vod.radiohemp.com/ivs/v1/324037287349/Owua07eBFR2k/2025/9/14/17/40/jUsmHY0dAIrr/media/thumbnails/thumb120.jpg",
-        avatarUrl: 'assets/logo_single_comfundo.png',
-        videoUrl:
-            'https://vod.radiohemp.com/ivs/v1/324037287349/Owua07eBFR2k/2025/9/14/17/40/jUsmHY0dAIrr/media/hls/master.m3u8',
-        isLive: false,
-      ));
+// // varios live cards para teste
+// Future<void> _fetchFakeLives({bool append = false}) async {
+//     if (isLoading) return;
+//     setState(() => isLoading = true);
 
-      filteredLives = allLives;
+//     await Future.delayed(const Duration(milliseconds: 300)); // simula requisição
+
+//     final start = (currentPage - 1) * limit;
+//     final end = (start + limit).clamp(0, totalFakeLives);
+
+//     final newLives = List.generate(end - start, (i) {
+//       final index = start + i;
+//       return LiveShow(
+//         id: 'id_$index',
+//         title: 'Live Show $index',
+//         category: 'Categoria $index',
+//         date: 'Data $index',
+//         thumbnailUrl:
+//             "https://vod.radiohemp.com/ivs/v1/324037287349/Owua07eBFR2k/2025/9/14/17/40/jUsmHY0dAIrr/media/thumbnails/thumb120.jpg",
+//         avatarUrl: 'assets/logo_single_comfundo.png',
+//         videoUrl:
+//             'https://vod.radiohemp.com/ivs/v1/324037287349/Owua07eBFR2k/2025/9/14/17/40/jUsmHY0dAIrr/media/hls/master.m3u8',
+//         isLive: false,
+//       );
+//     });
+
+//     if (append) {
+//       allLives.addAll(newLives);
+//     } else {
+//       allLives = newLives;
+//     }
+
+//     filteredLives = allLives;
+
+//     setState(() {
+//       isLoading = false;
+//     });
+//   }
+
+  Future<void> _fetchLives({bool append = false}) async {
+    if (isLoading) return;
+    setState(() => isLoading = true);
+
+    final baseUrl = 'http://localhost:3333';
+    final url =
+        Uri.parse('$baseUrl/dashboard/api/streams/vods?page=$currentPage&limit=10');
+
+    try {
+      final response = await http.get(url).timeout(const Duration(seconds: 8));
+      final decoded = jsonDecode(response.body);
+
+      // extrai meta do backend
+      final meta = decoded['meta'];
+      lastPage = meta['last_page'];
+
+      // extrai lista de streams
+      final List<dynamic> data = decoded['data'];
+      final List<LiveShow> fetchedLives = data.map<LiveShow>((item) {
+        final map = item as Map<String, dynamic>;
+        return LiveShow(
+          id: map['id'].toString(),
+          title: map['title'] ?? 'Sem título',
+          category: map['isLive'] == true ? 'Ao vivo' : 'Gravação',
+          date: map['recordedRelativeTime'] ?? '',
+          thumbnailUrl: map['latestThumbnail'] ?? '',
+          avatarUrl: map['avatarUrl'] ?? 'assets/logo_single_comfundo.png',
+          videoUrl: map['masterPlaylistUrl'] ?? '',
+          isLive: map['isLive'] ?? false,
+        );
+      }).toList();
+
+      if (append) {
+        allLives.addAll(fetchedLives);
+      } else {
+        allLives = fetchedLives;
+      }
+
+      setState(() {
+        _applyFilter();
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
     }
   }
 
-  // Future<void> _fetchLives() async {
-  //   final baseUrl = 'http://localhost:3333';
-  //   final url = Uri.parse('$baseUrl/dashboard/api/streams');
-
-  //   try {
-  //     final response = await http.get(url).timeout(const Duration(seconds: 8));
-
-  //     if (response.statusCode != 200) {
-  //       throw Exception('HTTP ${response.statusCode}');
-  //     }
-
-  //     final decoded = jsonDecode(response.body);
-  //     if (decoded is! List) {
-  //       throw Exception('Resposta inesperada: esperava um array JSON');
-  //     }
-
-  //     final List<LiveShow> fetchedLives = decoded.map<LiveShow>((dynamic item) {
-  //       final map = item as Map<String, dynamic>;
-  //       return LiveShow(
-  //         id: (map['id']?.toString() ?? 'id'),
-  //         title: map['title'] as String? ?? 'Sem título',
-  //         category: (map['isLive'] == true) ? 'Ao vivo' : 'Gravação', // alterar
-  //         date: map['recordedRelativeTime'] as String? ?? '',
-  //         thumbnailUrl: map['latestThumbnail'] as String? ?? '',
-  //         avatarUrl:
-  //             map['avatarUrl'] as String? ?? 'assets/logo_single_comfundo.png',
-  //         videoUrl: map['masterPlaylistUrl'] as String? ?? '',
-  //         isLive: map['isLive'] as bool? ?? false,
-  //       );
-  //     }).toList();
-
-  //     // Atualiza a lista global
-  //     allLives = fetchedLives;
-
-  //     if (!equals(widget.filter, "")) return;
-  //     setState(() {
-  //       _applyFilter();
-  //     });
-  //   } on TimeoutException catch (_) {
-  //     debugPrint('Requisição expirou');
-  //   } catch (e, st) {
-  //     debugPrint('Erro ao buscar lives: $e\n$st');
-  //   }
-  // }
-
-  // void _applyFilter() {
-  //   filteredLives = allLives
-  //       .where((live) =>
-  //           live.title.toLowerCase().contains(widget.filter.toLowerCase()))
-  //       .toList();
-  // }
+  void _applyFilter() {
+    filteredLives = allLives
+        .where((live) =>
+            live.title.toLowerCase().contains(widget.filter.toLowerCase()))
+        .toList();
+  }
 
   void _showMore() {
-    setState(() {
-      visibleCount += widget.loadMoreCount;
-    });
+    // quantos novos cards mostrar
+    final remaining = allLives.length - visibleCount;
+
+    if (remaining >= widget.loadMoreCount) {
+      // se já tem lives carregadas suficientes, só aumenta visibleCount
+      setState(() => visibleCount += widget.loadMoreCount);
+    } else {
+      // se não tem, carrega mais lives e depois aumenta visibleCount
+      currentPage++;
+      // _fetchFakeLives(append: true).then((_) {
+      _fetchLives(append: true).then((_) {
+        setState(() {
+          visibleCount += widget.loadMoreCount;
+          // não passar do total de lives disponíveis
+          if (visibleCount > allLives.length) visibleCount = allLives.length;
+        });
+      });
+    }
   }
 
   @override
@@ -167,13 +211,13 @@ class _VodsWidgetState extends State<VodsWidget> {
                     ),
                   ],
                 ),
-              const SizedBox(height: 24),
+              // const SizedBox(height: 24),
             ],
           ),
         if (allLives.isEmpty)
-          const Center(child: CircularProgressIndicator())
+          const Center(child: Text('Nenhum vod encontrado'))
         else if (filteredLives.isEmpty)
-          const Center(child: Text('Nenhuma live encontrada'))
+          const Center(child: Text('Nenhum vod encontrado'))
         else
           LayoutBuilder(
             builder: (context, constraints) {
@@ -243,7 +287,8 @@ class _VodsWidgetState extends State<VodsWidget> {
               );
             },
           ),
-        if (widget.showHeader && visibleCount < filteredLives.length)
+        if (currentPage <
+            lastPage) // if ((currentPage * limit) < totalFakeLives)
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Row(
@@ -258,10 +303,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    _showMore();
-                    widget.onShowMorePressed?.call();
-                  },
+                  onPressed: _showMore,
                   style: TextButton.styleFrom(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 4),

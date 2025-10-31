@@ -130,38 +130,83 @@ class _ScreenVideoState extends State<ScreenVideo> {
               );
             } else {
               // === Layout para DESKTOP ===
-              return Stack(
-                children: [
-                  /// Centraliza o player no meio da tela
-                  Center(
-                    child: VodPlayer(
-                      avatarUrl: _live!.avatarUrl,
-                      playbackUrl: _live!.videoUrl,
-                      title: _live!.title,
-                      isAdmin: false,
-                      date: _live!.date,
-                      category: _live!.category,
-                      id: _live!.id,
-                    ),
-                  ),
+              return Scaffold(
+                body: SafeArea(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final screenWidth = constraints.maxWidth;
+                      final isMobileMode = screenWidth < 1200;
 
-                  /// Botão de voltar fixo no canto superior esquerdo
-                  Positioned(
-                    top: 8,
-                    left: 8,
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () {
-                        final router = GoRouter.of(context);
-                        if (router.canPop()) {
-                          router.pop();
-                        } else {
-                          router.go('/rooms');
-                        }
-                      },
-                    ),
+                      if (isMobileMode) {
+                        // mobile
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.arrow_back),
+                                    onPressed: () {
+                                      final router = GoRouter.of(context);
+                                      if (router.canPop()) {
+                                        router.pop();
+                                      } else {
+                                        router.go('/rooms');
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                              VodPlayer(
+                                avatarUrl: _live!.avatarUrl,
+                                playbackUrl: _live!.videoUrl,
+                                title: _live!.title,
+                                isAdmin: false,
+                                date: _live!.date,
+                                category: _live!.category,
+                                id: _live!.id,
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        // web/desktop
+                        return Stack(
+                          children: [
+                            Center(
+                              child: VodPlayer(
+                                avatarUrl: _live!.avatarUrl,
+                                playbackUrl: _live!.videoUrl,
+                                title: _live!.title,
+                                isAdmin: false,
+                                date: _live!.date,
+                                category: _live!.category,
+                                id: _live!.id,
+                              ),
+                            ),
+                            Positioned(
+                              top: 10,
+                              left: 8,
+                              child: IconButton(
+                                icon: const Icon(Icons.arrow_back),
+                                onPressed: () {
+                                  final router = GoRouter.of(context);
+                                  if (router.canPop()) {
+                                    router.pop();
+                                  } else {
+                                    router.go('/rooms');
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                    },
                   ),
-                ],
+                ),
               );
             }
           },

@@ -119,7 +119,7 @@ class PopUpVodsState extends State<PopUpVods> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 16),
+                          //const SizedBox(height: 16),
                           Expanded(
                             child: SingleChildScrollView(
                               physics: const BouncingScrollPhysics(),
@@ -129,11 +129,11 @@ class PopUpVodsState extends State<PopUpVods> {
                                   if (secaoExpandida == null ||
                                       secaoExpandida == 'destaques')
                                     VodsWidget(
-                                      initialVisibleCount: 5,
+                                      initialVisibleCount: 10,
                                       loadMoreCount: 5,
                                       numColumns: 5,
                                       showHeader: true,
-                                      streamsWidgetTag: '🔥 Destaques',
+                                      streamsWidgetTag: '',
                                       onShowMorePressed: () {
                                         setState(
                                             () => secaoExpandida = 'destaques');
@@ -310,8 +310,8 @@ class PopUpVodsState extends State<PopUpVods> {
                         );
                       },
                     ),
-                    const SizedBox(height: 16),
-                    Expanded(
+                    const SizedBox(height: 8),
+                    Flexible(
                       child: AnimatedSwitcher(
                           duration: const Duration(milliseconds: 300),
                           switchInCurve: Curves.easeOut,
@@ -326,9 +326,9 @@ class PopUpVodsState extends State<PopUpVods> {
                                     secaoExpandida == 'destaques')
                                   VodsWidget(
                                     numColumns: 2,
-                                    initialVisibleCount: 2,
+                                    initialVisibleCount: 4,
                                     loadMoreCount: 2,
-                                    streamsWidgetTag: '🔥 Destaques',
+                                    streamsWidgetTag: '',
                                     onShowMorePressed: () {
                                       setState(
                                           () => secaoExpandida = 'destaques');
@@ -337,7 +337,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                       setState(() => secaoExpandida = null);
                                     },
                                   ),
-                                const SizedBox(height: 24),
+                                //const SizedBox(height: 24),
                                 // if (secaoExpandida == null ||
                                 //     secaoExpandida == 'amendoshow')
                                 //   VodsWidget(
