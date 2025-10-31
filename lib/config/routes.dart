@@ -77,20 +77,6 @@ abstract class AppRoutes {
         const AutoLoginScreen(),
       ),
     ),
-//     GoRoute(
-//   name: 'screen_vod',
-//   path: '/screen_vod/:id',
-//   builder: (context, state) {
-//     final id = state.pathParameters['id']!;
-//     final live = getLiveById(id);
-
-//     // Se live existe localmente
-//     if (live != null) return ScreenVideo(live: live);
-
-//     // Se não, passa só o id e deixa o ScreenVideo buscar do backend
-//     return ScreenVideo(liveId: id);
-//   },
-// ),
 
     GoRoute(
       path: '/login',
@@ -393,13 +379,13 @@ abstract class AppRoutes {
               redirect: loggedOutRedirect,
               routes: [
                 GoRoute(
-                  name: 'screen_vod',
-                  path: 'screen_vod/:id',
+                  name: 'vod',
+                  path: 'vod/:id',
                   builder: (context, state) {
                     final id = state.pathParameters['id']!;
                     final live = getLiveById(id);
-                    if (live != null) return ScreenVideo(live: live);
-                    return ScreenVideo(liveId: id);
+                    if (live != null) return ScreenVod(live: live);
+                    return ScreenVod(liveId: id);
                   },
                 ),
                 GoRoute(

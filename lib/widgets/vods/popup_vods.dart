@@ -126,7 +126,7 @@ class PopUpVodsState extends State<PopUpVods> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  if (secaoExpandida == null ||
+                                  if (showBottomMenu && secaoExpandida == null ||
                                       secaoExpandida == 'destaques')
                                     VodsWidget(
                                       initialVisibleCount: 10,
@@ -199,7 +199,6 @@ class PopUpVodsState extends State<PopUpVods> {
     );
   }
 
-  // === LAYOUT MOBILE === (ação de deslizar incompleto e não testado)
   // === LAYOUT MOBILE ===
   Widget _buildMobileLayout(ThemeData theme) {
     double _mobileHeight = MediaQuery.of(context).size.height * 0.7;
@@ -322,7 +321,7 @@ class PopUpVodsState extends State<PopUpVods> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                if (secaoExpandida == null ||
+                                if (showBottomMenu && secaoExpandida == null ||
                                     secaoExpandida == 'destaques')
                                   VodsWidget(
                                     numColumns: 2,

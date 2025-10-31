@@ -42,6 +42,7 @@ class _VodsWidgetState extends State<VodsWidget> {
   late int visibleCount;
   bool isLoading = false;
 
+  int loadedCount = 0; 
   int currentPage = 1;
   int lastPage = 1;
   int limit = 5; // quantos carregar a cada fetch
@@ -133,6 +134,8 @@ class _VodsWidgetState extends State<VodsWidget> {
         allLives = fetchedLives;
       }
 
+      loadedCount = allLives.length; 
+
       setState(() {
         _applyFilter();
         isLoading = false;
@@ -149,26 +152,27 @@ class _VodsWidgetState extends State<VodsWidget> {
         .toList();
   }
 
-  void _showMore() {
-    // quantos novos cards mostrar
-    final remaining = allLives.length - visibleCount;
+ void _showMore() {
+  final remainingVisible = loadedCount - visibleCount;
 
-    if (remaining >= widget.loadMoreCount) {
-      // se já tem lives carregadas suficientes, só aumenta visibleCount
-      setState(() => visibleCount += widget.loadMoreCount);
-    } else {
-      // se não tem, carrega mais lives e depois aumenta visibleCount
-      currentPage++;
-      // _fetchFakeLives(append: true).then((_) {
-      _fetchLives(append: true).then((_) {
-        setState(() {
-          visibleCount += widget.loadMoreCount;
-          // não passar do total de lives disponíveis
-          if (visibleCount > allLives.length) visibleCount = allLives.length;
-        });
+  if (remainingVisible >= widget.loadMoreCount) {
+    // já temos items carregados suficientes → só aumenta visibleCount
+    setState(() => visibleCount += widget.loadMoreCount);
+  } else if (currentPage < lastPage) {
+    // precisamos buscar mais do backend
+    currentPage++;
+    _fetchLives(append: true).then((_) {
+      setState(() {
+        // sempre mostra apenas 5 a mais
+        visibleCount += widget.loadMoreCount;
+        if (visibleCount > allLives.length) visibleCount = allLives.length;
       });
-    }
+    });
+  } else {
+    // última página → mostra tudo que restou
+    setState(() => visibleCount = allLives.length);
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -202,10 +206,16 @@ class _VodsWidgetState extends State<VodsWidget> {
                     TextButton(
                       style: TextButton.styleFrom(padding: EdgeInsets.zero),
                       onPressed: () {
-                        setState(
-                            () => visibleCount = widget.initialVisibleCount);
+                        setState(() {
+                          currentPage = 1;          // 🔥 reset
+                          visibleCount = widget.initialVisibleCount;
+                          allLives.clear();         // 🔥 limpa lives carregadas
+                        });
+
+                        _fetchLives();              // 🔥 carrega página 1 novamente
                         widget.onBackPressed?.call();
                       },
+
                       child: const Text('< Voltar',
                           style: TextStyle(fontSize: 14)),
                     ),
@@ -287,8 +297,7 @@ class _VodsWidgetState extends State<VodsWidget> {
               );
             },
           ),
-        if (currentPage <
-            lastPage) // if ((currentPage * limit) < totalFakeLives)
+        if (visibleCount < loadedCount || currentPage < lastPage) // if ((currentPage * limit) < totalFakeLives)
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Row(

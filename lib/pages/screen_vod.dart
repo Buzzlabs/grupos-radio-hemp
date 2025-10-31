@@ -5,21 +5,21 @@ import 'package:fluffychat/pages/lives_data.dart'; // já tem LiveShow e fetchLi
 import 'package:fluffychat/widgets/vods/vod_player_view.dart';
 import 'package:fluffychat/widgets/vods/vod_player.dart';
 
-class ScreenVideo extends StatefulWidget {
+class ScreenVod extends StatefulWidget {
   final LiveShow? live;
   final String? liveId;
 
-  const ScreenVideo({
+  const ScreenVod({
     this.live,
     this.liveId,
     super.key,
   });
 
   @override
-  State<ScreenVideo> createState() => _ScreenVideoState();
+  State<ScreenVod> createState() => _ScreenVodState();
 }
 
-class _ScreenVideoState extends State<ScreenVideo> {
+class _ScreenVodState extends State<ScreenVod> {
   LiveShow? _live;
   bool _loading = false;
   bool _error = false;
@@ -70,7 +70,7 @@ class _ScreenVideoState extends State<ScreenVideo> {
 
     if (_error || _live == null) {
       return const Scaffold(
-        body: Center(child: Text('Live não encontrada')),
+        body: Center(child: Text('Vod não encontrado')),
       );
     }
 
