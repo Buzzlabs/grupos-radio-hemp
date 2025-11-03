@@ -44,21 +44,21 @@ class _VodsWidgetState extends State<VodsWidget> {
   int loadedCount = 0;
   int currentPage = 1;
   int lastPage = 1;
-  int limit = 5;
+  int limit = 5; 
 
   @override
   void initState() {
     super.initState();
     visibleCount = widget.initialVisibleCount;
     limit = widget.initialVisibleCount;
-    _fetchLives();
+    _fetchLives(); 
   }
 
   Future<void> _fetchLives({bool append = false}) async {
     if (isLoading) return;
     setState(() => isLoading = true);
 
-    final baseUrl = 'https://chat.radiohemp.com';
+    final baseUrl = 'http://localhost:3333';
     final url = Uri.parse(
         '$baseUrl/dashboard/api/streams/vods?page=$currentPage&limit=10');
 
@@ -72,11 +72,29 @@ class _VodsWidgetState extends State<VodsWidget> {
       final List<dynamic> data = decoded['data'];
       final List<LiveShow> fetchedLives = data.map<LiveShow>((item) {
         final map = item as Map<String, dynamic>;
+
+         String title = map['title'] ?? 'Sem título';
+
+         final startedAtRaw = map['recordingStartedAt'];
+         DateTime? startedAt;
+
+         if (startedAtRaw != null) {
+          startedAt = DateTime.tryParse(startedAtRaw);
+        }
+        
+        if (title == 'Main Channel' && startedAt != null) {
+          final formatted =
+              '${startedAt.day.toString().padLeft(2, '0')}/${startedAt.month.toString().padLeft(2, '0')}/${startedAt.year.toString().substring(2)}';
+
+          title = 'Live $formatted';
+        }
+
         return LiveShow(
           id: map['id'].toString(),
-          title: map['title'] ?? 'Sem título',
+          title: title,
           category: map['isLive'] == true ? 'Ao vivo' : 'Gravação',
           date: map['recordedRelativeTime'] ?? '',
+          startedAt: map['recordingStartedAt'] ?? '',
           thumbnailUrl: map['latestThumbnail'] ?? '',
           avatarUrl: map['avatarUrl'] ?? 'assets/logo_single_comfundo.png',
           videoUrl: map['masterPlaylistUrl'] ?? '',
@@ -159,12 +177,12 @@ class _VodsWidgetState extends State<VodsWidget> {
                       style: TextButton.styleFrom(padding: EdgeInsets.zero),
                       onPressed: () {
                         setState(() {
-                          currentPage = 1;
+                          currentPage = 1; 
                           visibleCount = widget.initialVisibleCount;
-                          allLives.clear();
+                          allLives.clear(); 
                         });
 
-                        _fetchLives();
+                        _fetchLives(); 
                         widget.onBackPressed?.call();
                       },
                       child: const Text('< Voltar',
@@ -202,20 +220,21 @@ class _VodsWidgetState extends State<VodsWidget> {
 
               if ((screenWidth / (minCardWidth + spacing)) >= 1.5 &&
                   (screenWidth / (minCardWidth + spacing)) < 2) {
-                cardAspectRatio = 4 / 3.4;
+                cardAspectRatio = 4 / 3.4; 
               } else if ((screenWidth / (minCardWidth + spacing)) < 1.5) {
-                cardAspectRatio = 4 / 3.6;
-              } else if ((screenWidth / (minCardWidth + spacing)) >= 2.8 &&
+                cardAspectRatio = 4 / 3.6; 
+              }
+              else if ((screenWidth / (minCardWidth + spacing)) >= 2.8 &&
                   (screenWidth / (minCardWidth + spacing)) <= 3) {
                 cardAspectRatio = 4 / 3.5;
               } else if ((screenWidth / (minCardWidth + spacing)) >= 2.5 &&
                   (screenWidth / (minCardWidth + spacing)) <= 2.8) {
-                cardAspectRatio = 4 / 3.78;
+                cardAspectRatio = 4 / 3.78; 
               } else if ((screenWidth / (minCardWidth + spacing)) >= 2 &&
                   (screenWidth / (minCardWidth + spacing)) < 2.5) {
-                cardAspectRatio = 4 / 3.95;
+                cardAspectRatio = 4 / 3.95; 
               } else {
-                cardAspectRatio = 1;
+                cardAspectRatio = 1; 
               }
               final itemHeight = itemWidth / cardAspectRatio;
               final wrapWidth = columns * itemWidth + (columns - 1) * spacing;
@@ -240,7 +259,9 @@ class _VodsWidgetState extends State<VodsWidget> {
               );
             },
           ),
-        if (visibleCount < loadedCount || currentPage < lastPage)
+        if (visibleCount < loadedCount ||
+            currentPage <
+                lastPage) 
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Row(
