@@ -40,14 +40,12 @@ class LiveCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // === THUMBNAIL COM ASPECT RATIO ===
                 Stack(
                   children: [
                     ClipRRect(
-                      borderRadius:
-                          BorderRadius.circular(10), // define o arredondado
+                      borderRadius: BorderRadius.circular(10),
                       child: AspectRatio(
-                        aspectRatio: 16 / 9, // mantém proporção fixa
+                        aspectRatio: 16 / 9,
                         child: Image.network(
                           live.thumbnailUrl,
                           fit: BoxFit.cover,
@@ -56,32 +54,31 @@ class LiveCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (live.isLive)
-                      Positioned(
-                        top: 8,
-                        right: 8,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.redAccent,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            'AO VIVO',
-                            style: GoogleFonts.righteous(
-                              textStyle: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                    // to do
+                    // if (live.isLive)
+                    //   Positioned(
+                    //     top: 8,
+                    //     right: 8,
+                    //     child: Container(
+                    //       padding: const EdgeInsets.symmetric(
+                    //           horizontal: 8, vertical: 4),
+                    //       decoration: BoxDecoration(
+                    //         color: Colors.redAccent,
+                    //         borderRadius: BorderRadius.circular(6),
+                    //       ),
+                    //       child: Text(
+                    //         'AO VIVO',
+                    //         style: GoogleFonts.righteous(
+                    //           textStyle: const TextStyle(
+                    //             color: Colors.white,
+                    //             fontSize: 12,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
                   ],
                 ),
-
-                // === AVATAR + TÍTULO + INFO ===
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -124,6 +121,7 @@ class LiveCard extends StatelessWidget {
                                   theme.colorScheme.onSecondaryContainer
                                       .withOpacity(0.15),
                                   13),
+                              // to do
                               // _infoChip(
                               //     theme,
                               //     live.category,
@@ -138,7 +136,7 @@ class LiveCard extends StatelessWidget {
                             final roomId = GoRouterState.of(context)
                                 .pathParameters['roomid'];
                             final shareLink =
-                                'https://localhost//rooms/$roomId/vod/${live.id}';
+                                'https://grupos.radiohemp.com/#/rooms/$roomId/vod/${live.id}';
                             Clipboard.setData(ClipboardData(text: shareLink));
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Link copiado!')),

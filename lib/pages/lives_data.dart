@@ -1,10 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-/// Lista global de lives. Preencha ela ao buscar do backend.
 List<LiveShow> allLives = [];
 
-/// Busca uma live pelo ID. Retorna null se não encontrar.
 LiveShow? getLiveById(String id) {
   try {
     return allLives.firstWhere((live) => live.id == id);
@@ -15,14 +13,13 @@ LiveShow? getLiveById(String id) {
 
 Future<LiveShow?> fetchLiveById(String id) async {
   try {
-    final url = Uri.parse('http://localhost:3333/dashboard/api/streams');
+    final url = Uri.parse('https://chat.radiohemp.com/dashboard/api/streams');
     final response = await http.get(url);
 
     if (response.statusCode != 200) return null;
 
     final decoded = jsonDecode(response.body) as List<dynamic>;
 
-    // procura o item que tem o id desejado
     final map = decoded.firstWhere(
       (item) => item['id'].toString() == id,
       orElse: () => null,

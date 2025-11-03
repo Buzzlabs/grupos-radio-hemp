@@ -289,14 +289,13 @@ class ChatView extends StatelessWidget {
                             children: <Widget>[
                               const SizedBox(height: 1),
                               Material(
-                                elevation: 4, // controla a sombra
-                                color: theme.colorScheme
-                                    .surface, // ou transparente, se quiser
+                                elevation: 4,
+                                color: theme.colorScheme.surface,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.vertical(
                                     bottom: Radius.circular(
                                       12,
-                                    ), // <-- arredonda só a parte de baixo
+                                    ),
                                   ),
                                 ),
                                 child: PinnedMessageWidget(

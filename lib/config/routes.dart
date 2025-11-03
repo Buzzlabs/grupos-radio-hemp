@@ -30,10 +30,8 @@ import 'package:fluffychat/widgets/log_view.dart';
 import 'package:fluffychat/widgets/matrix.dart';
 import 'package:fluffychat/widgets/share_scaffold_dialog.dart';
 import 'package:fluffychat/guard/guard.dart';
-import 'package:fluffychat/widgets/vods/popup_vods.dart';
 import 'package:fluffychat/pages/screen_vod.dart';
 import 'package:fluffychat/pages/lives_data.dart';
-import 'package:fluffychat/widgets/vods/vods_widget.dart';
 
 abstract class AppRoutes {
   static FutureOr<String?> loggedInRedirect(
@@ -77,7 +75,6 @@ abstract class AppRoutes {
         const AutoLoginScreen(),
       ),
     ),
-
     GoRoute(
       path: '/login',
       redirect: loggedInRedirect,

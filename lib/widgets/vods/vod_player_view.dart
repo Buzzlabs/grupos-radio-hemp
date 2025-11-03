@@ -38,13 +38,14 @@ class VodPlayerView extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 1200;
     final double videoWidth = isMobile ? screenWidth : screenWidth * 0.7;
-    final videoHeight = videoWidth / (16 / 9);
+    // to do
+    // final videoHeight = videoWidth / (16 / 9);
 
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(
-          maxWidth: 1370, // limite horizontal total
-          maxHeight: 900, // limite vertical total, opcional
+          maxWidth: 1370,
+          maxHeight: 900,
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -52,20 +53,17 @@ class VodPlayerView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Player
-                SizedBox(
-            width: double.infinity,
-            child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: HtmlElementView(viewType: viewId),
+              SizedBox(
+                width: double.infinity,
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: HtmlElementView(viewType: viewId),
+                  ),
+                ),
               ),
-            ),
-          ),
               const SizedBox(height: 12),
-        
-              // Info tipo YouTube
               SizedBox(
                 width: videoWidth,
                 child: Column(
@@ -96,8 +94,8 @@ class VodPlayerView extends StatelessWidget {
                     const SizedBox(height: 8),
                     Row(children: [
                       Container(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
                           color: theme.colorScheme.onSecondaryContainer
                               .withOpacity(0.15),
@@ -112,6 +110,7 @@ class VodPlayerView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
+                      //to do
                       // Container(
                       //   padding:
                       //       const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -130,11 +129,11 @@ class VodPlayerView extends StatelessWidget {
                       const Spacer(),
                       IconButton(
                         onPressed: () {
-                          final roomId =
-                              GoRouterState.of(context).pathParameters['roomid'];
-        
+                          final roomId = GoRouterState.of(context)
+                              .pathParameters['roomid'];
+
                           final shareLink =
-                              'https://localhost//rooms/$roomId/vod/${id}';
+                              'https://grupos.radiohemp.com/#/rooms/$roomId/vod/${id}';
                           Clipboard.setData(ClipboardData(text: shareLink));
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Link copiado!')),

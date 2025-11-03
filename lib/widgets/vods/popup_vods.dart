@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluffychat/config/themes.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluffychat/widgets/vods/vods_widget.dart';
-import 'package:fluffychat/widgets/vods/events_table.dart';
 
 class PopUpVods extends StatefulWidget {
   final bool enforceMobileMode;
@@ -14,10 +12,9 @@ class PopUpVods extends StatefulWidget {
 
 class PopUpVodsState extends State<PopUpVods> {
   bool showBottomMenu = false;
-  String? secaoExpandida; // null = nenhuma expandida
+  String? secaoExpandida;
   String selectedTab = 'rolou';
 
-  // === MÉTODO PÚBLICO PARA TOGGLE DA GAVETA ===
   void toggleGaveta() {
     setState(() {
       showBottomMenu = !showBottomMenu;
@@ -36,11 +33,9 @@ class PopUpVodsState extends State<PopUpVods> {
     );
   }
 
-  // === LAYOUT WEB ===
   Widget _buildWebLayout(ThemeData theme) {
     return Stack(
       children: [
-        // === GAVETA ANIMADA ===
         AnimatedPositioned(
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeOut,
@@ -70,7 +65,6 @@ class PopUpVodsState extends State<PopUpVods> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // === PUXADOR ===
                     const SizedBox(height: 8),
                     Center(
                       child: MouseRegion(
@@ -92,13 +86,13 @@ class PopUpVodsState extends State<PopUpVods> {
                     ),
                     const SizedBox(height: 8),
 
-                    // === CONTEÚDO DA GAVETA ===
+                    // to do
                     // Expanded(
                     // child: Row(
                     // crossAxisAlignment: CrossAxisAlignment.start,
                     //children: [
-                    // ===== COLUNA ESQUERDA =====
                     Expanded(
+                      // to do
                       //flex: 2,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -119,6 +113,7 @@ class PopUpVodsState extends State<PopUpVods> {
                               ),
                             ],
                           ),
+                          // to do
                           //const SizedBox(height: 16),
                           Expanded(
                             child: SingleChildScrollView(
@@ -126,7 +121,8 @@ class PopUpVodsState extends State<PopUpVods> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  if (showBottomMenu && secaoExpandida == null ||
+                                  if (showBottomMenu &&
+                                          secaoExpandida == null ||
                                       secaoExpandida == 'destaques')
                                     VodsWidget(
                                       initialVisibleCount: 10,
@@ -142,6 +138,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                         setState(() => secaoExpandida = null);
                                       },
                                     ),
+                                  // to do
                                   //const SizedBox(height: 24),
                                   // if (secaoExpandida == null ||
                                   //     secaoExpandida == 'amendoshow')
@@ -169,10 +166,8 @@ class PopUpVodsState extends State<PopUpVods> {
                         ],
                       ),
                     ),
-
+                    // to do
                     //const SizedBox(width: 24),
-
-                    // ===== Coluna direita =====
                     // Expanded(
                     //   flex: 1,
                     //   child: Container(
@@ -199,10 +194,9 @@ class PopUpVodsState extends State<PopUpVods> {
     );
   }
 
-  // === LAYOUT MOBILE ===
   Widget _buildMobileLayout(ThemeData theme) {
     double _mobileHeight = MediaQuery.of(context).size.height * 0.7;
-    const double _peekHeight = 52; // parte visível quando fechada
+    const double _peekHeight = 52;
     double _dragOffset = showBottomMenu ? 0 : -_mobileHeight + _peekHeight;
 
     return Stack(
@@ -216,14 +210,12 @@ class PopUpVodsState extends State<PopUpVods> {
           child: GestureDetector(
             onVerticalDragUpdate: (details) {
               setState(() {
-                // move a gaveta junto com o dedo, limitando
                 _dragOffset = (_dragOffset - details.delta.dy)
                     .clamp(-_mobileHeight + _peekHeight, 0);
               });
             },
             onVerticalDragEnd: (details) {
               setState(() {
-                // abre ou fecha dependendo da velocidade ou posição
                 if (details.primaryVelocity! < -200) {
                   _dragOffset = 0;
                   showBottomMenu = true;
@@ -282,8 +274,6 @@ class PopUpVodsState extends State<PopUpVods> {
                       ),
                     ),
                     const SizedBox(height: 8),
-
-                    // abas e conteúdo
                     LayoutBuilder(
                       builder: (context, constraints) {
                         return SingleChildScrollView(
@@ -299,6 +289,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                 const SizedBox(width: 16),
                                 _buildTabButton(
                                     theme, 'Rolou por aqui', 'rolou', 200),
+                                // to do
                                 // const SizedBox(width: 24),
                                 // _buildTabButton(
                                 //     theme, 'Próximos eventos', 'eventos', 250),
@@ -315,7 +306,7 @@ class PopUpVodsState extends State<PopUpVods> {
                           duration: const Duration(milliseconds: 300),
                           switchInCurve: Curves.easeOut,
                           switchOutCurve: Curves.easeIn,
-                          child: // selectedTab  == 'rolou'
+                          child: // to do selectedTab  == 'rolou'
                               SingleChildScrollView(
                             key: const ValueKey('rolou'),
                             child: Column(
@@ -336,6 +327,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                       setState(() => secaoExpandida = null);
                                     },
                                   ),
+                                // to do
                                 //const SizedBox(height: 24),
                                 // if (secaoExpandida == null ||
                                 //     secaoExpandida == 'amendoshow')
@@ -356,6 +348,7 @@ class PopUpVodsState extends State<PopUpVods> {
                               ],
                             ),
                           )
+                          // to do
                           // : Container(
                           //     decoration: BoxDecoration(
                           //       color: theme.colorScheme.surface,
@@ -378,7 +371,6 @@ class PopUpVodsState extends State<PopUpVods> {
     );
   }
 
-  // === ABAS ===
   Widget _buildTabButton(
       ThemeData theme, String label, String id, double width) {
     final isSelected = selectedTab == id;
@@ -387,7 +379,7 @@ class PopUpVodsState extends State<PopUpVods> {
       child: Column(
         children: [
           SizedBox(
-            width: width, // Define a largura máxima da aba
+            width: width,
             child: Text(
               label.toUpperCase(),
               maxLines: 1,

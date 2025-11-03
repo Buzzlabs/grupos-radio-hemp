@@ -18,10 +18,8 @@ class PinnedMessageWidget extends StatelessWidget {
         enforceMobileMode || !FluffyThemes.isColumnMode(context);
 
     final content = Row(
-      mainAxisAlignment: MainAxisAlignment
-          .spaceBetween, // força o "bloco da esquerda" e o botão a ficarem nos cantos opostos
-      crossAxisAlignment: CrossAxisAlignment
-          .center, // garante que ambos fiquem no mesmo nível vertical
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
           child: Row(
@@ -83,9 +81,8 @@ class PinnedMessageWidget extends StatelessWidget {
       ),
       child: isMobileMode
           ? MouseRegion(
-              cursor: SystemMouseCursors.click, // muda para "mãozinha"
+              cursor: SystemMouseCursors.click,
               child: InkWell(
-                // torna todo o container clicável
                 borderRadius: const BorderRadius.vertical(
                   bottom: Radius.circular(12),
                 ),

@@ -57,21 +57,18 @@ class VodPlayerController extends State<VodPlayer> {
   Timer? _pollingTimer;
 
   @override
-void initState() {
-  super.initState();
+  void initState() {
+    super.initState();
 
-  viewId = 'vod-player-${DateTime.now().millisecondsSinceEpoch}';
+    viewId = 'vod-player-${DateTime.now().millisecondsSinceEpoch}';
 
-  // Criar elemento HTML e registrar antes do build
-  _createHtmlVideo();
+    _createHtmlVideo();
 
-  // Post frame callback apenas para usar o Provider com segurança
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    socketClient = Provider.of<SocketClient>(context, listen: false);
-    if (!isPreview) socketClient.joinLive();
-  });
-}
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      socketClient = Provider.of<SocketClient>(context, listen: false);
+      if (!isPreview) socketClient.joinLive();
+    });
+  }
 
   void initializeIfNeeded(double defaultWidth) {
     if (widthNotifier.value == 0) {
@@ -79,8 +76,8 @@ void initState() {
     }
   }
 
-  void setPosition(
-      Offset newPosition, double maxWidth, double maxHeight, bool isMobileMode) {
+  void setPosition(Offset newPosition, double maxWidth, double maxHeight,
+      bool isMobileMode) {
     if (!mounted) return;
 
     final dx = isMobileMode ? position.dx : newPosition.dx.clamp(16, maxWidth);
@@ -90,34 +87,34 @@ void initState() {
 
   void resize(double deltaX, double screenWidth) {
     if (!mounted) return;
-    final newWidth = (width + deltaX).clamp(screenWidth * 0.3, screenWidth * 0.65);
+    final newWidth =
+        (width + deltaX).clamp(screenWidth * 0.3, screenWidth * 0.65);
     widthNotifier.value = newWidth;
   }
 
   void _createHtmlVideo() {
-  if (htmlElementsCreated) return;
-  htmlElementsCreated = true;
+    if (htmlElementsCreated) return;
+    htmlElementsCreated = true;
 
-  videoElement = web.document.createElement('video') as web.HTMLVideoElement
-    ..id = '$viewId-video'
-    ..autoplay = true
-    ..controls = true
-    ..muted = false;
+    videoElement = web.document.createElement('video') as web.HTMLVideoElement
+      ..id = '$viewId-video'
+      ..autoplay = true
+      ..controls = true
+      ..muted = false;
 
-  videoElement!.style
-    ..width = '100%'
-    ..height = '100%'
-    ..border = 'none'
-    ..borderRadius = '8px'
-    ..backgroundColor = 'black'
-    ..objectFit = 'cover';
+    videoElement!.style
+      ..width = '100%'
+      ..height = '100%'
+      ..border = 'none'
+      ..borderRadius = '8px'
+      ..backgroundColor = 'black'
+      ..objectFit = 'cover';
 
-  // ⚠️ Registrar view imediatamente
-  ui.platformViewRegistry.registerViewFactory(viewId, (int id) => videoElement!);
+    ui.platformViewRegistry
+        .registerViewFactory(viewId, (int id) => videoElement!);
 
-  _attachHls();
-}
-
+    _attachHls();
+  }
 
   void _attachHls() {
     try {
@@ -129,18 +126,14 @@ void initState() {
           js_util.callMethod(hls, 'loadSource', [widget.playbackUrl]);
           js_util.callMethod(hls, 'attachMedia', [videoElement]);
         } else {
-          // HLS nativo ou Safari
           videoElement!.src = widget.playbackUrl;
         }
       } else {
-        // HLS.js não carregado
         videoElement!.src = widget.playbackUrl;
       }
     } catch (_) {
-      // fallback seguro
       videoElement!.src = widget.playbackUrl;
     }
-
   }
 
   @override

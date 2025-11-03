@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluffychat/widgets/vods/vods_widget.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fluffychat/pages/lives_data.dart'; // já tem LiveShow e fetchLiveById
-import 'package:fluffychat/widgets/vods/vod_player_view.dart';
+import 'package:fluffychat/pages/lives_data.dart';
 import 'package:fluffychat/widgets/vods/vod_player.dart';
 
 class ScreenVod extends StatefulWidget {
@@ -29,7 +27,6 @@ class _ScreenVodState extends State<ScreenVod> {
     super.initState();
     _live = widget.live;
 
-    // Se não veio LiveShow direto, busca do backend
     if (_live == null && widget.liveId != null) {
       _fetchLive(widget.liveId!);
     }
@@ -42,8 +39,7 @@ class _ScreenVodState extends State<ScreenVod> {
     });
 
     try {
-      final fetched =
-          await fetchLiveById(id); // usa direto a função do lives_data.dart
+      final fetched = await fetchLiveById(id);
       if (mounted) {
         setState(() {
           _live = fetched;
@@ -82,7 +78,6 @@ class _ScreenVodState extends State<ScreenVod> {
             final isMobileMode = screenWidth < 1200;
 
             if (isMobileMode) {
-              // === Layout para MOBILE ===
               return SingleChildScrollView(
                 child: Container(
                   width: double.infinity,
@@ -113,6 +108,7 @@ class _ScreenVodState extends State<ScreenVod> {
                         category: _live!.category,
                         id: _live!.id,
                       ),
+                      // to do
                       // const Padding(
                       //   padding: EdgeInsets.all(8.0),
                       //   child: VodsWidget(
@@ -129,7 +125,6 @@ class _ScreenVodState extends State<ScreenVod> {
                 ),
               );
             } else {
-              // === Layout para DESKTOP ===
               return Scaffold(
                 body: SafeArea(
                   child: LayoutBuilder(
@@ -138,7 +133,6 @@ class _ScreenVodState extends State<ScreenVod> {
                       final isMobileMode = screenWidth < 1200;
 
                       if (isMobileMode) {
-                        // mobile
                         return SingleChildScrollView(
                           child: Column(
                             children: [
@@ -172,7 +166,6 @@ class _ScreenVodState extends State<ScreenVod> {
                           ),
                         );
                       } else {
-                        // web/desktop
                         return Stack(
                           children: [
                             Center(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluffychat/config/themes.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -36,7 +35,7 @@ class _EventsTableState extends State<EventsTable> {
   List<Events> allEvents = [];
 
   Future<void> _fetchEvents() async {
-    final baseUrl = 'http://localhost:3333';
+    final baseUrl = 'https://chat.radiohemp.com';
     final url = Uri.parse('$baseUrl/api/calendar/events');
 
     try {
