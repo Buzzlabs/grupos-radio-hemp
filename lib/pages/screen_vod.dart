@@ -129,43 +129,6 @@ class _ScreenVodState extends State<ScreenVod> {
                 body: SafeArea(
                   child: LayoutBuilder(
                     builder: (context, constraints) {
-                      final screenWidth = constraints.maxWidth;
-                      final isMobileMode = screenWidth < 1200;
-
-                      if (isMobileMode) {
-                        return SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: IconButton(
-                                    icon: const Icon(Icons.arrow_back),
-                                    onPressed: () {
-                                      final router = GoRouter.of(context);
-                                      if (router.canPop()) {
-                                        router.pop();
-                                      } else {
-                                        router.go('/rooms');
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ),
-                              VodPlayer(
-                                avatarUrl: _live!.avatarUrl,
-                                playbackUrl: _live!.videoUrl,
-                                title: _live!.title,
-                                isAdmin: false,
-                                date: _live!.date,
-                                category: _live!.category,
-                                id: _live!.id,
-                              ),
-                            ],
-                          ),
-                        );
-                      } else {
                         return Stack(
                           children: [
                             Center(
@@ -196,7 +159,7 @@ class _ScreenVodState extends State<ScreenVod> {
                             ),
                           ],
                         );
-                      }
+                      
                     },
                   ),
                 ),
