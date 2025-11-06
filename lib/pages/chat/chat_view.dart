@@ -28,6 +28,10 @@ import 'chat_emoji_picker.dart';
 import 'chat_input_row.dart';
 import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/widgets/streaming/video_streaming.dart';
+import 'package:fluffychat/widgets/vods/pinned_message_widget.dart';
+import 'package:fluffychat/widgets/vods/popup_vods.dart';
+
+final GlobalKey<PopUpVodsState> testeKey = GlobalKey<PopUpVodsState>();
 
 enum _EventContextAction { info, report }
 
@@ -283,6 +287,23 @@ class ChatView extends StatelessWidget {
                         child: SafeArea(
                           child: Column(
                             children: <Widget>[
+                              const SizedBox(height: 1),
+                              Material(
+                                elevation: 4,
+                                color: theme.colorScheme.surface,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    bottom: Radius.circular(
+                                      12,
+                                    ),
+                                  ),
+                                ),
+                                child: PinnedMessageWidget(
+                                  onAcessarPressed: () {
+                                    testeKey.currentState?.toggleGaveta();
+                                  },
+                                ),
+                              ),
                               Expanded(
                                 child: GestureDetector(
                                   onTap: controller.clearSingleSelectedEvent,
@@ -312,62 +333,80 @@ class ChatView extends StatelessWidget {
                                     maxWidth: FluffyThemes.maxTimelineWidth,
                                   ),
                                   alignment: Alignment.center,
-                                  child: Material(
-                                    clipBehavior: Clip.hardEdge,
-                                    color: controller.selectedEvents.isNotEmpty
-                                        ? theme.colorScheme.tertiaryContainer
-                                        : theme
-                                            .colorScheme.surfaceContainerHigh,
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(24),
+                                  child: AnimatedPadding(
+                                    duration: const Duration(milliseconds: 200),
+                                    curve: Curves.easeOut,
+                                    padding: EdgeInsets.only(
+                                      bottom: MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom +
+                                          bottomSheetPadding +
+                                          60.0,
+                                      left: bottomSheetPadding,
+                                      right: bottomSheetPadding,
                                     ),
-                                    child: controller.room.isAbandonedDMRoom ==
-                                            true
-                                        ? Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              TextButton.icon(
-                                                style: TextButton.styleFrom(
-                                                  padding: const EdgeInsets.all(
-                                                    16,
+                                    child: Material(
+                                      clipBehavior: Clip.hardEdge,
+                                      color: controller
+                                              .selectedEvents.isNotEmpty
+                                          ? theme.colorScheme.tertiaryContainer
+                                          : theme
+                                              .colorScheme.surfaceContainerHigh,
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(24),
+                                      ),
+                                      child: controller
+                                                  .room.isAbandonedDMRoom ==
+                                              true
+                                          ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                TextButton.icon(
+                                                  style: TextButton.styleFrom(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                      16,
+                                                    ),
+                                                    foregroundColor:
+                                                        theme.colorScheme.error,
                                                   ),
-                                                  foregroundColor:
-                                                      theme.colorScheme.error,
-                                                ),
-                                                icon: const Icon(
-                                                  Icons.archive_outlined,
-                                                ),
-                                                onPressed: controller.leaveChat,
-                                                label: Text(
-                                                  L10n.of(context).leave,
-                                                ),
-                                              ),
-                                              TextButton.icon(
-                                                style: TextButton.styleFrom(
-                                                  padding: const EdgeInsets.all(
-                                                    16,
+                                                  icon: const Icon(
+                                                    Icons.archive_outlined,
+                                                  ),
+                                                  onPressed:
+                                                      controller.leaveChat,
+                                                  label: Text(
+                                                    L10n.of(context).leave,
                                                   ),
                                                 ),
-                                                icon: const Icon(
-                                                  Icons.forum_outlined,
+                                                TextButton.icon(
+                                                  style: TextButton.styleFrom(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                      16,
+                                                    ),
+                                                  ),
+                                                  icon: const Icon(
+                                                    Icons.forum_outlined,
+                                                  ),
+                                                  onPressed:
+                                                      controller.recreateChat,
+                                                  label: Text(
+                                                    L10n.of(context).reopenChat,
+                                                  ),
                                                 ),
-                                                onPressed:
-                                                    controller.recreateChat,
-                                                label: Text(
-                                                  L10n.of(context).reopenChat,
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        : Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              ReplyDisplay(controller),
-                                              ChatInputRow(controller),
-                                              ChatEmojiPicker(controller),
-                                            ],
-                                          ),
+                                              ],
+                                            )
+                                          : Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ReplyDisplay(controller),
+                                                ChatInputRow(controller),
+                                                ChatEmojiPicker(controller),
+                                              ],
+                                            ),
+                                    ),
                                   ),
                                 ),
                             ],
@@ -401,6 +440,7 @@ class ChatView extends StatelessWidget {
                           size: 100,
                         ),
                       ),
+                    PopUpVods(key: testeKey),
                   ],
                 ),
               ),
