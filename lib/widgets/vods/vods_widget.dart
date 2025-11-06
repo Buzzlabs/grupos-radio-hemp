@@ -10,6 +10,7 @@ class VodsWidget extends StatefulWidget {
   final VoidCallback? onShowMorePressed;
   final VoidCallback? onBackPressed;
   final String filter;
+  final bool filterOnServer;
 
   final bool isAdmin;
   final int numColumns;
@@ -19,8 +20,9 @@ class VodsWidget extends StatefulWidget {
   final bool showHeader;
 
   const VodsWidget({
-    this.filter = '',
-    required this.streamsWidgetTag,
+    this.filterOnServer = false,
+    this.filter = "",
+    this.streamsWidgetTag = "",
     this.numColumns = 3,
     this.initialVisibleCount = 3,
     this.loadMoreCount = 3,
@@ -108,7 +110,7 @@ class _VodsWidgetState extends State<VodsWidget> {
         allLives = fetchedLives;
       }
 
-      loadedCount = allLives.length;
+      loadedCount = filteredLives.length;
 
       setState(() {
         _applyFilter();
@@ -117,14 +119,21 @@ class _VodsWidgetState extends State<VodsWidget> {
     } catch (e) {
       setState(() => isLoading = false);
     }
+
+    if (widget.filter.isNotEmpty && filteredLives.length < visibleCount && currentPage < lastPage) {
+        currentPage++;
+        _fetchLives(append: true);
+    }
+
   }
 
-  void _applyFilter() {
-    filteredLives = allLives
-        .where((live) =>
-            live.title.toLowerCase().contains(widget.filter.toLowerCase()))
-        .toList();
-  }
+  bool _applyFilter() {
+  filteredLives = allLives
+      .where((live) => live.title.toLowerCase().contains(widget.filter.toLowerCase()))
+      .toList();
+  return filteredLives.length >= visibleCount;
+}
+
 
   void _showMore() {
     final remainingVisible = loadedCount - visibleCount;
@@ -259,9 +268,7 @@ class _VodsWidgetState extends State<VodsWidget> {
               );
             },
           ),
-        if (visibleCount < loadedCount ||
-            currentPage <
-                lastPage) 
+        if (filteredLives.length > visibleCount || currentPage < lastPage)
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Row(

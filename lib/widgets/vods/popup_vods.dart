@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluffychat/widgets/vods/vods_widget.dart';
+import 'package:fluffychat/widgets/vods/events_table.dart';
 
 class PopUpVods extends StatefulWidget {
   final bool enforceMobileMode;
@@ -85,105 +86,105 @@ class PopUpVodsState extends State<PopUpVods> {
                       ),
                     ),
                     const SizedBox(height: 8),
-
-                    // to do
-                    // Expanded(
-                    // child: Row(
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    //children: [
                     Expanded(
-                      // to do
-                      //flex: 2,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              const SizedBox(width: 24),
-                              Text(
-                                'ROLOU POR AQUI',
-                                style: GoogleFonts.righteous(
-                                  textStyle: TextStyle(
-                                    color: theme.colorScheme.primary,
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.w100,
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const SizedBox(width: 24),
+                                    Text(
+                                      'ROLOU POR AQUI',
+                                      style: GoogleFonts.righteous(
+                                        textStyle: TextStyle(
+                                          color: theme.colorScheme.primary,
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.w100,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                                Expanded(
+                                  child: SingleChildScrollView(
+                                    physics: const BouncingScrollPhysics(),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        if (showBottomMenu &&
+                                                secaoExpandida == null ||
+                                            secaoExpandida == 'destaques')
+                                          VodsWidget(
+                                            initialVisibleCount: 6,
+                                            loadMoreCount: 3,
+                                            numColumns: 5,
+                                            filter: "",
+                                            filterOnServer: false,
+                                            showHeader: true,
+                                            streamsWidgetTag: '',
+                                            onShowMorePressed: () {
+                                              setState(() =>
+                                                  secaoExpandida = 'destaques');
+                                            },
+                                            onBackPressed: () {
+                                              setState(
+                                                  () => secaoExpandida = null);
+                                            },
+                                          ),
+                                        // to do
+                                        // const SizedBox(height: 24),
+                                        // if (secaoExpandida == null ||
+                                        //     secaoExpandida == 'amendoshow')
+                                        //   VodsWidget(
+                                        //     filter: 'amendoshow',
+                                        //     initialVisibleCount: 3,
+                                        //     loadMoreCount: 3,
+                                        //     numColumns: 3,
+                                        //     showHeader: true,
+                                        //     streamsWidgetTag: '🥜 Amendoshow',
+                                        //     onShowMorePressed: () {
+                                        //       setState(() => secaoExpandida =
+                                        //           'amendoshow');
+                                        //     },
+                                        //     onBackPressed: () {
+                                        //       setState(
+                                        //         () => secaoExpandida = null,
+                                        //       );
+                                        //     },
+                                        //   ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           // to do
-                          //const SizedBox(height: 16),
+                          const SizedBox(width: 24),
                           Expanded(
-                            child: SingleChildScrollView(
-                              physics: const BouncingScrollPhysics(),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  if (showBottomMenu &&
-                                          secaoExpandida == null ||
-                                      secaoExpandida == 'destaques')
-                                    VodsWidget(
-                                      initialVisibleCount: 10,
-                                      loadMoreCount: 5,
-                                      numColumns: 5,
-                                      showHeader: true,
-                                      streamsWidgetTag: '',
-                                      onShowMorePressed: () {
-                                        setState(
-                                            () => secaoExpandida = 'destaques');
-                                      },
-                                      onBackPressed: () {
-                                        setState(() => secaoExpandida = null);
-                                      },
-                                    ),
-                                  // to do
-                                  //const SizedBox(height: 24),
-                                  // if (secaoExpandida == null ||
-                                  //     secaoExpandida == 'amendoshow')
-                                  //   VodsWidget(
-                                  //     filter: 'amendoshow',
-                                  //     initialVisibleCount: 3,
-                                  //     loadMoreCount: 3,
-                                  //     numColumns: 3,
-                                  //     showHeader: true,
-                                  //     streamsWidgetTag: '🥜 Amendoshow',
-                                  //     onShowMorePressed: () {
-                                  //       setState(() => secaoExpandida =
-                                  //           'amendoshow');
-                                  //     },
-                                  //     onBackPressed: () {
-                                  //       setState(
-                                  //         () => secaoExpandida = null,
-                                  //       );
-                                  //     },
-                                  //   ),
-                                ],
+                            flex: 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.surface,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              padding: const EdgeInsets.all(16),
+                              child: const EventsTable(
+                                showHeader: true,
                               ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    // to do
-                    //const SizedBox(width: 24),
-                    // Expanded(
-                    //   flex: 1,
-                    //   child: Container(
-                    //     decoration: BoxDecoration(
-                    //       color: theme.colorScheme.surface,
-                    //       borderRadius: BorderRadius.circular(20),
-                    //     ),
-                    //     padding: const EdgeInsets.all(16),
-                    //     child: const EventsTable(
-                    //       showHeader: true,
-                    //     ),
-                    //   ),
-                    // ),
-                    //],
-                    // ),
-                    // ),
                   ],
                 ),
               ),
@@ -289,10 +290,9 @@ class PopUpVodsState extends State<PopUpVods> {
                                 const SizedBox(width: 16),
                                 _buildTabButton(
                                     theme, 'Rolou por aqui', 'rolou', 200),
-                                // to do
-                                // const SizedBox(width: 24),
-                                // _buildTabButton(
-                                //     theme, 'Próximos eventos', 'eventos', 250),
+                                const SizedBox(width: 24),
+                                _buildTabButton(
+                                    theme, 'Próximos eventos', 'eventos', 250),
                                 const SizedBox(width: 16),
                               ],
                             ),
@@ -303,63 +303,63 @@ class PopUpVodsState extends State<PopUpVods> {
                     const SizedBox(height: 8),
                     Flexible(
                       child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          switchInCurve: Curves.easeOut,
-                          switchOutCurve: Curves.easeIn,
-                          child: // to do selectedTab  == 'rolou'
-                              SingleChildScrollView(
-                            key: const ValueKey('rolou'),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (showBottomMenu && secaoExpandida == null ||
-                                    secaoExpandida == 'destaques')
-                                  VodsWidget(
-                                    numColumns: 2,
-                                    initialVisibleCount: 4,
-                                    loadMoreCount: 2,
-                                    streamsWidgetTag: '',
-                                    onShowMorePressed: () {
-                                      setState(
-                                          () => secaoExpandida = 'destaques');
-                                    },
-                                    onBackPressed: () {
-                                      setState(() => secaoExpandida = null);
-                                    },
-                                  ),
-                                // to do
-                                //const SizedBox(height: 24),
-                                // if (secaoExpandida == null ||
-                                //     secaoExpandida == 'amendoshow')
-                                //   VodsWidget(
-                                //     filter: 'amendoshow',
-                                //     numColumns: 2,
-                                //     initialVisibleCount: 2,
-                                //     loadMoreCount: 2,
-                                //     streamsWidgetTag: '🥜 Amendoshow',
-                                //     onShowMorePressed: () {
-                                //       setState(() =>
-                                //           secaoExpandida = 'amendoshow');
-                                //     },
-                                //     onBackPressed: () {
-                                //       setState(() => secaoExpandida = null);
-                                //     },
-                                //   ),
-                              ],
-                            ),
-                          )
-                          // to do
-                          // : Container(
-                          //     decoration: BoxDecoration(
-                          //       color: theme.colorScheme.surface,
-                          //       borderRadius: BorderRadius.circular(20),
-                          //     ),
-                          //     padding: const EdgeInsets.all(16),
-                          //     child: const EventsTable(
-                          //       showHeader: false,
-                          //     ),
-                          //   ),
-                          ),
+                        duration: const Duration(milliseconds: 300),
+                        switchInCurve: Curves.easeOut,
+                        switchOutCurve: Curves.easeIn,
+                        child: selectedTab == 'rolou'
+                            ? SingleChildScrollView(
+                                key: const ValueKey('rolou'),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (showBottomMenu &&
+                                            secaoExpandida == null ||
+                                        secaoExpandida == 'destaques')
+                                      VodsWidget(
+                                        numColumns: 2,
+                                        initialVisibleCount: 4,
+                                        loadMoreCount: 2,
+                                        streamsWidgetTag: '',
+                                        onShowMorePressed: () {
+                                          setState(() =>
+                                              secaoExpandida = 'destaques');
+                                        },
+                                        onBackPressed: () {
+                                          setState(() => secaoExpandida = null);
+                                        },
+                                      ),
+                                    // to do
+                                    //const SizedBox(height: 24),
+                                    // if (secaoExpandida == null ||
+                                    //     secaoExpandida == 'amendoshow')
+                                    //   VodsWidget(
+                                    //     filter: 'amendoshow',
+                                    //     numColumns: 2,
+                                    //     initialVisibleCount: 2,
+                                    //     loadMoreCount: 2,
+                                    //     streamsWidgetTag: '🥜 Amendoshow',
+                                    //     onShowMorePressed: () {
+                                    //       setState(() =>
+                                    //           secaoExpandida = 'amendoshow');
+                                    //     },
+                                    //     onBackPressed: () {
+                                    //       setState(() => secaoExpandida = null);
+                                    //     },
+                                    //   ),
+                                  ],
+                                ),
+                              )
+                            : Container(
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.surface,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                padding: const EdgeInsets.all(16),
+                                child: const EventsTable(
+                                  showHeader: false,
+                                ),
+                              ),
+                      ),
                     ),
                   ],
                 ),

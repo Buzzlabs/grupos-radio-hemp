@@ -35,7 +35,7 @@ class _EventsTableState extends State<EventsTable> {
   List<Events> allEvents = [];
 
   Future<void> _fetchEvents() async {
-    final baseUrl = 'https://chat.radiohemp.com';
+    final baseUrl = 'http://localhost:3333';
     final url = Uri.parse('$baseUrl/api/calendar/events');
 
     try {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluffychat/pages/lives_data.dart';
 import 'package:fluffychat/widgets/vods/vod_player.dart';
+import 'package:fluffychat/widgets/vods/vods_widget.dart';
 
 class ScreenVod extends StatefulWidget {
   final LiveShow? live;
@@ -78,77 +79,125 @@ class _ScreenVodState extends State<ScreenVod> {
             final isMobileMode = screenWidth < 1200;
 
             if (isMobileMode) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8, top: 8),
-                    child: IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        onPressed: () {
-                          final router = GoRouter.of(context);
-                          if (router.canPop()) {
-                            router.pop();
-                          } else {
-                            router.go('/rooms');
-                          }
-                        }),
+              return Scaffold(
+                body: SafeArea(
+                  child: ListView(
+                    padding: const EdgeInsets.all(16),
+                    children: [
+                      // Botão de voltar
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () {
+                            final router = GoRouter.of(context);
+                            if (router.canPop()) {
+                              router.pop();
+                            } else {
+                              router.go('/rooms');
+                            }
+                          },
+                        ),
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      // PLAYER
+                      VodPlayer(
+                        avatarUrl: _live!.avatarUrl,
+                        playbackUrl: _live!.videoUrl,
+                        title: _live!.title,
+                        isAdmin: false,
+                        date: _live!.date,
+                        category: _live!.category,
+                        id: _live!.id,
+                      ),
+
+                      const SizedBox(height: 16),
+                      const Divider(),
+                      const SizedBox(height: 16),
+
+                      // LISTA DE OUTROS VODs
+                      const VodsWidget(
+                        numColumns: 2,
+                        initialVisibleCount: 6,
+                        loadMoreCount: 2,
+                        showHeader: false,
+                        enforceMobileMode: true,
+                        streamsWidgetTag: '',
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  VodPlayer(
-                    avatarUrl: _live!.avatarUrl,
-                    playbackUrl: _live!.videoUrl,
-                    title: _live!.title,
-                    isAdmin: false,
-                    date: _live!.date,
-                    category: _live!.category,
-                    id: _live!.id,
-                  ),
-                  // to do
-                  // const Padding(
-                  //   padding: EdgeInsets.all(8.0),
-                  //   child: VodsWidget(
-                  //     numColumns: 2,
-                  //     initialVisibleCount: 4,
-                  //     loadMoreCount: 2,
-                  //     showHeader: false,
-                  //     enforceMobileMode: true,
-                  //     streamsWidgetTag: '🔥 Destaques',
-                  //   ),
-                  // ),
-                ],
+                ),
               );
             } else {
-              return Stack(
-                children: [
-                  Center(
-                    child: VodPlayer(
-                      avatarUrl: _live!.avatarUrl,
-                      playbackUrl: _live!.videoUrl,
-                      title: _live!.title,
-                      isAdmin: false,
-                      date: _live!.date,
-                      category: _live!.category,
-                      id: _live!.id,
+              return SafeArea(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 1600),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Positioned(
+                                  top: 8,
+                                  left: 0,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.arrow_back),
+                                    onPressed: () {
+                                      final router = GoRouter.of(context);
+                                      if (router.canPop()) {
+                                        router.pop();
+                                      } else {
+                                        router.go('/rooms');
+                                      }
+                                    },
+                                  ),
+                                ),
+                          /// PLAYER (lado esquerdo)
+                          Expanded(
+                            flex: 3,
+                            child: Stack(
+                              children: [
+                                VodPlayer(
+                                  avatarUrl: _live!.avatarUrl,
+                                  playbackUrl: _live!.videoUrl,
+                                  title: _live!.title,
+                                  isAdmin: false,
+                                  date: _live!.date,
+                                  category: _live!.category,
+                                  id: _live!.id,
+                                ),
+                                
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(width: 32),
+
+                          /// LISTA (lado direito)
+                          const Expanded(
+                            flex: 1,
+                            child: Column(
+                              children: const [
+                                SizedBox(height: 10),
+                                VodsWidget(
+                                  numColumns: 1,
+                                  initialVisibleCount: 8,
+                                  loadMoreCount: 4,
+                                  showHeader: false,
+                                  enforceMobileMode: false,
+                                  streamsWidgetTag: '',
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  Positioned(
-                    top: 10,
-                    left: 8,
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () {
-                        final router = GoRouter.of(context);
-                        if (router.canPop()) {
-                          router.pop();
-                        } else {
-                          router.go('/rooms');
-                        }
-                      },
-                    ),
-                  ),
-                ],
+                ),
               );
             }
           },

@@ -22,13 +22,13 @@ class LiveCard extends StatelessWidget {
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(5),
         ),
         clipBehavior: Clip.antiAlias,
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(5),
             onTap: () {
               AudioState.mutedNotifier.value = true;
 
@@ -43,7 +43,7 @@ class LiveCard extends StatelessWidget {
                 Stack(
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(5),
                       child: AspectRatio(
                         aspectRatio: 16 / 9,
                         child: Image.network(
@@ -122,11 +122,11 @@ class LiveCard extends StatelessWidget {
                                       .withOpacity(0.15),
                                   13),
                               // to do
-                              // _infoChip(
-                              //     theme,
-                              //     live.category,
-                              //     theme.colorScheme.primary.withOpacity(0.15),
-                              //     12),
+                              _infoChip(
+                                  theme,
+                                  live.category,
+                                  theme.colorScheme.primary.withOpacity(0.15),
+                                  12),
                             ],
                           ),
                         ),
