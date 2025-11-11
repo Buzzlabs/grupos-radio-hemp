@@ -16,9 +16,37 @@ class PopUpVodsState extends State<PopUpVods> {
   String? secaoExpandida;
   String selectedTab = 'rolou';
 
+  double _dragOffset = 0;
+  double _mobileHeight = 0;
+  final double _peekHeight = 52;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobileMode = widget.enforceMobileMode || screenWidth < 1200;
+
+    if (_mobileHeight == 0) {
+      _mobileHeight = MediaQuery.of(context).size.height * 0.7;
+    }
+
+    if (isMobileMode) {
+      _dragOffset = -_mobileHeight + _peekHeight;
+    } else {
+      _dragOffset = -600 + _peekHeight;
+    }
+  }
+
   void toggleGaveta() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobileMode = widget.enforceMobileMode || screenWidth < 1200;
+    final closedOffset =
+        isMobileMode ? -_mobileHeight + _peekHeight : -600 + _peekHeight;
+
     setState(() {
       showBottomMenu = !showBottomMenu;
+      _dragOffset = showBottomMenu ? 0 : closedOffset;
     });
   }
 
@@ -38,13 +66,37 @@ class PopUpVodsState extends State<PopUpVods> {
     return Stack(
       children: [
         AnimatedPositioned(
-          duration: const Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 200),
           curve: Curves.easeOut,
+          bottom: _dragOffset,
           left: 0,
           right: 0,
-          bottom: showBottomMenu ? 0 : -550,
-          child: Align(
-            alignment: Alignment.bottomCenter,
+          child: GestureDetector(
+            onVerticalDragUpdate: (details) {
+              setState(() {
+                _dragOffset = (_dragOffset - details.delta.dy)
+                    .clamp(-600 + _peekHeight, 0);
+              });
+            },
+            onVerticalDragEnd: (details) {
+              setState(() {
+                if (details.primaryVelocity! < -200) {
+                  _dragOffset = 0;
+                  showBottomMenu = true;
+                } else if (details.primaryVelocity! > 200) {
+                  _dragOffset = -600 + _peekHeight;
+                  showBottomMenu = false;
+                } else {
+                  if (_dragOffset > -600 / 2) {
+                    _dragOffset = 0;
+                    showBottomMenu = true;
+                  } else {
+                    _dragOffset = -600 + _peekHeight;
+                    showBottomMenu = false;
+                  }
+                }
+              });
+            },
             child: Container(
               height: 600,
               decoration: BoxDecoration(
@@ -71,8 +123,7 @@ class PopUpVodsState extends State<PopUpVods> {
                       child: MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: GestureDetector(
-                          onTap: () =>
-                              setState(() => showBottomMenu = !showBottomMenu),
+                          onTap: () => toggleGaveta(),
                           child: Container(
                             width: 40,
                             height: 5,
@@ -119,9 +170,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        if (showBottomMenu &&
-                                                secaoExpandida == null ||
-                                            secaoExpandida == 'destaques')
+                                        if (_mostrarSecao("destaques"))
                                           VodsWidget(
                                             initialVisibleCount: 6,
                                             loadMoreCount: 3,
@@ -129,10 +178,18 @@ class PopUpVodsState extends State<PopUpVods> {
                                             filter: "",
                                             filterOnServer: false,
                                             showHeader: true,
-                                            streamsWidgetTag: '',
+                                            streamsWidgetTag: 'destaques',
                                             onShowMorePressed: () {
-                                              setState(() =>
-                                                  secaoExpandida = 'destaques');
+                                              setState(() {
+                                                if (secaoExpandida ==
+                                                    'destaques') {
+                                                  secaoExpandida = null;
+                                                } else {
+                                                  secaoExpandida = 'destaques';
+                                                  showBottomMenu = true;
+                                                  _dragOffset = 0;
+                                                }
+                                              });
                                             },
                                             onBackPressed: () {
                                               setState(
@@ -140,26 +197,32 @@ class PopUpVodsState extends State<PopUpVods> {
                                             },
                                           ),
                                         // to do
-                                        // const SizedBox(height: 24),
-                                        // if (secaoExpandida == null ||
-                                        //     secaoExpandida == 'amendoshow')
-                                        //   VodsWidget(
-                                        //     filter: 'amendoshow',
-                                        //     initialVisibleCount: 3,
-                                        //     loadMoreCount: 3,
-                                        //     numColumns: 3,
-                                        //     showHeader: true,
-                                        //     streamsWidgetTag: '🥜 Amendoshow',
-                                        //     onShowMorePressed: () {
-                                        //       setState(() => secaoExpandida =
-                                        //           'amendoshow');
-                                        //     },
-                                        //     onBackPressed: () {
-                                        //       setState(
-                                        //         () => secaoExpandida = null,
-                                        //       );
-                                        //     },
-                                        //   ),
+                                        const SizedBox(height: 5),
+                                        if (_mostrarSecao("legal"))
+                                          VodsWidget(
+                                            filter: 'legal',
+                                            initialVisibleCount: 3,
+                                            loadMoreCount: 3,
+                                            numColumns: 3,
+                                            showHeader: true,
+                                            streamsWidgetTag: 'legal',
+                                            onShowMorePressed: () {
+                                              setState(() {
+                                                if (secaoExpandida == 'legal') {
+                                                  secaoExpandida = null;
+                                                } else {
+                                                  secaoExpandida = 'legal';
+                                                  showBottomMenu = true;
+                                                  _dragOffset = 0;
+                                                }
+                                              });
+                                            },
+                                            onBackPressed: () {
+                                              setState(
+                                                () => secaoExpandida = null,
+                                              );
+                                            },
+                                          ),
                                       ],
                                     ),
                                   ),
@@ -196,10 +259,6 @@ class PopUpVodsState extends State<PopUpVods> {
   }
 
   Widget _buildMobileLayout(ThemeData theme) {
-    double _mobileHeight = MediaQuery.of(context).size.height * 0.7;
-    const double _peekHeight = 52;
-    double _dragOffset = showBottomMenu ? 0 : -_mobileHeight + _peekHeight;
-
     return Stack(
       children: [
         AnimatedPositioned(
@@ -256,7 +315,6 @@ class PopUpVodsState extends State<PopUpVods> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 8),
-                    // puxador
                     Center(
                       child: MouseRegion(
                         cursor: SystemMouseCursors.click,
@@ -284,17 +342,44 @@ class PopUpVodsState extends State<PopUpVods> {
                             constraints: BoxConstraints(
                               minWidth: constraints.maxWidth,
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(width: 16),
-                                _buildTabButton(
-                                    theme, 'Rolou por aqui', 'rolou', 200),
-                                const SizedBox(width: 24),
-                                _buildTabButton(
-                                    theme, 'Próximos eventos', 'eventos', 250),
-                                const SizedBox(width: 16),
-                              ],
+                            child: Center(
+                              child: LayoutBuilder(
+                                builder: (context, constraints) {
+                                  final isSmall = constraints.maxWidth < 1000;
+
+                                  return FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 35),
+                                          child: _buildTabButton(
+                                            theme,
+                                            isSmall
+                                                ? 'Rolou'
+                                                : 'Rolou por aqui',
+                                            'rolou',
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 35),
+                                          child: _buildTabButton(
+                                            theme,
+                                            isSmall
+                                                ? 'Eventos'
+                                                : 'Próximos eventos',
+                                            'eventos',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         );
@@ -312,9 +397,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    if (showBottomMenu &&
-                                            secaoExpandida == null ||
-                                        secaoExpandida == 'destaques')
+                                    if (_mostrarSecao('destaques'))
                                       VodsWidget(
                                         numColumns: 2,
                                         initialVisibleCount: 4,
@@ -328,24 +411,6 @@ class PopUpVodsState extends State<PopUpVods> {
                                           setState(() => secaoExpandida = null);
                                         },
                                       ),
-                                    // to do
-                                    //const SizedBox(height: 24),
-                                    // if (secaoExpandida == null ||
-                                    //     secaoExpandida == 'amendoshow')
-                                    //   VodsWidget(
-                                    //     filter: 'amendoshow',
-                                    //     numColumns: 2,
-                                    //     initialVisibleCount: 2,
-                                    //     loadMoreCount: 2,
-                                    //     streamsWidgetTag: '🥜 Amendoshow',
-                                    //     onShowMorePressed: () {
-                                    //       setState(() =>
-                                    //           secaoExpandida = 'amendoshow');
-                                    //     },
-                                    //     onBackPressed: () {
-                                    //       setState(() => secaoExpandida = null);
-                                    //     },
-                                    //   ),
                                   ],
                                 ),
                               )
@@ -371,15 +436,13 @@ class PopUpVodsState extends State<PopUpVods> {
     );
   }
 
-  Widget _buildTabButton(
-      ThemeData theme, String label, String id, double width) {
+  Widget _buildTabButton(ThemeData theme, String label, String id) {
     final isSelected = selectedTab == id;
     return GestureDetector(
       onTap: () => setState(() => selectedTab = id),
       child: Column(
         children: [
           SizedBox(
-            width: width,
             child: Text(
               label.toUpperCase(),
               maxLines: 1,
@@ -405,5 +468,13 @@ class PopUpVodsState extends State<PopUpVods> {
         ],
       ),
     );
+  }
+
+  bool _mostrarSecao(String nome) {
+    // se nenhuma seção está expandida, mostra todas
+    if (secaoExpandida == null) return showBottomMenu;
+
+    // se existe seção expandida, mostra só ela
+    return showBottomMenu && secaoExpandida == nome;
   }
 }
