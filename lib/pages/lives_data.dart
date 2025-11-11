@@ -1,15 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-List<LiveShow> allLives = [];
-
-LiveShow? getLiveById(String id) {
-  try {
-    return allLives.firstWhere((live) => live.id == id);
-  } catch (e) {
-    return null;
-  }
-}
 
 Future<LiveShow?> fetchLiveById(String id) async {
   try {

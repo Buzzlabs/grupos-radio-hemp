@@ -376,15 +376,21 @@ abstract class AppRoutes {
               redirect: loggedOutRedirect,
               routes: [
                 GoRoute(
-                  name: 'vod',
                   path: 'vod/:id',
-                  builder: (context, state) {
+                  pageBuilder: (context, state) {
                     final id = state.pathParameters['id']!;
-                    final live = getLiveById(id);
-                    if (live != null) return ScreenVod(live: live);
-                    return ScreenVod(liveId: id);
+
+                    return AppRoutes.defaultPageBuilder(
+                      context,
+                      state,
+                      ScreenVod(
+                        key: ValueKey(id),
+                        liveId: id,
+                      ),
+                    );
                   },
                 ),
+
                 GoRoute(
                   path: 'search',
                   pageBuilder: (context, state) => defaultPageBuilder(

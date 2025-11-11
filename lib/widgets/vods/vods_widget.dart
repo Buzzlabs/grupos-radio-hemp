@@ -11,7 +11,7 @@ class VodsWidget extends StatefulWidget {
   final VoidCallback? onBackPressed;
   final String filter;
   final bool filterOnServer;
-
+  final String? idCardOnShow;
   final bool isAdmin;
   final int numColumns;
   final int initialVisibleCount;
@@ -21,6 +21,7 @@ class VodsWidget extends StatefulWidget {
 
   const VodsWidget({
     this.filterOnServer = false,
+    this.idCardOnShow,
     this.filter = "",
     this.streamsWidgetTag = "",
     this.numColumns = 3,
@@ -39,6 +40,7 @@ class VodsWidget extends StatefulWidget {
 }
 
 class _VodsWidgetState extends State<VodsWidget> {
+  List<LiveShow> allLives = [];
   List<LiveShow> filteredLives = [];
   late int visibleCount;
   bool isLoading = false;
@@ -46,14 +48,14 @@ class _VodsWidgetState extends State<VodsWidget> {
   int loadedCount = 0;
   int currentPage = 1;
   int lastPage = 1;
-  int limit = 5; 
+  int limit = 5;
 
   @override
   void initState() {
     super.initState();
     visibleCount = widget.initialVisibleCount;
     limit = widget.initialVisibleCount;
-    _fetchLives(); 
+    _fetchLives();
   }
 
   Future<void> _fetchLives({bool append = false}) async {
@@ -75,19 +77,17 @@ class _VodsWidgetState extends State<VodsWidget> {
       final List<LiveShow> fetchedLives = data.map<LiveShow>((item) {
         final map = item as Map<String, dynamic>;
 
-         String title = map['title'] ?? 'Sem título';
+        String title = map['title'] ?? 'Sem título';
+        final startedAtRaw = map['recordingStartedAt'];
+        DateTime? startedAt;
 
-         final startedAtRaw = map['recordingStartedAt'];
-         DateTime? startedAt;
-
-         if (startedAtRaw != null) {
+        if (startedAtRaw != null) {
           startedAt = DateTime.tryParse(startedAtRaw);
         }
-        
+
         if (title == 'Main Channel' && startedAt != null) {
           final formatted =
               '${startedAt.day.toString().padLeft(2, '0')}/${startedAt.month.toString().padLeft(2, '0')}/${startedAt.year.toString().substring(2)}';
-
           title = 'Live $formatted';
         }
 
@@ -104,10 +104,16 @@ class _VodsWidgetState extends State<VodsWidget> {
         );
       }).toList();
 
+      final filteredFetchedLives = widget.idCardOnShow != null
+          ? fetchedLives
+              .where((live) => live.id != widget.idCardOnShow)
+              .toList()
+          : fetchedLives;
+
       if (append) {
-        allLives.addAll(fetchedLives);
+        allLives.addAll(filteredFetchedLives);
       } else {
-        allLives = fetchedLives;
+        allLives = filteredFetchedLives;
       }
 
       loadedCount = filteredLives.length;
@@ -120,22 +126,26 @@ class _VodsWidgetState extends State<VodsWidget> {
       setState(() => isLoading = false);
     }
 
-    if (widget.filter.isNotEmpty && filteredLives.length < visibleCount && currentPage < lastPage) {
-        currentPage++;
-        _fetchLives(append: true);
+    if (widget.filter.isNotEmpty &&
+        filteredLives.length < visibleCount &&
+        currentPage < lastPage) {
+      currentPage++;
+      _fetchLives(append: true);
     }
-
   }
 
   bool _applyFilter() {
-  filteredLives = allLives
-      .where((live) => live.title.toLowerCase().contains(widget.filter.toLowerCase()))
-      .toList();
-  return filteredLives.length >= visibleCount;
-}
-
+    filteredLives = allLives
+        .where((live) =>
+            live.title.toLowerCase().contains(widget.filter.toLowerCase()))
+        .toList();
+    return filteredLives.length >= visibleCount;
+  }
 
   void _showMore() {
+    if (widget.onShowMorePressed != null && widget.initialVisibleCount == visibleCount) {
+      widget.onShowMorePressed!.call();
+    }
     final remainingVisible = loadedCount - visibleCount;
 
     if (remainingVisible >= widget.loadMoreCount) {
@@ -186,12 +196,12 @@ class _VodsWidgetState extends State<VodsWidget> {
                       style: TextButton.styleFrom(padding: EdgeInsets.zero),
                       onPressed: () {
                         setState(() {
-                          currentPage = 1; 
+                          currentPage = 1;
                           visibleCount = widget.initialVisibleCount;
-                          allLives.clear(); 
+                          allLives.clear();
                         });
 
-                        _fetchLives(); 
+                        _fetchLives();
                         widget.onBackPressed?.call();
                       },
                       child: const Text('< Voltar',
@@ -229,21 +239,20 @@ class _VodsWidgetState extends State<VodsWidget> {
 
               if ((screenWidth / (minCardWidth + spacing)) >= 1.5 &&
                   (screenWidth / (minCardWidth + spacing)) < 2) {
-                cardAspectRatio = 4 / 3.4; 
+                cardAspectRatio = 4 / 3.4;
               } else if ((screenWidth / (minCardWidth + spacing)) < 1.5) {
-                cardAspectRatio = 4 / 3.6; 
-              }
-              else if ((screenWidth / (minCardWidth + spacing)) >= 2.8 &&
+                cardAspectRatio = 4 / 3.6;
+              } else if ((screenWidth / (minCardWidth + spacing)) >= 2.8 &&
                   (screenWidth / (minCardWidth + spacing)) <= 3) {
                 cardAspectRatio = 4 / 3.5;
               } else if ((screenWidth / (minCardWidth + spacing)) >= 2.5 &&
                   (screenWidth / (minCardWidth + spacing)) <= 2.8) {
-                cardAspectRatio = 4 / 3.78; 
+                cardAspectRatio = 4 / 3.78;
               } else if ((screenWidth / (minCardWidth + spacing)) >= 2 &&
                   (screenWidth / (minCardWidth + spacing)) < 2.5) {
-                cardAspectRatio = 4 / 3.95; 
+                cardAspectRatio = 4 / 3.95;
               } else {
-                cardAspectRatio = 1; 
+                cardAspectRatio = 1;
               }
               final itemHeight = itemWidth / cardAspectRatio;
               final wrapWidth = columns * itemWidth + (columns - 1) * spacing;
