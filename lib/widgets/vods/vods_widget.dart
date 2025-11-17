@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:fluffychat/pages/lives_data.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class VodsWidget extends StatefulWidget {
   final String streamsWidgetTag;
@@ -191,9 +192,10 @@ class _VodsWidgetState extends State<VodsWidget> {
               if (visibleCount > widget.initialVisibleCount)
                 Row(
                   children: [
-                    const SizedBox(width: 24),
-                    TextButton(
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    const SizedBox(width: 10),
+                    IconButton(   
+                    icon: Icon(Icons.arrow_back),
+                    color: theme.colorScheme.primary,
                       onPressed: () {
                         setState(() {
                           currentPage = 1;
@@ -204,8 +206,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                         _fetchLives();
                         widget.onBackPressed?.call();
                       },
-                      child: const Text('< Voltar',
-                          style: TextStyle(fontSize: 14)),
+                      
                     ),
                   ],
                 ),
@@ -313,7 +314,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                     height: 1,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     color:
-                        theme.colorScheme.onSecondaryContainer.withOpacity(0.2),
+                        const Color(0xff5e5c61).withOpacity(0.6),
                   ),
                 ),
               ],

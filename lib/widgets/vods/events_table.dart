@@ -24,8 +24,7 @@ class Events {
 }
 
 class EventsTable extends StatefulWidget {
-  final bool showHeader;
-  const EventsTable({required this.showHeader, super.key});
+  const EventsTable({super.key});
 
   @override
   State<EventsTable> createState() => _EventsTableState();
@@ -115,18 +114,6 @@ class _EventsTableState extends State<EventsTable> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.showHeader)
-            Text(
-              'PRÓXIMOS EVENTOS',
-              style: GoogleFonts.righteous(
-                textStyle: TextStyle(
-                  color: theme.colorScheme.primary,
-                  fontSize: 25,
-                  fontWeight: FontWeight.w100,
-                ),
-              ),
-            ),
-          const SizedBox(height: 16),
           Expanded(
             child: allEvents.isEmpty
                 ? const Center(child: CircularProgressIndicator())

@@ -63,200 +63,220 @@ class PopUpVodsState extends State<PopUpVods> {
   }
 
   Widget _buildWebLayout(ThemeData theme) {
-    return Stack(
-      children: [
-        AnimatedPositioned(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-          bottom: _dragOffset,
-          left: 0,
-          right: 0,
-          child: GestureDetector(
-            onVerticalDragUpdate: (details) {
-              setState(() {
-                _dragOffset = (_dragOffset - details.delta.dy)
-                    .clamp(-600 + _peekHeight, 0);
-              });
-            },
-            onVerticalDragEnd: (details) {
-              setState(() {
-                if (details.primaryVelocity! < -200) {
+  return Stack(
+    children: [
+      AnimatedPositioned(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        bottom: _dragOffset,
+        left: 0,
+        right: 0,
+        child: GestureDetector(
+          onVerticalDragUpdate: (details) {
+            setState(() {
+              _dragOffset = (_dragOffset - details.delta.dy)
+                  .clamp(-600 + _peekHeight, 0);
+            });
+          },
+          onVerticalDragEnd: (details) {
+            setState(() {
+              if (details.primaryVelocity! < -200) {
+                _dragOffset = 0;
+                showBottomMenu = true;
+              } else if (details.primaryVelocity! > 200) {
+                _dragOffset = -600 + _peekHeight;
+                showBottomMenu = false;
+              } else {
+                if (_dragOffset > -600 / 2) {
                   _dragOffset = 0;
                   showBottomMenu = true;
-                } else if (details.primaryVelocity! > 200) {
+                } else {
                   _dragOffset = -600 + _peekHeight;
                   showBottomMenu = false;
-                } else {
-                  if (_dragOffset > -600 / 2) {
-                    _dragOffset = 0;
-                    showBottomMenu = true;
-                  } else {
-                    _dragOffset = -600 + _peekHeight;
-                    showBottomMenu = false;
-                  }
                 }
-              });
-            },
-            child: Container(
-              height: 600,
+              }
+            });
+          },
+          child: Container(
+            height: 600,
               decoration: BoxDecoration(
                 color: theme.colorScheme.onPrimary,
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black45,
-                    blurRadius: 12,
-                    offset: Offset(0, -4),
-                  ),
-                ],
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 8),
-                    Center(
-                      child: MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: GestureDetector(
-                          onTap: () => toggleGaveta(),
-                          child: Container(
-                            width: 40,
-                            height: 5,
-                            margin: const EdgeInsets.symmetric(vertical: 8),
-                            decoration: BoxDecoration(
+                boxShadow: const [
+                BoxShadow(
+                  color: Colors.black45,
+                  blurRadius: 12,
+                  offset: Offset(0, -4),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8),
+                  Center(
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () => toggleGaveta(),
+                        child: Container(
+                          width: 40,
+                          height: 5,
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
                               color: Colors.grey[600],
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    const SizedBox(width: 24),
-                                    Text(
-                                      'ROLOU POR AQUI',
+                  ),
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const SizedBox(width: 24),
+                                  Text(
+                                    'ROLOU POR AQUI',
                                       style: GoogleFonts.righteous(
                                         textStyle: TextStyle(
                                           color: theme.colorScheme.primary,
-                                          fontSize: 25,
+                                        fontSize: 25,
                                           fontWeight: FontWeight.w100,
-                                        ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                                const SizedBox(height: 16),
-                                Expanded(
-                                  child: SingleChildScrollView(
-                                    physics: const BouncingScrollPhysics(),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        if (_mostrarSecao("destaques"))
-                                          VodsWidget(
-                                            initialVisibleCount: 6,
-                                            loadMoreCount: 3,
-                                            numColumns: 5,
-                                            filter: "",
-                                            filterOnServer: false,
-                                            showHeader: true,
-                                            streamsWidgetTag: 'destaques',
-                                            onShowMorePressed: () {
-                                              setState(() {
-                                                if (secaoExpandida ==
-                                                    'destaques') {
-                                                  secaoExpandida = null;
-                                                } else {
-                                                  secaoExpandida = 'destaques';
-                                                  showBottomMenu = true;
-                                                  _dragOffset = 0;
-                                                }
-                                              });
-                                            },
-                                            onBackPressed: () {
-                                              setState(
-                                                  () => secaoExpandida = null);
-                                            },
-                                          ),
-                                        // to do
-                                        const SizedBox(height: 5),
-                                        if (_mostrarSecao("legal"))
-                                          VodsWidget(
-                                            filter: 'legal',
-                                            initialVisibleCount: 3,
-                                            loadMoreCount: 3,
-                                            numColumns: 3,
-                                            showHeader: true,
-                                            streamsWidgetTag: 'legal',
-                                            onShowMorePressed: () {
-                                              setState(() {
-                                                if (secaoExpandida == 'legal') {
-                                                  secaoExpandida = null;
-                                                } else {
-                                                  secaoExpandida = 'legal';
-                                                  showBottomMenu = true;
-                                                  _dragOffset = 0;
-                                                }
-                                              });
-                                            },
-                                            onBackPressed: () {
-                                              setState(
-                                                () => secaoExpandida = null,
-                                              );
-                                            },
-                                          ),
-                                      ],
-                                    ),
+                                  ),
+                                ],
+                              ),
+                              // Container(
+                              //   height: 1,
+                              //   margin: const EdgeInsets.symmetric(horizontal: 8),
+                              //   color:
+                              //       theme.colorScheme.primary.withOpacity(0.6),
+                              // ),
+                              const SizedBox(height: 16),
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  physics: const BouncingScrollPhysics(),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      if (_mostrarSecao("destaques"))
+                                        VodsWidget(
+                                          initialVisibleCount: 6,
+                                          loadMoreCount: 3,
+                                          numColumns: 5,
+                                          filter: "",
+                                          filterOnServer: false,
+                                          showHeader: true,
+                                          streamsWidgetTag: 'Destaques',
+                                          onShowMorePressed: () {
+                                            setState(() {
+                                              if (secaoExpandida ==
+                                                  'destaques') {
+                                                secaoExpandida = null;
+                                              } else {
+                                                secaoExpandida = 'destaques';
+                                                showBottomMenu = true;
+                                                _dragOffset = 0;
+                                              }
+                                            });
+                                          },
+                                          onBackPressed: () {
+                                            setState(
+                                                () => secaoExpandida = null);
+                                          },
+                                        ),
+                                      const SizedBox(height: 5),
+                                      if (_mostrarSecao("legal"))
+                                        VodsWidget(
+                                          filter: 'legal',
+                                          initialVisibleCount: 3,
+                                          loadMoreCount: 3,
+                                          numColumns: 3,
+                                          showHeader: true,
+                                          streamsWidgetTag: 'Legal',
+                                          onShowMorePressed: () {
+                                            setState(() {
+                                              if (secaoExpandida == 'legal') {
+                                                secaoExpandida = null;
+                                              } else {
+                                                secaoExpandida = 'legal';
+                                                showBottomMenu = true;
+                                                _dragOffset = 0;
+                                              }
+                                            });
+                                          },
+                                          onBackPressed: () {
+                                            setState(
+                                              () => secaoExpandida = null,
+                                            );
+                                          },
+                                        ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          // to do
-                          const SizedBox(width: 24),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              decoration: BoxDecoration(
+                        ),
+
+                        const SizedBox(width: 24),
+
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            children: [
+                              Text(
+                                'PRÓXIMOS EVENTOS',
+                                style: GoogleFonts.roboto(
+                                  textStyle: TextStyle(
+                                    color: theme.colorScheme.primary,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(
                                 color: theme.colorScheme.surface,
-                                borderRadius: BorderRadius.circular(20),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  padding: const EdgeInsets.all(16),
+                                  child: const EventsTable(),
+                                ),
                               ),
-                              padding: const EdgeInsets.all(16),
-                              child: const EventsTable(
-                                showHeader: true,
-                              ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
 
   Widget _buildMobileLayout(ThemeData theme) {
     return Stack(
@@ -402,13 +422,45 @@ class PopUpVodsState extends State<PopUpVods> {
                                         numColumns: 2,
                                         initialVisibleCount: 4,
                                         loadMoreCount: 2,
-                                        streamsWidgetTag: '',
+                                        streamsWidgetTag: 'Destaque',
                                         onShowMorePressed: () {
                                           setState(() =>
                                               secaoExpandida = 'destaques');
                                         },
                                         onBackPressed: () {
-                                          setState(() => secaoExpandida = null);
+                                           setState(() {
+                                                if (secaoExpandida ==
+                                                    'destaques') {
+                                                  secaoExpandida = null;
+                                                } else {
+                                                  secaoExpandida = 'destaques';
+                                                  showBottomMenu = true;
+                                                  _dragOffset = 0;
+                                                }
+                                              });
+                                        },
+                                      ),
+
+                                      if (_mostrarSecao('legal'))
+                                      VodsWidget(
+                                        numColumns: 2,
+                                        initialVisibleCount: 4,
+                                        loadMoreCount: 2,
+                                        streamsWidgetTag: 'Legal',
+                                        onShowMorePressed: () {
+                                          setState(() =>
+                                              secaoExpandida = 'legal');
+                                        },
+                                        onBackPressed: () {
+                                          setState(() {
+                                                if (secaoExpandida == 'legal') {
+                                                  secaoExpandida = null;
+                                                } else {
+                                                  secaoExpandida = 'legal';
+                                                  showBottomMenu = true;
+                                                  _dragOffset = 0;
+                                                }
+                                              });
                                         },
                                       ),
                                   ],
@@ -420,9 +472,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 padding: const EdgeInsets.all(16),
-                                child: const EventsTable(
-                                  showHeader: false,
-                                ),
+                                child: const EventsTable(),
                               ),
                       ),
                     ),
