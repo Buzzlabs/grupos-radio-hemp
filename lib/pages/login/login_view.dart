@@ -32,7 +32,7 @@ class LoginView extends StatelessWidget {
 
     final mobileAppBarHeight = screenHeight * 0.15;
     final mobileAppBarTitlePaddingTop = mobileAppBarHeight - 18;
-    final mobileImagePadding = screenHeight * 0.13;
+    final mobileImagePadding = screenHeight * 0.03;
 
     const desktopAppBarHeight = 80.0;
     const desktopAppBarTitlePaddingTop = 30.0;
@@ -49,13 +49,14 @@ class LoginView extends StatelessWidget {
     return LoginScaffold(
       appBar: AppBar(
         backgroundColor: isMobileMode
-            ? theme.colorScheme.surface
+            ? theme.colorScheme.tertiary
             : theme.colorScheme.tertiary,
+
         toolbarHeight: toolBarHeight,
         title: Padding(
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
             left: 16.0,
-            top: toolBarPadding,
+            // top: toolBarPadding,
           ),
           child: Align(
             alignment: isMobileMode ? Alignment.topLeft : Alignment.centerLeft,
@@ -70,9 +71,9 @@ class LoginView extends StatelessWidget {
             ),
           ),
         ),
-        actions: [
+        actions: const [
           MoreLoginMenuButton(
-            padding: EdgeInsets.only(right: 16.0, top: toolBarPadding - 15),
+            padding: EdgeInsets.only(right: 16.0, ),
           ),
         ],
       ),
@@ -86,9 +87,9 @@ class LoginView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(bottom: imagePadding),
+                      padding: EdgeInsets.symmetric(vertical: imagePadding),
                       child: FractionallySizedBox(
-                        widthFactor: isMobileMode ? 0.6 : 0.5,
+                        widthFactor: isMobileMode ? 0.8 : 0.7,
                         child: Image.asset(
                           'assets/logo_horizontal_semfundo.png',
                           fit: BoxFit.contain,
@@ -96,12 +97,12 @@ class LoginView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 5),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextField(
                         style: TextStyle(
-                          color: theme.colorScheme.onSecondary,
+                          color: theme.colorScheme.onSurface,
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Roboto',
                         ),
@@ -117,10 +118,37 @@ class LoginView extends StatelessWidget {
                             : [AutofillHints.username],
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.account_box_outlined),
+                          fillColor: theme.colorScheme.tertiary,
+                          disabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: theme.colorScheme.primary, width: 2),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           errorText: controller.usernameError,
                           errorStyle: TextStyle(
                               color: Theme.of(context).colorScheme.error,
-                              fontSize: 15),
+                              fontSize: 15,),
                           labelText: L10n.of(context).emailOrUsername,
                         ),
                       ),
@@ -130,7 +158,7 @@ class LoginView extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextField(
                         style: TextStyle(
-                          color: theme.colorScheme.onSecondary,
+                          color: theme.colorScheme.onSurface,
                           fontWeight: FontWeight.normal,
                           fontFamily: 'Roboto',
                         ),
@@ -146,6 +174,33 @@ class LoginView extends StatelessWidget {
                         onSubmitted: (_) => controller.login(),
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.lock_outlined),
+                          fillColor: theme.colorScheme.tertiary,
+                          disabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: theme.colorScheme.primary, width: 2),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           errorText: controller.passwordError,
                           errorStyle: TextStyle(
                             color: Theme.of(context).colorScheme.error,
@@ -198,18 +253,22 @@ class LoginView extends StatelessWidget {
                             children: [
                               TextSpan(
                                 text: '${L10n.of(context).newHere} ',
-                                style: GoogleFonts.fredoka(
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
                                   fontSize: 18,
+                                  fontWeight: FontWeight.normal,
                                 ),
                               ),
                               TextSpan(
                                 text: L10n.of(context).createAnAccountPrompt,
-                                style: GoogleFonts.fredoka(
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
                                   color: Theme.of(context).colorScheme.primary,
                                   fontSize: 18,
                                   decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.normal,
                                 ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {

@@ -48,13 +48,13 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                   ),
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: theme.colorScheme.tertiary,
+                    fillColor: theme.colorScheme.tertiaryContainer,
                     contentPadding: EdgeInsets.zero,
                     hintText: hide
                         ? L10n.of(context).searchChatsRooms
                         : status.calcLocalizedString(context),
                     hintStyle: TextStyle(
-                      color: theme.colorScheme.onSecondary,
+                      color: theme.colorScheme.onSecondaryContainer,
                       fontWeight: FontWeight.normal,
                     ),
                     border: OutlineInputBorder(
@@ -81,7 +81,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                                 onPressed: controller.startSearch,
                                 icon: Icon(
                                   Icons.search_outlined,
-                                  color: theme.colorScheme.onSecondary,
+                                  color: theme.colorScheme.onSecondaryContainer,
                                 ),
                               )
                         : Container(
@@ -94,7 +94,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                                 value: status.progress,
                                 valueColor: status.error != null
                                     ? AlwaysStoppedAnimation<Color>(
-                                        theme.colorScheme.secondary,
+                                        theme.colorScheme.primary,
                                       )
                                     : null,
                               ),

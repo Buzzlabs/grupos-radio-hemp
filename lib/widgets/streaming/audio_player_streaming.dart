@@ -173,6 +173,7 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
   }
 
   Future<void> _startStream() async {
+    final theme = Theme.of(context);
     if (_isLoadingAudio) return;
 
     final streamUrl = dotenv.env['AUDIO_PLAYER_URL'] ?? '';
@@ -206,7 +207,11 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
       if (mounted) {
         setState(() => _isLoadingAudio = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Toque novamente para iniciar o áudio')),
+          SnackBar(
+              content: Text(
+            'Toque novamente para iniciar o áudio',
+            style: TextStyle(color: theme.colorScheme.tertiary),
+          ),),
         );
       }
       _loadingSafetyTimer?.cancel();
@@ -354,16 +359,16 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
             color: theme.colorScheme.tertiaryContainer,
             border: Border.all(
               color: isPlaying
-                  ? Colors.orangeAccent.withValues(
+                  ? theme.colorScheme.primary.withValues(
                       alpha: dim(0.6 + 0.20 * _glowController.value),
                     )
-                  : theme.colorScheme.secondary,
+                  : theme.colorScheme.primary,
             ),
             borderRadius: BorderRadius.circular(_borderRadius),
             boxShadow: isPlaying
                 ? [
                     BoxShadow(
-                      color: Colors.orangeAccent.withValues(
+                      color: theme.colorScheme.primary.withValues(
                         alpha: dim(0.28 + 0.15 * _glowController.value),
                       ),
                       blurRadius: 10,
@@ -683,7 +688,8 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
+                  color: theme.colorScheme.tertiary,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
@@ -718,11 +724,16 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
   }
 
   Widget _buildTimeLabels() {
+    final theme = Theme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(_formatTime(_position), style: const TextStyle(fontSize: 11)),
-        Text(_formatTime(duration), style: const TextStyle(fontSize: 11)),
+        Text(_formatTime(_position),
+            style: TextStyle(
+                fontSize: 11, color: theme.colorScheme.onSecondaryContainer,),),
+        Text(_formatTime(duration),
+            style: TextStyle(
+                fontSize: 11, color: theme.colorScheme.onSecondaryContainer,),),
       ],
     );
   }

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ui_web' as ui;
 
-import 'package:fluffychat/widgets/streaming/video_streaming_model.dart';
 import 'package:fluffychat/widgets/streaming/video_streaming_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

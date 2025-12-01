@@ -54,12 +54,39 @@ class DialogTextField extends StatelessWidget {
           maxLength: maxLength,
           keyboardType: keyboardType,
           autocorrect: autocorrect,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: theme.colorScheme.tertiary,
             fontWeight: FontWeight.normal,
             fontFamily: 'Roboto',
           ),
           decoration: InputDecoration(
+            disabledBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: theme.colorScheme.surface, width: 2),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: theme.colorScheme.surface,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: theme.colorScheme.surface,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: theme.colorScheme.surface,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            fillColor: theme.colorScheme.tertiaryContainer,
             errorText: errorText,
             hintText: hintText,
             labelText: labelText,

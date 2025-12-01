@@ -31,7 +31,6 @@ import 'package:fluffychat/widgets/matrix.dart';
 import 'package:fluffychat/widgets/share_scaffold_dialog.dart';
 import 'package:fluffychat/guard/guard.dart';
 import 'package:fluffychat/pages/screen_vod.dart';
-import 'package:fluffychat/pages/lives_data.dart';
 
 abstract class AppRoutes {
   static FutureOr<String?> loggedInRedirect(

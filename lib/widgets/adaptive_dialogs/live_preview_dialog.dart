@@ -123,7 +123,8 @@ class _LivePreviewDialogState extends State<LivePreviewDialog> {
                         const SizedBox(width: 12),
                         Text(
                           l10n.live.toUpperCase(),
-                          style: const TextStyle(
+                          style: TextStyle(
+                            color: theme.colorScheme.primary,
                             fontWeight: FontWeight.bold,
                             letterSpacing: 0.5,
                             fontSize: 18,
@@ -136,11 +137,12 @@ class _LivePreviewDialogState extends State<LivePreviewDialog> {
                       l10n.liveTitle,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.primary,
+                        color: theme.colorScheme.tertiary,
                       ),
                     ),
                     const SizedBox(height: 8),
                     TextField(
+                      
                       controller: titleController,
                       onChanged: (value) {
                         setState(() {
@@ -152,21 +154,47 @@ class _LivePreviewDialogState extends State<LivePreviewDialog> {
                         color: theme.colorScheme.onSecondary,
                       ),
                       decoration: InputDecoration(
+                        fillColor: theme.colorScheme.tertiaryContainer,
                         hintText: l10n.enterLiveTitleHint,
-                        border: const OutlineInputBorder(),
                         isDense: true,
                         errorText: titleError,
-                        errorStyle: TextStyle(
-                          color: theme.colorScheme.secondary,
+                        disabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: theme.colorScheme.surface, width: 2),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                      ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.surface, 
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ), 
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.surface, 
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.surface,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                              errorStyle: TextStyle(
+                                color: theme.colorScheme.secondary,
+                              ),
+                        ),
                     ),
                     const SizedBox(height: 24),
                     Text(
                       l10n.preview,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.primary,
+                        color: theme.colorScheme.tertiary,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -201,7 +229,7 @@ class _LivePreviewDialogState extends State<LivePreviewDialog> {
                     Text(
                       latestDebugInfo ?? '',
                       style: TextStyle(
-                        color: theme.colorScheme.onSurface,
+                        color: theme.colorScheme.onSecondaryContainer,
                         fontSize: 12,
                       ),
                       textAlign: TextAlign.center,
@@ -215,6 +243,7 @@ class _LivePreviewDialogState extends State<LivePreviewDialog> {
                           onPressed: loading ? null : _submit,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 15.0),
+                            foregroundColor: theme.colorScheme.tertiary,
                           ),
                           child: loading
                               ? const Padding(
@@ -245,7 +274,7 @@ class _LivePreviewDialogState extends State<LivePreviewDialog> {
               top: 8,
               right: 8,
               child: IconButton(
-                icon: const Icon(Icons.close),
+                icon: Icon(Icons.close, color: theme.colorScheme.tertiary,),
                 onPressed: () =>
                     Navigator.of(context, rootNavigator: true).pop(),
                 tooltip: l10n.close,

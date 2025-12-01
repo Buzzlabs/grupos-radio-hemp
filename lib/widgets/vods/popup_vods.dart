@@ -129,7 +129,7 @@ class PopUpVodsState extends State<PopUpVods> {
                           height: 5,
                           margin: const EdgeInsets.symmetric(vertical: 8),
                           decoration: BoxDecoration(
-                              color: Colors.grey[600],
+                              color: theme.colorScheme.primary,
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
@@ -152,12 +152,12 @@ class PopUpVodsState extends State<PopUpVods> {
                                   const SizedBox(width: 24),
                                   Text(
                                     'ROLOU POR AQUI',
-                                      style: GoogleFonts.righteous(
-                                        textStyle: TextStyle(
+                                      style:  TextStyle(
+                                        fontFamily: 'GothamRndSSm',
                                           color: theme.colorScheme.primary,
                                         fontSize: 25,
-                                          fontWeight: FontWeight.w100,
-                                      ),
+                                          fontWeight: FontWeight.bold,
+                                      
                                     ),
                                   ),
                                 ],
@@ -199,24 +199,24 @@ class PopUpVodsState extends State<PopUpVods> {
                                           },
                                           onBackPressed: () {
                                             setState(
-                                                () => secaoExpandida = null);
+                                                () => secaoExpandida = null,);
                                           },
                                         ),
                                       const SizedBox(height: 5),
-                                      if (_mostrarSecao("legal"))
+                                      if (_mostrarSecao("musica"))
                                         VodsWidget(
-                                          filter: 'legal',
+                                          filter: 'musica',
                                           initialVisibleCount: 3,
                                           loadMoreCount: 3,
                                           numColumns: 3,
                                           showHeader: true,
-                                          streamsWidgetTag: 'Legal',
+                                          streamsWidgetTag: 'Música',
                                           onShowMorePressed: () {
                                             setState(() {
-                                              if (secaoExpandida == 'legal') {
+                                              if (secaoExpandida == 'musica') {
                                                 secaoExpandida = null;
                                               } else {
-                                                secaoExpandida = 'legal';
+                                                secaoExpandida = 'musica';
                                                 showBottomMenu = true;
                                                 _dragOffset = 0;
                                               }
@@ -244,12 +244,12 @@ class PopUpVodsState extends State<PopUpVods> {
                             children: [
                               Text(
                                 'PRÓXIMOS EVENTOS',
-                                style: GoogleFonts.roboto(
-                                  textStyle: TextStyle(
+                                style: TextStyle(
+                                    fontFamily: 'GothamRndSSm',
                                     color: theme.colorScheme.primary,
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,
-                                  ),
+                                 
                                 ),
                               ),
                               Expanded(
@@ -345,7 +345,7 @@ class PopUpVodsState extends State<PopUpVods> {
                             height: 5,
                             margin: const EdgeInsets.symmetric(vertical: 8),
                             decoration: BoxDecoration(
-                              color: Colors.grey[600],
+                              color: theme.colorScheme.primary,
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
@@ -375,7 +375,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 35),
+                                              horizontal: 35,),
                                           child: _buildTabButton(
                                             theme,
                                             isSmall
@@ -386,7 +386,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 35),
+                                              horizontal: 35,),
                                           child: _buildTabButton(
                                             theme,
                                             isSmall
@@ -425,7 +425,7 @@ class PopUpVodsState extends State<PopUpVods> {
                                         streamsWidgetTag: 'Destaque',
                                         onShowMorePressed: () {
                                           setState(() =>
-                                              secaoExpandida = 'destaques');
+                                              secaoExpandida = 'destaques',);
                                         },
                                         onBackPressed: () {
                                            setState(() {
@@ -441,22 +441,22 @@ class PopUpVodsState extends State<PopUpVods> {
                                         },
                                       ),
 
-                                      if (_mostrarSecao('legal'))
+                                      if (_mostrarSecao('musica'))
                                       VodsWidget(
                                         numColumns: 2,
                                         initialVisibleCount: 4,
                                         loadMoreCount: 2,
-                                        streamsWidgetTag: 'Legal',
+                                        streamsWidgetTag: 'Música',
                                         onShowMorePressed: () {
                                           setState(() =>
-                                              secaoExpandida = 'legal');
+                                              secaoExpandida = 'musica',);
                                         },
                                         onBackPressed: () {
                                           setState(() {
-                                                if (secaoExpandida == 'legal') {
+                                                if (secaoExpandida == 'musica') {
                                                   secaoExpandida = null;
                                                 } else {
-                                                  secaoExpandida = 'legal';
+                                                  secaoExpandida = 'musica';
                                                   showBottomMenu = true;
                                                   _dragOffset = 0;
                                                 }

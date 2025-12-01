@@ -138,7 +138,7 @@ class ChatListController extends State<ChatList>
     if (room.membership == Membership.ban) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(L10n.of(context).youHaveBeenBannedFromThisChat),
+          content: Text(L10n.of(context).youHaveBeenBannedFromThisChat, style: TextStyle(color: Theme.of(context).colorScheme.error),),
         ),
       );
       return;
@@ -267,6 +267,7 @@ class ChatListController extends State<ChatList>
         SnackBar(
           content: Text(
             e.toLocalizedString(context),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         ),
       );
@@ -551,10 +552,11 @@ class ChatListController extends State<ChatList>
               !space.spaceChildren.any((c) => c.roomId == room.id),
         )
         .toList();
-
+    final theme = Theme.of(context);
     final action = await showMenu<ChatContextAction>(
       context: posContext,
       position: position,
+      color: theme.colorScheme.surface,
       items: [
         PopupMenuItem(
           value: ChatContextAction.open,
@@ -571,7 +573,7 @@ class ChatListController extends State<ChatList>
                 child: Text(
                   displayname,
                   style:
-                      TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -607,12 +609,14 @@ class ChatListController extends State<ChatList>
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
+                  color: theme.colorScheme.tertiary,
                   room.pushRuleState == PushRuleState.notify
                       ? Icons.notifications_off_outlined
                       : Icons.notifications_off,
                 ),
                 const SizedBox(width: 12),
                 Text(
+                  style: TextStyle(color: theme.colorScheme.tertiary),
                   room.pushRuleState == PushRuleState.notify
                       ? L10n.of(context).muteChat
                       : L10n.of(context).unmuteChat,
@@ -626,12 +630,14 @@ class ChatListController extends State<ChatList>
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
+                  color: theme.colorScheme.tertiary,
                   room.markedUnread
                       ? Icons.mark_as_unread
                       : Icons.mark_as_unread_outlined,
                 ),
                 const SizedBox(width: 12),
                 Text(
+                  style: TextStyle(color: theme.colorScheme.tertiary),
                   room.markedUnread
                       ? L10n.of(context).markAsRead
                       : L10n.of(context).markAsUnread,
@@ -645,10 +651,12 @@ class ChatListController extends State<ChatList>
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
+                  color: theme.colorScheme.tertiary,
                   room.isFavourite ? Icons.push_pin : Icons.push_pin_outlined,
                 ),
                 const SizedBox(width: 12),
                 Text(
+                  style: TextStyle(color: theme.colorScheme.tertiary),
                   room.isFavourite
                       ? L10n.of(context).unpin
                       : L10n.of(context).pin,

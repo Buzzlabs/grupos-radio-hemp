@@ -38,7 +38,7 @@ class ChatSearchMessageTab extends StatelessWidget {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.search_outlined, size: 64),
+              Icon(Icons.search_outlined, size: 64, color: theme.colorScheme.primaryContainer),
               const SizedBox(height: 8),
               Text(
                 L10n.of(context).searchIn(
@@ -46,7 +46,7 @@ class ChatSearchMessageTab extends StatelessWidget {
                     MatrixLocals(L10n.of(context)),
                   ),
                 ),
-                style: TextStyle(color: theme.colorScheme.onSurface),
+                style: TextStyle(color: theme.colorScheme.primaryContainer),
               ),
             ],
           );
@@ -81,17 +81,18 @@ class ChatSearchMessageTab extends StatelessWidget {
                     padding: const EdgeInsets.all(16.0),
                     child: TextButton.icon(
                       style: TextButton.styleFrom(
-                        backgroundColor: theme.colorScheme.secondaryContainer,
-                        foregroundColor: theme.colorScheme.onSecondaryContainer,
+                        backgroundColor: theme.colorScheme.primary,
+                        foregroundColor: theme.colorScheme.tertiary,
                       ),
                       onPressed: () => startSearch(
                         prevBatch: nextBatch,
                         previousSearchResult: events,
                       ),
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.arrow_downward_outlined,
+                        color: theme.colorScheme.tertiary,
                       ),
-                      label: Text(L10n.of(context).searchMore),
+                      label: Text(L10n.of(context).searchMore, style: TextStyle(color: theme.colorScheme.tertiary),),
                     ),
                   ),
                 );
@@ -144,7 +145,7 @@ class _MessageSearchResultListTile extends StatelessWidget {
           Text(
             displayname,
             style:
-                TextStyle(fontSize: 15, color: theme.colorScheme.onSecondary),
+                TextStyle(fontSize: 15, color: theme.colorScheme.primary),
           ),
           Expanded(
             child: Text(
@@ -180,8 +181,9 @@ class _MessageSearchResultListTile extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
       ),
       trailing: IconButton(
-        icon: const Icon(
+        icon: Icon(
           Icons.chevron_right_outlined,
+          color: theme.colorScheme.tertiary,
         ),
         onPressed: () => context.go(
           '/${Uri(

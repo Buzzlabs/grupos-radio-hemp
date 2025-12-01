@@ -42,6 +42,7 @@ class ChatDetailsController extends State<ChatDetails> {
   String? get roomId => widget.roomId;
 
   void setDisplaynameAction() async {
+    final theme = Theme.of(context);
     final room = Matrix.of(context).client.getRoomById(roomId!)!;
     final input = await showTextInputDialog(
       context: context,
@@ -61,12 +62,13 @@ class ChatDetailsController extends State<ChatDetails> {
     );
     if (success.error == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(L10n.of(context).displaynameHasBeenChanged)),
+        SnackBar(content: Text(L10n.of(context).displaynameHasBeenChanged, style: TextStyle(color: theme.colorScheme.tertiary))),
       );
     }
   }
 
   void setTopicAction() async {
+    final theme = Theme.of(context);
     final room = Matrix.of(context).client.getRoomById(roomId!)!;
     final input = await showTextInputDialog(
       context: context,
@@ -85,7 +87,7 @@ class ChatDetailsController extends State<ChatDetails> {
     if (success.error == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(L10n.of(context).chatDescriptionHasBeenChanged),
+          content: Text(L10n.of(context).chatDescriptionHasBeenChanged, style: TextStyle(color: theme.colorScheme.tertiary)),
         ),
       );
     }

@@ -17,15 +17,18 @@ class ChatMembersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final room =
         Matrix.of(context).client.getRoomById(controller.widget.roomId);
     if (room == null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(L10n.of(context).oopsSomethingWentWrong),
+          title: Text(L10n.of(context).oopsSomethingWentWrong,
+              style: TextStyle(color: theme.colorScheme.onSecondaryContainer),),
         ),
         body: Center(
-          child: Text(L10n.of(context).youAreNoLongerParticipatingInThisChat),
+          child: Text(L10n.of(context).youAreNoLongerParticipatingInThisChat,
+              style: TextStyle(color: theme.colorScheme.onSecondaryContainer),),
         ),
       );
     }
@@ -36,14 +39,12 @@ class ChatMembersView extends StatelessWidget {
         (room.summary.mInvitedMemberCount ?? 0);
 
     final error = controller.error;
-    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        leading: const Center(child: BackButton()),
-        title: Text(
-          L10n.of(context).countParticipants(roomCount),
-        ),
+        leading: Center(child: BackButton(color: theme.colorScheme.tertiary)),
+        title: Text(L10n.of(context).countParticipants(roomCount),
+            style: TextStyle(color: theme.colorScheme.tertiary),),
         actions: [
           if (room.canInvite)
             IconButton(
@@ -64,13 +65,19 @@ class ChatMembersView extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.error_outline),
-                      Text(error.toLocalizedString(context)),
+                      Icon(
+                        Icons.error_outline,
+                        color: theme.colorScheme.primary,
+                      ),
+                      Text(error.toLocalizedString(context),
+                          style: TextStyle(color: theme.colorScheme.primary),),
                       const SizedBox(height: 8),
                       OutlinedButton.icon(
                         onPressed: controller.refreshMembers,
-                        icon: const Icon(Icons.refresh_outlined),
-                        label: Text(L10n.of(context).tryAgain),
+                        icon: Icon(Icons.refresh_outlined,
+                            color: theme.colorScheme.primary,),
+                        label: Text(L10n.of(context).tryAgain,
+                            style: TextStyle(color: theme.colorScheme.primary),),
                       ),
                     ],
                   ),
@@ -107,19 +114,47 @@ class ChatMembersView extends StatelessWidget {
                               child: TextField(
                                 controller: controller.filterController,
                                 onChanged: controller.setFilter,
+                                style: TextStyle(
+                                    color: theme.colorScheme.tertiary,),
                                 decoration: InputDecoration(
+                                  disabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: theme.colorScheme.surface,
+                                        width: 2,),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: theme.colorScheme.surface,
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: theme.colorScheme.surface,
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: theme.colorScheme.surface,
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                   filled: true,
                                   fillColor:
-                                      theme.colorScheme.secondaryContainer,
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(99),
-                                  ),
+                                      theme.colorScheme.tertiaryContainer,
                                   hintStyle: TextStyle(
-                                    color: theme.colorScheme.onPrimaryContainer,
+                                    color:
+                                        theme.colorScheme.onSecondaryContainer,
                                     fontWeight: FontWeight.normal,
                                   ),
-                                  prefixIcon: const Icon(Icons.search_outlined),
+                                  prefixIcon: Icon(Icons.search_outlined,
+                                      color: theme
+                                          .colorScheme.onSecondaryContainer,),
                                   hintText: L10n.of(context).search,
                                 ),
                               ),

@@ -42,7 +42,7 @@ class ChatSearchFilesTab extends StatelessWidget {
                     MatrixLocals(L10n.of(context)),
                   ),
                 ),
-                style: TextStyle(color: theme.colorScheme.onSurface),
+                style: TextStyle(color: theme.colorScheme.onSecondaryContainer),
               ),
             ],
           );
@@ -56,7 +56,7 @@ class ChatSearchFilesTab extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 L10n.of(context).nothingFound,
-                style: TextStyle(color: theme.colorScheme.onSurface),
+                style: TextStyle(color: theme.colorScheme.onSecondaryContainer),
               ),
             ],
           );
@@ -87,19 +87,20 @@ class ChatSearchFilesTab extends StatelessWidget {
                     padding: const EdgeInsets.all(16.0),
                     child: TextButton.icon(
                       style: TextButton.styleFrom(
-                        backgroundColor: theme.colorScheme.secondaryContainer,
-                        foregroundColor: theme.colorScheme.onSecondaryContainer,
+                        backgroundColor: theme.colorScheme.primary,
+                        foregroundColor: theme.colorScheme.tertiary,
                       ),
                       onPressed: () => startSearch(
                         prevBatch: nextBatch,
                         previousSearchResult: events,
                       ),
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.arrow_downward_outlined,
+                        color: theme.colorScheme.tertiary,
                       ),
                       label: Text(
                         L10n.of(context).searchMore,
-                        style: TextStyle(color: theme.colorScheme.onSurface),
+                        style: TextStyle(color: theme.colorScheme.tertiary),
                       ),
                     ),
                   ),
@@ -142,7 +143,7 @@ class ChatSearchFilesTab extends StatelessWidget {
                               event.originServerTs.localizedTime(context),
                               style: TextStyle(
                                   fontSize: 12,
-                                  color: theme.colorScheme.onSurface),
+                                  color: theme.colorScheme.tertiary,),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -162,15 +163,15 @@ class ChatSearchFilesTab extends StatelessWidget {
                       color: theme.colorScheme.onInverseSurface,
                       clipBehavior: Clip.hardEdge,
                       child: ListTile(
-                        leading: const Icon(Icons.file_present_outlined),
+                        leading: Icon(Icons.file_present_outlined, color: theme.colorScheme.secondary),
                         title: Text(
                           filename,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style:
-                              TextStyle(color: theme.colorScheme.onSecondary),
+                              TextStyle(color: theme.colorScheme.tertiary),
                         ),
-                        subtitle: Text('$sizeString | $filetype'),
+                        subtitle: Text('$sizeString | $filetype', style: TextStyle(color: theme.colorScheme.onSecondaryContainer)),
                         onTap: () => event.saveFile(context),
                       ),
                     ),

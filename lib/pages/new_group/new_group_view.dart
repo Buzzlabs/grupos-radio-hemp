@@ -23,12 +23,14 @@ class NewGroupView extends StatelessWidget {
         leading: Center(
           child: BackButton(
             onPressed: controller.loading ? null : Navigator.of(context).pop,
+            color: theme.colorScheme.tertiary,
           ),
         ),
         title: Text(
           controller.createGroupType == CreateGroupType.space
               ? L10n.of(context).newSpace
               : L10n.of(context).createGroup,
+          style: TextStyle(color: theme.colorScheme.tertiary),
         ),
       ),
       body: MaxWidthBody(
@@ -48,8 +50,8 @@ class NewGroupView extends StatelessWidget {
                       style: TextStyle(
                         color:
                             controller.createGroupType == CreateGroupType.group
-                                ? theme.colorScheme.onPrimary
-                                : theme.colorScheme.onSurface,
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.secondary,
                       ),
                     ),
                   ),
@@ -60,8 +62,8 @@ class NewGroupView extends StatelessWidget {
                       style: TextStyle(
                         color:
                             controller.createGroupType == CreateGroupType.space
-                                ? theme.colorScheme.onPrimary
-                                : theme.colorScheme.onSurface,
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.secondary,
                       ),
                     ),
                   ),
@@ -76,7 +78,10 @@ class NewGroupView extends StatelessWidget {
                 radius: Avatar.defaultSize,
                 backgroundColor: theme.colorScheme.primary,
                 child: avatar == null
-                    ? const Icon(Icons.add_a_photo_outlined)
+                    ? Icon(
+                        Icons.add_a_photo_outlined,
+                        color: theme.colorScheme.tertiary,
+                      )
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(90),
                         child: Image.memory(
@@ -97,18 +102,50 @@ class NewGroupView extends StatelessWidget {
                 autocorrect: false,
                 readOnly: controller.loading,
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.people_outlined),
+                  fillColor: theme.colorScheme.tertiaryContainer,
+                  prefixIcon: Icon(
+                    Icons.people_outlined,
+                    color: theme.colorScheme.onSecondaryContainer,
+                  ),
                   labelText: controller.createGroupType == CreateGroupType.space
                       ? L10n.of(context).spaceName
                       : L10n.of(context).groupName,
+                  disabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: theme.colorScheme.surface, width: 2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: theme.colorScheme.surface,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: theme.colorScheme.surface,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: theme.colorScheme.surface,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                style: TextStyle(color: theme.colorScheme.onSecondary),
+                style: TextStyle(color: theme.colorScheme.tertiary),
               ),
             ),
             const SizedBox(height: 16),
             SwitchListTile.adaptive(
               contentPadding: const EdgeInsets.symmetric(horizontal: 32),
-              secondary: const Icon(Icons.public_outlined),
+              secondary: const Icon(
+                Icons.public_outlined,
+              ),
               title: Text(
                 controller.createGroupType == CreateGroupType.space
                     ? L10n.of(context).spaceIsPublic
@@ -124,8 +161,14 @@ class NewGroupView extends StatelessWidget {
                   ? SwitchListTile.adaptive(
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 32),
-                      secondary: const Icon(Icons.search_outlined),
-                      title: Text(L10n.of(context).groupCanBeFoundViaSearch),
+                      secondary: Icon(
+                        Icons.search_outlined,
+                        color: theme.colorScheme.tertiary,
+                      ),
+                      title: Text(
+                        L10n.of(context).groupCanBeFoundViaSearch,
+                        style: TextStyle(color: theme.colorScheme.tertiary),
+                      ),
                       value: controller.groupCanBeFound,
                       onChanged: controller.loading
                           ? null
@@ -143,12 +186,12 @@ class NewGroupView extends StatelessWidget {
                           const EdgeInsets.symmetric(horizontal: 32),
                       secondary: Icon(
                         Icons.lock_outlined,
-                        color: theme.colorScheme.onSurface,
+                        color: theme.colorScheme.tertiary,
                       ),
                       title: Text(
                         L10n.of(context).enableEncryption,
                         style: TextStyle(
-                          color: theme.colorScheme.onSurface,
+                          color: theme.colorScheme.tertiary,
                         ),
                       ),
                       value: !controller.publicGroup,
@@ -162,11 +205,17 @@ class NewGroupView extends StatelessWidget {
                   ? ListTile(
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 32),
-                      trailing: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Icon(Icons.info_outlined),
+                      trailing: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Icon(
+                          Icons.info_outlined,
+                          color: theme.colorScheme.tertiary,
+                        ),
                       ),
-                      subtitle: Text(L10n.of(context).newSpaceDescription),
+                      subtitle: Text(
+                        L10n.of(context).newSpaceDescription,
+                        style: TextStyle(color: theme.colorScheme.tertiary),
+                      ),
                     )
                   : const SizedBox.shrink(),
             ),
@@ -183,6 +232,7 @@ class NewGroupView extends StatelessWidget {
                           controller.createGroupType == CreateGroupType.space
                               ? L10n.of(context).createNewSpace
                               : L10n.of(context).createGroupAndInviteUsers,
+                          style: TextStyle(color: theme.colorScheme.tertiary),
                         ),
                 ),
               ),

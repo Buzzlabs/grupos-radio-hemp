@@ -19,12 +19,13 @@ class ChatAppBarTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final room = controller.room;
     if (controller.selectedEvents.isNotEmpty) {
       return Text(
         controller.selectedEvents.length.toString(),
         style: TextStyle(
-          color: Theme.of(context).colorScheme.onTertiaryContainer,
+          color: Theme.of(context).colorScheme.tertiary,
         ),
       );
     }
@@ -58,7 +59,9 @@ class ChatAppBarTitle extends StatelessWidget {
                   room.getLocalizedDisplayname(MatrixLocals(L10n.of(context))),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.fredoka(
+                  style: TextStyle(
+                    fontFamily: 'GothamRndSSm',
+                    color: theme.colorScheme.primary,
                     fontSize: 18,
                   ),
                 ),

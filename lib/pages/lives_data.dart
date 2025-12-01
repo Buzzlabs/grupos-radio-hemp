@@ -40,7 +40,7 @@ Future<LiveShow?> fetchLiveById(String id) async {
       category: map['isLive'] == true ? 'Ao vivo' : 'Gravação',
       date: map['recordedRelativeTime'] ?? '',
       startedAt: map['recordingStartedAt'] ?? '',
-      thumbnailUrl: map['latestThumbnail'] ?? '',
+      thumbnailUrl: 'assets/thumb_exemplo.png', // map['latestThumbnail'] ?? '',
       avatarUrl: map['avatarUrl'] ?? 'assets/logo_single_comfundo.png',
       videoUrl: map['masterPlaylistUrl'] ?? '',
       isLive: map['isLive'] ?? false,

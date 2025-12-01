@@ -321,7 +321,7 @@ class RegisterController extends State<Register> {
       return;
     }
 
-    bool emailConfirmed = await _confirmEmail(
+    var emailConfirmed = await _confirmEmail(
       context,
       client,
       username,
@@ -475,7 +475,7 @@ class SidAuth extends AuthenticationData {
   final String clientSecret;
 
   SidAuth(
-      {required String session, required this.sid, required this.clientSecret})
+      {required String session, required this.sid, required this.clientSecret,})
       : super(
           type: 'm.login.email.identity',
           session: session,

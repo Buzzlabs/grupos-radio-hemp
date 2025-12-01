@@ -30,10 +30,12 @@ class ChatDetailsView extends StatelessWidget {
     if (room == null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(L10n.of(context).oopsSomethingWentWrong),
+          title: Text(L10n.of(context).oopsSomethingWentWrong,
+              style: TextStyle(color: theme.colorScheme.onSecondaryContainer),),
         ),
         body: Center(
-          child: Text(L10n.of(context).youAreNoLongerParticipatingInThisChat),
+          child: Text(L10n.of(context).youAreNoLongerParticipatingInThisChat,
+              style: TextStyle(color: theme.colorScheme.onSecondaryContainer),),
         ),
       );
     }
@@ -58,13 +60,14 @@ class ChatDetailsView extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             leading: controller.widget.embeddedCloseButton ??
-                const Center(child: BackButton()),
+                Center(child: BackButton(color: theme.colorScheme.tertiary)),
             elevation: theme.appBarTheme.elevation,
             actions: <Widget>[
               if (room.canonicalAlias.isNotEmpty)
                 IconButton(
                   tooltip: L10n.of(context).share,
-                  icon: const Icon(Icons.qr_code_rounded),
+                  icon: Icon(Icons.qr_code_rounded,
+                      color: theme.colorScheme.tertiary,),
                   onPressed: () => showQrCodeViewer(
                     context,
                     room.canonicalAlias,
@@ -73,7 +76,8 @@ class ChatDetailsView extends StatelessWidget {
               else if (directChatMatrixID != null)
                 IconButton(
                   tooltip: L10n.of(context).share,
-                  icon: const Icon(Icons.qr_code_rounded),
+                  icon: Icon(Icons.qr_code_rounded,
+                      color: theme.colorScheme.tertiary,),
                   onPressed: () => showQrCodeViewer(
                     context,
                     directChatMatrixID,
@@ -82,7 +86,8 @@ class ChatDetailsView extends StatelessWidget {
               if (controller.widget.embeddedCloseButton == null)
                 ChatSettingsPopupMenu(room, false),
             ],
-            title: Text(L10n.of(context).chatDetails),
+            title: Text(L10n.of(context).chatDetails,
+                style: TextStyle(color: theme.colorScheme.tertiary),),
             backgroundColor: theme.appBarTheme.backgroundColor,
           ),
           body: MaxWidthBody(
@@ -128,7 +133,7 @@ class ChatDetailsView extends StatelessWidget {
                                       right: 0,
                                       child: FloatingActionButton.small(
                                         backgroundColor:
-                                            theme.colorScheme.secondary,
+                                            theme.colorScheme.primary,
                                         onPressed: controller.setAvatarAction,
                                         heroTag: null,
                                         child: Icon(
@@ -166,11 +171,12 @@ class ChatDetailsView extends StatelessWidget {
                                               ? Icons.edit_outlined
                                               : Icons.copy_outlined,
                                       size: 16,
+                                      color: theme.colorScheme.primary,
                                     ),
                                     style: TextButton.styleFrom(
                                       foregroundColor:
-                                          theme.colorScheme.onSurface,
-                                      iconColor: theme.colorScheme.onSurface,
+                                          theme.colorScheme.tertiary,
+                                      iconColor: theme.colorScheme.tertiary,
                                     ),
                                     label: Text(
                                       room.isDirectChat
@@ -180,6 +186,7 @@ class ChatDetailsView extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 18,
+                                        fontFamily: 'GothamRndSSm',
                                         color: theme.colorScheme.primary,
                                       ),
                                     ),
@@ -193,11 +200,11 @@ class ChatDetailsView extends StatelessWidget {
                                     icon: Icon(
                                       Icons.group_outlined,
                                       size: 14,
-                                      color: theme.colorScheme.onSurface,
+                                      color: theme.colorScheme.tertiary,
                                     ),
                                     style: TextButton.styleFrom(
                                       foregroundColor:
-                                          theme.colorScheme.secondary,
+                                          theme.colorScheme.tertiary,
                                       iconColor: theme.colorScheme.secondary,
                                     ),
                                     label: Text(
@@ -205,7 +212,7 @@ class ChatDetailsView extends StatelessWidget {
                                         actualMembersCount,
                                       ),
                                       style: TextStyle(
-                                        color: theme.colorScheme.onSurface,
+                                        color: theme.colorScheme.tertiary,
                                       ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -223,7 +230,7 @@ class ChatDetailsView extends StatelessWidget {
                             title: Text(
                               L10n.of(context).chatDescription,
                               style: TextStyle(
-                                color: theme.colorScheme.secondary,
+                                color: theme.colorScheme.primary,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -233,12 +240,18 @@ class ChatDetailsView extends StatelessWidget {
                             padding: const EdgeInsets.all(16.0),
                             child: TextButton.icon(
                               onPressed: controller.setTopicAction,
-                              label: Text(L10n.of(context).setChatDescription),
-                              icon: const Icon(Icons.edit_outlined),
+                              label: Text(L10n.of(context).setChatDescription,
+                                  style: TextStyle(
+                                    color: theme.colorScheme.tertiary,
+                                  ),),
+                              icon: Icon(
+                                Icons.edit_outlined,
+                                color: theme.colorScheme.tertiary,
+                              ),
                               style: TextButton.styleFrom(
-                                iconColor: theme.colorScheme.onPrimary,
+                                iconColor: theme.colorScheme.tertiary,
                                 backgroundColor: theme.colorScheme.primary,
-                                foregroundColor: theme.colorScheme.onPrimary,
+                                foregroundColor: theme.colorScheme.tertiary,
                               ),
                             ),
                           ),
@@ -262,8 +275,8 @@ class ChatDetailsView extends StatelessWidget {
                               fontStyle: room.topic.isEmpty
                                   ? FontStyle.italic
                                   : FontStyle.normal,
-                              color: theme.colorScheme.onSurface,
-                              decorationColor: theme.colorScheme.onSurface,
+                              color: theme.colorScheme.onSecondaryContainer,
+                              decorationColor: theme.colorScheme.tertiary,
                             ),
                             onOpen: (url) =>
                                 UrlLauncher(context, url.url).launchUrl(),
@@ -281,15 +294,20 @@ class ChatDetailsView extends StatelessWidget {
                                 color: theme.colorScheme.primary,
                               ),
                             ),
-                            title: Text(
-                              L10n.of(context).extensions,
-                            ),
-                            subtitle: Text(
-                              L10n.of(context).externalResourcesForRooms,
-                            ),
+                            title: Text(L10n.of(context).extensions,
+                                style: TextStyle(
+                                  fontFamily: 'GothamRndSSm',
+                                  color: theme.colorScheme.tertiary,
+                                ),),
+                            subtitle:
+                                Text(L10n.of(context).externalResourcesForRooms,
+                                    style: TextStyle(
+                                      color: theme.colorScheme.tertiary,
+                                    ),),
                             onTap: () => context
                                 .push('/rooms/${room.id}/details/extensions'),
-                            trailing: const Icon(Icons.chevron_right_outlined),
+                            trailing: Icon(Icons.chevron_right_outlined,
+                                color: theme.colorScheme.tertiary,),
                           ),
                         ListTile(
                           leading: CircleAvatar(
@@ -300,10 +318,18 @@ class ChatDetailsView extends StatelessWidget {
                               color: theme.colorScheme.primary,
                             ),
                           ),
-                          title: Text(L10n.of(context).customEmojisAndStickers),
-                          subtitle: Text(L10n.of(context).setCustomEmotes),
+                          title: Text(L10n.of(context).customEmojisAndStickers,
+                              style: TextStyle(
+                                fontFamily: 'GothamRndSSm',
+                                color: theme.colorScheme.tertiary,
+                              ),),
+                          subtitle: Text(L10n.of(context).setCustomEmotes,
+                              style: TextStyle(
+                                color: theme.colorScheme.tertiary,
+                              ),),
                           onTap: controller.goToEmoteSettings,
-                          trailing: const Icon(Icons.chevron_right_outlined),
+                          trailing: Icon(Icons.chevron_right_outlined,
+                              color: theme.colorScheme.tertiary,),
                         ),
                         if (!room.isDirectChat)
                           ListTile(
@@ -315,22 +341,35 @@ class ChatDetailsView extends StatelessWidget {
                                 color: theme.colorScheme.primary,
                               ),
                             ),
-                            title: Text(
-                              L10n.of(context).accessAndVisibility,
-                            ),
+                            title: Text(L10n.of(context).accessAndVisibility,
+                                style: TextStyle(
+                                  fontFamily: 'GothamRndSSm',
+                                  color: theme.colorScheme.tertiary,
+                                ),),
                             subtitle: Text(
-                              L10n.of(context).accessAndVisibilityDescription,
-                            ),
+                                L10n.of(context).accessAndVisibilityDescription,
+                                style: TextStyle(
+                                  color: theme.colorScheme.tertiary,
+                                ),),
                             onTap: () => context
                                 .push('/rooms/${room.id}/details/access'),
-                            trailing: const Icon(Icons.chevron_right_outlined),
+                            trailing: Icon(
+                              Icons.chevron_right_outlined,
+                              color: theme.colorScheme.tertiary,
+                            ),
                           ),
                         if (!room.isDirectChat)
                           ListTile(
-                            title: Text(L10n.of(context).chatPermissions),
-                            subtitle: Text(
-                              L10n.of(context).whoCanPerformWhichAction,
-                            ),
+                            title: Text(L10n.of(context).chatPermissions,
+                                style: TextStyle(
+                                  fontFamily: 'GothamRndSSm',
+                                  color: theme.colorScheme.tertiary,
+                                ),),
+                            subtitle:
+                                Text(L10n.of(context).whoCanPerformWhichAction,
+                                    style: TextStyle(
+                                      color: theme.colorScheme.tertiary,
+                                    ),),
                             leading: CircleAvatar(
                               backgroundColor: theme.scaffoldBackgroundColor,
                               foregroundColor: iconColor,
@@ -339,7 +378,10 @@ class ChatDetailsView extends StatelessWidget {
                                 color: theme.colorScheme.primary,
                               ),
                             ),
-                            trailing: const Icon(Icons.chevron_right_outlined),
+                            trailing: Icon(
+                              Icons.chevron_right_outlined,
+                              color: theme.colorScheme.tertiary,
+                            ),
                             onTap: () => context
                                 .push('/rooms/${room.id}/details/permissions'),
                           ),
@@ -350,6 +392,7 @@ class ChatDetailsView extends StatelessWidget {
                               actualMembersCount,
                             ),
                             style: TextStyle(
+                              fontFamily: 'GothamRndSSm',
                               color: theme.colorScheme.primary,
                               fontWeight: FontWeight.bold,
                             ),
@@ -357,14 +400,20 @@ class ChatDetailsView extends StatelessWidget {
                         ),
                         if (!room.isDirectChat && room.canInvite)
                           ListTile(
-                            title: Text(L10n.of(context).inviteContact),
+                            title: Text(L10n.of(context).inviteContact,
+                                style: TextStyle(
+                                  color: theme.colorScheme.tertiary,
+                                ),),
                             leading: CircleAvatar(
                               backgroundColor: theme.colorScheme.secondary,
-                              foregroundColor: theme.colorScheme.onSecondary,
+                              foregroundColor: theme.colorScheme.tertiary,
                               radius: Avatar.defaultSize / 2,
                               child: const Icon(Icons.add_outlined),
                             ),
-                            trailing: const Icon(Icons.chevron_right_outlined),
+                            trailing: Icon(
+                              Icons.chevron_right_outlined,
+                              color: theme.colorScheme.tertiary,
+                            ),
                             onTap: () => context.go('/rooms/${room.id}/invite'),
                           ),
                       ],
@@ -387,7 +436,10 @@ class ChatDetailsView extends StatelessWidget {
                           onTap: () => context.push(
                             '/rooms/${controller.roomId!}/details/members',
                           ),
-                          trailing: const Icon(Icons.chevron_right_outlined),
+                          trailing: Icon(
+                            Icons.chevron_right_outlined,
+                            color: theme.colorScheme.tertiary,
+                          ),
                         ),
             ),
           ),

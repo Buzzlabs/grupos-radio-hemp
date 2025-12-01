@@ -178,7 +178,7 @@ class AudioPlayerState extends State<AudioPlayerWidget> {
       Logs().v('Could not download audio file', e, s);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(e.toLocalizedString(context)),
+          content: Text(e.toLocalizedString(context), style: TextStyle(color: Theme.of(context).colorScheme.error),),
         ),
       );
       rethrow;

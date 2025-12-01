@@ -34,7 +34,7 @@ class PinnedMessageWidget extends StatelessWidget {
                 child: Text(
                   "Assista às lives anteriores e veja a programação da Rádio Hemp",
                   style: TextStyle(
-                    color: theme.colorScheme.onSurface,
+                    color: theme.colorScheme.tertiary,
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
                   ),
@@ -55,7 +55,7 @@ class PinnedMessageWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 backgroundColor:
-                    theme.colorScheme.primary.withValues(alpha: 0.2),
+                    theme.colorScheme.primary.withValues(alpha: 0.6),
                 foregroundColor: theme.colorScheme.onSurface,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -64,7 +64,7 @@ class PinnedMessageWidget extends StatelessWidget {
               child: Text(
                 'Assistir 🎬',
                 style: TextStyle(
-                  color: theme.colorScheme.onSecondary,
+                  color: theme.colorScheme.tertiary,
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                 ),

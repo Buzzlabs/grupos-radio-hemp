@@ -19,8 +19,14 @@ class ChatPermissionsSettingsView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: const Center(child: BackButton()),
-        title: Text(L10n.of(context).chatPermissions),
+        leading: Center(
+            child: BackButton(
+          color: theme.colorScheme.tertiary,
+        ),),
+        title: Text(
+          L10n.of(context).chatPermissions,
+          style: TextStyle(color: theme.colorScheme.tertiary),
+        ),
       ),
       body: MaxWidthBody(
         child: StreamBuilder(
@@ -31,7 +37,13 @@ class ChatPermissionsSettingsView extends StatelessWidget {
                 ? null
                 : Matrix.of(context).client.getRoomById(roomId);
             if (room == null) {
-              return Center(child: Text(L10n.of(context).noRoomsFound));
+              return Center(
+                child: Text(
+                  L10n.of(context).noRoomsFound,
+                  style:
+                      TextStyle(color: theme.colorScheme.onSecondaryContainer),
+                ),
+              );
             }
             final powerLevelsContent = Map<String, Object?>.from(
               room.getState(EventTypes.RoomPowerLevels)?.content ?? {},
@@ -44,12 +56,17 @@ class ChatPermissionsSettingsView extends StatelessWidget {
             return Column(
               children: [
                 ListTile(
-                  leading: const Icon(Icons.info_outlined),
+                  leading: Icon(
+                    Icons.info_outlined,
+                    color: theme.colorScheme.onSecondaryContainer,
+                  ),
                   subtitle: Text(
                     L10n.of(context).chatPermissionsDescription,
+                    style: TextStyle(
+                        color: theme.colorScheme.onSecondaryContainer,),
                   ),
                 ),
-                Divider(color: theme.dividerColor),
+                Divider(color: theme.colorScheme.primary),
                 ListTile(
                   title: Text(
                     L10n.of(context).chatPermissions,
@@ -74,7 +91,7 @@ class ChatPermissionsSettingsView extends StatelessWidget {
                         ),
                         canEdit: room.canChangePowerLevel,
                       ),
-                    Divider(color: theme.dividerColor),
+                    Divider(color: theme.colorScheme.primary),
                     ListTile(
                       title: Text(
                         L10n.of(context).notifications,

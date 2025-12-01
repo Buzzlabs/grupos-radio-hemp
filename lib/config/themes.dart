@@ -46,71 +46,81 @@ abstract class FluffyThemes {
   ]) {
     const colorScheme = ColorScheme(
       brightness: Brightness.dark,
-      primary: Color(0xFFE3ED55),
-      onPrimary: Color(0xFF212529),
-      primaryFixed: Color(0xFFE0E444),
-      primaryContainer: Color(0xFF82893F),
-      onPrimaryContainer: Color(0xFF212529),
-      secondary: Color(0xFFEE7F4B),
-      onSecondary: Color(0xFFFFFFFF),
-      secondaryContainer: Color(0xFFEE7F4B),
+      primary: Color(0xFF3EC2CF), // N MEXE
+      onPrimary: Color(0xFF4F4F4F),
+      primaryFixed: Color.fromARGB(0, 255, 255, 255), // N MEXE
+      primaryContainer: Color(0xFFadadad), // N MEXE
+      onPrimaryContainer: Color(0xFF212529), //N MEXE
+      secondary: Color(0xFF8B89AD), // N MEXE
+      onSecondary: Color(0xCCF7F7F7), // N MEXE
+      secondaryContainer: Color(0xFF8B89AD),
       onSecondaryContainer: Color(0xFFADB5BD),
-      tertiary: Color(0xFF3D3D3D),
-      onTertiary: Color.fromARGB(255, 82, 82, 82),
+      tertiary: Color(0xFFF7F7F7), // N MEXE
+      onTertiary: Color(0xFF4F4F4F),
       tertiaryContainer: Color(0xFF3D3D3D),
-      onTertiaryContainer: Color(0xFFADB5BD),
-      surface: Color(0xFF212529),
-      onSurface: Color(0xFFADB5BD),
-      surfaceContainerLow: Color.fromARGB(255, 27, 29, 29),
-      surfaceContainer: Color(0xFF212529),
-      surfaceContainerHighest: Color.fromARGB(255, 59, 63, 66),
-      error: Color.fromARGB(255, 243, 117, 117),
+      onTertiaryContainer: Color(0xFF646464), // N MEXE
+      surface: Color(0xFF4F4F4F), // N MEXE
+      onSurface: Color(0xFF646464), // N MEXE
+      surfaceContainerLow: Color(0xFF3EC2CF), // N MEXE
+      surfaceContainer: Color(0xFFF7F7F7), // N MEXE
+      surfaceContainerHighest: Color(0xFF8B89AD), // N MEXE
+      surfaceContainerHigh: Color(0xFF4F4F4F), // N MEXE
+      error: Color.fromARGB(255, 243, 117, 117), // N MEXE
       onError: Color.fromARGB(255, 243, 117, 117),
       errorContainer: Color.fromARGB(255, 243, 117, 117),
       onErrorContainer: Color(0xFF000000),
-      surfaceTint: Color(0xFFE3ED55),
-      outline: Color(0xFFE3ED55),
+      surfaceTint: Color(0xFF3EC2CF),
+      outline: Color(0xFF3EC2CF),
     );
 
     final isColumnMode = FluffyThemes.isColumnMode(context);
     return ThemeData(
-      textTheme: GoogleFonts.fredokaTextTheme(
-        Theme.of(context).textTheme.copyWith(
-              bodyMedium: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.normal,
-                color: colorScheme.onSurface,
-              ),
-              bodySmall: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                color: colorScheme.onSurface,
-              ),
-              headlineSmall: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
-              ),
-              titleLarge: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
-              ),
-              titleSmall: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
-              ),
+      textTheme: Theme.of(context).textTheme.copyWith(
+            bodyMedium: TextStyle(
+              fontFamily: 'Roboto',
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: colorScheme.tertiary,
             ),
-      ),
+            bodySmall: TextStyle(
+              fontFamily: 'Roboto',
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              color: colorScheme.tertiary,
+            ),
+            headlineSmall: TextStyle(
+              fontFamily: 'GothamRndSSm',
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: colorScheme.tertiary,
+            ),
+            titleLarge: TextStyle(
+              fontFamily: 'GothamRndSSm',
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              color: colorScheme.tertiary,
+            ),
+            titleSmall: TextStyle(
+              fontFamily: 'GothamRndSSm',
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: colorScheme.tertiary,
+            ),
+            labelSmall: TextStyle(
+              fontFamily: 'Roboto',
+              fontSize: 10,
+              fontWeight: FontWeight.w400,
+              color: colorScheme.onSecondaryContainer,
+            ),
+          ),
       splashColor: colorScheme.primary.withValues(alpha: 0.1),
       visualDensity: VisualDensity.standard,
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: colorScheme,
-      dividerColor: colorScheme.tertiary,
+      dividerColor: colorScheme.onSecondaryContainer,
       popupMenuTheme: PopupMenuThemeData(
-        color: colorScheme.surfaceContainerLow,
+        color: colorScheme.surface,
         iconColor: colorScheme.onSurface,
         textStyle: TextStyle(color: colorScheme.onSurface),
         shape: RoundedRectangleBorder(
@@ -136,11 +146,11 @@ abstract class FluffyThemes {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius),
-          borderSide: BorderSide(color: colorScheme.onSurface, width: 0.3),
+          borderSide: BorderSide(color: colorScheme.surface, width: 0.3),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius),
-          borderSide: BorderSide(color: colorScheme.secondary),
+          borderSide: BorderSide(color: colorScheme.surface),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius),
@@ -148,26 +158,26 @@ abstract class FluffyThemes {
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppConfig.inputBorderRadius),
-          borderSide: BorderSide(color: colorScheme.secondary),
+          borderSide: BorderSide(color: colorScheme.surface),
         ),
         labelStyle: TextStyle(
-          fontFamily: 'Roboto',
+          fontFamily: 'GothamRndSSm',
           fontSize: 16,
-          fontWeight: FontWeight.normal,
-          color: colorScheme.onSurface,
+          fontWeight: FontWeight.w400,
+          color: colorScheme.onSecondaryContainer,
         ),
-        prefixIconColor: colorScheme.onSurface,
+        prefixIconColor: colorScheme.onSecondaryContainer,
       ),
       chipTheme: ChipThemeData(
         showCheckmark: false,
-        backgroundColor: colorScheme.tertiary,
-        selectedColor: colorScheme.primary.withValues(alpha: 0.2),
+        backgroundColor: colorScheme.primary.withValues(alpha: 0.2),
+        selectedColor: colorScheme.primary.withValues(alpha: 0.6),
         side: BorderSide.none,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppConfig.borderRadius),
         ),
         labelStyle: TextStyle(
-          color: colorScheme.onSecondary,
+          color: colorScheme.tertiary,
         ),
       ),
       appBarTheme: AppBarTheme(
@@ -182,16 +192,19 @@ abstract class FluffyThemes {
           systemNavigationBarIconBrightness: brightness.reversed,
           systemNavigationBarColor: colorScheme.surface,
         ),
-        foregroundColor: colorScheme.onSurface,
+        foregroundColor: colorScheme.tertiary,
+        iconTheme: IconThemeData(
+          color: colorScheme.tertiary, // escolha a cor que quiser
+        ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           side: BorderSide(
             width: 1,
-            color: colorScheme.secondary,
+            color: colorScheme.surface,
           ),
           shape: RoundedRectangleBorder(
-            side: BorderSide(color: colorScheme.secondary),
+            side: BorderSide(color: colorScheme.surface),
             borderRadius: BorderRadius.circular(AppConfig.borderRadius / 2),
           ),
         ),
@@ -214,12 +227,17 @@ abstract class FluffyThemes {
           ),
         ),
       ),
+      listTileTheme: ListTileThemeData(
+        textColor: colorScheme.primary.withOpacity(0.6),
+        iconColor: colorScheme.primary.withOpacity(0.6),
+        selectedColor: colorScheme.primary,
+      ),
       dialogTheme: DialogThemeData(
         backgroundColor: colorScheme.surface,
         titleTextStyle:
-            GoogleFonts.righteous(color: colorScheme.primary, fontSize: 18),
+            TextStyle(fontFamily: 'GothamRndSSm', color: colorScheme.primary, fontSize: 18, fontWeight: FontWeight.w400),
         contentTextStyle: TextStyle(
-          color: colorScheme.onSurface,
+          color: colorScheme.onSecondaryContainer,
           decorationColor: colorScheme.onSurface,
         ),
       ),
@@ -234,8 +252,8 @@ extension on Brightness {
 
 extension BubbleColorTheme on ThemeData {
   Color get bubbleColor => brightness == Brightness.light
-      ? colorScheme.primary
-      : colorScheme.primary.withValues(alpha: 0.1);
+      ? colorScheme.secondary
+      : colorScheme.secondary.withValues(alpha: 1);
 
   Color get onBubbleColor => colorScheme.onSecondary;
 

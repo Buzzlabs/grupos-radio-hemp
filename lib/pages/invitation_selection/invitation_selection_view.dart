@@ -16,26 +16,36 @@ class InvitationSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final room =
         Matrix.of(context).client.getRoomById(controller.widget.roomId);
     if (room == null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(L10n.of(context).oopsSomethingWentWrong),
+          title: Text(
+            L10n.of(context).oopsSomethingWentWrong,
+            style: TextStyle(color: theme.colorScheme.onSecondaryContainer),
+          ),
         ),
         body: Center(
-          child: Text(L10n.of(context).youAreNoLongerParticipatingInThisChat),
+          child: Text(L10n.of(context).youAreNoLongerParticipatingInThisChat,
+              style: TextStyle(color: theme.colorScheme.onSecondaryContainer),),
         ),
       );
     }
 
     final groupName = room.name.isEmpty ? L10n.of(context).group : room.name;
-    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        leading: const Center(child: BackButton()),
+        leading: Center(
+            child: BackButton(
+          color: theme.colorScheme.tertiary,
+        ),),
         titleSpacing: 0,
-        title: Text(L10n.of(context).inviteContact),
+        title: Text(
+          L10n.of(context).inviteContact,
+          style: TextStyle(color: theme.colorScheme.tertiary),
+        ),
       ),
       body: MaxWidthBody(
         innerPadding: const EdgeInsets.symmetric(vertical: 8),
@@ -46,15 +56,35 @@ class InvitationSelectionView extends StatelessWidget {
               child: TextField(
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
+                  fillColor: theme.colorScheme.tertiaryContainer,
+                  disabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: theme.colorScheme.surface, width: 2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: theme.colorScheme.secondary,
+                      color: theme.colorScheme.surface,
                       width: 2,
                     ),
-                    borderRadius: BorderRadius.circular(99),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: theme.colorScheme.surface,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: theme.colorScheme.surface,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   hintStyle: TextStyle(
-                    color: theme.colorScheme.onSurface,
+                    color: theme.colorScheme.onSecondaryContainer,
                     fontWeight: FontWeight.normal,
                   ),
                   hintText: L10n.of(context).inviteContactToGroup(groupName),
@@ -71,9 +101,12 @@ class InvitationSelectionView extends StatelessWidget {
                             ),
                           ),
                         )
-                      : const Icon(Icons.search_outlined),
+                      : Icon(
+                          Icons.search_outlined,
+                          color: theme.colorScheme.onSecondaryContainer,
+                        ),
                 ),
-                style: TextStyle(color: theme.colorScheme.onSecondary),
+                style: TextStyle(color: theme.colorScheme.tertiary),
                 onChanged: controller.searchUserWithCoolDown,
               ),
             ),
@@ -171,6 +204,7 @@ class _InviteContactListTile extends StatelessWidget {
         mxContent: profile.avatarUrl,
         name: profile.displayName,
         presenceUserId: profile.userId,
+        presenceBackgroundColor: Colors.transparent,
         onTap: () => UserDialog.show(
           context: context,
           profile: profile,
@@ -180,19 +214,26 @@ class _InviteContactListTile extends StatelessWidget {
         profile.displayName ?? profile.userId.localpart ?? l10n.user,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
+        style: TextStyle(color: theme.colorScheme.primary),
       ),
       subtitle: Text(
         profile.userId,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: theme.colorScheme.secondary,
+          color: theme.colorScheme.tertiary,
         ),
       ),
       trailing: TextButton.icon(
         onPressed: isMember ? null : onTap,
-        label: Text(isMember ? l10n.participant : l10n.invite),
-        icon: Icon(isMember ? Icons.check : Icons.add),
+        label: Text(
+          isMember ? l10n.participant : l10n.invite,
+          style: TextStyle(color: theme.colorScheme.tertiary),
+        ),
+        icon: Icon(
+          isMember ? Icons.check : Icons.add,
+          color: theme.colorScheme.tertiary,
+        ),
       ),
     );
   }

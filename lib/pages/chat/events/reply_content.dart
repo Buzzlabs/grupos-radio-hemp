@@ -32,10 +32,10 @@ class ReplyContent extends StatelessWidget {
         timeline != null ? replyEvent.getDisplayEvent(timeline) : replyEvent;
     final fontSize = AppConfig.messageFontSize * AppConfig.fontSizeFactor;
     final color = theme.brightness == Brightness.dark
-        ? theme.colorScheme.onTertiaryContainer
+        ? theme.colorScheme.onSecondaryContainer
         : ownMessage
-            ? theme.colorScheme.tertiaryContainer
-            : theme.colorScheme.tertiary;
+            ? theme.colorScheme.secondaryContainer
+            : theme.colorScheme.secondaryContainer;
 
     return Material(
       color: Colors.transparent,
@@ -83,10 +83,10 @@ class ReplyContent extends StatelessWidget {
                   maxLines: 1,
                   style: TextStyle(
                     color: theme.brightness == Brightness.dark
-                        ? theme.colorScheme.onSurface
+                        ? theme.colorScheme.onSecondary
                         : ownMessage
                             ? theme.colorScheme.onSecondary
-                            : theme.colorScheme.onSurface,
+                            : theme.colorScheme.onSecondary,
                     fontSize: fontSize,
                   ),
                 ),

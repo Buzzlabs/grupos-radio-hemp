@@ -29,6 +29,9 @@ class ChatEmojiPicker extends StatelessWidget {
               child: Column(
                 children: [
                   TabBar(
+                    indicatorColor: theme.colorScheme.primary, 
+                    labelColor: theme.colorScheme.primary, 
+                    unselectedLabelColor: theme.colorScheme.primary.withAlpha(128),
                     tabs: [
                       Tab(text: L10n.of(context).emojis),
                       Tab(text: L10n.of(context).stickers),
@@ -102,7 +105,7 @@ class NoRecent extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Text(
           L10n.of(context).emoteKeyboardNoRecents,
-          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+          style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
           textAlign: TextAlign.center,
         ),
       ),

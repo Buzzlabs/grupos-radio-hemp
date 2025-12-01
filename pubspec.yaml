@@ -119,6 +119,27 @@ flutter_native_splash:
 flutter:
   generate: true
   uses-material-design: true
+  fonts:
+    - family: GothamRndSSm
+      fonts:
+        - asset: assets/fonts/Gotham/GothamRndSSm-Bold.otf
+          weight: 700
+        - asset: assets/fonts/Gotham/GothamRndSSm-Book.otf
+          weight: 400
+        - asset: assets/fonts/Gotham/GothamRndSSm-Medium.otf
+          weight: 500
+
+    - family: SentinelSSm
+      fonts:
+        - asset: assets/fonts/Sentinel/SentinelSSm-Bold.otf
+          weight: 700
+        - asset: assets/fonts/Sentinel/SentinelSSm-Book.otf
+          weight: 400
+        - asset: assets/fonts/Sentinel/SentinelSSm-Medium.otf
+          weight: 500 
+        - asset: assets/fonts/Sentinel/SentinelSSm-Semibold.otf
+          weight: 600
+
   assets:
     - assets/
     - assets/sounds/

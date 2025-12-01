@@ -13,11 +13,13 @@ class DevicesSettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: !FluffyThemes.isColumnMode(context),
         centerTitle: FluffyThemes.isColumnMode(context),
-        title: Text(L10n.of(context).devices),
+        title: Text(L10n.of(context).devices,
+         style: TextStyle(color: theme.colorScheme.primary),),
       ),
       body: MaxWidthBody(
         child: FutureBuilder<bool>(

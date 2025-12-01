@@ -118,7 +118,7 @@ class _VideoStreamingViewState extends State<VideoStreamingView> {
                               child: Icon(
                                 Icons.open_in_full,
                                 size: 15,
-                                color: theme.colorScheme.onSurface,
+                                color: theme.colorScheme.onSecondaryContainer,
                               ),
                             ),
                           ),
@@ -199,7 +199,10 @@ class _VideoStreamingViewState extends State<VideoStreamingView> {
   }
 
   Widget _buildAdminMenu(BuildContext context) {
+    final theme = Theme.of(context);
+
     return PopupMenuButton<String>(
+      iconColor: theme.colorScheme.onSecondaryContainer,
       onSelected: (value) {
         if (value == 'edit') widget.onEdit();
         if (value == 'remove') widget.onClose();
@@ -207,11 +210,13 @@ class _VideoStreamingViewState extends State<VideoStreamingView> {
       itemBuilder: (context) => [
         PopupMenuItem(
           value: 'edit',
-          child: Text(L10n.of(context).edit),
+          child: Text(L10n.of(context).edit,
+              style: TextStyle(color: theme.colorScheme.tertiary),),
         ),
         PopupMenuItem(
           value: 'remove',
-          child: Text(L10n.of(context).closeLive),
+          child: Text(L10n.of(context).closeLive,
+              style: TextStyle(color: theme.colorScheme.tertiary),),
         ),
       ],
     );

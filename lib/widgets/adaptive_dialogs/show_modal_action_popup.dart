@@ -18,6 +18,7 @@ Future<T?> showModalActionPopup<T>({
     case TargetPlatform.windows:
     case TargetPlatform.linux:
       return showModalBottomSheet(
+        backgroundColor: theme.colorScheme.surface,
         isScrollControlled: true,
         useRootNavigator: useRootNavigator,
         context: context,
@@ -35,7 +36,8 @@ Future<T?> showModalActionPopup<T>({
                     ? null
                     : Text(
                         title.toUpperCase(),
-                        style: GoogleFonts.righteous(
+                        style: TextStyle(
+                          fontFamily: 'GothamRndSSm',
                           fontSize: 20,
                           color: theme.colorScheme.primary,
                         ),
@@ -46,7 +48,7 @@ Future<T?> showModalActionPopup<T>({
                         message,
                         style: TextStyle(
                           fontSize: 15,
-                          color: theme.colorScheme.onSurface,
+                          color: theme.colorScheme.tertiary,
                         ),
                       ),
               ),
@@ -55,6 +57,7 @@ Future<T?> showModalActionPopup<T>({
             ...actions.map(
               (action) => ListTile(
                 leading: action.icon,
+                iconColor: action.isDestructive? theme.colorScheme.error : theme.colorScheme.tertiary,
                 title: Text(
                   action.label,
                   maxLines: 1,
@@ -64,7 +67,7 @@ Future<T?> showModalActionPopup<T>({
                           fontWeight:
                               action.isDefaultAction ? FontWeight.bold : null,
                         )
-                      : null,
+                      : TextStyle(color: theme.colorScheme.tertiary),
                 ),
                 onTap: () => Navigator.of(context).pop<T>(action.value),
               ),
@@ -72,6 +75,7 @@ Future<T?> showModalActionPopup<T>({
             if (cancelLabel != null) ...[
               const Divider(height: 1),
               ListTile(
+                textColor: theme.colorScheme.tertiary,
                 title: Text(cancelLabel),
                 onTap: () => Navigator.of(context).pop(null),
               ),

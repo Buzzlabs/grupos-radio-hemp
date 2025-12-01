@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:matrix/matrix.dart';
 import 'package:fluffychat/l10n/l10n.dart';
 import 'package:fluffychat/widgets/layouts/login_scaffold.dart';
-import 'package:fluffychat/widgets/matrix.dart';
 import 'register.dart';
 import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/gestures.dart';
@@ -30,31 +29,32 @@ class RegisterView extends StatelessWidget {
 
     final screenHeight = MediaQuery.of(context).size.height;
 
-    final mobileAppBarHeight = screenHeight * 0.13;
+    final mobileAppBarHeight = screenHeight * 0.15;
     final mobileAppBarTitlePaddingTop = mobileAppBarHeight - 18;
-    final mobileImagePadding = screenHeight * 0.1;
+    final mobileImagePadding = screenHeight * 0.03;
 
-    const desktopAppBarHeight = 75.0;
+    const desktopAppBarHeight = 80.0;
     const desktopAppBarTitlePaddingTop = 30.0;
-    const desktopImagePadding = 40.0;
+    const desktopImagePadding = 45.0;
 
     final toolBarHeight =
         isMobileMode ? mobileAppBarHeight : desktopAppBarHeight;
     final toolBarPadding = isMobileMode
         ? mobileAppBarTitlePaddingTop
         : desktopAppBarTitlePaddingTop;
-    final imagePadding =
-        isMobileMode ? mobileImagePadding : desktopImagePadding;
+    final imagePadding = mobileImagePadding;
+        // isMobileMode ? mobileImagePadding : desktopImagePadding;
 
     return LoginScaffold(
-      maxHeight: 680,
       appBar: AppBar(
         backgroundColor: isMobileMode
-            ? theme.colorScheme.surface
+            ? theme.colorScheme.tertiary
             : theme.colorScheme.tertiary,
         toolbarHeight: toolBarHeight,
         title: Padding(
-          padding: EdgeInsets.only(left: 16.0, top: toolBarPadding),
+          padding: const EdgeInsets.only(
+            left: 16.0,
+          ),
           child: Align(
             alignment: isMobileMode ? Alignment.topLeft : Alignment.centerLeft,
             child: Text(
@@ -68,12 +68,9 @@ class RegisterView extends StatelessWidget {
             ),
           ),
         ),
-        actions: [
+        actions: const [
           MoreLoginMenuButton(
-            padding: EdgeInsets.only(
-              right: 16.0,
-              top: toolBarPadding - 10,
-            ),
+            padding: EdgeInsets.only(right: 16.0),
           ),
         ],
       ),
@@ -82,16 +79,14 @@ class RegisterView extends StatelessWidget {
           return SingleChildScrollView(
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 32.0,
-                ),
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(bottom: imagePadding),
+                      padding: isMobileMode? EdgeInsets.only(bottom: imagePadding): EdgeInsets.symmetric(vertical: imagePadding),
                       child: FractionallySizedBox(
-                        widthFactor: isMobileMode ? 0.6 : 0.5,
+                        widthFactor: isMobileMode ? 0.8 : 0.7,
                         child: Image.asset(
                           'assets/logo_horizontal_semfundo.png',
                           fit: BoxFit.contain,
@@ -99,12 +94,14 @@ class RegisterView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+
+                    // EMAIL
+                    const SizedBox(height: 15),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextField(
                         style: TextStyle(
-                          color: theme.colorScheme.onSecondary,
+                          color: theme.colorScheme.onSurface,
                           fontFamily: 'Roboto',
                         ),
                         readOnly: controller.loading,
@@ -113,25 +110,48 @@ class RegisterView extends StatelessWidget {
                         focusNode: controller.emailFocusNode,
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.emailAddress,
-                        autofillHints:
-                            controller.loading ? null : [AutofillHints.email],
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.email_outlined),
-                          errorText: controller.emailError,
-                          errorStyle: TextStyle(
-                            color: theme.colorScheme.error,
-                            fontSize: 15,
+                          fillColor: theme.colorScheme.tertiary,
+                          disabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: theme.colorScheme.primary, width: 2),
+                            borderRadius: BorderRadius.circular(10),
                           ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          errorText: controller.emailError,
                           labelText: L10n.of(context).email,
                         ),
                       ),
                     ),
+
+                    // USERNAME
                     const SizedBox(height: 15),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextField(
                         style: TextStyle(
-                          color: theme.colorScheme.onSecondary,
+                          color: theme.colorScheme.onSurface,
                           fontFamily: 'Roboto',
                         ),
                         readOnly: controller.loading,
@@ -139,46 +159,86 @@ class RegisterView extends StatelessWidget {
                         controller: controller.usernameController,
                         focusNode: controller.usernameFocusNode,
                         textInputAction: TextInputAction.next,
-                        keyboardType: TextInputType.text,
-                        autofillHints: controller.loading
-                            ? null
-                            : [AutofillHints.username],
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.account_box_outlined),
-                          errorText: controller.usernameError,
-                          errorStyle: TextStyle(
-                            color: theme.colorScheme.error,
-                            fontSize: 15,
+                          fillColor: theme.colorScheme.tertiary,
+                          disabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: theme.colorScheme.primary, width: 2),
+                            borderRadius: BorderRadius.circular(10),
                           ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          errorText: controller.usernameError,
                           labelText: L10n.of(context).username,
                         ),
                       ),
                     ),
+
+                    // PASSWORD
                     const SizedBox(height: 15),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextField(
                         style: TextStyle(
-                          color: theme.colorScheme.onSecondary,
+                          color: theme.colorScheme.onSurface,
                           fontFamily: 'Roboto',
                         ),
                         readOnly: controller.loading,
-                        autocorrect: false,
                         controller: controller.passwordController,
                         focusNode: controller.passwordFocusNode,
                         textInputAction: TextInputAction.go,
                         obscureText: !controller.showPassword,
                         onSubmitted: (_) => controller.register(),
-                        autofillHints: controller.loading
-                            ? null
-                            : [AutofillHints.password],
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.lock_outlined),
-                          errorText: controller.passwordError,
-                          errorStyle: TextStyle(
-                            color: theme.colorScheme.error,
-                            fontSize: 15,
+                          fillColor: theme.colorScheme.tertiary,
+                          disabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: theme.colorScheme.primary, width: 2),
+                            borderRadius: BorderRadius.circular(10),
                           ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          errorText: controller.passwordError,
                           suffixIcon: IconButton(
                             onPressed: controller.toggleShowPassword,
                             icon: Icon(
@@ -192,44 +252,31 @@ class RegisterView extends StatelessWidget {
                         ),
                       ),
                     ),
+
+                    // IS ADULT
                     const SizedBox(height: 15),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
                         children: [
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: controller.isAdult,
-                                activeColor: theme.colorScheme.secondary,
-                                checkColor: theme.colorScheme.onSecondary,
-                                onChanged: controller.toggleIsAdult,
-                              ),
-                              Text(
-                                L10n.of(context).isAdult,
-                                style: TextStyle(
-                                  color: theme.colorScheme.onSecondary,
-                                  fontFamily: 'Roboto',
-                                ),
-                              ),
-                            ],
+                          Checkbox(
+                            value: controller.isAdult,
+                            activeColor: theme.colorScheme.secondary,
+                            checkColor: theme.colorScheme.tertiary,
+                            onChanged: controller.toggleIsAdult,
                           ),
-                          if (controller.isAdultError != null)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 18, top: 4.0),
-                              child: Text(
-                                controller.isAdultError!,
-                                style: TextStyle(
-                                  color: theme.colorScheme.error,
-                                  fontSize: 15,
-                                ),
-                              ),
+                          Text(
+                            L10n.of(context).isAdult,
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              color: theme.colorScheme.onSurface,
                             ),
+                          ),
                         ],
                       ),
                     ),
+
+                    // REGISTER BUTTON
                     const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -254,43 +301,35 @@ class RegisterView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (controller.genericError != null)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12),
-                        child: Text(
-                          controller.genericError!,
-                          style: TextStyle(color: theme.colorScheme.secondary),
-                        ),
-                      ),
+
+                    // GO BACK TO LOGIN
                     const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: '${L10n.of(context).alreadyHaveAccount} ',
-                                style: GoogleFonts.fredoka(
-                                  color: theme.colorScheme.onSurface,
-                                  fontSize: 18,
-                                ),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text:
+                                  '${L10n.of(context).alreadyHaveAccount} ',
+                              style: GoogleFonts.fredoka(
+                                color: theme.colorScheme.onSurface,
+                                fontSize: 18,
                               ),
-                              TextSpan(
-                                text: L10n.of(context).login,
-                                style: GoogleFonts.fredoka(
-                                  color: theme.colorScheme.primary,
-                                  fontSize: 18,
-                                  decoration: TextDecoration.underline,
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    context.go('/login', extra: client);
-                                  },
+                            ),
+                            TextSpan(
+                              text: L10n.of(context).login,
+                              style: GoogleFonts.fredoka(
+                                color: theme.colorScheme.primary,
+                                fontSize: 18,
+                                decoration: TextDecoration.underline,
                               ),
-                            ],
-                          ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  context.go('/login', extra: client);
+                                },
+                            ),
+                          ],
                         ),
                       ),
                     ),

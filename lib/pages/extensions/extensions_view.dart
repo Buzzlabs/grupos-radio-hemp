@@ -16,8 +16,9 @@ class ExtensionsView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: const Center(child: BackButton()),
-        title: Text(L10n.of(context).extensions),
+        leading: Center(child: BackButton(color: theme.colorScheme.tertiary)),
+        title: Text(L10n.of(context).extensions, style: TextStyle(color: theme.colorScheme.tertiary),
+     ),
       ),
       body: MaxWidthBody(
         child: Padding(

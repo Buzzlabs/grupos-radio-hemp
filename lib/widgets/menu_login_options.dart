@@ -14,7 +14,7 @@ class MoreLoginMenuButton extends StatelessWidget {
   });
 
   Future<void> _handleAction(
-      BuildContext context, MoreLoginActions action) async {
+      BuildContext context, MoreLoginActions action,) async {
     switch (action) {
       case MoreLoginActions.about:
         PlatformInfos.showAboutInfo(context);
@@ -47,21 +47,29 @@ class MoreLoginMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Padding(
       padding: padding,
       child: PopupMenuButton<MoreLoginActions>(
+        color: theme.colorScheme.tertiary,
         onSelected: (action) => _handleAction(context, action),
         itemBuilder: (_) => [
           PopupMenuItem(
             value: MoreLoginActions.store,
             child: Row(
               children: [
-                SvgPicture.asset(
-                  'assets/icons/store.svg',
-                  width: 30,
-                ),
+                Icon(
+                Icons.shopping_cart,
+                color: theme.colorScheme.primary,
+                size: 20,
+              ),
+                // SvgPicture.asset(
+                //   'assets/icons/store.svg',
+                //   width: 30,
+                // ),
                 const SizedBox(width: 18),
-                Text(L10n.of(context).menuStore),
+                Text(L10n.of(context).menuStore, style: TextStyle(color: theme.colorScheme.onSurface),
+),
               ],
             ),
           ),
@@ -69,12 +77,18 @@ class MoreLoginMenuButton extends StatelessWidget {
             value: MoreLoginActions.course,
             child: Row(
               children: [
-                SvgPicture.asset(
-                  'assets/icons/course.svg',
-                  width: 30,
-                ),
+                Icon(
+                Icons.book,
+                color: theme.colorScheme.primary,
+                size: 20,
+              ),
+                // SvgPicture.asset(
+                //   'assets/icons/course.svg',
+                //   width: 30,
+                // ),
                 const SizedBox(width: 18),
-                Text(L10n.of(context).menuCourse),
+                Text(L10n.of(context).menuCourse, style: TextStyle(color: theme.colorScheme.onSurface),
+),
               ],
             ),
           ),
@@ -82,12 +96,18 @@ class MoreLoginMenuButton extends StatelessWidget {
             value: MoreLoginActions.podcasts,
             child: Row(
               children: [
-                SvgPicture.asset(
-                  'assets/icons/podcast.svg',
-                  width: 30,
-                ),
+                 Icon(
+                Icons.mic,
+                color: theme.colorScheme.primary,
+                size: 20,
+              ),
+                // SvgPicture.asset(
+                //   'assets/icons/podcast.svg',
+                //   width: 30,
+                // ),
                 const SizedBox(width: 18),
-                Text(L10n.of(context).menuPodcasts),
+                Text(L10n.of(context).menuPodcasts, style: TextStyle(color: theme.colorScheme.onSurface),
+),
               ],
             ),
           ),
@@ -99,11 +119,12 @@ class MoreLoginMenuButton extends StatelessWidget {
                   padding: const EdgeInsets.all(3),
                   child: Icon(
                     Icons.info_outlined,
-                    color: Theme.of(context).colorScheme.primaryFixed,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 const SizedBox(width: 12),
-                Text(L10n.of(context).about),
+                Text(L10n.of(context).about,style: TextStyle(color: theme.colorScheme.onSurface),
+),
               ],
             ),
           ),

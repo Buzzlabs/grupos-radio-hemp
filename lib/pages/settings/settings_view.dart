@@ -4,11 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:matrix/matrix.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/config/themes.dart';
 import 'package:fluffychat/l10n/l10n.dart';
 import 'package:fluffychat/utils/fluffy_share.dart';
-import 'package:fluffychat/utils/platform_infos.dart';
 import 'package:fluffychat/widgets/avatar.dart';
 import 'package:fluffychat/widgets/matrix.dart';
 import 'package:fluffychat/widgets/navigation_rail.dart';
@@ -54,11 +52,12 @@ class SettingsView extends StatelessWidget {
                     leading: Center(
                       child: BackButton(
                         onPressed: () => context.go('/rooms'),
+                        color: theme.colorScheme.tertiary,
                       ),
                     ),
                   ),
             body: ListTileTheme(
-              iconColor: theme.colorScheme.onSurface,
+              iconColor: theme.colorScheme.tertiary,
               child: ListView(
                 key: const Key('SettingsListViewContent'),
                 children: <Widget>[
@@ -95,13 +94,13 @@ class SettingsView extends StatelessWidget {
                                     right: 0,
                                     child: FloatingActionButton.small(
                                       backgroundColor:
-                                          theme.colorScheme.secondary,
+                                          theme.colorScheme.primary,
                                       elevation: 2,
                                       onPressed: controller.setAvatarAction,
                                       heroTag: null,
                                       child: Icon(
                                         Icons.camera_alt_outlined,
-                                        color: theme.colorScheme.onSecondary,
+                                        color: theme.colorScheme.tertiary,
                                       ),
                                     ),
                                   ),
@@ -120,15 +119,15 @@ class SettingsView extends StatelessWidget {
                                     size: 16,
                                   ),
                                   style: TextButton.styleFrom(
-                                    foregroundColor:
-                                        theme.colorScheme.onSurface,
-                                    iconColor: theme.colorScheme.onSurface,
+                                    foregroundColor: theme.colorScheme.tertiary,
+                                    iconColor: theme.colorScheme.tertiary,
                                   ),
                                   label: Text(
                                     displayname,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
+                                    style: TextStyle(
+                                      color: theme.colorScheme.tertiary,
                                       fontSize: 18,
                                     ),
                                   ),
@@ -179,7 +178,10 @@ class SettingsView extends StatelessWidget {
                   // Divider(color: theme.dividerColor),
                   ListTile(
                     leading: const Icon(Icons.devices_outlined),
-                    title: Text(L10n.of(context).devices),
+                    title: Text(
+                      L10n.of(context).devices,
+                      style: TextStyle(color: theme.colorScheme.tertiary),
+                    ),
                     onTap: () => context.go('/rooms/settings/devices'),
                     tileColor: activeRoute.startsWith('/rooms/settings/devices')
                         ? theme.colorScheme.surfaceContainerHigh
@@ -187,7 +189,10 @@ class SettingsView extends StatelessWidget {
                   ),
                   ListTile(
                     leading: const Icon(Icons.logout_outlined),
-                    title: Text(L10n.of(context).logout),
+                    title: Text(
+                      L10n.of(context).logout,
+                      style: TextStyle(color: theme.colorScheme.tertiary),
+                    ),
                     onTap: controller.logoutAction,
                   ),
                 ],

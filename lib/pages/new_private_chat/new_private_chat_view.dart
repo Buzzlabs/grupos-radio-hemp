@@ -30,14 +30,23 @@ class NewPrivateChatView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        leading: const Center(child: BackButton()),
-        title: Text(L10n.of(context).newChat),
-        backgroundColor: theme.scaffoldBackgroundColor,
+        leading: Center(
+            child: BackButton(
+          color: theme.colorScheme.tertiary,
+        ),),
+        title: Text(
+          L10n.of(context).newChat,
+          style: TextStyle(color: theme.colorScheme.tertiary),
+        ),
+        backgroundColor: theme.colorScheme.surface,
         actions: [
           TextButton(
             onPressed:
                 UrlLauncher(context, AppConfig.startChatTutorial).launchUrl,
-            child: Text(L10n.of(context).help),
+            child: Text(
+              L10n.of(context).help,
+              style: TextStyle(color: theme.colorScheme.tertiary),
+            ),
           ),
         ],
       ),
@@ -55,22 +64,42 @@ class NewPrivateChatView extends StatelessWidget {
                 controller: controller.controller,
                 onChanged: controller.searchUsers,
                 decoration: InputDecoration(
+                  fillColor: theme.colorScheme.tertiaryContainer,
                   hintText: L10n.of(context).searchForUsers,
+                  disabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: theme.colorScheme.surface, width: 2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
+                      color: theme.colorScheme.surface,
                       width: 2,
-                      color: theme.colorScheme.onSurface,
                     ),
-                    borderRadius: BorderRadius.circular(99),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: theme.colorScheme.surface,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: theme.colorScheme.surface,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   hintStyle: TextStyle(
-                    color: theme.colorScheme.onSurface,
+                    color: theme.colorScheme.onSecondaryContainer,
                     fontWeight: FontWeight.normal,
                   ),
                   prefixIcon: searchResponse == null
                       ? Icon(
                           Icons.search_outlined,
-                          color: theme.colorScheme.onSurface,
+                          color: theme.colorScheme.onSecondaryContainer,
                         )
                       : FutureBuilder(
                           future: searchResponse,
@@ -87,13 +116,19 @@ class NewPrivateChatView extends StatelessWidget {
                                 ),
                               );
                             }
-                            return const Icon(Icons.search_outlined);
+                            return Icon(
+                              Icons.search_outlined,
+                              color: theme.colorScheme.onSecondaryContainer,
+                            );
                           },
                         ),
                   suffixIcon: controller.controller.text.isEmpty
                       ? null
                       : IconButton(
-                          icon: const Icon(Icons.clear_outlined),
+                          icon: Icon(
+                            Icons.clear_outlined,
+                            color: theme.colorScheme.tertiary,
+                          ),
                           onPressed: () {
                             controller.controller.clear();
                             controller.searchUsers();
@@ -117,17 +152,20 @@ class NewPrivateChatView extends StatelessWidget {
                           children: [
                             TextSpan(
                               text: L10n.of(context).yourGlobalUserIdIs,
+                              style:
+                                  TextStyle(color: theme.colorScheme.tertiary),
                             ),
                             TextSpan(
                               text: Matrix.of(context).client.userID,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.w600,
+                                color: theme.colorScheme.tertiary,
                               ),
                             ),
                           ],
                         ),
                         style: TextStyle(
-                          color: theme.colorScheme.onSurface,
+                          color: theme.colorScheme.tertiary,
                           fontSize: 12,
                         ),
                       ),
@@ -136,29 +174,42 @@ class NewPrivateChatView extends StatelessWidget {
                     ListTile(
                       leading: CircleAvatar(
                         backgroundColor: theme.colorScheme.primary,
-                        foregroundColor: theme.colorScheme.onPrimary,
-                        child: Icon(Icons.adaptive.share_outlined),
+                        foregroundColor: theme.colorScheme.tertiary,
+                        child: Icon(
+                          Icons.adaptive.share_outlined,
+                          color: theme.colorScheme.tertiary,
+                        ),
                       ),
-                      title: Text(L10n.of(context).shareInviteLink),
+                      title: Text(L10n.of(context).shareInviteLink,
+                          style: TextStyle(color: theme.colorScheme.tertiary),),
                       onTap: controller.inviteAction,
                     ),
                     ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: theme.colorScheme.tertiaryContainer,
-                        foregroundColor: theme.colorScheme.onTertiaryContainer,
-                        child: const Icon(Icons.group_add_outlined),
+                        backgroundColor: theme.colorScheme.primary,
+                        foregroundColor: theme.colorScheme.tertiary,
+                        child: Icon(
+                          Icons.group_add_outlined,
+                          color: theme.colorScheme.tertiary,
+                        ),
                       ),
-                      title: Text(L10n.of(context).createGroup),
+                      title: Text(L10n.of(context).createGroup,
+                          style: TextStyle(color: theme.colorScheme.tertiary),),
                       onTap: () => context.go('/rooms/newgroup'),
                     ),
                     if (PlatformInfos.isMobile)
                       ListTile(
                         leading: CircleAvatar(
-                          backgroundColor: theme.colorScheme.tertiary,
-                          foregroundColor: theme.colorScheme.onPrimaryContainer,
-                          child: const Icon(Icons.qr_code_scanner_outlined),
+                          backgroundColor: theme.colorScheme.primary,
+                          foregroundColor: theme.colorScheme.tertiary,
+                          child: Icon(
+                            Icons.qr_code_scanner_outlined,
+                            color: theme.colorScheme.tertiary,
+                          ),
                         ),
-                        title: Text(L10n.of(context).scanQrCode),
+                        title: Text(L10n.of(context).scanQrCode,
+                            style:
+                                TextStyle(color: theme.colorScheme.tertiary),),
                         onTap: controller.openScannerAction,
                       ),
                     Center(
@@ -226,8 +277,16 @@ class NewPrivateChatView extends StatelessWidget {
                           const SizedBox(height: 12),
                           OutlinedButton.icon(
                             onPressed: controller.searchUsers,
-                            icon: const Icon(Icons.refresh_outlined),
-                            label: Text(L10n.of(context).tryAgain),
+                            icon: Icon(
+                              Icons.refresh_outlined,
+                              color: theme.colorScheme.onSecondaryContainer,
+                            ),
+                            label: Text(
+                              L10n.of(context).tryAgain,
+                              style: TextStyle(
+                                  color:
+                                      theme.colorScheme.onSecondaryContainer,),
+                            ),
                           ),
                         ],
                       );
@@ -241,7 +300,11 @@ class NewPrivateChatView extends StatelessWidget {
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.search_outlined, size: 86),
+                          Icon(
+                            Icons.search_outlined,
+                            size: 86,
+                            color: theme.colorScheme.tertiary,
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Text(
@@ -249,7 +312,7 @@ class NewPrivateChatView extends StatelessWidget {
                                 controller.controller.text,
                               ),
                               style: TextStyle(
-                                color: theme.colorScheme.primary,
+                                color: theme.colorScheme.onSecondaryContainer,
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -270,8 +333,14 @@ class NewPrivateChatView extends StatelessWidget {
                             mxContent: contact.avatarUrl,
                             presenceUserId: contact.userId,
                           ),
-                          title: Text(displayname),
-                          subtitle: Text(contact.userId),
+                          title: Text(
+                            displayname,
+                            style: TextStyle(color: theme.colorScheme.primary),
+                          ),
+                          subtitle: Text(
+                            contact.userId,
+                            style: TextStyle(color: theme.colorScheme.tertiary),
+                          ),
                           onTap: () => controller.openUserModal(contact),
                         );
                       },

@@ -56,7 +56,7 @@ class LoginController extends State<Login> {
       if (!passwordFocusNode.hasFocus) {
         if (passwordController.text.isEmpty) {
           setState(
-              () => passwordError = L10n.of(context).pleaseEnterYourPassword);
+              () => passwordError = L10n.of(context).pleaseEnterYourPassword,);
         } else {
           setState(() => passwordError = null);
         }
@@ -224,7 +224,7 @@ class LoginController extends State<Login> {
         initialText:
             usernameController.text.isEmail ? usernameController.text : '',
         keyboardType: TextInputType.emailAddress,
-        maxLines: 1);
+        maxLines: 1,);
     if (input == null) return;
     final clientSecret = DateTime.now().millisecondsSinceEpoch.toString();
     final response = await showFutureLoadingDialog(
@@ -285,7 +285,7 @@ class LoginController extends State<Login> {
     );
     if (success.error == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(L10n.of(context).passwordHasBeenChanged)),
+        SnackBar(content: Text(L10n.of(context).passwordHasBeenChanged, style: TextStyle(color: Theme.of(context).colorScheme.tertiary),)),
       );
       usernameController.text = input;
       passwordController.text = password;

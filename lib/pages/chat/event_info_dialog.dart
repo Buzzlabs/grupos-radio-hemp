@@ -73,14 +73,14 @@ class EventInfoDialog extends StatelessWidget {
             padding: const EdgeInsets.all(12.0),
             child: Material(
               borderRadius: BorderRadius.circular(AppConfig.borderRadius),
-              color: theme.colorScheme.surfaceContainer,
+              color: theme.colorScheme.secondary,
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 scrollDirection: Axis.horizontal,
                 child: SelectableText(
                   prettyJson(MatrixEvent.fromJson(event.toJson())),
                   style: TextStyle(
-                    color: theme.colorScheme.onSurface,
+                    color: theme.colorScheme.tertiary,
                   ),
                 ),
               ),
@@ -92,14 +92,14 @@ class EventInfoDialog extends StatelessWidget {
               padding: const EdgeInsets.all(12.0),
               child: Material(
                 borderRadius: BorderRadius.circular(AppConfig.borderRadius),
-                color: theme.colorScheme.surfaceContainer,
+                color: theme.colorScheme.secondary,
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
                   scrollDirection: Axis.horizontal,
                   child: SelectableText(
                     prettyJson(originalSource),
                     style: TextStyle(
-                      color: theme.colorScheme.onSurface,
+                      color: theme.colorScheme.tertiary,
                     ),
                   ),
                 ),

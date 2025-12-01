@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -56,13 +55,14 @@ abstract class PlatformInfos {
           children: [
             Image.asset(
               'assets/logo_single_semfundo.png',
-              height: 70,
+              height: 50,
               filterQuality: FilterQuality.medium,
             ),
             const SizedBox(width: 8),
             Text(
               AppConfig.applicationName.toUpperCase(),
-              style: GoogleFonts.righteous(
+              style: TextStyle(
+                fontFamily: 'GothamRndSSm',
                 fontSize: 20,
                 color: Theme.of(context).colorScheme.primary,
               ),
@@ -78,7 +78,7 @@ abstract class PlatformInfos {
             label: Text(L10n.of(context).sourceCode),
             style: ButtonStyle(
               foregroundColor: WidgetStateProperty.all(
-                Theme.of(context).colorScheme.onSurface,
+                Theme.of(context).colorScheme.tertiary,
               ),
             ),
           ),

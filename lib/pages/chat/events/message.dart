@@ -100,8 +100,9 @@ class Message extends StatelessWidget {
     final client = Matrix.of(context).client;
     final ownMessage = event.senderId == client.userID;
     final alignment = ownMessage ? Alignment.topRight : Alignment.topLeft;
-
-    var color = theme.colorScheme.surfaceContainerHigh;
+    var color = ownMessage
+        ? theme.colorScheme.secondary   
+        : theme.colorScheme.surface;  
     final displayTime = event.type == EventTypes.RoomCreate ||
         nextEvent == null ||
         !event.originServerTs.sameEnvironment(nextEvent!.originServerTs);
@@ -124,12 +125,12 @@ class Message extends StatelessWidget {
         previousEvent!.originServerTs.sameEnvironment(event.originServerTs);
 
     final textColor =
-        ownMessage ? theme.onBubbleColor : theme.colorScheme.onSecondary;
+        ownMessage ? theme.colorScheme.tertiary : theme.colorScheme.tertiary;
 
     final linkColor = ownMessage
         ? theme.brightness == Brightness.light
-            ? theme.colorScheme.primaryFixed
-            : theme.colorScheme.onTertiaryContainer
+            ? theme.colorScheme.tertiary
+            : theme.colorScheme.tertiary
         : theme.colorScheme.primary;
 
     final rowMainAxisAlignment =
@@ -234,7 +235,7 @@ class Message extends StatelessWidget {
                       child: Material(
                         borderRadius:
                             BorderRadius.circular(AppConfig.borderRadius * 2),
-                        color: theme.colorScheme.surface.withAlpha(128),
+                        color: theme.colorScheme.secondary.withOpacity(0.6),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 8.0,
@@ -245,7 +246,7 @@ class Message extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 12 * AppConfig.fontSizeFactor,
                               fontWeight: FontWeight.bold,
-                              color: theme.colorScheme.onSurface,
+                              color: theme.colorScheme.tertiary,
                             ),
                           ),
                         ),
@@ -715,9 +716,10 @@ class Message extends StatelessWidget {
                                                               ),
                                                             ),
                                                             IconButton(
-                                                              icon: const Icon(
+                                                              icon: Icon(
                                                                 Icons
                                                                     .add_reaction_outlined,
+                                                                    color: theme.colorScheme.onSecondaryContainer,
                                                               ),
                                                               tooltip: L10n.of(
                                                                 context,
@@ -738,9 +740,10 @@ class Message extends StatelessWidget {
                                                                           Text(
                                                                         L10n.of(context)
                                                                             .customReaction,
-                                                                      ),
+                                                                      style: TextStyle(color: theme.colorScheme.tertiary),),
                                                                       leading:
                                                                           CloseButton(
+                                                                            color: theme.colorScheme.tertiary,
                                                                         onPressed:
                                                                             () =>
                                                                                 Navigator.of(
@@ -889,7 +892,7 @@ class Message extends StatelessWidget {
                         L10n.of(context).readUpToHere,
                         style: TextStyle(
                             fontSize: 12 * AppConfig.fontSizeFactor,
-                            color: theme.colorScheme.onSurface),
+                            color: theme.colorScheme.onSurface,),
                       ),
                     ),
                     Expanded(

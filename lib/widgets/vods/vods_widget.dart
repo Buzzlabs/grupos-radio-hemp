@@ -63,9 +63,9 @@ class _VodsWidgetState extends State<VodsWidget> {
     if (isLoading) return;
     setState(() => isLoading = true);
 
-    final baseUrl = 'http://localhost:3333';
+    const baseUrl = 'http://localhost:3333';
     final url = Uri.parse(
-        '$baseUrl/dashboard/api/streams/vods?page=$currentPage&limit=10');
+        '$baseUrl/dashboard/api/streams/vods?page=$currentPage&limit=10',);
 
     try {
       final response = await http.get(url).timeout(const Duration(seconds: 8));
@@ -75,7 +75,7 @@ class _VodsWidgetState extends State<VodsWidget> {
       lastPage = meta['last_page'];
 
       final List<dynamic> data = decoded['data'];
-      final List<LiveShow> fetchedLives = data.map<LiveShow>((item) {
+      final fetchedLives = data.map<LiveShow>((item) {
         final map = item as Map<String, dynamic>;
 
         String title = map['title'] ?? 'Sem título';
@@ -98,7 +98,7 @@ class _VodsWidgetState extends State<VodsWidget> {
           category: map['isLive'] == true ? 'Ao vivo' : 'Gravação',
           date: map['recordedRelativeTime'] ?? '',
           startedAt: map['recordingStartedAt'] ?? '',
-          thumbnailUrl: map['latestThumbnail'] ?? '',
+          thumbnailUrl: 'assets/thumb_exemplo.png', //map['latestThumbnail'] ?? '',
           avatarUrl: map['avatarUrl'] ?? 'assets/logo_single_comfundo.png',
           videoUrl: map['masterPlaylistUrl'] ?? '',
           isLive: map['isLive'] ?? false,
@@ -138,7 +138,7 @@ class _VodsWidgetState extends State<VodsWidget> {
   bool _applyFilter() {
     filteredLives = allLives
         .where((live) =>
-            live.title.toLowerCase().contains(widget.filter.toLowerCase()))
+            live.title.toLowerCase().contains(widget.filter.toLowerCase()),)
         .toList();
     return filteredLives.length >= visibleCount;
   }
@@ -182,7 +182,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                   Text(
                     widget.streamsWidgetTag,
                     style: TextStyle(
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.tertiary,
                       fontSize: 20,
                       fontWeight: FontWeight.w100,
                     ),
@@ -194,7 +194,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                   children: [
                     const SizedBox(width: 10),
                     IconButton(   
-                    icon: Icon(Icons.arrow_back),
+                    icon: const Icon(Icons.arrow_back),
                     color: theme.colorScheme.primary,
                       onPressed: () {
                         setState(() {
@@ -229,7 +229,7 @@ class _VodsWidgetState extends State<VodsWidget> {
 
               const minCardWidth = 250.0;
 
-              int columns = (screenWidth / (minCardWidth + spacing)).floor();
+              var columns = (screenWidth / (minCardWidth + spacing)).floor();
               if (columns < 1) columns = 1;
 
               final totalSpacing =
@@ -289,7 +289,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                     height: 1,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     color:
-                        theme.colorScheme.onSecondaryContainer.withOpacity(0.2),
+                        theme.colorScheme.primary.withOpacity(0.6),
                   ),
                 ),
                 TextButton(
@@ -314,7 +314,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                     height: 1,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     color:
-                        const Color(0xff5e5c61).withOpacity(0.6),
+                        theme.colorScheme.primary.withOpacity(0.6),
                   ),
                 ),
               ],

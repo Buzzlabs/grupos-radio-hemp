@@ -97,9 +97,10 @@ class LiveCard extends StatelessWidget {
                             live.title,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              color: theme.colorScheme.onSecondary,
+                              fontFamily: 'Roboto',
+                              color: theme.colorScheme.tertiary,
                               fontSize: 16,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ),
@@ -118,15 +119,15 @@ class LiveCard extends StatelessWidget {
                               _infoChip(
                                   theme,
                                   live.date,
-                                  theme.colorScheme.onSecondaryContainer
-                                      .withOpacity(0.15),
-                                  13),
+                                  theme.colorScheme.secondary
+                                      .withOpacity(0.2),
+                                  13,),
                               // to do
                               _infoChip(
                                   theme,
                                   live.category,
-                                  theme.colorScheme.primary.withOpacity(0.15),
-                                  12),
+                                  theme.colorScheme.primary.withOpacity(0.2),
+                                  12,),
                             ],
                           ),
                         ),
@@ -139,7 +140,7 @@ class LiveCard extends StatelessWidget {
                                 'https://grupos.radiohemp.com/#/rooms/$roomId/vod/${live.id}';
                             Clipboard.setData(ClipboardData(text: shareLink));
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Link copiado!')),
+                              SnackBar(content: Text('Link copiado!', style: TextStyle(color: Theme.of(context).colorScheme.tertiary),),),
                             );
                           },
                           child: Padding(
@@ -147,12 +148,12 @@ class LiveCard extends StatelessWidget {
                             child: Icon(
                               Icons.share,
                               size: 18,
-                              color: theme.colorScheme.onSecondary,
+                              color: theme.colorScheme.tertiary,
                             ),
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ],
@@ -160,7 +161,7 @@ class LiveCard extends StatelessWidget {
           ),
         ),
       );
-    });
+    },);
   }
 
   Widget _infoChip(ThemeData theme, String text, Color bg, double fontSize) {
@@ -173,7 +174,7 @@ class LiveCard extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: theme.colorScheme.onSecondary,
+          color: theme.colorScheme.tertiary,
           fontSize: fontSize,
         ),
       ),

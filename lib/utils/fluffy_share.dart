@@ -27,7 +27,7 @@ abstract class FluffyShare {
       ClipboardData(text: text),
     );
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(L10n.of(context).copiedToClipboard)),
+      SnackBar(content: Text(L10n.of(context).copiedToClipboard, style: TextStyle(color: Theme.of(context).colorScheme.tertiary),)),
     );
     return;
   }

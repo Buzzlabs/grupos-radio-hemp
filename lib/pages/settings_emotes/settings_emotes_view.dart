@@ -25,8 +25,15 @@ class EmotesSettingsView extends StatelessWidget {
     final imageKeys = controller.pack!.images.keys.toList();
     return Scaffold(
       appBar: AppBar(
-        leading: const Center(child: BackButton()),
-        title: Text(L10n.of(context).customEmojisAndStickers),
+        leading: Center(
+          child: BackButton(
+            color: theme.colorScheme.tertiary,
+          ),
+        ),
+        title: Text(
+          L10n.of(context).customEmojisAndStickers,
+          style: TextStyle(color: theme.colorScheme.tertiary),
+        ),
         actions: [
           PopupMenuButton<PopupMenuEmojiActions>(
             useRootNavigator: true,
@@ -44,11 +51,17 @@ class EmotesSettingsView extends StatelessWidget {
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: PopupMenuEmojiActions.import,
-                child: Text(L10n.of(context).importFromZipFile),
+                child: Text(
+                  L10n.of(context).importFromZipFile,
+                  style: TextStyle(color: theme.colorScheme.tertiary),
+                ),
               ),
               PopupMenuItem(
                 value: PopupMenuEmojiActions.export,
-                child: Text(L10n.of(context).exportEmotePack),
+                child: Text(
+                  L10n.of(context).exportEmotePack,
+                  style: TextStyle(color: theme.colorScheme.tertiary),
+                ),
               ),
             ],
           ),
@@ -83,18 +96,53 @@ class EmotesSettingsView extends StatelessWidget {
                       minLines: 1,
                       maxLines: 1,
                       decoration: InputDecoration(
+                        fillColor: theme.colorScheme.tertiaryContainer,
+                        disabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.surface,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.surface,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.surface,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: theme.colorScheme.surface,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         hintText: L10n.of(context).emoteShortcode,
+                        hintStyle: TextStyle(
+                          color: theme.colorScheme.onSurface,
+                          fontWeight: FontWeight.normal,
+                        ),
                         prefixText: ': ',
                         suffixText: ':',
                         prefixStyle: TextStyle(
-                          color: theme.colorScheme.secondary,
+                          color: theme.colorScheme.primary,
                           fontWeight: FontWeight.bold,
                         ),
                         suffixStyle: TextStyle(
-                          color: theme.colorScheme.secondary,
+                          color: theme.colorScheme.primary,
                           fontWeight: FontWeight.bold,
                         ),
-                        border: InputBorder.none,
+                      ),
+                      style: TextStyle(
+                        color: theme.colorScheme.tertiary,
                       ),
                     ),
                   ),
@@ -106,17 +154,27 @@ class EmotesSettingsView extends StatelessWidget {
                     onTap: controller.addImageAction,
                     child: Icon(
                       Icons.add_outlined,
-                      color: theme.colorScheme.secondary,
+                      color: theme.colorScheme.primary,
                       size: 32.0,
                     ),
                   ),
                 ),
               ),
             if (controller.room != null)
-              SwitchListTile.adaptive(
-                title: Text(L10n.of(context).enableEmotesGlobally),
+              SwitchListTile(
+                title: Text(
+                  L10n.of(context).enableEmotesGlobally,
+                  style: TextStyle(color: theme.colorScheme.tertiary),
+                ),
                 value: controller.isGloballyActive(client),
                 onChanged: controller.setIsGloballyActive,
+                activeThumbColor: theme.colorScheme.tertiaryContainer,
+                activeTrackColor: theme.colorScheme.primary,
+                inactiveThumbColor: theme.colorScheme.primary,
+                inactiveTrackColor: theme.colorScheme.tertiaryContainer,
+                trackOutlineColor: WidgetStateProperty.resolveWith(
+                  (states) => theme.colorScheme.primary,
+                ),
               ),
             if (!controller.readonly || controller.room != null)
               const Divider(),
@@ -128,7 +186,7 @@ class EmotesSettingsView extends StatelessWidget {
                         L10n.of(context).noEmotesFound,
                         style: TextStyle(
                           fontSize: 20,
-                          color: Theme.of(context).colorScheme.onSurface,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
                       ),
                     ),
@@ -270,10 +328,14 @@ class _ImagePicker extends StatefulWidget {
 class _ImagePickerState extends State<_ImagePicker> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     if (widget.controller.value == null) {
       return ElevatedButton(
         onPressed: () => widget.onPressed(widget.controller),
-        child: Text(L10n.of(context).pickImage),
+        child: Text(
+          L10n.of(context).pickImage,
+          style: TextStyle(color: theme.colorScheme.tertiary),
+        ),
       );
     } else {
       return _EmoteImage(widget.controller.value!.url);

@@ -16,30 +16,36 @@ class ChatSearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final room = controller.room;
     if (room == null) {
       return Scaffold(
-        appBar: AppBar(title: Text(L10n.of(context).oopsSomethingWentWrong)),
+        appBar: AppBar(
+            title: Text(L10n.of(context).oopsSomethingWentWrong,
+                style:
+                    TextStyle(color: theme.colorScheme.onSecondaryContainer),),),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Text(L10n.of(context).youAreNoLongerParticipatingInThisChat),
+            child: Text(L10n.of(context).youAreNoLongerParticipatingInThisChat,
+                style:
+                    TextStyle(color: theme.colorScheme.onSecondaryContainer),),
           ),
         ),
       );
     }
 
-    final theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
-        leading: const Center(child: BackButton()),
+        leading: Center(child: BackButton(color: theme.colorScheme.tertiary)),
         titleSpacing: 0,
         title: Text(
-          L10n.of(context).searchIn(
-            room.getLocalizedDisplayname(MatrixLocals(L10n.of(context))),
-          ),
-        ),
+            L10n.of(context).searchIn(
+              room.getLocalizedDisplayname(MatrixLocals(
+                L10n.of(context),
+              ),),
+            ),
+            style: TextStyle(color: theme.colorScheme.tertiary),),
       ),
       body: MaxWidthBody(
         withScrolling: false,
@@ -57,22 +63,45 @@ class ChatSearchView extends StatelessWidget {
                 autofocus: true,
                 enabled: controller.tabController.index == 0,
                 decoration: InputDecoration(
+                  fillColor: theme.colorScheme.tertiaryContainer,
                   hintText: L10n.of(context).search,
-                  prefixIcon: const Icon(Icons.search_outlined),
+                  labelStyle:
+                      TextStyle(color: theme.colorScheme.onSecondaryContainer),
+                  prefixIcon: Icon(Icons.search_outlined,
+                      color: theme.colorScheme.onSecondaryContainer,),
+                  disabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: theme.colorScheme.surface, width: 2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: theme.colorScheme.onSurface,
+                      color: theme.colorScheme.surface,
                       width: 2,
                     ),
-                    borderRadius: BorderRadius.circular(99),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: theme.colorScheme.surface,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: theme.colorScheme.surface,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   hintStyle: TextStyle(
-                    color: theme.colorScheme.onSurface,
+                    color: theme.colorScheme.onSecondaryContainer,
                     fontWeight: FontWeight.normal,
                   ),
                 ),
                 style: TextStyle(
-                  color: theme.colorScheme.onSecondary,
+                  color: theme.colorScheme.tertiary,
                 ),
               ),
             ),
@@ -83,6 +112,9 @@ class ChatSearchView extends StatelessWidget {
                 Tab(child: Text(L10n.of(context).gallery)),
                 Tab(child: Text(L10n.of(context).files)),
               ],
+              labelColor: theme.colorScheme.primary,
+              unselectedLabelColor: theme.colorScheme.primary.withAlpha(128),
+              indicatorColor: theme.colorScheme.primary,
             ),
             Expanded(
               child: TabBarView(

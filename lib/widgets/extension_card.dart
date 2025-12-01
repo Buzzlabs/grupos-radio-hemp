@@ -42,6 +42,8 @@ class _ExtensionCardState extends State<ExtensionCard> {
   }
 
   Future<void> _closeLive() async {
+    final theme = Theme.of(context);
+
     final confirmed = await showOkCancelAlertDialog(
       context: context,
       title: L10n.of(context).confirm.toUpperCase(),
@@ -64,7 +66,10 @@ class _ExtensionCardState extends State<ExtensionCard> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(L10n.of(context).liveClosedSuccess),
+            content: Text(
+              L10n.of(context).liveClosedSuccess,
+              style: TextStyle(color: theme.colorScheme.tertiary),
+            ),
             duration: const Duration(seconds: 3),
           ),
         );
@@ -73,7 +78,10 @@ class _ExtensionCardState extends State<ExtensionCard> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(L10n.of(context).liveCloseError(e.toString())),
+            content: Text(
+              L10n.of(context).liveCloseError(e.toString()),
+              style: TextStyle(color: theme.colorScheme.tertiary),
+            ),
             duration: const Duration(seconds: 3),
           ),
         );
@@ -121,8 +129,10 @@ class _ExtensionCardState extends State<ExtensionCard> {
                           children: [
                             Text(
                               widget.title,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: theme.colorScheme.tertiary,
+                              ),
                             ),
                             if (isLive &&
                                 widget.type == ExtensionType.live) ...[
@@ -152,7 +162,7 @@ class _ExtensionCardState extends State<ExtensionCard> {
                           widget.subtitle,
                           style: TextStyle(
                             fontSize: 12,
-                            color: theme.colorScheme.onSurface,
+                            color: theme.colorScheme.onSecondaryContainer,
                           ),
                         ),
                       ],
@@ -177,7 +187,7 @@ class _ExtensionCardState extends State<ExtensionCard> {
                         L10n.of(context).closeLive,
                         style: TextStyle(
                           fontSize: 16,
-                          color: theme.colorScheme.onSurface,
+                          color: theme.colorScheme.onSecondaryContainer,
                         ),
                       ),
                     ),

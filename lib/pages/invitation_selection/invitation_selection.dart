@@ -63,7 +63,7 @@ class InvitationSelectionController extends State<InvitationSelection> {
     if (success.error == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(L10n.of(context).contactHasBeenInvitedToTheGroup),
+          content: Text(L10n.of(context).contactHasBeenInvitedToTheGroup, style: TextStyle(color: Theme.of(context).colorScheme.tertiary),),
         ),
       );
     }
@@ -92,7 +92,7 @@ class InvitationSelectionController extends State<InvitationSelection> {
       response = await matrix.client.searchUserDirectory(text, limit: 10);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text((e).toLocalizedString(context))),
+        SnackBar(content: Text((e).toLocalizedString(context), style: TextStyle(color: Theme.of(context).colorScheme.error),)),
       );
       return;
     } finally {

@@ -112,7 +112,7 @@ class UserDeviceListItem extends StatelessWidget {
           leading: CircleAvatar(
             foregroundColor: Colors.white,
             backgroundColor: keys == null
-                ? theme.colorScheme.onSurface
+                ? theme.colorScheme.secondary
                 : keys.blocked
                     ? theme.colorScheme.error
                     : keys.verified
@@ -122,6 +122,7 @@ class UserDeviceListItem extends StatelessWidget {
           ),
           title: Text(
             userDevice.displayname,
+            style: TextStyle(color: theme.colorScheme.tertiary),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -130,7 +131,8 @@ class UserDeviceListItem extends StatelessWidget {
               DateTime.fromMillisecondsSinceEpoch(userDevice.lastSeenTs ?? 0)
                   .localizedTimeShort(context),
             ),
-            style: const TextStyle(fontWeight: FontWeight.w300),
+            style: TextStyle(fontWeight: FontWeight.w300,
+              color: theme.colorScheme.tertiary,),
           ),
           trailing: keys == null
               ? null

@@ -33,7 +33,7 @@ class StateMessage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(4),
                   child: Material(
-                    color: theme.colorScheme.surface.withAlpha(128),
+                    color: theme.colorScheme.secondary.withOpacity(0.6),
                     borderRadius:
                         BorderRadius.circular(AppConfig.borderRadius / 3),
                     child: Padding(
@@ -50,13 +50,14 @@ class StateMessage extends StatelessWidget {
                               ),
                             ),
                             if (onExpand != null) ...[
-                              const TextSpan(
+                              TextSpan(
                                 text: ' + ',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: TextStyle(fontWeight: FontWeight.bold,
+                                 color: theme.colorScheme.tertiary,),
                               ),
                               TextSpan(
                                 style: TextStyle(
-                                  color: theme.colorScheme.primary,
+                                  color: theme.colorScheme.secondary,
                                   decoration: TextDecoration.underline,
                                 ),
                                 recognizer: TapGestureRecognizer()
@@ -68,7 +69,7 @@ class StateMessage extends StatelessWidget {
                         ),
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: theme.colorScheme.onSurface,
+                          color: theme.colorScheme.tertiary,
                           fontSize: 12 * AppConfig.fontSizeFactor,
                           decoration: event.redacted
                               ? TextDecoration.lineThrough

@@ -48,7 +48,9 @@ class SendFileDialogState extends State<SendFileDialog> {
       if (!widget.room.otherPartyCanReceiveMessages) {
         throw OtherPartyCanNotReceiveMessages();
       }
-      scaffoldMessenger.showLoadingSnackBar(l10n.prepareSendingAttachment);
+      scaffoldMessenger.showLoadingSnackBar(
+        l10n.prepareSendingAttachment,
+      );
       Navigator.of(context, rootNavigator: false).pop();
       final clientConfig = await widget.room.client.getConfig();
       final maxUploadSize = clientConfig.mUploadSize ?? 100 * 1000 * 1000;
@@ -318,8 +320,9 @@ class SendFileDialogState extends State<SendFileDialog> {
                                 Text(
                                   '$sizeString - $fileTypes',
                                   style: TextStyle(
-                                      color: theme.colorScheme.onSurface,
-                                      fontSize: 10),
+                                    color: theme.colorScheme.onSurface,
+                                    fontSize: 10,
+                                  ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -334,7 +337,7 @@ class SendFileDialogState extends State<SendFileDialog> {
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: DialogTextField(
                         controller: _labelTextController,
-                        labelText: L10n.of(context).optionalMessage,
+                        hintText: L10n.of(context).optionalMessage,
                         minLines: 1,
                         maxLines: 3,
                         maxLength: 255,
@@ -353,6 +356,7 @@ class SendFileDialogState extends State<SendFileDialog> {
                             onChanged: compressionSupported
                                 ? (v) => setState(() => compress = v)
                                 : null,
+                            activeColor: theme.colorScheme.primary,
                           )
                         else
                           Switch.adaptive(
@@ -360,6 +364,15 @@ class SendFileDialogState extends State<SendFileDialog> {
                             onChanged: compressionSupported
                                 ? (v) => setState(() => compress = v)
                                 : null,
+                            activeColor: theme
+                                .colorScheme.tertiaryContainer, // iOS thumb
+                            activeTrackColor: theme.colorScheme.primary,
+                            inactiveThumbColor: theme.colorScheme.primary,
+                            inactiveTrackColor:
+                                theme.colorScheme.tertiaryContainer,
+                            trackOutlineColor: WidgetStateProperty.resolveWith(
+                              (states) => theme.colorScheme.primary,
+                            ),
                           ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -373,7 +386,8 @@ class SendFileDialogState extends State<SendFileDialog> {
                                   Text(
                                     L10n.of(context).compress,
                                     style: TextStyle(
-                                      color: theme.colorScheme.onSurface,
+                                      color: theme
+                                          .colorScheme.onSecondaryContainer,
                                     ),
                                     textAlign: TextAlign.left,
                                   ),

@@ -33,34 +33,86 @@ class EventsTable extends StatefulWidget {
 class _EventsTableState extends State<EventsTable> {
   List<Events> allEvents = [];
 
+  // Future<void> _fetchEvents() async {
+  //   final baseUrl = 'http://localhost:3333';
+  //   final url = Uri.parse('$baseUrl/api/calendar/events');
+
+  //   try {
+  //     final response = await http.get(url).timeout(const Duration(seconds: 8));
+
+  //     if (response.statusCode != 200) {
+  //       throw Exception('HTTP ${response.statusCode}');
+  //     }
+
+  //     final decoded = jsonDecode(response.body);
+  //     final items = decoded['items'];
+  //     if (items == null || items is! List) {
+  //       throw Exception('Campo "items" ausente ou inválido');
+  //     }
+
+  //     final fetchedEvents =
+  //         items.map<Events>((dynamic item) => Events.fromJson(item)).toList();
+
+  //     if (!mounted) return;
+  //     setState(() {
+  //       allEvents = fetchedEvents;
+  //     });
+  //   } on TimeoutException catch (_) {
+  //     debugPrint('Requisição expirou');
+  //   } catch (e, st) {
+  //     debugPrint('Erro ao buscar eventos: $e\n$st');
+  //   }
+  // }
   Future<void> _fetchEvents() async {
-    final baseUrl = 'http://localhost:3333';
-    final url = Uri.parse('$baseUrl/api/calendar/events');
+    // await Future.delayed(const Duration(milliseconds: 500)); // simula loading
+
+    final mockData = [
+      {
+        "summary": "Evento Nexo",
+        "start": {"dateTime": "2025-11-24T10:00:00"},
+      },
+      {
+        "summary": "Evento Nexo",
+        "start": {"dateTime": "2025-11-25T10:00:00"},
+      },
+      {
+        "summary": "Evento Nexo",
+        "start": {"dateTime": "2025-11-26T10:00:00"},
+      },
+      {
+        "summary": "Evento Nexo",
+        "start": {"dateTime": "2025-11-27T10:00:00"},
+      },
+      {
+        "summary": "Evento Nexo",
+        "start": {"dateTime": "2025-11-28T10:00:00"},
+      },
+      {
+        "summary": "Evento Nexo",
+        "start": {"dateTime": "2025-11-29T10:00:00"},
+      },
+      {
+        "summary": "Evento Nexo",
+        "start": {"dateTime": "2025-11-29T10:00:00"},
+      }
+      
+     
+    ];
+
 
     try {
-      final response = await http.get(url).timeout(const Duration(seconds: 8));
-
-      if (response.statusCode != 200) {
-        throw Exception('HTTP ${response.statusCode}');
-      }
-
-      final decoded = jsonDecode(response.body);
-      final items = decoded['items'];
-      if (items == null || items is! List) {
-        throw Exception('Campo "items" ausente ou inválido');
-      }
-
-      final fetchedEvents =
-          items.map<Events>((dynamic item) => Events.fromJson(item)).toList();
+      final fetchedEvents = mockData
+          .map<Events>((item) => Events.fromJson(item))
+          .toList();
 
       if (!mounted) return;
       setState(() {
         allEvents = fetchedEvents;
       });
-    } on TimeoutException catch (_) {
-      debugPrint('Requisição expirou');
+
+      debugPrint("Eventos mock carregados!");
     } catch (e, st) {
-      debugPrint('Erro ao buscar eventos: $e\n$st');
+      debugPrint("Erro ao montar mock de eventos: $e\n$st");
     }
   }
 
@@ -142,14 +194,14 @@ class _EventsTableState extends State<EventsTable> {
                                 Expanded(
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: eventColor.withOpacity(0.05),
+                                      color: eventColor.withOpacity(0.2),
                                       borderRadius: const BorderRadius.only(
                                         topRight: Radius.circular(12),
                                         bottomRight: Radius.circular(12),
                                       ),
                                     ),
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 10),
+                                        horizontal: 12, vertical: 10,),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -168,7 +220,8 @@ class _EventsTableState extends State<EventsTable> {
                                             event.summary,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
+                                            style:  TextStyle(
+                                              color: theme.colorScheme.tertiary,
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500,
                                             ),
