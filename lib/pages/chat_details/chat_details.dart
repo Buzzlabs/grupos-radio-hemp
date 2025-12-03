@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';
@@ -62,7 +63,7 @@ class ChatDetailsController extends State<ChatDetails> {
     );
     if (success.error == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(L10n.of(context).displaynameHasBeenChanged, style: TextStyle(color: theme.colorScheme.tertiary))),
+        SnackBar(content: Text(L10n.of(context).displaynameHasBeenChanged, style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor))),
       );
     }
   }
@@ -87,7 +88,7 @@ class ChatDetailsController extends State<ChatDetails> {
     if (success.error == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(L10n.of(context).chatDescriptionHasBeenChanged, style: TextStyle(color: theme.colorScheme.tertiary)),
+          content: Text(L10n.of(context).chatDescriptionHasBeenChanged, style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor)),
         ),
       );
     }

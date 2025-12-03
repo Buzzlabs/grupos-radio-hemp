@@ -46,33 +46,33 @@ class ChatView extends StatelessWidget {
       return [
         if (controller.canEditSelectedEvents)
           IconButton(
-            icon: Icon(Icons.edit_outlined, color: theme.colorScheme.tertiary,),
+            icon: Icon(Icons.edit_outlined, color: theme.colorScheme.chatAppBarTileIconColor,),
             tooltip: L10n.of(context).edit,
-            color: theme.colorScheme.tertiary,
+            color: theme.colorScheme.chatAppBarTileTextColor,
             onPressed: controller.editSelectedEventAction,
           ),
         IconButton(
-          icon: Icon(Icons.copy_outlined, color: theme.colorScheme.tertiary,),
+          icon: Icon(Icons.copy_outlined, color: theme.colorScheme.chatAppBarTileIconColor,),
           tooltip: L10n.of(context).copy,
           onPressed: controller.copyEventsAction,
         ),
         if (controller.canPinSelectedEvents)
           IconButton(
-            icon: Icon(Icons.push_pin_outlined, color: theme.colorScheme.tertiary,),
+            icon: Icon(Icons.push_pin_outlined, color: theme.colorScheme.chatAppBarTileIconColor,),
             onPressed: controller.pinEvent,
             tooltip: L10n.of(context).pinMessage,
           ),
         if (controller.canRedactSelectedEvents)
           IconButton(
-            icon: Icon(Icons.delete_outlined, color: theme.colorScheme.tertiary,),
+            icon: Icon(Icons.delete_outlined, color: theme.colorScheme.error,),
             tooltip: L10n.of(context).redactMessage,
             onPressed: controller.redactEventsAction,
           ),
         if (controller.selectedEvents.length == 1)
           PopupMenuButton<_EventContextAction>(
             icon: Icon(Icons.more_vert, 
-            color: theme.colorScheme.tertiary,),
-            color: theme.colorScheme.surface,
+            color: theme.colorScheme.chatAppBarTileIconColor,),
+            color: theme.colorScheme.chatAppBarTileBackground,
             useRootNavigator: true,
             onSelected: (action) {
               switch (action) {
@@ -93,9 +93,9 @@ class ChatView extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.download_outlined, color: theme.colorScheme.tertiary),
+                      Icon(Icons.download_outlined, color: theme.colorScheme.chatAppBarTileIconColor),
                       const SizedBox(width: 12),
-                      Text(L10n.of(context).downloadFile, style: TextStyle(color: theme.colorScheme.tertiary),),
+                      Text(L10n.of(context).downloadFile, style: TextStyle(color: theme.colorScheme.chatAppBarTileTextColor),),
                     ],
                   ),
                 ),
@@ -104,9 +104,9 @@ class ChatView extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.info_outlined, color: theme.colorScheme.tertiary),
+                    Icon(Icons.info_outlined, color: theme.colorScheme.chatAppBarTileIconColor),
                     const SizedBox(width: 12),
-                    Text(L10n.of(context).messageInfo, style: TextStyle(color: theme.colorScheme.tertiary),),
+                    Text(L10n.of(context).messageInfo, style: TextStyle(color: theme.colorScheme.chatAppBarTileTextColor),),
                   ],
                 ),
               ),
@@ -205,15 +205,15 @@ class ChatView extends StatelessWidget {
                       : theme.colorScheme.onTertiaryContainer,
                 ),
                 backgroundColor: controller.selectedEvents.isEmpty
-                    ? null
-                    : theme.colorScheme.tertiaryContainer,
+                    ? theme.colorScheme.chatAppBarTileBackground
+                    : theme.colorScheme.chatAppBarTileSelectedBackground,
                 automaticallyImplyLeading: false,
                 leading: controller.selectMode
                     ? IconButton(
-                        icon: Icon(Icons.close, color: theme.colorScheme.tertiary,),
+                        icon: Icon(Icons.close, color: theme.colorScheme.chatAppBarTileIconColor,),
                         onPressed: controller.clearSelectedEvents,
                         tooltip: L10n.of(context).close,
-                        color: theme.colorScheme.onTertiaryContainer,
+                        color: theme.colorScheme.chatAppBarTileIconColor,
                       )
                     : FluffyThemes.isColumnMode(context)
                         ? null
@@ -226,7 +226,7 @@ class ChatView extends StatelessWidget {
                               filter: (r) => r.id != controller.roomId,
                               badgePosition:
                                   BadgePosition.topEnd(end: 8, top: 4),
-                              child: const Center(child: BackButton()),
+                              child: Center(child: BackButton(color: theme.colorScheme.chatAppBarBackButtonColor)),
                             ),
                           ),
                 titleSpacing: FluffyThemes.isColumnMode(context) ? 24 : 0,
@@ -241,8 +241,8 @@ class ChatView extends StatelessWidget {
                       if (scrollUpBannerEventId != null)
                         ChatAppBarListTile(
                           leading: IconButton(
-                            color: theme.colorScheme.onSurfaceVariant,
-                            icon: Icon(Icons.close, color: theme.colorScheme.tertiary,),
+                            color: theme.colorScheme.chatAppBarTileIconColor,
+                            icon: Icon(Icons.close, color: theme.colorScheme.chatAppBarTileIconColor,),
                             tooltip: L10n.of(context).close,
                             onPressed: () {
                               controller.discardScrollUpBannerEventId();
@@ -257,7 +257,7 @@ class ChatView extends StatelessWidget {
                               );
                               controller.discardScrollUpBannerEventId();
                             },
-                            child: Text(L10n.of(context).jump, style: TextStyle(color: theme.colorScheme.tertiary)),
+                            child: Text(L10n.of(context).jump, style: TextStyle(color: theme.colorScheme.chatAppBarTileTextColor)),
                           ),
                         ),
                     ],
@@ -274,9 +274,9 @@ class ChatView extends StatelessWidget {
                         onPressed: controller.scrollDown,
                         heroTag: null,
                         mini: true,
-                        backgroundColor: theme.colorScheme.secondary,
-                        foregroundColor: theme.colorScheme.tertiary,
-                        child: Icon(Icons.arrow_downward_outlined, color: theme.colorScheme.tertiary),
+                        backgroundColor: theme.colorScheme.jumpToLastMessagePaddingColor,
+                        foregroundColor: theme.colorScheme.chatAppBarTileIconColor,
+                        child: Icon(Icons.arrow_downward_outlined, color: theme.colorScheme.chatAppBarTileIconColor),
                       ),
                     )
                   : null,
@@ -288,7 +288,7 @@ class ChatView extends StatelessWidget {
                   children: <Widget>[
                     Positioned.fill(
                       child: Material(
-                        color: theme.colorScheme.tertiary,
+                        color: theme.colorScheme.chatBackground,
                         child: SafeArea(
                           child: Column(
                             children: <Widget>[
@@ -296,7 +296,7 @@ class ChatView extends StatelessWidget {
                                 height: 1,),
                               Material(
                                 elevation: 4,
-                                color: theme.colorScheme.surface,
+                                color: theme.colorScheme.pinnedMessageBackground,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.vertical(
                                     bottom: Radius.circular(
@@ -356,9 +356,9 @@ class ChatView extends StatelessWidget {
                                       clipBehavior: Clip.hardEdge,
                                       color: controller
                                               .selectedEvents.isNotEmpty
-                                          ? theme.colorScheme.tertiaryContainer
+                                          ? theme.colorScheme.inputBarBackground
                                           : theme
-                                              .colorScheme.surfaceContainerHigh,
+                                              .colorScheme.inputBarBackground,
                                       borderRadius: const BorderRadius.all(
                                         Radius.circular(24),
                                       ),

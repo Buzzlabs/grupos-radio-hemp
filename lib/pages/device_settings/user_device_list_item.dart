@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -112,17 +113,17 @@ class UserDeviceListItem extends StatelessWidget {
           leading: CircleAvatar(
             foregroundColor: Colors.white,
             backgroundColor: keys == null
-                ? theme.colorScheme.secondary
+                ? theme.colorScheme.deviceSettingPaddingColor
                 : keys.blocked
                     ? theme.colorScheme.error
                     : keys.verified
                         ? Colors.green
-                        : theme.colorScheme.secondary,
+                        : theme.colorScheme.deviceSettingPaddingColor,
             child: Icon(userDevice.icon),
           ),
           title: Text(
             userDevice.displayname,
-            style: TextStyle(color: theme.colorScheme.tertiary),
+            style: TextStyle(color: theme.colorScheme.deviceSettingTextColor),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -132,7 +133,7 @@ class UserDeviceListItem extends StatelessWidget {
                   .localizedTimeShort(context),
             ),
             style: TextStyle(fontWeight: FontWeight.w300,
-              color: theme.colorScheme.tertiary,),
+              color: theme.colorScheme.deviceSettingInfoColor,),
           ),
           trailing: keys == null
               ? null
@@ -147,7 +148,7 @@ class UserDeviceListItem extends StatelessWidget {
                         ? theme.colorScheme.error
                         : keys.verified
                             ? Colors.green
-                            : Theme.of(context).colorScheme.secondary,
+                            : Theme.of(context).colorScheme.deviceSettingPaddingColor,
                   ),
                 ),
         ),

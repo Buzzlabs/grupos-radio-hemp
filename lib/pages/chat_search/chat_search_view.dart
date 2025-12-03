@@ -23,13 +23,13 @@ class ChatSearchView extends StatelessWidget {
         appBar: AppBar(
             title: Text(L10n.of(context).oopsSomethingWentWrong,
                 style:
-                    TextStyle(color: theme.colorScheme.onSecondaryContainer),),),
+                    TextStyle(color: theme.colorScheme.oopsMessageTextColor),),),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Text(L10n.of(context).youAreNoLongerParticipatingInThisChat,
                 style:
-                    TextStyle(color: theme.colorScheme.onSecondaryContainer),),
+                    TextStyle(color: theme.colorScheme.oopsMessageTextColor),),
           ),
         ),
       );
@@ -37,7 +37,7 @@ class ChatSearchView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Center(child: BackButton(color: theme.colorScheme.tertiary)),
+        leading: Center(child: BackButton(color: theme.colorScheme.searchScreenBackButton)),
         titleSpacing: 0,
         title: Text(
             L10n.of(context).searchIn(
@@ -45,7 +45,7 @@ class ChatSearchView extends StatelessWidget {
                 L10n.of(context),
               ),),
             ),
-            style: TextStyle(color: theme.colorScheme.tertiary),),
+            style: TextStyle(color: theme.colorScheme.searchScreenTitle),),
       ),
       body: MaxWidthBody(
         withScrolling: false,
@@ -63,45 +63,45 @@ class ChatSearchView extends StatelessWidget {
                 autofocus: true,
                 enabled: controller.tabController.index == 0,
                 decoration: InputDecoration(
-                  fillColor: theme.colorScheme.tertiaryContainer,
+                  fillColor: theme.colorScheme.dialogTextFieldBackground,
                   hintText: L10n.of(context).search,
                   labelStyle:
-                      TextStyle(color: theme.colorScheme.onSecondaryContainer),
+                      TextStyle(color: theme.colorScheme.dialogTextFieldHintTextColor),
                   prefixIcon: Icon(Icons.search_outlined,
-                      color: theme.colorScheme.onSecondaryContainer,),
+                      color: theme.colorScheme.dialogTextFieldHintTextColor,),
                   disabledBorder: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: theme.colorScheme.surface, width: 2),
+                        BorderSide(color: theme.colorScheme.dialogTextFieldBorderColor, width: 2),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: theme.colorScheme.surface,
+                      color: theme.colorScheme.dialogTextFieldBorderColor,
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: theme.colorScheme.surface,
+                      color: theme.colorScheme.dialogTextFieldBorderColor,
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: theme.colorScheme.surface,
+                      color: theme.colorScheme.dialogTextFieldBorderColor,
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   hintStyle: TextStyle(
-                    color: theme.colorScheme.onSecondaryContainer,
+                    color: theme.colorScheme.dialogTextFieldHintTextColor,
                     fontWeight: FontWeight.normal,
                   ),
                 ),
                 style: TextStyle(
-                  color: theme.colorScheme.tertiary,
+                  color: theme.colorScheme.dialogTextFieldTextColor,
                 ),
               ),
             ),
@@ -112,9 +112,9 @@ class ChatSearchView extends StatelessWidget {
                 Tab(child: Text(L10n.of(context).gallery)),
                 Tab(child: Text(L10n.of(context).files)),
               ],
-              labelColor: theme.colorScheme.primary,
-              unselectedLabelColor: theme.colorScheme.primary.withAlpha(128),
-              indicatorColor: theme.colorScheme.primary,
+              labelColor: theme.colorScheme.searchScreenTabBarSelected,
+              unselectedLabelColor: theme.colorScheme.searchScreenTabBarUnelected,
+              indicatorColor: theme.colorScheme.searchScreenTabBarSelected,
             ),
             Expanded(
               child: TabBarView(

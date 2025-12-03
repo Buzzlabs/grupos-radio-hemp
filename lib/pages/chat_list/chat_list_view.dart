@@ -62,7 +62,7 @@ class ChatListView extends StatelessWidget {
                           child: Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: theme.colorScheme.surface,
+                              color: theme.colorScheme.chatListBackground,
                             ),
                             padding: const EdgeInsets.only(
                               left: 20,

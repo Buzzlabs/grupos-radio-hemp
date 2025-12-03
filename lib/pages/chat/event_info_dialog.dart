@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -41,7 +42,8 @@ class EventInfoDialog extends StatelessWidget {
     final originalSource = event.originalSource;
     return Scaffold(
       appBar: AppBar(
-        title: Text(L10n.of(context).messageInfo),
+        title: Text(L10n.of(context).messageInfo, style: TextStyle(color: theme.colorScheme.infoAboutMessageTextColor),
+),
         leading: CloseButton(
           onPressed: Navigator.of(context, rootNavigator: false).pop,
         ),
@@ -50,6 +52,7 @@ class EventInfoDialog extends StatelessWidget {
         children: [
           ListTile(
             leading: Avatar(
+              presenceBackgroundColor: Colors.transparent,
               mxContent: event.senderFromMemoryOrFallback.avatarUrl,
               name: event.senderFromMemoryOrFallback.calcDisplayname(),
               client: event.room.client,
@@ -58,29 +61,33 @@ class EventInfoDialog extends StatelessWidget {
             title: Text(L10n.of(context).sender),
             subtitle: Text(
               '${event.senderFromMemoryOrFallback.calcDisplayname()} [${event.senderId}]',
-            ),
+            style: TextStyle(color: theme.colorScheme.infoAboutMessageTextColor),
+),
           ),
           ListTile(
             title: Text('${L10n.of(context).time}:'),
-            subtitle: Text(event.originServerTs.localizedTime(context)),
+            subtitle: Text(event.originServerTs.localizedTime(context), style: TextStyle(color: theme.colorScheme.infoAboutMessageTextColor),
+),
           ),
           ListTile(
             title: Text('${L10n.of(context).status}:'),
-            subtitle: Text(event.status.name),
+            subtitle: Text(event.status.name, style: TextStyle(color: theme.colorScheme.infoAboutMessageTextColor),
+),
           ),
-          ListTile(title: Text('${L10n.of(context).sourceCode}:')),
+          ListTile(title: Text('${L10n.of(context).sourceCode}:', 
+)),
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Material(
               borderRadius: BorderRadius.circular(AppConfig.borderRadius),
-              color: theme.colorScheme.secondary,
+              color: theme.colorScheme.infoAboutMessageBackground,
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 scrollDirection: Axis.horizontal,
                 child: SelectableText(
                   prettyJson(MatrixEvent.fromJson(event.toJson())),
                   style: TextStyle(
-                    color: theme.colorScheme.tertiary,
+                    color: theme.colorScheme.infoAboutMessageTextColor,
                   ),
                 ),
               ),
@@ -92,14 +99,14 @@ class EventInfoDialog extends StatelessWidget {
               padding: const EdgeInsets.all(12.0),
               child: Material(
                 borderRadius: BorderRadius.circular(AppConfig.borderRadius),
-                color: theme.colorScheme.secondary,
+                color: theme.colorScheme.infoAboutMessageBackground,
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
                   scrollDirection: Axis.horizontal,
                   child: SelectableText(
                     prettyJson(originalSource),
                     style: TextStyle(
-                      color: theme.colorScheme.tertiary,
+                      color: theme.colorScheme.infoAboutMessageTextColor,
                     ),
                   ),
                 ),

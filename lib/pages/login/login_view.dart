@@ -49,8 +49,8 @@ class LoginView extends StatelessWidget {
     return LoginScaffold(
       appBar: AppBar(
         backgroundColor: isMobileMode
-            ? theme.colorScheme.tertiary
-            : theme.colorScheme.tertiary,
+            ? theme.colorScheme.loginBoxBackground
+            : theme.colorScheme.loginBoxBackground,
 
         toolbarHeight: toolBarHeight,
         title: Padding(
@@ -63,10 +63,10 @@ class LoginView extends StatelessWidget {
             child: Text(
               L10n.of(context).login,
               style: TextStyle(
-                fontFamily: 'Roboto',
+                fontFamily: theme.colorScheme.loginFontFamily,
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
-                color: theme.colorScheme.onSurface,
+                color: theme.colorScheme.loginLabel,
               ),
             ),
           ),
@@ -102,9 +102,9 @@ class LoginView extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextField(
                         style: TextStyle(
-                          color: theme.colorScheme.onSurface,
+                          color: theme.colorScheme.userTxtFieldTextColor,
                           fontWeight: FontWeight.normal,
-                          fontFamily: 'Roboto',
+                          fontFamily: theme.colorScheme.loginFontFamily,
                         ),
                         readOnly: controller.loading,
                         autocorrect: false,
@@ -118,7 +118,7 @@ class LoginView extends StatelessWidget {
                             : [AutofillHints.username],
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.account_box_outlined),
-                          fillColor: theme.colorScheme.tertiary,
+                          fillColor: theme.colorScheme.userTxtFieldFilledColor,
                           disabledBorder: OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: theme.colorScheme.primary, width: 2),
@@ -126,21 +126,21 @@ class LoginView extends StatelessWidget {
                           ),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.userTxtFieldBorderColor,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.userTxtFieldBorderColor,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.userTxtFieldBorderColor,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
@@ -158,9 +158,9 @@ class LoginView extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextField(
                         style: TextStyle(
-                          color: theme.colorScheme.onSurface,
+                          color: theme.colorScheme.userTxtFieldTextColor,
                           fontWeight: FontWeight.normal,
-                          fontFamily: 'Roboto',
+                          fontFamily: theme.colorScheme.loginFontFamily,
                         ),
                         readOnly: controller.loading,
                         autocorrect: false,
@@ -174,29 +174,29 @@ class LoginView extends StatelessWidget {
                         onSubmitted: (_) => controller.login(),
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.lock_outlined),
-                          fillColor: theme.colorScheme.tertiary,
+                          fillColor: theme.colorScheme.userTxtFieldFilledColor,
                           disabledBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide(color: theme.colorScheme.primary, width: 2),
+                                BorderSide(color: theme.colorScheme.userTxtFieldBorderColor, width: 2),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.userTxtFieldBorderColor,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.userTxtFieldBorderColor,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.userTxtFieldBorderColor,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
@@ -212,7 +212,7 @@ class LoginView extends StatelessWidget {
                               controller.showPassword
                                   ? Icons.visibility_off_outlined
                                   : Icons.visibility_outlined,
-                              color: Theme.of(context).colorScheme.onSurface,
+                              color: Theme.of(context).colorScheme.eyeIconPasswordVisibility,
                             ),
                           ),
                           labelText: L10n.of(context).password,
@@ -238,7 +238,7 @@ class LoginView extends StatelessWidget {
                                 )
                               : Text(
                                   L10n.of(context).login,
-                                  style: const TextStyle(fontSize: 16),
+                                  style: TextStyle(fontSize: 16, color: theme.colorScheme.loginButtonTextColor),
                                 ),
                         ),
                       ),
@@ -254,9 +254,9 @@ class LoginView extends StatelessWidget {
                               TextSpan(
                                 text: '${L10n.of(context).newHere} ',
                                 style: TextStyle(
-                                  fontFamily: 'Roboto',
+                                  fontFamily: theme.colorScheme.loginFontFamily,
                                   color:
-                                      Theme.of(context).colorScheme.onSurface,
+                                      Theme.of(context).colorScheme.loginNewHereTextColor,
                                   fontSize: 18,
                                   fontWeight: FontWeight.normal,
                                 ),
@@ -264,8 +264,8 @@ class LoginView extends StatelessWidget {
                               TextSpan(
                                 text: L10n.of(context).createAnAccountPrompt,
                                 style: TextStyle(
-                                  fontFamily: 'Roboto',
-                                  color: Theme.of(context).colorScheme.primary,
+                                  fontFamily: theme.colorScheme.loginFontFamily,
+                                  color: Theme.of(context).colorScheme.loginCreateAccTextColor,
                                   fontSize: 18,
                                   decoration: TextDecoration.underline,
                                   fontWeight: FontWeight.normal,
@@ -291,13 +291,13 @@ class LoginView extends StatelessWidget {
                               : controller.passwordForgotten,
                           style: TextButton.styleFrom(
                             foregroundColor:
-                                Theme.of(context).colorScheme.primary,
+                                Theme.of(context).colorScheme.loginPasswordForgottenTextColor,
                             padding: const EdgeInsets.symmetric(vertical: 15.0),
                           ),
                           child: Text(
                             L10n.of(context).passwordForgotten,
-                            style: const TextStyle(
-                              fontFamily: 'Roboto',
+                            style: TextStyle(
+                              fontFamily: theme.colorScheme.loginFontFamily,
                               fontSize: 16,
                               fontWeight: FontWeight.normal,
                             ),

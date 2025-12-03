@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -63,7 +64,7 @@ class InvitationSelectionController extends State<InvitationSelection> {
     if (success.error == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(L10n.of(context).contactHasBeenInvitedToTheGroup, style: TextStyle(color: Theme.of(context).colorScheme.tertiary),),
+          content: Text(L10n.of(context).contactHasBeenInvitedToTheGroup, style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor),),
         ),
       );
     }

@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -32,10 +33,10 @@ class ReplyContent extends StatelessWidget {
         timeline != null ? replyEvent.getDisplayEvent(timeline) : replyEvent;
     final fontSize = AppConfig.messageFontSize * AppConfig.fontSizeFactor;
     final color = theme.brightness == Brightness.dark
-        ? theme.colorScheme.onSecondaryContainer
+        ? theme.colorScheme.senderNameBeingAnsweredTextColor
         : ownMessage
-            ? theme.colorScheme.secondaryContainer
-            : theme.colorScheme.secondaryContainer;
+            ? theme.colorScheme.senderNameBeingAnsweredTextColor
+            : theme.colorScheme.senderNameBeingAnsweredTextColor;
 
     return Material(
       color: Colors.transparent,
@@ -83,10 +84,10 @@ class ReplyContent extends StatelessWidget {
                   maxLines: 1,
                   style: TextStyle(
                     color: theme.brightness == Brightness.dark
-                        ? theme.colorScheme.onSecondary
+                        ? theme.colorScheme.messageBeingAnsweredTextColor
                         : ownMessage
-                            ? theme.colorScheme.onSecondary
-                            : theme.colorScheme.onSecondary,
+                            ? theme.colorScheme.messageBeingAnsweredTextColor
+                            : theme.colorScheme.messageBeingAnsweredTextColor,
                     fontSize: fontSize,
                   ),
                 ),

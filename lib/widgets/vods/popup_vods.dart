@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fluffychat/widgets/vods/vods_widget.dart';
@@ -100,7 +101,7 @@ class PopUpVodsState extends State<PopUpVods> {
           child: Container(
             height: 600,
               decoration: BoxDecoration(
-                color: theme.colorScheme.onPrimary,
+                color: theme.colorScheme.vodsPopupBackground,
                 borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30),
                 topRight: Radius.circular(30),
@@ -129,7 +130,7 @@ class PopUpVodsState extends State<PopUpVods> {
                           height: 5,
                           margin: const EdgeInsets.symmetric(vertical: 8),
                           decoration: BoxDecoration(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.vodsPopupHandleColor,
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
@@ -153,8 +154,8 @@ class PopUpVodsState extends State<PopUpVods> {
                                   Text(
                                     'ROLOU POR AQUI',
                                       style:  TextStyle(
-                                        fontFamily: 'GothamRndSSm',
-                                          color: theme.colorScheme.primary,
+                                        fontFamily: theme.colorScheme.vodsPopupFontFamily,
+                                          color: theme.colorScheme.vodsPopupMainTagTextColor,
                                         fontSize: 25,
                                           fontWeight: FontWeight.bold,
                                       

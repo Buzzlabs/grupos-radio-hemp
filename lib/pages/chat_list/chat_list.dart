@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fluffychat/config/themes.dart';
 import 'package:fluffychat/widgets/streaming/video_streaming_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -556,7 +557,7 @@ class ChatListController extends State<ChatList>
     final action = await showMenu<ChatContextAction>(
       context: posContext,
       position: position,
-      color: theme.colorScheme.surface,
+      color: theme.colorScheme.chatListPopupBackground,
       items: [
         PopupMenuItem(
           value: ChatContextAction.open,
@@ -573,7 +574,7 @@ class ChatListController extends State<ChatList>
                 child: Text(
                   displayname,
                   style:
-                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                      TextStyle(color: Theme.of(context).colorScheme.chatListPopupTextColor),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -609,14 +610,14 @@ class ChatListController extends State<ChatList>
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
-                  color: theme.colorScheme.tertiary,
+                  color: theme.colorScheme.chatListPopupIconColor,
                   room.pushRuleState == PushRuleState.notify
                       ? Icons.notifications_off_outlined
                       : Icons.notifications_off,
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  style: TextStyle(color: theme.colorScheme.tertiary),
+                  style: TextStyle(color: theme.colorScheme.chatListPopupTextColor),
                   room.pushRuleState == PushRuleState.notify
                       ? L10n.of(context).muteChat
                       : L10n.of(context).unmuteChat,
@@ -630,14 +631,14 @@ class ChatListController extends State<ChatList>
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
-                  color: theme.colorScheme.tertiary,
+                  color: theme.colorScheme.chatListPopupIconColor,
                   room.markedUnread
                       ? Icons.mark_as_unread
                       : Icons.mark_as_unread_outlined,
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  style: TextStyle(color: theme.colorScheme.tertiary),
+                  style: TextStyle(color: theme.colorScheme.chatListPopupTextColor),
                   room.markedUnread
                       ? L10n.of(context).markAsRead
                       : L10n.of(context).markAsUnread,
@@ -651,12 +652,12 @@ class ChatListController extends State<ChatList>
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
-                  color: theme.colorScheme.tertiary,
+                  color: theme.colorScheme.chatListPopupIconColor,
                   room.isFavourite ? Icons.push_pin : Icons.push_pin_outlined,
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  style: TextStyle(color: theme.colorScheme.tertiary),
+                  style: TextStyle(color: theme.colorScheme.chatListPopupTextColor),
                   room.isFavourite
                       ? L10n.of(context).unpin
                       : L10n.of(context).pin,

@@ -30,7 +30,7 @@ class ReplyDisplay extends StatelessWidget {
         children: <Widget>[
           IconButton(
             tooltip: L10n.of(context).close,
-            icon: Icon(Icons.close, color: theme.colorScheme.onSecondary),
+            icon: Icon(Icons.close, color: theme.colorScheme.closeMessageBeingAnsweredIconColor),
             onPressed: controller.cancelReplyEventAction,
           ),
           Expanded(
@@ -65,7 +65,7 @@ class _EditContent extends StatelessWidget {
       children: <Widget>[
         Icon(
           Icons.edit,
-          color: theme.colorScheme.secondary,
+          color: theme.colorScheme.editMessageIconColor,
         ),
         Container(width: 15.0),
         Text(

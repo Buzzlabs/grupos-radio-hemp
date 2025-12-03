@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -42,7 +43,7 @@ class ChatSearchFilesTab extends StatelessWidget {
                     MatrixLocals(L10n.of(context)),
                   ),
                 ),
-                style: TextStyle(color: theme.colorScheme.onSecondaryContainer),
+                style: TextStyle(color: theme.colorScheme.searchScreenTitle),
               ),
             ],
           );
@@ -56,7 +57,7 @@ class ChatSearchFilesTab extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 L10n.of(context).nothingFound,
-                style: TextStyle(color: theme.colorScheme.onSecondaryContainer),
+                style: TextStyle(color: theme.colorScheme.oopsMessageTextColor),
               ),
             ],
           );
@@ -87,8 +88,8 @@ class ChatSearchFilesTab extends StatelessWidget {
                     padding: const EdgeInsets.all(16.0),
                     child: TextButton.icon(
                       style: TextButton.styleFrom(
-                        backgroundColor: theme.colorScheme.primary,
-                        foregroundColor: theme.colorScheme.tertiary,
+                        backgroundColor: theme.colorScheme.searchTextButtonPaddingColor,
+                        foregroundColor: theme.colorScheme.searchTextButtonTextColor,
                       ),
                       onPressed: () => startSearch(
                         prevBatch: nextBatch,
@@ -96,11 +97,11 @@ class ChatSearchFilesTab extends StatelessWidget {
                       ),
                       icon: Icon(
                         Icons.arrow_downward_outlined,
-                        color: theme.colorScheme.tertiary,
+                        color: theme.colorScheme.searchTextButtonTextColor,
                       ),
                       label: Text(
                         L10n.of(context).searchMore,
-                        style: TextStyle(color: theme.colorScheme.tertiary),
+                        style: TextStyle(color: theme.colorScheme.searchTextButtonTextColor),
                       ),
                     ),
                   ),
@@ -142,8 +143,9 @@ class ChatSearchFilesTab extends StatelessWidget {
                             child: Text(
                               event.originServerTs.localizedTime(context),
                               style: TextStyle(
-                                  fontSize: 12,
-                                  color: theme.colorScheme.tertiary,),
+                                fontSize: 12,
+                                color: theme.colorScheme.searchTextButtonTextColor,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -163,15 +165,17 @@ class ChatSearchFilesTab extends StatelessWidget {
                       color: theme.colorScheme.onInverseSurface,
                       clipBehavior: Clip.hardEdge,
                       child: ListTile(
-                        leading: Icon(Icons.file_present_outlined, color: theme.colorScheme.secondary),
+                        leading: Icon(Icons.file_present_outlined,
+                            color: theme.colorScheme.searchFileIconColor),
                         title: Text(
                           filename,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style:
-                              TextStyle(color: theme.colorScheme.tertiary),
+                          style: TextStyle(color: theme.colorScheme.searchTextButtonTextColor),
                         ),
-                        subtitle: Text('$sizeString | $filetype', style: TextStyle(color: theme.colorScheme.onSecondaryContainer)),
+                        subtitle: Text('$sizeString | $filetype',
+                            style: TextStyle(
+                                color: theme.colorScheme.fileTypeTextColor)),
                         onTap: () => event.saveFile(context),
                       ),
                     ),

@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 
@@ -41,6 +42,7 @@ Future<String?> showTextInputDialog({
             constraints: const BoxConstraints(maxWidth: 256),
             child: Text(
               title.toUpperCase(),
+              style: TextStyle(color: theme.colorScheme.textInputDialogTitleTextColor),
             ),
           ),
           content: ConstrainedBox(

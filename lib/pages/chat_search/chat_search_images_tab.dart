@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -45,7 +46,7 @@ class ChatSearchImagesTab extends StatelessWidget {
                     MatrixLocals(L10n.of(context)),
                   ),
                 ),
-                style: TextStyle(color: theme.colorScheme.onSecondaryContainer),
+                style: TextStyle(color: theme.colorScheme.searchScreenTitle),
               ),
             ],
           );
@@ -58,7 +59,7 @@ class ChatSearchImagesTab extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 L10n.of(context).nothingFound,
-                style: TextStyle(color: theme.colorScheme.onSecondaryContainer),
+                style: TextStyle(color: theme.colorScheme.oopsMessageTextColor),
               ),
             ],
           );
@@ -99,8 +100,8 @@ class ChatSearchImagesTab extends StatelessWidget {
                   padding: const EdgeInsets.all(16.0),
                   child: TextButton.icon(
                     style: TextButton.styleFrom(
-                      backgroundColor: theme.colorScheme.primary,
-                      foregroundColor: theme.colorScheme.tertiary,
+                      backgroundColor: theme.colorScheme.searchTextButtonPaddingColor,
+                      foregroundColor: theme.colorScheme.searchTextButtonTextColor,
                     ),
                     onPressed: () => startSearch(
                       prevBatch: nextBatch,
@@ -108,10 +109,10 @@ class ChatSearchImagesTab extends StatelessWidget {
                     ),
                     icon: Icon(
                       Icons.arrow_downward_outlined,
-                      color: theme.colorScheme.tertiary,
+                      color: theme.colorScheme.searchTextButtonTextColor,
                     ),
                     label: Text(L10n.of(context).searchMore,
-                        style: TextStyle(color: theme.colorScheme.tertiary),),
+                        style: TextStyle(color: theme.colorScheme.searchTextButtonTextColor),),
                   ),
                 ),
               );
@@ -138,7 +139,7 @@ class ChatSearchImagesTab extends StatelessWidget {
                         ).format(eventsByMonthList[i].key),
                         style: TextStyle(
                           fontSize: 12,
-                          color: theme.colorScheme.tertiary,
+                          color: theme.colorScheme.searchTextButtonTextColor,
                         ),
                         textAlign: TextAlign.center,
                       ),

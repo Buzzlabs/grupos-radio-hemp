@@ -29,9 +29,9 @@ class ChatEmojiPicker extends StatelessWidget {
               child: Column(
                 children: [
                   TabBar(
-                    indicatorColor: theme.colorScheme.primary, 
-                    labelColor: theme.colorScheme.primary, 
-                    unselectedLabelColor: theme.colorScheme.primary.withAlpha(128),
+                    indicatorColor: theme.colorScheme.emojiTabSelectedColor, 
+                    labelColor: theme.colorScheme.emojiTabSelectedColor, 
+                    unselectedLabelColor: theme.colorScheme.emojitabUnselectedColor,
                     tabs: [
                       Tab(text: L10n.of(context).emojis),
                       Tab(text: L10n.of(context).stickers),
@@ -53,17 +53,17 @@ class ChatEmojiPicker extends StatelessWidget {
                               enabled: false,
                             ),
                             categoryViewConfig: CategoryViewConfig(
-                              backspaceColor: theme.colorScheme.primary,
+                              backspaceColor: theme.colorScheme.emojiTabSelectedColor,
                               iconColor:
-                                  theme.colorScheme.primary.withAlpha(128),
-                              iconColorSelected: theme.colorScheme.primary,
-                              indicatorColor: theme.colorScheme.primary,
-                              backgroundColor: theme.colorScheme.surface,
+                                  theme.colorScheme.emojiIconUnselectedColor,
+                              iconColorSelected: theme.colorScheme.emojiIconSelectedColor,
+                              indicatorColor: theme.colorScheme.emojiIconSelectedColor,
+                              backgroundColor: theme.colorScheme.emojiPickerBackground,
                             ),
                             skinToneConfig: SkinToneConfig(
                               dialogBackgroundColor: Color.lerp(
-                                theme.colorScheme.surface,
-                                theme.colorScheme.primaryContainer,
+                                theme.colorScheme.emojiPickerBackground,
+                                theme.colorScheme.emojiPickerBackground,
                                 0.75,
                               )!,
                               indicatorColor: theme.colorScheme.onSurface,

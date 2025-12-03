@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluffychat/pages/lives_data.dart';
@@ -96,7 +97,7 @@ class _ScreenVodState extends State<ScreenVod> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: IconButton(
-                          icon: Icon(Icons.arrow_back, color: theme.colorScheme.tertiary,),
+                          icon: Icon(Icons.arrow_back, color: theme.colorScheme.vodCardBackgroundColor,),
                           onPressed: () {
                             final router = GoRouter.of(context);
                             if (router.canPop()) {
@@ -153,7 +154,7 @@ class _ScreenVodState extends State<ScreenVod> {
                             top: 8,
                             left: 0,
                             child: IconButton(
-                              icon: Icon(Icons.arrow_back, color: theme.colorScheme.tertiary,),
+                              icon: Icon(Icons.arrow_back, color: theme.colorScheme.vodScreenBackButtonColor,),
                               onPressed: () {
                                 final router = GoRouter.of(context);
                                 if (router.canPop()) {

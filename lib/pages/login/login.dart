@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -285,7 +286,7 @@ class LoginController extends State<Login> {
     );
     if (success.error == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(L10n.of(context).passwordHasBeenChanged, style: TextStyle(color: Theme.of(context).colorScheme.tertiary),)),
+        SnackBar(content: Text(L10n.of(context).passwordHasBeenChanged, style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor),)),
       );
       usernameController.text = input;
       passwordController.text = password;

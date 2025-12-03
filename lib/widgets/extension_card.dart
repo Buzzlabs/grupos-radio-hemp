@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluffychat/widgets/streaming/video_streaming_model.dart';
 import 'package:fluffychat/pages/extensions/extensions.dart';
@@ -68,7 +69,7 @@ class _ExtensionCardState extends State<ExtensionCard> {
           SnackBar(
             content: Text(
               L10n.of(context).liveClosedSuccess,
-              style: TextStyle(color: theme.colorScheme.tertiary),
+              style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor),
             ),
             duration: const Duration(seconds: 3),
           ),
@@ -80,7 +81,7 @@ class _ExtensionCardState extends State<ExtensionCard> {
           SnackBar(
             content: Text(
               L10n.of(context).liveCloseError(e.toString()),
-              style: TextStyle(color: theme.colorScheme.tertiary),
+              style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor),
             ),
             duration: const Duration(seconds: 3),
           ),
@@ -99,8 +100,8 @@ class _ExtensionCardState extends State<ExtensionCard> {
         final isLive = liveMap[widget.roomId] == true;
 
         final borderColor = isHovered && !isLive
-            ? theme.colorScheme.primary
-            : theme.colorScheme.tertiary;
+            ? theme.colorScheme.extensionBorderColorHovered
+            : theme.colorScheme.extensionBorderColorNotHovered;
 
         return MouseRegion(
           onEnter: (_) => setState(() => isHovered = true),
@@ -117,7 +118,7 @@ class _ExtensionCardState extends State<ExtensionCard> {
               ),
               child: Row(
                 children: [
-                  Icon(widget.icon, size: 20, color: theme.colorScheme.primary),
+                  Icon(widget.icon, size: 20, color: theme.colorScheme.extensionIconColor),
                   const SizedBox(width: 12),
                   if (isLive && widget.type == ExtensionType.live) ...[],
                   Expanded(
@@ -131,7 +132,7 @@ class _ExtensionCardState extends State<ExtensionCard> {
                               widget.title,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: theme.colorScheme.tertiary,
+                                color: theme.colorScheme.extensionIconText,
                               ),
                             ),
                             if (isLive &&
@@ -162,7 +163,7 @@ class _ExtensionCardState extends State<ExtensionCard> {
                           widget.subtitle,
                           style: TextStyle(
                             fontSize: 12,
-                            color: theme.colorScheme.onSecondaryContainer,
+                            color: theme.colorScheme.extensionSubtitleText,
                           ),
                         ),
                       ],
@@ -172,7 +173,7 @@ class _ExtensionCardState extends State<ExtensionCard> {
                     OutlinedButton(
                       onPressed: _closeLive,
                       style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: theme.colorScheme.tertiary),
+                        side: BorderSide(color: theme.colorScheme.extensionScreenBackButton),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 24,
                           vertical: 12,
@@ -187,7 +188,7 @@ class _ExtensionCardState extends State<ExtensionCard> {
                         L10n.of(context).closeLive,
                         style: TextStyle(
                           fontSize: 16,
-                          color: theme.colorScheme.onSecondaryContainer,
+                          color: theme.colorScheme.extensionSubtitleText,
                         ),
                       ),
                     ),

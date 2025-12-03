@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fluffychat/l10n/l10n.dart';
@@ -16,8 +17,8 @@ class ExtensionsView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Center(child: BackButton(color: theme.colorScheme.tertiary)),
-        title: Text(L10n.of(context).extensions, style: TextStyle(color: theme.colorScheme.tertiary),
+        leading: Center(child: BackButton(color: theme.colorScheme.extensionScreenBackButton)),
+        title: Text(L10n.of(context).extensions, style: TextStyle(color: theme.colorScheme.extensionScreenTextColor),
      ),
       ),
       body: MaxWidthBody(
@@ -29,7 +30,7 @@ class ExtensionsView extends StatelessWidget {
               Text(
                 L10n.of(context).availableExtensions,
                 style: TextStyle(
-                  color: theme.colorScheme.primary,
+                  color: theme.colorScheme.availableExtensionTextColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),

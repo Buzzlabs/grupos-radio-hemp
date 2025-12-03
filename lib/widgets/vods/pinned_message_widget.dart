@@ -27,14 +27,14 @@ class PinnedMessageWidget extends StatelessWidget {
               Icon(
                 Icons.push_pin,
                 size: 23,
-                color: theme.colorScheme.primary,
+                color: theme.colorScheme.pinnedMessageIconColor,
               ),
               const SizedBox(width: 8),
               Flexible(
                 child: Text(
-                  "Assista às lives anteriores e veja a programação da Rádio Hemp",
+                  "Assista às lives anteriores e veja a programação",
                   style: TextStyle(
-                    color: theme.colorScheme.tertiary,
+                    color: theme.colorScheme.pinnedMessageTextColor,
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
                   ),
@@ -55,8 +55,8 @@ class PinnedMessageWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 backgroundColor:
-                    theme.colorScheme.primary.withValues(alpha: 0.6),
-                foregroundColor: theme.colorScheme.onSurface,
+                    theme.colorScheme.pinnedMessageButtonColor,
+                foregroundColor: theme.colorScheme.pinnedMessageTextColor,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 minimumSize: const Size(130, 25),
@@ -64,7 +64,7 @@ class PinnedMessageWidget extends StatelessWidget {
               child: Text(
                 'Assistir 🎬',
                 style: TextStyle(
-                  color: theme.colorScheme.tertiary,
+                  color: theme.colorScheme.pinnedMessageTextColor,
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                 ),
@@ -76,7 +76,7 @@ class PinnedMessageWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: theme.colorScheme.pinnedMessageBackground,
         borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
       ),
       child: isMobileMode

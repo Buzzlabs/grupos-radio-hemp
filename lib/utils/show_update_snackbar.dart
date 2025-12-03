@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +23,7 @@ abstract class UpdateNotifier {
           SnackBar(
             duration: const Duration(seconds: 30),
             showCloseIcon: true,
-            content: Text(L10n.of(context).updateInstalled(currentVersion)),
+            content: Text(L10n.of(context).updateInstalled(currentVersion), style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor),),
             action: SnackBarAction(
               label: L10n.of(context).changelog,
               onPressed: () => launchUrlString(AppConfig.changelogUrl),

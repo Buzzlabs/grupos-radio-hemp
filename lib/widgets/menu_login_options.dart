@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluffychat/l10n/l10n.dart';
@@ -30,7 +31,7 @@ class MoreLoginMenuButton extends StatelessWidget {
       case MoreLoginActions.course:
         await launchUrl(
           Uri.parse(
-            'https://www.radiohemp.com/produto/como-plantar-maconha-medicinal/',
+            'https://pp.nexojornal.com.br/',
           ),
           mode: LaunchMode.externalApplication,
         );
@@ -60,7 +61,7 @@ class MoreLoginMenuButton extends StatelessWidget {
               children: [
                 Icon(
                 Icons.shopping_cart,
-                color: theme.colorScheme.primary,
+                color: theme.colorScheme.loginMenuIconColor,
                 size: 20,
               ),
                 // SvgPicture.asset(
@@ -68,7 +69,7 @@ class MoreLoginMenuButton extends StatelessWidget {
                 //   width: 30,
                 // ),
                 const SizedBox(width: 18),
-                Text(L10n.of(context).menuStore, style: TextStyle(color: theme.colorScheme.onSurface),
+                Text(L10n.of(context).menuStore, style: TextStyle(color: theme.colorScheme.loginMenuTextColor),
 ),
               ],
             ),
@@ -79,7 +80,7 @@ class MoreLoginMenuButton extends StatelessWidget {
               children: [
                 Icon(
                 Icons.book,
-                color: theme.colorScheme.primary,
+                color: theme.colorScheme.loginMenuIconColor,
                 size: 20,
               ),
                 // SvgPicture.asset(
@@ -87,7 +88,7 @@ class MoreLoginMenuButton extends StatelessWidget {
                 //   width: 30,
                 // ),
                 const SizedBox(width: 18),
-                Text(L10n.of(context).menuCourse, style: TextStyle(color: theme.colorScheme.onSurface),
+                Text(L10n.of(context).menuCourse, style: TextStyle(color: theme.colorScheme.loginMenuTextColor),
 ),
               ],
             ),
@@ -98,7 +99,7 @@ class MoreLoginMenuButton extends StatelessWidget {
               children: [
                  Icon(
                 Icons.mic,
-                color: theme.colorScheme.primary,
+                color: theme.colorScheme.loginMenuIconColor,
                 size: 20,
               ),
                 // SvgPicture.asset(
@@ -106,7 +107,7 @@ class MoreLoginMenuButton extends StatelessWidget {
                 //   width: 30,
                 // ),
                 const SizedBox(width: 18),
-                Text(L10n.of(context).menuPodcasts, style: TextStyle(color: theme.colorScheme.onSurface),
+                Text(L10n.of(context).menuPodcasts, style: TextStyle(color: theme.colorScheme.loginMenuTextColor),
 ),
               ],
             ),
@@ -119,11 +120,11 @@ class MoreLoginMenuButton extends StatelessWidget {
                   padding: const EdgeInsets.all(3),
                   child: Icon(
                     Icons.info_outlined,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.loginMenuIconColor,
                   ),
                 ),
                 const SizedBox(width: 12),
-                Text(L10n.of(context).about,style: TextStyle(color: theme.colorScheme.onSurface),
+                Text(L10n.of(context).about,style: TextStyle(color: theme.colorScheme.loginMenuTextColor),
 ),
               ],
             ),

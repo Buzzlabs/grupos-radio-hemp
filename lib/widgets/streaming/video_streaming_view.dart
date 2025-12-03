@@ -67,11 +67,11 @@ class _VideoStreamingViewState extends State<VideoStreamingView> {
                 height: boxHeight.toDouble(),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.surface,
+                  color: theme.colorScheme.liveStreamBackground,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: theme.colorScheme.surface,
+                      color: theme.colorScheme.liveStreamBackground,
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -118,7 +118,7 @@ class _VideoStreamingViewState extends State<VideoStreamingView> {
                               child: Icon(
                                 Icons.open_in_full,
                                 size: 15,
-                                color: theme.colorScheme.onSecondaryContainer,
+                                color: theme.colorScheme.liveStreamIconColor,
                               ),
                             ),
                           ),
@@ -202,7 +202,7 @@ class _VideoStreamingViewState extends State<VideoStreamingView> {
     final theme = Theme.of(context);
 
     return PopupMenuButton<String>(
-      iconColor: theme.colorScheme.onSecondaryContainer,
+      iconColor: theme.colorScheme.liveStreamIconColor,
       onSelected: (value) {
         if (value == 'edit') widget.onEdit();
         if (value == 'remove') widget.onClose();
@@ -211,12 +211,12 @@ class _VideoStreamingViewState extends State<VideoStreamingView> {
         PopupMenuItem(
           value: 'edit',
           child: Text(L10n.of(context).edit,
-              style: TextStyle(color: theme.colorScheme.tertiary),),
+              style: TextStyle(color: theme.colorScheme.liveStreamMenuTextColor),),
         ),
         PopupMenuItem(
           value: 'remove',
           child: Text(L10n.of(context).closeLive,
-              style: TextStyle(color: theme.colorScheme.tertiary),),
+              style: TextStyle(color: theme.colorScheme.liveStreamMenuTextColor),),
         ),
       ],
     );

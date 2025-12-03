@@ -27,11 +27,7 @@ class LoginScaffold extends StatelessWidget {
       return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              theme.colorScheme.surfaceContainerLow,
-              theme.colorScheme.surfaceContainer,
-              theme.colorScheme.surfaceContainerHighest,
-            ],
+            colors: theme.colorScheme.gradientBackground,
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -44,7 +40,7 @@ class LoginScaffold extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppConfig.borderRadius),
                 side: BorderSide(
-                  color: theme.colorScheme.primary,
+                  color: theme.colorScheme.scaffoldBorderColor,
                   width: 2,
                 ),
               ),
@@ -57,7 +53,7 @@ class LoginScaffold extends StatelessWidget {
                   maxHeight: 700,
                 ),
                 child: Scaffold(
-                  backgroundColor: theme.colorScheme.tertiary,
+                  backgroundColor: theme.colorScheme.loginBoxBackground,
                   appBar: appBar,
                   body: SafeArea(
                     child: SingleChildScrollView(
@@ -76,11 +72,7 @@ class LoginScaffold extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            theme.colorScheme.surfaceContainerLow,
-            theme.colorScheme.surfaceContainer,
-            theme.colorScheme.surfaceContainerHighest,
-          ],
+          colors: theme.colorScheme.gradientBackground,
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -93,7 +85,7 @@ class LoginScaffold extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppConfig.borderRadius),
               side: BorderSide(
-                color: theme.colorScheme.primary,
+                color: theme.colorScheme.scaffoldBorderColor,
                 width: 2,
               ),
             ),
@@ -108,7 +100,7 @@ class LoginScaffold extends StatelessWidget {
                 minHeight: 400,
               ),
               child: Scaffold(
-                backgroundColor: theme.colorScheme.tertiary,
+                backgroundColor: theme.colorScheme.loginBoxBackground,
                 key: const Key('LoginScaffold'),
                 appBar: appBar,
                 body: SafeArea(

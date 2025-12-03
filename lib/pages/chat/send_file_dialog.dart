@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -305,6 +306,7 @@ class SendFileDialogState extends State<SendFileDialog> {
                                         ? Icons.audio_file_outlined
                                         : Icons.description_outlined,
                             size: 32,
+                            color: theme.colorScheme.searchFileIconColor,
                           ),
                           const SizedBox(width: 8),
                           Expanded(
@@ -320,7 +322,7 @@ class SendFileDialogState extends State<SendFileDialog> {
                                 Text(
                                   '$sizeString - $fileTypes',
                                   style: TextStyle(
-                                    color: theme.colorScheme.onSurface,
+                                    color: theme.colorScheme.fileTypeTextColor,
                                     fontSize: 10,
                                   ),
                                   maxLines: 1,
@@ -356,7 +358,7 @@ class SendFileDialogState extends State<SendFileDialog> {
                             onChanged: compressionSupported
                                 ? (v) => setState(() => compress = v)
                                 : null,
-                            activeColor: theme.colorScheme.primary,
+                            activeColor: theme.colorScheme.fileCompressionSwitchActiveColor,
                           )
                         else
                           Switch.adaptive(
@@ -365,13 +367,13 @@ class SendFileDialogState extends State<SendFileDialog> {
                                 ? (v) => setState(() => compress = v)
                                 : null,
                             activeColor: theme
-                                .colorScheme.tertiaryContainer, // iOS thumb
-                            activeTrackColor: theme.colorScheme.primary,
-                            inactiveThumbColor: theme.colorScheme.primary,
+                                .colorScheme.fileCompressionSwitchInactiveColor, // iOS thumb
+                            activeTrackColor: theme.colorScheme.fileCompressionSwitchActiveColor,
+                            inactiveThumbColor: theme.colorScheme.fileCompressionSwitchActiveColor,
                             inactiveTrackColor:
-                                theme.colorScheme.tertiaryContainer,
+                                theme.colorScheme.fileCompressionSwitchInactiveColor,
                             trackOutlineColor: WidgetStateProperty.resolveWith(
-                              (states) => theme.colorScheme.primary,
+                              (states) => theme.colorScheme.fileCompressionSwitchActiveColor,
                             ),
                           ),
                         const SizedBox(width: 16),
@@ -387,7 +389,7 @@ class SendFileDialogState extends State<SendFileDialog> {
                                     L10n.of(context).compress,
                                     style: TextStyle(
                                       color: theme
-                                          .colorScheme.onSecondaryContainer,
+                                          .colorScheme.fileCompressionTextColor,
                                     ),
                                     textAlign: TextAlign.left,
                                   ),
@@ -448,7 +450,8 @@ extension on ScaffoldMessengerState {
               ),
             ),
             const SizedBox(width: 16),
-            Text(title),
+            Text(title, style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor),
+),
           ],
         ),
       ),

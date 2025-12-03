@@ -19,7 +19,7 @@ class DevicesSettingsView extends StatelessWidget {
         automaticallyImplyLeading: !FluffyThemes.isColumnMode(context),
         centerTitle: FluffyThemes.isColumnMode(context),
         title: Text(L10n.of(context).devices,
-         style: TextStyle(color: theme.colorScheme.primary),),
+         style: TextStyle(color: theme.colorScheme.deviceSettingTitleColor),),
       ),
       body: MaxWidthBody(
         child: FutureBuilder<bool>(
@@ -55,12 +55,13 @@ class DevicesSettingsView extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: ListTile(
-                            leading: const CircleAvatar(
-                              child: Icon(Icons.info_outlined),
+                            leading: CircleAvatar(
+                              child: Icon(Icons.info_outlined, color: theme.colorScheme.deviceSettingInfoColor),
                             ),
                             subtitle: Text(
                               L10n.of(context)
                                   .noticeChatBackupDeviceVerification,
+                                  style: TextStyle(color: theme.colorScheme.deviceSettingInfoColor)
                             ),
                           ),
                         ),
@@ -75,7 +76,7 @@ class DevicesSettingsView extends StatelessWidget {
                             L10n.of(context).thisDevice,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.deviceSettingTitleColor,
                             ),
                             textAlign: TextAlign.left,
                           ),
@@ -100,6 +101,7 @@ class DevicesSettingsView extends StatelessWidget {
                             child: TextButton.icon(
                               label: Text(
                                 L10n.of(context).removeAllOtherDevices,
+                                style: TextStyle(color: theme.colorScheme.deviceSettingTextColor)
                               ),
                               style: TextButton.styleFrom(
                                 iconColor: theme.colorScheme.onErrorContainer,
@@ -108,7 +110,7 @@ class DevicesSettingsView extends StatelessWidget {
                                 backgroundColor:
                                     theme.colorScheme.errorContainer,
                               ),
-                              icon: const Icon(Icons.delete_outline),
+                              icon: Icon(Icons.delete_outline, color: theme.colorScheme.error),
                               onPressed: () => controller.removeDevicesAction(
                                 controller.notThisDevice,
                               ),

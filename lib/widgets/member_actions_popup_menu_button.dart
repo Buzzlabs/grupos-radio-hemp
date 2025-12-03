@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -60,7 +61,7 @@ void showMemberActionsPopupMenu({
                     displayname,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.participantNameTextColor,
                       fontSize: 15,
                     ),
                     maxLines: 1,
@@ -73,7 +74,7 @@ void showMemberActionsPopupMenu({
                     user.id,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontSize: 12, color: theme.colorScheme.tertiary,),
+                        fontSize: 12, color: theme.colorScheme.participantTextColor,),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -91,11 +92,11 @@ void showMemberActionsPopupMenu({
             children: [
               Icon(
                 Icons.alternate_email_outlined,
-                color: theme.colorScheme.tertiary,
+                color: theme.colorScheme.participantTextColor,
               ),
               const SizedBox(width: 18),
               Text(L10n.of(context).mention,
-                  style: TextStyle(color: theme.colorScheme.tertiary),),
+                  style: TextStyle(color: theme.colorScheme.participantTextColor),),
             ],
           ),
         ),
@@ -111,7 +112,7 @@ void showMemberActionsPopupMenu({
               const SizedBox(width: 18),
               Text(
                 L10n.of(context).approve,
-                style: TextStyle(color: theme.colorScheme.tertiary),
+                style: TextStyle(color: theme.colorScheme.participantApproveTextColor),
               ),
             ],
           ),
@@ -121,15 +122,15 @@ void showMemberActionsPopupMenu({
         value: _MemberActions.setRole,
         child: IconTheme(
           data: IconThemeData(
-            color: theme.colorScheme.tertiary,
+            color: theme.colorScheme.participantPowerLevelTextColor,
           ),
           child: DefaultTextStyle(
-            style: TextStyle(color: theme.colorScheme.tertiary),
+            style: TextStyle(color: theme.colorScheme.participantPowerLevelTextColor),
             child: Row(
               children: [
                 Icon(
                   Icons.admin_panel_settings_outlined,
-                  color: theme.colorScheme.primary,
+                  color: theme.colorScheme.participantLevelIconColor,
                 ),
                 const SizedBox(width: 18),
                 Column(
@@ -138,7 +139,7 @@ void showMemberActionsPopupMenu({
                   children: [
                     Text(
                       L10n.of(context).chatPermissions,
-                      style: TextStyle(color: theme.colorScheme.tertiary),
+                      style: TextStyle(color: theme.colorScheme.participantPowerLevelTextColor),
                     ),
                     Text(
                       user.powerLevel < 50
@@ -148,7 +149,7 @@ void showMemberActionsPopupMenu({
                               : L10n.of(context).adminLevel(user.powerLevel),
                       style: TextStyle(
                         fontSize: 10,
-                        color: theme.colorScheme.tertiary,
+                        color: theme.colorScheme.participantPowerLevelTextColor,
                       ),
                     ),
                   ],

@@ -60,14 +60,14 @@ class ClientChooserButton extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Icon(
                 Icons.edit_outlined,
-                color: theme.colorScheme.tertiary,
+                color: theme.colorScheme.clientChooserButtonIconColor,
                 size: 22,
               ),
             ),
             const SizedBox(width: 18),
             Text(
               L10n.of(context).setStatus,
-              style: TextStyle(color: theme.colorScheme.tertiary),
+              style: TextStyle(color: theme.colorScheme.clientChooserButtonTextColor),
             ),
           ],
         ),
@@ -81,7 +81,7 @@ class ClientChooserButton extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Icon(
                 Icons.home,
-                color: theme.colorScheme.tertiary,
+                color: theme.colorScheme.clientChooserButtonIconColor,
                 size: 22,
               ),
               // SvgPicture.asset(
@@ -92,7 +92,7 @@ class ClientChooserButton extends StatelessWidget {
             const SizedBox(width: 18),
             Text(
               L10n.of(context).menuHome,
-              style: TextStyle(color: theme.colorScheme.tertiary),
+              style: TextStyle(color: theme.colorScheme.clientChooserButtonTextColor),
             ),
           ],
         ),
@@ -131,7 +131,7 @@ class ClientChooserButton extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Icon(
                 Icons.book,
-                color: theme.colorScheme.tertiary,
+                color: theme.colorScheme.clientChooserButtonIconColor,
                 size: 22,
               ),
               // SvgPicture.asset(
@@ -142,7 +142,7 @@ class ClientChooserButton extends StatelessWidget {
             const SizedBox(width: 18),
             Text(
               L10n.of(context).menuCourse,
-              style: TextStyle(color: theme.colorScheme.tertiary),
+              style: TextStyle(color: theme.colorScheme.clientChooserButtonTextColor),
             ),
           ],
         ),
@@ -182,7 +182,7 @@ class ClientChooserButton extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Icon(
                 Icons.settings,
-                color: theme.colorScheme.tertiary,
+                color: theme.colorScheme.clientChooserButtonIconColor,
                 size: 22,
               ),
               // SvgPicture.asset(
@@ -193,7 +193,7 @@ class ClientChooserButton extends StatelessWidget {
             const SizedBox(width: 18),
             Text(
               L10n.of(context).settings,
-              style: TextStyle(color: theme.colorScheme.tertiary),
+              style: TextStyle(color: theme.colorScheme.clientChooserButtonTextColor),
             ),
           ],
         ),
@@ -208,14 +208,14 @@ class ClientChooserButton extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Icon(
                 Icons.info_outlined,
-                color: theme.colorScheme.tertiary,
+                color: theme.colorScheme.clientChooserButtonIconColor,
                 size: 22,
               ),
             ),
             const SizedBox(width: 12),
             Text(
               L10n.of(context).about,
-              style: TextStyle(color: theme.colorScheme.tertiary),
+              style: TextStyle(color: theme.colorScheme.clientChooserButtonTextColor),
             ),
           ],
         ),
@@ -230,14 +230,14 @@ class ClientChooserButton extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Icon(
                 Icons.adaptive.share_outlined,
-                color: theme.colorScheme.primary,
+                color: theme.colorScheme.clientChooserShareIconColor,
                 size: 22,
               ),
             ),
             const SizedBox(width: 18),
             Text(
               '${L10n.of(context).inviteContact} 🔥',
-              style: TextStyle(color: theme.colorScheme.primary),
+              style: TextStyle(color: theme.colorScheme.clientChooserShareTextColor),
             ),
           ],
         ),

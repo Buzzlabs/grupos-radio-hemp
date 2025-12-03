@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluffychat/widgets/vods/live_card.dart';
 import 'dart:convert';
@@ -182,7 +183,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                   Text(
                     widget.streamsWidgetTag,
                     style: TextStyle(
-                      color: theme.colorScheme.tertiary,
+                      color: theme.colorScheme.vodsCategoryTagTextColor,
                       fontSize: 20,
                       fontWeight: FontWeight.w100,
                     ),
@@ -195,7 +196,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                     const SizedBox(width: 10),
                     IconButton(   
                     icon: const Icon(Icons.arrow_back),
-                    color: theme.colorScheme.primary,
+                    color: theme.colorScheme.vodsBackButtonColor,
                       onPressed: () {
                         setState(() {
                           currentPage = 1;
@@ -289,7 +290,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                     height: 1,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     color:
-                        theme.colorScheme.primary.withOpacity(0.6),
+                        theme.colorScheme.vodsShowMoreColor.withOpacity(0.6),
                   ),
                 ),
                 TextButton(
@@ -304,7 +305,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                     'Mostrar mais >',
                     style: TextStyle(
                       fontSize: 14,
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.vodsShowMoreColor,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -314,7 +315,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                     height: 1,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     color:
-                        theme.colorScheme.primary.withOpacity(0.6),
+                        theme.colorScheme.vodsShowMoreColor.withOpacity(0.6),
                   ),
                 ),
               ],

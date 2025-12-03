@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
@@ -101,14 +102,13 @@ class _VodPlayerViewState extends State<VodPlayerView> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 3,),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.secondary
-                            .withOpacity(0.2),
+                        color: theme.colorScheme.vodCardDateChipColor,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         widget.date,
                         style: TextStyle(
-                          color: theme.colorScheme.tertiary,
+                          color: theme.colorScheme.vodCardTextColor,
                           fontSize: 13,
                         ),
                       ),
@@ -118,13 +118,13 @@ class _VodPlayerViewState extends State<VodPlayerView> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 3,),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primary.withOpacity(0.2),
+                        color: theme.colorScheme.vodCardCategoryChipColor,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         widget.category,
                         style: TextStyle(
-                          color: theme.colorScheme.tertiary,
+                          color: theme.colorScheme.vodCardTextColor,
                           fontSize: 12,
                         ),
                       ),
@@ -139,13 +139,13 @@ class _VodPlayerViewState extends State<VodPlayerView> {
                             'https://grupos.radiohemp.com/#/rooms/$roomId/vod/${widget.id}';
                         Clipboard.setData(ClipboardData(text: shareLink));
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Link copiado!', style: TextStyle(color: Theme.of(context).colorScheme.tertiary),)),
+                          SnackBar(content: Text('Link copiado!', style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor),)),
                         );
                       },
                       icon: Icon(
                         Icons.share,
                         size: 18,
-                        color: theme.colorScheme.tertiary,
+                        color: theme.colorScheme.vodCardIconColor,
                       ),
                     ),
                   ],),
@@ -163,7 +163,7 @@ class _VodPlayerViewState extends State<VodPlayerView> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              color: theme.colorScheme.tertiary,
+                              color: theme.colorScheme.vodCardTextColor,
                               fontSize: 14,
                               height: 1.3,
                             ),
@@ -171,7 +171,7 @@ class _VodPlayerViewState extends State<VodPlayerView> {
                           secondChild: Text(
                             "Aqui vai uma descrição do VOD. Pode ser várias linhas de texto e só vai aparecer 2. Se clicar no mostrar mais, deve aparecer o resto. blalablablalablablalablablalablablalabla",
                             style: TextStyle(
-                              color: theme.colorScheme.tertiary,
+                              color: theme.colorScheme.vodCardTextColor,
                               fontSize: 14,
                               height: 1.3,
                             ),
@@ -185,7 +185,7 @@ class _VodPlayerViewState extends State<VodPlayerView> {
                         Text(
                           _expanded ? "mostrar menos" : "…mais",
                           style: TextStyle(
-                            color: theme.colorScheme.primary,
+                            color: theme.colorScheme.vodsShowMoreColor,
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                           ),
@@ -195,7 +195,6 @@ class _VodPlayerViewState extends State<VodPlayerView> {
                   ),
                 ],
               ),
-              
             ],
           ),
         ),

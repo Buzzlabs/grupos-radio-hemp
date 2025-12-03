@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -24,12 +25,12 @@ class InvitationSelectionView extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             L10n.of(context).oopsSomethingWentWrong,
-            style: TextStyle(color: theme.colorScheme.onSecondaryContainer),
+            style: TextStyle(color: theme.colorScheme.oopsMessageTextColor),
           ),
         ),
         body: Center(
           child: Text(L10n.of(context).youAreNoLongerParticipatingInThisChat,
-              style: TextStyle(color: theme.colorScheme.onSecondaryContainer),),
+              style: TextStyle(color: theme.colorScheme.oopsMessageTextColor),),
         ),
       );
     }
@@ -39,12 +40,12 @@ class InvitationSelectionView extends StatelessWidget {
       appBar: AppBar(
         leading: Center(
             child: BackButton(
-          color: theme.colorScheme.tertiary,
+          color: theme.colorScheme.invitationScreenBackButton,
         ),),
         titleSpacing: 0,
         title: Text(
           L10n.of(context).inviteContact,
-          style: TextStyle(color: theme.colorScheme.tertiary),
+          style: TextStyle(color: theme.colorScheme.invitationScreenTextColor),
         ),
       ),
       body: MaxWidthBody(
@@ -56,35 +57,35 @@ class InvitationSelectionView extends StatelessWidget {
               child: TextField(
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
-                  fillColor: theme.colorScheme.tertiaryContainer,
+                  fillColor: theme.colorScheme.dialogTextFieldBackground,
                   disabledBorder: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: theme.colorScheme.surface, width: 2),
+                        BorderSide(color: theme.colorScheme.dialogTextFieldBorderColor, width: 2),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: theme.colorScheme.surface,
+                      color: theme.colorScheme.dialogTextFieldBorderColor,
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: theme.colorScheme.surface,
+                      color: theme.colorScheme.dialogTextFieldBorderColor,
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: theme.colorScheme.surface,
+                      color: theme.colorScheme.dialogTextFieldBorderColor,
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   hintStyle: TextStyle(
-                    color: theme.colorScheme.onSecondaryContainer,
+                    color: theme.colorScheme.dialogTextFieldHintTextColor,
                     fontWeight: FontWeight.normal,
                   ),
                   hintText: L10n.of(context).inviteContactToGroup(groupName),
@@ -103,10 +104,10 @@ class InvitationSelectionView extends StatelessWidget {
                         )
                       : Icon(
                           Icons.search_outlined,
-                          color: theme.colorScheme.onSecondaryContainer,
+                          color: theme.colorScheme.dialogTextFieldHintTextColor,
                         ),
                 ),
-                style: TextStyle(color: theme.colorScheme.tertiary),
+                style: TextStyle(color: theme.colorScheme.dialogTextFieldTextColor),
                 onChanged: controller.searchUserWithCoolDown,
               ),
             ),
@@ -214,25 +215,25 @@ class _InviteContactListTile extends StatelessWidget {
         profile.displayName ?? profile.userId.localpart ?? l10n.user,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: theme.colorScheme.primary),
+        style: TextStyle(color: theme.colorScheme.participantNameTextColor),
       ),
       subtitle: Text(
         profile.userId,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: theme.colorScheme.tertiary,
+          color: theme.colorScheme.participantTextColor,
         ),
       ),
       trailing: TextButton.icon(
         onPressed: isMember ? null : onTap,
         label: Text(
           isMember ? l10n.participant : l10n.invite,
-          style: TextStyle(color: theme.colorScheme.tertiary),
+          style: TextStyle(color: theme.colorScheme.participantTextColor),
         ),
         icon: Icon(
           isMember ? Icons.check : Icons.add,
-          color: theme.colorScheme.tertiary,
+          color: theme.colorScheme.participantTextColor,
         ),
       ),
     );

@@ -658,7 +658,7 @@ class Message extends StatelessWidget {
                                                         AppConfig.borderRadius,
                                                       ),
                                                       shadowColor: theme
-                                                          .colorScheme.surface
+                                                          .colorScheme.reactionBarBackground
                                                           .withAlpha(128),
                                                       child:
                                                           SingleChildScrollView(
@@ -719,7 +719,7 @@ class Message extends StatelessWidget {
                                                               icon: Icon(
                                                                 Icons
                                                                     .add_reaction_outlined,
-                                                                    color: theme.colorScheme.onSecondaryContainer,
+                                                                    color: theme.colorScheme.reactionBarMoreReactionIconColor,
                                                               ),
                                                               tooltip: L10n.of(
                                                                 context,
@@ -740,10 +740,10 @@ class Message extends StatelessWidget {
                                                                           Text(
                                                                         L10n.of(context)
                                                                             .customReaction,
-                                                                      style: TextStyle(color: theme.colorScheme.tertiary),),
+                                                                      style: TextStyle(color: theme.colorScheme.reactionPopupTextColor),),
                                                                       leading:
                                                                           CloseButton(
-                                                                            color: theme.colorScheme.tertiary,
+                                                                            color: theme.colorScheme.reactionPopupTextColor,
                                                                         onPressed:
                                                                             () =>
                                                                                 Navigator.of(
@@ -786,24 +786,22 @@ class Message extends StatelessWidget {
                                                                             initCategory:
                                                                                 Category.SMILEYS,
                                                                             backspaceColor:
-                                                                                theme.colorScheme.primary,
+                                                                                theme.colorScheme.emojiIconSelectedColor,
                                                                             iconColor:
-                                                                                theme.colorScheme.primary.withAlpha(
-                                                                              128,
-                                                                            ),
+                                                                                theme.colorScheme.emojitabUnselectedColor,
                                                                             iconColorSelected:
-                                                                                theme.colorScheme.primary,
+                                                                                theme.colorScheme.emojiTabSelectedColor,
                                                                             indicatorColor:
-                                                                                theme.colorScheme.primary,
+                                                                                theme.colorScheme.emojiTabSelectedColor,
                                                                             backgroundColor:
-                                                                                theme.colorScheme.surface,
+                                                                                theme.colorScheme.emojiPickerBackground,
                                                                           ),
                                                                           skinToneConfig:
                                                                               SkinToneConfig(
                                                                             dialogBackgroundColor:
                                                                                 Color.lerp(
-                                                                              theme.colorScheme.surface,
-                                                                              theme.colorScheme.primaryContainer,
+                                                                              theme.colorScheme.emojiPickerBackground,
+                                                                              theme.colorScheme.emojiPickerBackground,
                                                                               0.75,
                                                                             )!,
                                                                             indicatorColor:

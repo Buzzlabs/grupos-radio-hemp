@@ -33,7 +33,7 @@ class StateMessage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(4),
                   child: Material(
-                    color: theme.colorScheme.secondary.withOpacity(0.6),
+                    color: theme.colorScheme.eventBubbleBackground,
                     borderRadius:
                         BorderRadius.circular(AppConfig.borderRadius / 3),
                     child: Padding(
@@ -53,11 +53,11 @@ class StateMessage extends StatelessWidget {
                               TextSpan(
                                 text: ' + ',
                                 style: TextStyle(fontWeight: FontWeight.bold,
-                                 color: theme.colorScheme.tertiary,),
+                                 color: theme.colorScheme.eventBubbleTextColor,),
                               ),
                               TextSpan(
                                 style: TextStyle(
-                                  color: theme.colorScheme.secondary,
+                                  color: theme.colorScheme.eventBubbleMoreEventsTextColor,
                                   decoration: TextDecoration.underline,
                                 ),
                                 recognizer: TapGestureRecognizer()
@@ -69,7 +69,7 @@ class StateMessage extends StatelessWidget {
                         ),
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: theme.colorScheme.tertiary,
+                          color: theme.colorScheme.eventBubbleTextColor,
                           fontSize: 12 * AppConfig.fontSizeFactor,
                           decoration: event.redacted
                               ? TextDecoration.lineThrough

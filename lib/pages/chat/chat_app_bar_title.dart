@@ -25,7 +25,7 @@ class ChatAppBarTitle extends StatelessWidget {
       return Text(
         controller.selectedEvents.length.toString(),
         style: TextStyle(
-          color: Theme.of(context).colorScheme.tertiary,
+          color: Theme.of(context).colorScheme.chatAppBarTileTextColor,
         ),
       );
     }
@@ -60,8 +60,8 @@ class ChatAppBarTitle extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontFamily: 'GothamRndSSm',
-                    color: theme.colorScheme.primary,
+                    fontFamily: theme.colorScheme.chatAppBarFontFamily,
+                    color: theme.colorScheme.chatAppBarTileChatNameTextColor,
                     fontSize: 18,
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -24,11 +25,11 @@ class ChatMembersView extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(
           title: Text(L10n.of(context).oopsSomethingWentWrong,
-              style: TextStyle(color: theme.colorScheme.onSecondaryContainer),),
+              style: TextStyle(color: theme.colorScheme.oopsMessageTextColor),),
         ),
         body: Center(
           child: Text(L10n.of(context).youAreNoLongerParticipatingInThisChat,
-              style: TextStyle(color: theme.colorScheme.onSecondaryContainer),),
+              style: TextStyle(color: theme.colorScheme.oopsMessageTextColor),),
         ),
       );
     }
@@ -42,9 +43,9 @@ class ChatMembersView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Center(child: BackButton(color: theme.colorScheme.tertiary)),
+        leading: Center(child: BackButton(color: theme.colorScheme.participantScreenBackButton)),
         title: Text(L10n.of(context).countParticipants(roomCount),
-            style: TextStyle(color: theme.colorScheme.tertiary),),
+            style: TextStyle(color: theme.colorScheme.participantScreenTitle),),
         actions: [
           if (room.canInvite)
             IconButton(
@@ -70,14 +71,14 @@ class ChatMembersView extends StatelessWidget {
                         color: theme.colorScheme.primary,
                       ),
                       Text(error.toLocalizedString(context),
-                          style: TextStyle(color: theme.colorScheme.primary),),
+                          style: TextStyle(color: theme.colorScheme.error),),
                       const SizedBox(height: 8),
                       OutlinedButton.icon(
                         onPressed: controller.refreshMembers,
                         icon: Icon(Icons.refresh_outlined,
-                            color: theme.colorScheme.primary,),
+                            color: theme.colorScheme.error,),
                         label: Text(L10n.of(context).tryAgain,
-                            style: TextStyle(color: theme.colorScheme.primary),),
+                            style: TextStyle(color: theme.colorScheme.error),),
                       ),
                     ],
                   ),
@@ -115,46 +116,46 @@ class ChatMembersView extends StatelessWidget {
                                 controller: controller.filterController,
                                 onChanged: controller.setFilter,
                                 style: TextStyle(
-                                    color: theme.colorScheme.tertiary,),
+                                    color: theme.colorScheme.dialogTextFieldTextColor,),
                                 decoration: InputDecoration(
                                   disabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                        color: theme.colorScheme.surface,
+                                        color: theme.colorScheme.dialogTextFieldBorderColor,
                                         width: 2,),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: theme.colorScheme.surface,
+                                      color: theme.colorScheme.dialogTextFieldBorderColor,
                                       width: 2,
                                     ),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: theme.colorScheme.surface,
+                                      color: theme.colorScheme.dialogTextFieldBorderColor,
                                       width: 2,
                                     ),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: theme.colorScheme.surface,
+                                      color: theme.colorScheme.dialogTextFieldBorderColor,
                                       width: 2,
                                     ),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   filled: true,
                                   fillColor:
-                                      theme.colorScheme.tertiaryContainer,
+                                      theme.colorScheme.dialogTextFieldBackground,
                                   hintStyle: TextStyle(
                                     color:
-                                        theme.colorScheme.onSecondaryContainer,
+                                        theme.colorScheme.dialogTextFieldHintTextColor,
                                     fontWeight: FontWeight.normal,
                                   ),
                                   prefixIcon: Icon(Icons.search_outlined,
                                       color: theme
-                                          .colorScheme.onSecondaryContainer,),
+                                          .colorScheme.dialogTextFieldHintTextColor,),
                                   hintText: L10n.of(context).search,
                                 ),
                               ),

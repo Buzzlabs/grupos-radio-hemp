@@ -72,7 +72,7 @@ class SpacesNavigationRail extends StatelessWidget {
                               padding: const EdgeInsets.all(10),
                               child: Icon(
                                 Icons.home,
-                                color: theme.colorScheme.tertiary,
+                                color: theme.colorScheme.unselectediconColor,
                                 size: 40,
                               ), //SvgPicture.asset('assets/icons/home.svg'),
                             ),
@@ -85,7 +85,7 @@ class SpacesNavigationRail extends StatelessWidget {
                               padding: const EdgeInsets.all(10),
                               child: Icon(
                                 Icons.chat_bubble_outline,
-                                color: theme.colorScheme.tertiary,
+                                color: theme.colorScheme.unselectediconColor,
                                 size: 40,
                               ), // SvgPicture.asset('assets/icons/chat.svg'),
                             ),
@@ -93,7 +93,7 @@ class SpacesNavigationRail extends StatelessWidget {
                               padding: const EdgeInsets.all(10),
                               child: Icon(
                                 Icons.chat_bubble_outline,
-                                color: theme.colorScheme.primary,
+                                color: theme.colorScheme.selectediconColor,
                                 size: 40,
                               ), // SvgPicture.asset('assets/icons/chat.svg'),
                             ),
@@ -171,7 +171,7 @@ class SpacesNavigationRail extends StatelessWidget {
                               padding: const EdgeInsets.all(10),
                               child: Icon(
                                 Icons.book,
-                                color: theme.colorScheme.tertiary,
+                                color: theme.colorScheme.unselectediconColor,
                                 size: 40,
                               ), //SvgPicture.asset('assets/icons/course.svg'),
                             ),
@@ -224,7 +224,7 @@ class SpacesNavigationRail extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         child: Icon(
                           Icons.settings,
-                          color: theme.colorScheme.tertiary,
+                          color: theme.colorScheme.unselectediconColor,
                           size: 40,
                         ), // SvgPicture.asset('assets/icons/configs.svg'),
                       ),
@@ -232,7 +232,7 @@ class SpacesNavigationRail extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         child: Icon(
                           Icons.settings,
-                          color: theme.colorScheme.primary,
+                          color: theme.colorScheme.selectediconColor,
                           size: 40,
                         ), // SvgPicture.asset('assets/icons/configs.svg'),
                       ),

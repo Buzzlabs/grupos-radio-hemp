@@ -383,8 +383,8 @@ class AudioPlayerState extends State<AudioPlayerWidget> {
                                 child: Slider(
                                   thumbColor: widget.event.senderId ==
                                           widget.event.room.client.userID
-                                      ? theme.colorScheme.onPrimary
-                                      : theme.colorScheme.primary,
+                                      ? theme.colorScheme.sliderBaseColor
+                                      : theme.colorScheme.sliderPlayedColor,
                                   activeColor: waveform == null
                                       ? widget.color
                                       : Colors.transparent,

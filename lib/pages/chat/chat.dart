@@ -846,7 +846,7 @@ class ChatController extends State<ChatPageWithRoom>
       selectedEvents.clear();
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(L10n.of(context).contentHasBeenReported, style: TextStyle(color: Theme.of(context).colorScheme.tertiary),),),
+      SnackBar(content: Text(L10n.of(context).contentHasBeenReported, style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor),),),
     );
   }
 
@@ -1336,7 +1336,7 @@ class ChatController extends State<ChatPageWithRoom>
       await voipPlugin!.voip.inviteToCall(room, callType);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toLocalizedString(context), style: TextStyle(color: Theme.of(context).colorScheme.tertiary),)),
+        SnackBar(content: Text(e.toLocalizedString(context), style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor),)),
       );
     }
   }
@@ -1448,7 +1448,7 @@ class ChatController extends State<ChatPageWithRoom>
           SnackBar(
             content: Text(
               L10n.of(context).liveClosedSuccess,
-              style: TextStyle(color: theme.colorScheme.tertiary),
+              style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor),
             ),
             duration: const Duration(seconds: 3),
           ),
@@ -1460,7 +1460,7 @@ class ChatController extends State<ChatPageWithRoom>
           SnackBar(
             content: Text(
               L10n.of(context).liveCloseError(e.toString()),
-              style: TextStyle(color: theme.colorScheme.tertiary),
+              style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor),
             ),
             duration: const Duration(seconds: 3),
           ),

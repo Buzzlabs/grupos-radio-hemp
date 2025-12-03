@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart' hide Visibility;
 
 import 'package:matrix/matrix.dart';
@@ -21,12 +22,12 @@ class ChatAccessSettingsPageView extends StatelessWidget {
       appBar: AppBar(
         leading: Center(
           child: BackButton(
-            color: theme.colorScheme.tertiary,
+            color: theme.colorScheme.accessScreenBackButton,
           ),
         ),
         title: Text(
           L10n.of(context).accessAndVisibility,
-          style: TextStyle(color: theme.colorScheme.tertiary),
+          style: TextStyle(color: theme.colorScheme.accessScreenTextColor),
         ),
       ),
       body: MaxWidthBody(
@@ -47,7 +48,7 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                   title: Text(
                     L10n.of(context).visibilityOfTheChatHistory,
                     style: TextStyle(
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.accessScreenTagColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -57,7 +58,7 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                     title: Text(
                       historyVisibility
                           .getLocalizedString(MatrixLocals(L10n.of(context))),
-                      style: TextStyle(color: theme.colorScheme.tertiary),
+                      style: TextStyle(color: theme.colorScheme.accessTextColor),
                     ),
                     value: historyVisibility,
                     groupValue: room.historyVisibility,
@@ -66,12 +67,12 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                         ? null
                         : controller.setHistoryVisibility,
                   ),
-                Divider(color: theme.colorScheme.primary),
+                Divider(color: theme.colorScheme.accessDividerColor),
                 ListTile(
                   title: Text(
                     L10n.of(context).whoIsAllowedToJoinThisGroup,
                     style: TextStyle(
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.accessScreenTagColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -81,7 +82,7 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                     RadioListTile<JoinRules>.adaptive(
                       title: Text(
                         joinRule.localizedString(L10n.of(context)),
-                        style: TextStyle(color: theme.colorScheme.tertiary),
+                        style: TextStyle(color: theme.colorScheme.accessTextColor),
                       ),
                       value: joinRule,
                       groupValue: room.joinRules,
@@ -90,14 +91,14 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                           ? null
                           : controller.setJoinRule,
                     ),
-                Divider(color: theme.colorScheme.primary),
+                Divider(color: theme.colorScheme.accessDividerColor),
                 if ({JoinRules.public, JoinRules.knock}
                     .contains(room.joinRules)) ...[
                   ListTile(
                     title: Text(
                       L10n.of(context).areGuestsAllowedToJoin,
                       style: TextStyle(
-                        color: theme.colorScheme.primary,
+                        color: theme.colorScheme.accessScreenTagColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -108,7 +109,7 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                         guestAccess.getLocalizedString(
                           MatrixLocals(L10n.of(context)),
                         ),
-                        style: TextStyle(color: theme.colorScheme.tertiary),
+                        style: TextStyle(color: theme.colorScheme.accessTextColor),
                       ),
                       value: guestAccess,
                       groupValue: room.guestAccess,
@@ -117,19 +118,19 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                           ? null
                           : controller.setGuestAccess,
                     ),
-                  Divider(color: theme.colorScheme.primary),
+                  Divider(color: theme.colorScheme.accessDividerColor),
                   ListTile(
                     title: Text(
                       L10n.of(context).publicChatAddresses,
                       style: TextStyle(
-                        color: theme.colorScheme.primary,
+                        color: theme.colorScheme.accessScreenTagColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     trailing: IconButton(
                       icon: Icon(
                         Icons.add_outlined,
-                        color: theme.colorScheme.primary,
+                        color: theme.colorScheme.accessScreenTagColor,
                       ),
                       tooltip: L10n.of(context).createNewAddress,
                       onPressed: controller.addAlias,
@@ -178,7 +179,7 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                       );
                     },
                   ),
-                  Divider(color: theme.colorScheme.primary),
+                  Divider(color: theme.colorScheme.accessDividerColor),
                   FutureBuilder(
                     future: room.client.getRoomVisibilityOnDirectory(room.id),
                     builder: (context, snapshot) => SwitchListTile(
@@ -187,15 +188,15 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                         L10n.of(context).chatCanBeDiscoveredViaSearchOnServer(
                           room.client.userID!.domain!,
                         ),
-                        style: TextStyle(color: theme.colorScheme.tertiary),
+                        style: TextStyle(color: theme.colorScheme.accessTextColor),
                       ),
                       onChanged: controller.setChatVisibilityOnDirectory,
-                      activeThumbColor: theme.colorScheme.tertiaryContainer,
-                      inactiveThumbColor: theme.colorScheme.primary,
-                      activeTrackColor: theme.colorScheme.primary,
-                      inactiveTrackColor: theme.colorScheme.tertiaryContainer,
+                      activeThumbColor: theme.colorScheme.accessSwitchInactiveColor,
+                      inactiveThumbColor: theme.colorScheme.accessSwitchActiveColor,
+                      activeTrackColor: theme.colorScheme.accessSwitchActiveColor,
+                      inactiveTrackColor: theme.colorScheme.accessSwitchInactiveColor,
                       trackOutlineColor: WidgetStateProperty.resolveWith(
-                        (states) => theme.colorScheme.primary,
+                        (states) => theme.colorScheme.accessSwitchActiveColor,
                       ),
                     ),
                   ),
@@ -203,15 +204,15 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                 ListTile(
                   title: Text(
                     L10n.of(context).globalChatId,
-                    style: TextStyle(color: theme.colorScheme.tertiary),
+                    style: TextStyle(color: theme.colorScheme.accessTextColor),
                   ),
                   subtitle: SelectableText(room.id),
                   subtitleTextStyle:
-                      TextStyle(color: theme.colorScheme.tertiary),
+                      TextStyle(color: theme.colorScheme.accessTextColor),
                   trailing: IconButton(
                     icon: Icon(
                       Icons.copy_outlined,
-                      color: theme.colorScheme.tertiary,
+                      color: theme.colorScheme.accessTextColor,
                     ),
                     onPressed: () => FluffyShare.share(room.id, context),
                   ),
@@ -219,7 +220,7 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                 ListTile(
                   title: Text(
                     L10n.of(context).roomVersion,
-                    style: TextStyle(color: theme.colorScheme.tertiary),
+                    style: TextStyle(color: theme.colorScheme.accessTextColor),
                   ),
                   subtitle: SelectableText(
                     room
@@ -229,12 +230,12 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                         'Unknown',
                   ),
                   subtitleTextStyle:
-                      TextStyle(color: theme.colorScheme.tertiary),
+                      TextStyle(color: theme.colorScheme.accessTextColor),
                   trailing: room.canSendEvent(EventTypes.RoomTombstone)
                       ? IconButton(
                           icon: Icon(
                             Icons.upgrade_outlined,
-                            color: theme.colorScheme.tertiary,
+                            color: theme.colorScheme.accessTextColor,
                           ),
                           onPressed: controller.updateRoomAction,
                         )
@@ -268,10 +269,10 @@ class _AliasListTile extends StatelessWidget {
 
     return ListTile(
       leading: isCanonicalAlias
-          ? Icon(Icons.star, color: theme.colorScheme.primary)
+          ? Icon(Icons.star, color: theme.colorScheme.accessStarColor)
           : Icon(
               Icons.link_outlined,
-              color: theme.colorScheme.primary,
+              color: theme.colorScheme.accessStarColor,
             ),
       title: InkWell(
         onTap: () => FluffyShare.share(
@@ -282,8 +283,8 @@ class _AliasListTile extends StatelessWidget {
           alias,
           style: TextStyle(
             decoration: TextDecoration.underline,
-            decorationColor: theme.colorScheme.primary,
-            color: theme.colorScheme.primary,
+            decorationColor: theme.colorScheme.accessStarColor,
+            color: theme.colorScheme.accessStarColor,
             fontSize: 14,
           ),
         ),

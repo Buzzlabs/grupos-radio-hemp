@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -21,11 +22,11 @@ class ChatPermissionsSettingsView extends StatelessWidget {
       appBar: AppBar(
         leading: Center(
             child: BackButton(
-          color: theme.colorScheme.tertiary,
+          color: theme.colorScheme.permissionsScreenBackButton,
         ),),
         title: Text(
           L10n.of(context).chatPermissions,
-          style: TextStyle(color: theme.colorScheme.tertiary),
+          style: TextStyle(color: theme.colorScheme.permissionsScreenTextColor),
         ),
       ),
       body: MaxWidthBody(
@@ -41,7 +42,7 @@ class ChatPermissionsSettingsView extends StatelessWidget {
                 child: Text(
                   L10n.of(context).noRoomsFound,
                   style:
-                      TextStyle(color: theme.colorScheme.onSecondaryContainer),
+                      TextStyle(color: theme.colorScheme.oopsMessageTextColor),
                 ),
               );
             }
@@ -58,20 +59,20 @@ class ChatPermissionsSettingsView extends StatelessWidget {
                 ListTile(
                   leading: Icon(
                     Icons.info_outlined,
-                    color: theme.colorScheme.onSecondaryContainer,
+                    color: theme.colorScheme.permissionsInfoTextColor,
                   ),
                   subtitle: Text(
                     L10n.of(context).chatPermissionsDescription,
                     style: TextStyle(
-                        color: theme.colorScheme.onSecondaryContainer,),
+                        color: theme.colorScheme.permissionsInfoTextColor,),
                   ),
                 ),
-                Divider(color: theme.colorScheme.primary),
+                Divider(color: theme.colorScheme.permissionsDividerColor),
                 ListTile(
                   title: Text(
                     L10n.of(context).chatPermissions,
                     style: TextStyle(
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.permissionsScreenTagColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -91,12 +92,12 @@ class ChatPermissionsSettingsView extends StatelessWidget {
                         ),
                         canEdit: room.canChangePowerLevel,
                       ),
-                    Divider(color: theme.colorScheme.primary),
+                    Divider(color: theme.colorScheme.permissionsDividerColor),
                     ListTile(
                       title: Text(
                         L10n.of(context).notifications,
                         style: TextStyle(
-                          color: theme.colorScheme.primary,
+                          color: theme.colorScheme.permissionsScreenTagColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -131,7 +132,7 @@ class ChatPermissionsSettingsView extends StatelessWidget {
                       title: Text(
                         L10n.of(context).configureChat,
                         style: TextStyle(
-                          color: theme.colorScheme.primary,
+                          color: theme.colorScheme.permissionsScreenTagColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

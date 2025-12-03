@@ -48,8 +48,8 @@ class RegisterView extends StatelessWidget {
     return LoginScaffold(
       appBar: AppBar(
         backgroundColor: isMobileMode
-            ? theme.colorScheme.tertiary
-            : theme.colorScheme.tertiary,
+            ? theme.colorScheme.loginBoxBackground
+            : theme.colorScheme.loginBoxBackground,
         toolbarHeight: toolBarHeight,
         title: Padding(
           padding: const EdgeInsets.only(
@@ -60,10 +60,10 @@ class RegisterView extends StatelessWidget {
             child: Text(
               L10n.of(context).signUp,
               style: TextStyle(
-                fontFamily: 'Roboto',
+                fontFamily: theme.colorScheme.loginFontFamily,
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
-                color: theme.colorScheme.onSurface,
+                color: theme.colorScheme.loginLabel,
               ),
             ),
           ),
@@ -101,8 +101,8 @@ class RegisterView extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextField(
                         style: TextStyle(
-                          color: theme.colorScheme.onSurface,
-                          fontFamily: 'Roboto',
+                          color: theme.colorScheme.userTxtFieldBorderColor,
+                          fontFamily: theme.colorScheme.loginFontFamily,
                         ),
                         readOnly: controller.loading,
                         autocorrect: false,
@@ -112,29 +112,29 @@ class RegisterView extends StatelessWidget {
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.email_outlined),
-                          fillColor: theme.colorScheme.tertiary,
+                          fillColor: theme.colorScheme.userTxtFieldFilledColor,
                           disabledBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide(color: theme.colorScheme.primary, width: 2),
+                                BorderSide(color: theme.colorScheme.userTxtFieldBorderColor, width: 2),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.userTxtFieldBorderColor,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.userTxtFieldBorderColor,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.userTxtFieldBorderColor,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
@@ -151,8 +151,8 @@ class RegisterView extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextField(
                         style: TextStyle(
-                          color: theme.colorScheme.onSurface,
-                          fontFamily: 'Roboto',
+                          color: theme.colorScheme.userTxtFieldTextColor,
+                          fontFamily: theme.colorScheme.loginFontFamily,
                         ),
                         readOnly: controller.loading,
                         autocorrect: false,
@@ -161,29 +161,29 @@ class RegisterView extends StatelessWidget {
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.account_box_outlined),
-                          fillColor: theme.colorScheme.tertiary,
+                          fillColor: theme.colorScheme.userTxtFieldFilledColor,
                           disabledBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide(color: theme.colorScheme.primary, width: 2),
+                                BorderSide(color: theme.colorScheme.userTxtFieldBorderColor, width: 2),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.userTxtFieldBorderColor,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.userTxtFieldBorderColor,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.userTxtFieldBorderColor,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
@@ -200,8 +200,8 @@ class RegisterView extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextField(
                         style: TextStyle(
-                          color: theme.colorScheme.onSurface,
-                          fontFamily: 'Roboto',
+                          color: theme.colorScheme.userTxtFieldTextColor,
+                          fontFamily: theme.colorScheme.loginFontFamily,
                         ),
                         readOnly: controller.loading,
                         controller: controller.passwordController,
@@ -211,29 +211,29 @@ class RegisterView extends StatelessWidget {
                         onSubmitted: (_) => controller.register(),
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.lock_outlined),
-                          fillColor: theme.colorScheme.tertiary,
+                          fillColor: theme.colorScheme.userTxtFieldFilledColor,
                           disabledBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide(color: theme.colorScheme.primary, width: 2),
+                                BorderSide(color: theme.colorScheme.userTxtFieldBorderColor, width: 2),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.userTxtFieldBorderColor,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.userTxtFieldBorderColor,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.userTxtFieldBorderColor,
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
@@ -245,7 +245,7 @@ class RegisterView extends StatelessWidget {
                               controller.showPassword
                                   ? Icons.visibility_off_outlined
                                   : Icons.visibility_outlined,
-                              color: theme.colorScheme.onSurface,
+                              color: theme.colorScheme.eyeIconPasswordVisibility,
                             ),
                           ),
                           labelText: L10n.of(context).password,
@@ -261,15 +261,15 @@ class RegisterView extends StatelessWidget {
                         children: [
                           Checkbox(
                             value: controller.isAdult,
-                            activeColor: theme.colorScheme.secondary,
-                            checkColor: theme.colorScheme.tertiary,
+                            activeColor: theme.colorScheme.loginAbove18CheckBoxActiveColor,
+                            checkColor: theme.colorScheme.loginAbove18CheckBoxActiveColor,
                             onChanged: controller.toggleIsAdult,
                           ),
                           Text(
                             L10n.of(context).isAdult,
                             style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: theme.colorScheme.onSurface,
+                              fontFamily: theme.colorScheme.loginFontFamily,
+                              color: theme.colorScheme.loginIsAdultTextColor,
                             ),
                           ),
                         ],
@@ -296,7 +296,7 @@ class RegisterView extends StatelessWidget {
                                 )
                               : Text(
                                   L10n.of(context).createAccount,
-                                  style: const TextStyle(fontSize: 16),
+                                  style: TextStyle(fontSize: 16, color: theme.colorScheme.loginButtonTextColor,),
                                 ),
                         ),
                       ),
@@ -312,15 +312,17 @@ class RegisterView extends StatelessWidget {
                             TextSpan(
                               text:
                                   '${L10n.of(context).alreadyHaveAccount} ',
-                              style: GoogleFonts.fredoka(
-                                color: theme.colorScheme.onSurface,
+                              style: TextStyle(
+                                fontFamily: theme.colorScheme.loginFontFamily,
+                                color: theme.colorScheme.loginNewHereTextColor,
                                 fontSize: 18,
                               ),
                             ),
                             TextSpan(
                               text: L10n.of(context).login,
-                              style: GoogleFonts.fredoka(
-                                color: theme.colorScheme.primary,
+                              style: TextStyle(
+                                fontFamily: theme.colorScheme.loginFontFamily,
+                                color: theme.colorScheme.loginCreateAccTextColor,
                                 fontSize: 18,
                                 decoration: TextDecoration.underline,
                               ),

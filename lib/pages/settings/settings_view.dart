@@ -48,16 +48,17 @@ class SettingsView extends StatelessWidget {
             appBar: FluffyThemes.isColumnMode(context)
                 ? null
                 : AppBar(
-                    title: Text(L10n.of(context).settings),
+                    title: Text(L10n.of(context).settings,
+                    style: TextStyle(color: theme.colorScheme.deviceSettingTitleColor)),
                     leading: Center(
                       child: BackButton(
                         onPressed: () => context.go('/rooms'),
-                        color: theme.colorScheme.tertiary,
+                        color: theme.colorScheme.settingScreenBackButton,
                       ),
                     ),
                   ),
             body: ListTileTheme(
-              iconColor: theme.colorScheme.tertiary,
+              iconColor: theme.colorScheme.deviceSettingTitleColor,
               child: ListView(
                 key: const Key('SettingsListViewContent'),
                 children: <Widget>[
@@ -94,13 +95,13 @@ class SettingsView extends StatelessWidget {
                                     right: 0,
                                     child: FloatingActionButton.small(
                                       backgroundColor:
-                                          theme.colorScheme.primary,
+                                          theme.colorScheme.floatingButtonPaddingColor,
                                       elevation: 2,
                                       onPressed: controller.setAvatarAction,
                                       heroTag: null,
                                       child: Icon(
                                         Icons.camera_alt_outlined,
-                                        color: theme.colorScheme.tertiary,
+                                        color: theme.colorScheme.floatingButtonIconColor,
                                       ),
                                     ),
                                   ),
@@ -119,15 +120,15 @@ class SettingsView extends StatelessWidget {
                                     size: 16,
                                   ),
                                   style: TextButton.styleFrom(
-                                    foregroundColor: theme.colorScheme.tertiary,
-                                    iconColor: theme.colorScheme.tertiary,
+                                    foregroundColor: theme.colorScheme.participantNameTextColor,
+                                    iconColor: theme.colorScheme.participantNameTextColor,
                                   ),
                                   label: Text(
                                     displayname,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      color: theme.colorScheme.tertiary,
+                                      color: theme.colorScheme.participantNameTextColor,
                                       fontSize: 18,
                                     ),
                                   ),
@@ -140,8 +141,8 @@ class SettingsView extends StatelessWidget {
                                     size: 14,
                                   ),
                                   style: TextButton.styleFrom(
-                                    foregroundColor: theme.colorScheme.primary,
-                                    iconColor: theme.colorScheme.primary,
+                                    foregroundColor: theme.colorScheme.settingTextColor,
+                                    iconColor: theme.colorScheme.floatingButtonIconColor,
                                   ),
                                   label: Text(
                                     mxid,
@@ -159,9 +160,9 @@ class SettingsView extends StatelessWidget {
                   ),
                   if (accountManageUrl != null)
                     ListTile(
-                      leading: const Icon(Icons.account_circle_outlined),
-                      title: Text(L10n.of(context).manageAccount),
-                      trailing: const Icon(Icons.open_in_new_outlined),
+                      leading: Icon(Icons.account_circle_outlined, color: theme.colorScheme.floatingButtonIconColor),
+                      title: Text(L10n.of(context).manageAccount, style: TextStyle(color: theme.colorScheme.settingTextColor)),
+                      trailing: Icon(Icons.open_in_new_outlined, color: theme.colorScheme.floatingButtonIconColor),
                       onTap: () => launchUrlString(
                         accountManageUrl,
                         mode: LaunchMode.inAppBrowserView,
@@ -177,21 +178,21 @@ class SettingsView extends StatelessWidget {
                   // ),
                   // Divider(color: theme.dividerColor),
                   ListTile(
-                    leading: const Icon(Icons.devices_outlined),
+                    leading: Icon(Icons.devices_outlined, color: theme.colorScheme.floatingButtonIconColor),
                     title: Text(
                       L10n.of(context).devices,
-                      style: TextStyle(color: theme.colorScheme.tertiary),
+                      style: TextStyle(color: theme.colorScheme.settingTextColor),
                     ),
                     onTap: () => context.go('/rooms/settings/devices'),
                     tileColor: activeRoute.startsWith('/rooms/settings/devices')
-                        ? theme.colorScheme.surfaceContainerHigh
+                        ? theme.colorScheme.floatingButtonBackground
                         : null,
                   ),
                   ListTile(
-                    leading: const Icon(Icons.logout_outlined),
+                    leading: Icon(Icons.logout_outlined, color: theme.colorScheme.floatingButtonIconColor),
                     title: Text(
                       L10n.of(context).logout,
-                      style: TextStyle(color: theme.colorScheme.tertiary),
+                      style: TextStyle(color: theme.colorScheme.settingTextColor),
                     ),
                     onTap: controller.logoutAction,
                   ),

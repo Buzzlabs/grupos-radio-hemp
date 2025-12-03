@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -210,7 +211,7 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
           SnackBar(
               content: Text(
             'Toque novamente para iniciar o áudio',
-            style: TextStyle(color: theme.colorScheme.tertiary),
+            style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor),
           ),),
         );
       }
@@ -356,19 +357,19 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           decoration: BoxDecoration(
-            color: theme.colorScheme.tertiaryContainer,
+            color: theme.colorScheme.musicPlayerBackground,
             border: Border.all(
               color: isPlaying
-                  ? theme.colorScheme.primary.withValues(
+                  ? theme.colorScheme.isPlayingColor.withValues(
                       alpha: dim(0.6 + 0.20 * _glowController.value),
                     )
-                  : theme.colorScheme.primary,
+                  : theme.colorScheme.isPlayingColor,
             ),
             borderRadius: BorderRadius.circular(_borderRadius),
             boxShadow: isPlaying
                 ? [
                     BoxShadow(
-                      color: theme.colorScheme.primary.withValues(
+                      color: theme.colorScheme.isPlayingColor.withValues(
                         alpha: dim(0.28 + 0.15 * _glowController.value),
                       ),
                       blurRadius: 10,
@@ -384,7 +385,7 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
               children: [
                 _buildMetadataRow(theme),
                 const SizedBox(height: 15),
-                _buildProgressBar(theme, theme.colorScheme.primary),
+                _buildProgressBar(theme, theme.colorScheme.progressBarColor),
                 const SizedBox(height: 4),
                 _buildTimeLabels(),
                 const SizedBox(height: 5),
@@ -400,7 +401,7 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
                             style: OutlinedButton.styleFrom(
                               shape: const CircleBorder(),
                               side: BorderSide(
-                                color: theme.colorScheme.primary,
+                                color: theme.colorScheme.progressBarColor,
                                 width: 2,
                               ),
                               padding: EdgeInsets.zero,
@@ -411,12 +412,12 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
                                     padding: const EdgeInsets.all(8.0),
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
-                                      color: theme.colorScheme.primary,
+                                      color: theme.colorScheme.progressBarColor,
                                     ),
                                   )
                                 : Icon(
                                     _getVolumeIcon(isMuted),
-                                    color: theme.colorScheme.primary,
+                                    color: theme.colorScheme.progressBarColor,
                                     size: _volumeIconSize,
                                   ),
                           ),
@@ -476,7 +477,7 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
                   child: Container(
                     height: trackHeight,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.onTertiary,
+                      color: theme.colorScheme.progressBaseColor,
                       borderRadius: BorderRadius.circular(trackHeight / 2),
                     ),
                   ),
@@ -591,7 +592,7 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
                     Positioned.fill(
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          color: theme.colorScheme.onTertiary
+                          color: theme.colorScheme.progressBaseColor
                               .withValues(alpha: 0.3),
                         ),
                       ),
@@ -608,9 +609,9 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                               colors: [
-                                theme.colorScheme.primary
+                                theme.colorScheme.progressBarColor
                                     .withValues(alpha: 0.0),
-                                theme.colorScheme.primary
+                                theme.colorScheme.progressBarColor
                                     .withValues(alpha: 0.6),
                               ],
                             ),
@@ -689,7 +690,7 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
               Text(
                 title,
                 style: TextStyle(
-                  color: theme.colorScheme.tertiary,
+                  color: theme.colorScheme.musicPlayerTextColor,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
@@ -717,7 +718,7 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
     return LinearProgressIndicator(
       value: progress,
       minHeight: 4,
-      backgroundColor: theme.colorScheme.onTertiary,
+      backgroundColor: theme.colorScheme.progressBaseColor,
       color: primaryColor,
       borderRadius: BorderRadius.circular(8),
     );
@@ -730,10 +731,10 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
       children: [
         Text(_formatTime(_position),
             style: TextStyle(
-                fontSize: 11, color: theme.colorScheme.onSecondaryContainer,),),
+                fontSize: 11, color: theme.colorScheme.timeLabelsTextColor,),),
         Text(_formatTime(duration),
             style: TextStyle(
-                fontSize: 11, color: theme.colorScheme.onSecondaryContainer,),),
+                fontSize: 11, color: theme.colorScheme.timeLabelsTextColor,),),
       ],
     );
   }

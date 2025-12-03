@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -27,12 +28,12 @@ class EmotesSettingsView extends StatelessWidget {
       appBar: AppBar(
         leading: Center(
           child: BackButton(
-            color: theme.colorScheme.tertiary,
+            color: theme.colorScheme.emojisAndStickersScreenBackButton,
           ),
         ),
         title: Text(
           L10n.of(context).customEmojisAndStickers,
-          style: TextStyle(color: theme.colorScheme.tertiary),
+          style: TextStyle(color: theme.colorScheme.emojisAndStickersScreenTextColor),
         ),
         actions: [
           PopupMenuButton<PopupMenuEmojiActions>(
@@ -53,14 +54,14 @@ class EmotesSettingsView extends StatelessWidget {
                 value: PopupMenuEmojiActions.import,
                 child: Text(
                   L10n.of(context).importFromZipFile,
-                  style: TextStyle(color: theme.colorScheme.tertiary),
+                  style: TextStyle(color: theme.colorScheme.emojisAndStickersTextColor),
                 ),
               ),
               PopupMenuItem(
                 value: PopupMenuEmojiActions.export,
                 child: Text(
                   L10n.of(context).exportEmotePack,
-                  style: TextStyle(color: theme.colorScheme.tertiary),
+                  style: TextStyle(color: theme.colorScheme.emojisAndStickersTextColor),
                 ),
               ),
             ],
@@ -96,53 +97,53 @@ class EmotesSettingsView extends StatelessWidget {
                       minLines: 1,
                       maxLines: 1,
                       decoration: InputDecoration(
-                        fillColor: theme.colorScheme.tertiaryContainer,
+                        fillColor: theme.colorScheme.dialogTextFieldBackground,
                         disabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: theme.colorScheme.surface,
+                            color: theme.colorScheme.dialogTextFieldBorderColor,
                             width: 2,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: theme.colorScheme.surface,
+                            color: theme.colorScheme.dialogTextFieldBorderColor,
                             width: 2,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: theme.colorScheme.surface,
+                            color: theme.colorScheme.dialogTextFieldBorderColor,
                             width: 2,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: theme.colorScheme.surface,
+                            color: theme.colorScheme.dialogTextFieldBorderColor,
                             width: 2,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         hintText: L10n.of(context).emoteShortcode,
                         hintStyle: TextStyle(
-                          color: theme.colorScheme.onSurface,
+                          color: theme.colorScheme.dialogTextFieldHintTextColor,
                           fontWeight: FontWeight.normal,
                         ),
                         prefixText: ': ',
                         suffixText: ':',
                         prefixStyle: TextStyle(
-                          color: theme.colorScheme.primary,
+                          color: theme.colorScheme.dialogTextFieldSuffixPrefixColor,
                           fontWeight: FontWeight.bold,
                         ),
                         suffixStyle: TextStyle(
-                          color: theme.colorScheme.primary,
+                          color: theme.colorScheme.dialogTextFieldSuffixPrefixColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       style: TextStyle(
-                        color: theme.colorScheme.tertiary,
+                        color: theme.colorScheme.dialogTextFieldTextColor,
                       ),
                     ),
                   ),
@@ -154,7 +155,7 @@ class EmotesSettingsView extends StatelessWidget {
                     onTap: controller.addImageAction,
                     child: Icon(
                       Icons.add_outlined,
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.emojisAndStickersIconColor,
                       size: 32.0,
                     ),
                   ),
@@ -164,16 +165,16 @@ class EmotesSettingsView extends StatelessWidget {
               SwitchListTile(
                 title: Text(
                   L10n.of(context).enableEmotesGlobally,
-                  style: TextStyle(color: theme.colorScheme.tertiary),
+                  style: TextStyle(color: theme.colorScheme.emojisAndStickersTextColor),
                 ),
                 value: controller.isGloballyActive(client),
                 onChanged: controller.setIsGloballyActive,
-                activeThumbColor: theme.colorScheme.tertiaryContainer,
-                activeTrackColor: theme.colorScheme.primary,
-                inactiveThumbColor: theme.colorScheme.primary,
-                inactiveTrackColor: theme.colorScheme.tertiaryContainer,
+                activeThumbColor: theme.colorScheme.emojisAndStickersSwitchInactiveColor,
+                activeTrackColor: theme.colorScheme.emojisAndStickersSwitchActiveColor,
+                inactiveThumbColor: theme.colorScheme.emojisAndStickersSwitchActiveColor,
+                inactiveTrackColor: theme.colorScheme.emojisAndStickersSwitchInactiveColor,
                 trackOutlineColor: WidgetStateProperty.resolveWith(
-                  (states) => theme.colorScheme.primary,
+                  (states) => theme.colorScheme.emojisAndStickersSwitchActiveColor,
                 ),
               ),
             if (!controller.readonly || controller.room != null)
@@ -186,7 +187,7 @@ class EmotesSettingsView extends StatelessWidget {
                         L10n.of(context).noEmotesFound,
                         style: TextStyle(
                           fontSize: 20,
-                          color: Theme.of(context).colorScheme.tertiary,
+                          color: Theme.of(context).colorScheme.emojisAndStickersTextColor,
                         ),
                       ),
                     ),
@@ -246,19 +247,51 @@ class EmotesSettingsView extends StatelessWidget {
                                 autocorrect: false,
                                 minLines: 1,
                                 maxLines: 1,
+                                textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   hintText: L10n.of(context).emoteShortcode,
                                   prefixText: ': ',
                                   suffixText: ':',
                                   prefixStyle: TextStyle(
-                                    color: theme.colorScheme.secondary,
+                                    color: theme.colorScheme.dialogTextFieldSuffixPrefixColor,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   suffixStyle: TextStyle(
-                                    color: theme.colorScheme.secondary,
+                                    color: theme.colorScheme.dialogTextFieldSuffixPrefixColor,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                  border: InputBorder.none,
+                                  disabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: theme.colorScheme.dialogTextFieldBorderColor,
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: theme.colorScheme.dialogTextFieldBorderColor,
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: theme.colorScheme.dialogTextFieldBorderColor,
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: theme.colorScheme.dialogTextFieldBorderColor,
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                            
+                                ),
+                                style: TextStyle(
+                                  color: theme.colorScheme.dialogTextFieldTextColor,
                                 ),
                                 onSubmitted: (s) =>
                                     controller.submitImageAction(
@@ -334,7 +367,7 @@ class _ImagePickerState extends State<_ImagePicker> {
         onPressed: () => widget.onPressed(widget.controller),
         child: Text(
           L10n.of(context).pickImage,
-          style: TextStyle(color: theme.colorScheme.tertiary),
+          style: TextStyle(color: theme.colorScheme.emojisAndStickersTextColor),
         ),
       );
     } else {
