@@ -137,7 +137,7 @@ class ChatView extends StatelessWidget {
           child: FractionallySizedBox(
             heightFactor: 0.6,
             child: Image.asset(
-              'assets/logo_horizontal_semfundo.png',
+              theme.colorScheme.logoHorizontalSemFundo,
               fit: BoxFit.contain,
               filterQuality: FilterQuality.high,
             ),

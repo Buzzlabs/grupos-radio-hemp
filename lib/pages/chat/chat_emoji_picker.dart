@@ -66,7 +66,7 @@ class ChatEmojiPicker extends StatelessWidget {
                                 theme.colorScheme.emojiPickerBackground,
                                 0.75,
                               )!,
-                              indicatorColor: theme.colorScheme.onSurface,
+                              indicatorColor: theme.colorScheme.emojiPickerIndicator,
                             ),
                           ),
                         ),
@@ -105,7 +105,7 @@ class NoRecent extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Text(
           L10n.of(context).emoteKeyboardNoRecents,
-          style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
+          style: TextStyle(color: Theme.of(context).colorScheme.oopsMessageTextColor),
           textAlign: TextAlign.center,
         ),
       ),

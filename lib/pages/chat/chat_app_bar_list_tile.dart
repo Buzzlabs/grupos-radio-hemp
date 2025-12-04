@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -42,7 +43,7 @@ class ChatAppBarListTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: theme.colorScheme.onSurfaceVariant,
+                    color: theme.colorScheme.pinnedMessageTextColor,
                     overflow: TextOverflow.ellipsis,
                     fontSize: 14,
                   ),
@@ -50,7 +51,7 @@ class ChatAppBarListTile extends StatelessWidget {
                     color: theme.colorScheme.onSurfaceVariant,
                     fontSize: 14,
                     decoration: TextDecoration.underline,
-                    decorationColor: theme.colorScheme.onSurfaceVariant,
+                    decorationColor: theme.colorScheme.pinnedMessageTextColor,
                   ),
                   onOpen: (url) => UrlLauncher(context, url.url).launchUrl(),
                 ),

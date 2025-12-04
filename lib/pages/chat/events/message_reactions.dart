@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart' show IterableExtension;
@@ -128,7 +129,7 @@ class _Reaction extends StatelessWidget {
               count.toString(),
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: theme.colorScheme.onSurface,
+                color: theme.colorScheme.reactionTextColor,
                 fontSize: DefaultTextStyle.of(context).style.fontSize,
               ),
             ),
@@ -143,7 +144,7 @@ class _Reaction extends StatelessWidget {
       content = Text(
         renderKey.toString() + (count > 1 ? ' $count' : ''),
         style: TextStyle(
-          color: theme.colorScheme.onSurface,
+          color: theme.colorScheme.reactionTextColor,
           fontSize: DefaultTextStyle.of(context).style.fontSize,
         ),
       );
@@ -155,8 +156,8 @@ class _Reaction extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: reacted == true
-              ? theme.colorScheme.primaryContainer
-              : theme.colorScheme.surfaceContainerHigh,
+              ? theme.colorScheme.reactionInkColor
+              : theme.colorScheme.reactionInkColor,
           borderRadius: BorderRadius.circular(AppConfig.borderRadius / 2),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),

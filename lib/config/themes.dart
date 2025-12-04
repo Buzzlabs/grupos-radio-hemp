@@ -46,26 +46,26 @@ abstract class FluffyThemes {
   ]) {
     const colorScheme = ColorScheme(
       brightness: Brightness.dark,
-      primary: Color(0xFF3EC2CF), // N MEXE
+      primary: Color(0xFF3EC2CF), 
       onPrimary: Color(0xFF4F4F4F),
-      primaryFixed: Color.fromARGB(0, 255, 255, 255), // N MEXE
-      primaryContainer: Color(0xFFadadad), // N MEXE
-      onPrimaryContainer: Color(0xFF212529), //N MEXE
-      secondary: Color(0xFF8B89AD), // N MEXE
-      onSecondary: Color(0xCCF7F7F7), // N MEXE
+      primaryFixed: Color.fromARGB(0, 255, 255, 255), 
+      primaryContainer: Color(0xFFadadad), 
+      onPrimaryContainer: Color(0xFF212529), 
+      secondary: Color(0xFF8B89AD), 
+      onSecondary: Color(0xCCF7F7F7), 
       secondaryContainer: Color(0xFF8B89AD),
       onSecondaryContainer: Color(0xFFADB5BD),
-      tertiary: Color(0xFFF7F7F7), // N MEXE
+      tertiary: Color(0xFFF7F7F7), 
       onTertiary: Color(0xFF4F4F4F),
-      tertiaryContainer: Color(0xFF3D3D3D),
-      onTertiaryContainer: Color(0xFF646464), // N MEXE
-      surface: Color(0xFF4F4F4F), // N MEXE
-      onSurface: Color(0xFF646464), // N MEXE
-      surfaceContainerLow: Color(0xFF3EC2CF), // N MEXE
-      surfaceContainer: Color(0xFFF7F7F7), // N MEXE
-      surfaceContainerHighest: Color(0xFF8B89AD), // N MEXE
-      surfaceContainerHigh: Color(0xFF4F4F4F), // N MEXE
-      error: Color.fromARGB(255, 243, 117, 117), // N MEXE
+      tertiaryContainer: Color(0xFF3D3D3D), 
+      onTertiaryContainer: Color(0xFF646464), 
+      surface: Color(0xFF4F4F4F), 
+      onSurface: Color(0xFF646464), 
+      surfaceContainerLow: Color(0xFF3EC2CF), 
+      surfaceContainer: Color(0xFFF7F7F7), 
+      surfaceContainerHighest: Color(0xFF8B89AD), 
+      surfaceContainerHigh: Color(0xFF4F4F4F), 
+      error: Color.fromARGB(255, 243, 117, 117), 
       onError: Color.fromARGB(255, 243, 117, 117),
       errorContainer: Color.fromARGB(255, 243, 117, 117),
       onErrorContainer: Color(0xFF000000),
@@ -266,6 +266,8 @@ extension BubbleColorTheme on ThemeData {
 
 extension ColorId on ColorScheme{
 
+  String get logoHorizontalSemFundo => 'assets/logo_horizontal_semfundo.png';
+  String get logoSingleSemFundo =>  'assets/logo_single_semfundo.png';
   Color get normalSnackBarTextColor => tertiary;
   Color get oopsMessageTextColor => onSecondaryContainer;
 
@@ -318,12 +320,18 @@ extension ColorId on ColorScheme{
   Color get clientChooserButtonTextColor => tertiary;
   Color get clientChooserShareIconColor => primary;
   Color get clientChooserShareTextColor => primary;
+    // show about info
+    String get showAboutInfoFontFamily => 'GothamRndSSm';
+    Color get showAboutInfoTitleColor => primary;
+    Color get showAboutInfoSourceTextColor => tertiary;
 
   // body
   Color get searchTitleBackGroud => surface;
   Color get searchTitleIconColor => primary;
   Color get noChatsFoundIconColor => onSecondaryContainer;
   Color get noChatsFoundTextColor => onSecondaryContainer;
+  Color get typingIconBaseColor => surface;
+  Color get typingIconBallsColor => secondary;
 
   // item
   String get chatNameFontFamily => "GothamRndSSm";
@@ -335,6 +343,7 @@ extension ColorId on ColorScheme{
   Color get localizedTimeShortColor => onSecondary;
   Color get chatItemIconColor => tertiary;
   Color get chatItemTextColor => tertiary;
+  Color get chatItemUnreadColor => primary;
 
   // navirail
   Color get selectedContainerColor => primary;
@@ -376,6 +385,8 @@ extension ColorId on ColorScheme{
     Color get emojiIconSelectedColor => primary;
     Color get emojiIconUnselectedColor => primary.withAlpha(128);
     Color get emojiPickerBackground => surface;
+    Color get emojiPickerIndicator => onSurface;
+    Color get emojiIconTextColor => tertiary;
 
   // bar 
   String get chatAppBarFontFamily => "GothamRndSSm";
@@ -395,7 +406,14 @@ extension ColorId on ColorScheme{
   Color get chatBackground => tertiary;
     //  message
     Color get reactionBarBackground => surface;
+    Color get seenByBackground => surface;
+    Color get messageTextColor => tertiary;
+    Color get messageReadUpToHereColor => secondary.withOpacity(0.6);
     Color get reactionBarMoreReactionIconColor => onSecondaryContainer;
+    Color get reactionTextColor => onSurface;
+    Color get reactionInkColor => primaryContainer;
+    Color get selectionMessageColor => primaryContainer.withValues(alpha: 0.5);
+
       // reaction popup
       Color get reactionPopupTextColor => tertiary;
 
@@ -505,6 +523,7 @@ extension ColorId on ColorScheme{
   Color get emojisAndStickersScreenBackButton => tertiary;
   Color get emojisAndStickersScreenTextColor => tertiary;
   Color get emojisAndStickersTextColor => tertiary;
+  Color get emojisAndStickersBorderColor => tertiary;
   Color get emojisAndStickersIconColor => primary;
   Color get emojisAndStickersSwitchActiveColor => primary;
   Color get emojisAndStickersSwitchInactiveColor => tertiaryContainer;

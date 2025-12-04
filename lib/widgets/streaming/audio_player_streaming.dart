@@ -676,7 +676,7 @@ class _AudioPlayerStreamingState extends State<AudioPlayerStreaming>
                       const Icon(Icons.music_note, size: _artSize),
                 )
               : Image.asset(
-                  'assets/logo_single_semfundo.png',
+                  theme.colorScheme.logoSingleSemFundo,
                   width: _artSize,
                   height: _artSize,
                   fit: BoxFit.cover,

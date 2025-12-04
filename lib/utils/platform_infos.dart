@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -54,7 +55,7 @@ abstract class PlatformInfos {
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
-              'assets/logo_single_semfundo.png',
+              Theme.of(context).colorScheme.logoSingleSemFundo,
               height: 50,
               filterQuality: FilterQuality.medium,
             ),
@@ -62,9 +63,9 @@ abstract class PlatformInfos {
             Text(
               AppConfig.applicationName.toUpperCase(),
               style: TextStyle(
-                fontFamily: 'GothamRndSSm',
+                fontFamily: Theme.of(context).colorScheme.showAboutInfoFontFamily,
                 fontSize: 20,
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.showAboutInfoTitleColor,
               ),
             ),
           ],
@@ -78,7 +79,7 @@ abstract class PlatformInfos {
             label: Text(L10n.of(context).sourceCode),
             style: ButtonStyle(
               foregroundColor: WidgetStateProperty.all(
-                Theme.of(context).colorScheme.tertiary,
+                Theme.of(context).colorScheme.showAboutInfoSourceTextColor,
               ),
             ),
           ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -38,7 +39,7 @@ class PinnedEvents extends StatelessWidget {
                 .map(
                   (event) => AdaptiveModalAction(
                     value: event?.eventId ?? '',
-                    icon: const Icon(Icons.push_pin_outlined),
+                    icon: Icon(Icons.push_pin_outlined, color: Theme.of(context).colorScheme.pinnedMessageIconColor,),
                     label: event?.calcLocalizedBodyFallback(
                           MatrixLocals(L10n.of(context)),
                           withSenderNamePrefix: true,
@@ -78,7 +79,7 @@ class PinnedEvents extends StatelessWidget {
             splashRadius: 18,
             iconSize: 18,
             color: theme.colorScheme.onSurfaceVariant,
-            icon: const Icon(Icons.push_pin),
+            icon: Icon(Icons.push_pin, color: Theme.of(context).colorScheme.pinnedMessageIconColor,),
             tooltip: L10n.of(context).unpin,
             onPressed: controller.room.canSendEvent(EventTypes.RoomPinnedEvents)
                 ? () => controller.unpinEvent(event!.eventId)

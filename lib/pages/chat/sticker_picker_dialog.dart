@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -120,36 +121,36 @@ class StickerPickerDialogState extends State<StickerPickerDialog> {
               title: SizedBox(
                 height: 42,
                 child: TextField(
-                  style: TextStyle(color: theme.colorScheme.tertiary, ),
+                  style: TextStyle(color: theme.colorScheme.dialogTextFieldTextColor, ),
                   autofocus: false,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.transparent,
                     hintText: L10n.of(context).search,
-                    hintStyle: TextStyle(color: theme.colorScheme.onSecondaryContainer),
+                    hintStyle: TextStyle(color: theme.colorScheme.dialogTextFieldHintTextColor),
                     prefixIcon: Icon(
                       Icons.search_outlined,
-                      color: theme.colorScheme.tertiary,
+                      color: theme.colorScheme.dialogTextFieldHintTextColor,
                     ),
                     contentPadding: EdgeInsets.zero,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12), 
                       borderSide: BorderSide(
-                        color: theme.colorScheme.tertiary, 
+                        color: theme.colorScheme.emojisAndStickersBorderColor, 
                         width: 1,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: theme.colorScheme.tertiary, 
+                        color: theme.colorScheme.emojisAndStickersBorderColor, 
                         width: 1,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(
-                        color: theme.colorScheme.tertiary,
+                        color: theme.colorScheme.emojisAndStickersBorderColor,
                         width: 2,
                       ),
                     ),
@@ -168,7 +169,7 @@ class StickerPickerDialogState extends State<StickerPickerDialog> {
                       Text(
                         L10n.of(context).noEmotesFound,
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.tertiary,
+                          color: Theme.of(context).colorScheme.oopsMessageTextColor,
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -178,9 +179,9 @@ class StickerPickerDialogState extends State<StickerPickerDialog> {
                           'https://matrix.to/#/#fluffychat-stickers:janian.de',
                         ).launchUrl(),
                         icon: Icon(Icons.explore_outlined,
-                        color: theme.colorScheme.tertiary,),
+                        color: theme.colorScheme.emojiIconTextColor,),
                         label: Text(L10n.of(context).discover,
-                        style: TextStyle(color: theme.colorScheme.tertiary,),),
+                        style: TextStyle(color: theme.colorScheme.emojiIconTextColor,),),
                       ),
                     ],
                   ),

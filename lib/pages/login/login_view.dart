@@ -91,7 +91,7 @@ class LoginView extends StatelessWidget {
                       child: FractionallySizedBox(
                         widthFactor: isMobileMode ? 0.8 : 0.7,
                         child: Image.asset(
-                          'assets/logo_horizontal_semfundo.png',
+                          theme.colorScheme.logoHorizontalSemFundo,
                           fit: BoxFit.contain,
                           filterQuality: FilterQuality.high,
                         ),

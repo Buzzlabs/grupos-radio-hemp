@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 class EmptyPage extends StatelessWidget {
@@ -20,7 +21,7 @@ class EmptyPage extends StatelessWidget {
       body: Container(
         alignment: Alignment.center,
         child: Image.asset(
-          'assets/logo_horizontal_semfundo.png',
+          theme.colorScheme.logoHorizontalSemFundo,
           color: theme.colorScheme.surfaceContainerHigh,
           width: width,
           height: width,

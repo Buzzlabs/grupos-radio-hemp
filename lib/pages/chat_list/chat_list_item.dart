@@ -334,7 +334,7 @@ class ChatListItem extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         color: unread || room.hasNewMessages
-                                            ? theme.colorScheme.chatItemTextColor
+                                            ? theme.colorScheme.chatItemUnreadColor
                                             : theme.colorScheme.chatItemTextColor,
                                         decoration:
                                             room.lastEvent?.redacted == true
@@ -360,8 +360,8 @@ class ChatListItem extends StatelessWidget {
                       color: room.highlightCount > 0
                           ? theme.colorScheme.error
                           : hasNotifications || room.markedUnread
-                              ? theme.colorScheme.chatItemTextColor
-                              : theme.colorScheme.chatItemTextColor,
+                              ? theme.colorScheme.chatItemUnreadColor
+                              : theme.colorScheme.chatItemUnreadColor,
                       borderRadius: BorderRadius.circular(7),
                     ),
                     child: hasNotifications

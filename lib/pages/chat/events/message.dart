@@ -125,13 +125,13 @@ class Message extends StatelessWidget {
         previousEvent!.originServerTs.sameEnvironment(event.originServerTs);
 
     final textColor =
-        ownMessage ? theme.colorScheme.tertiary : theme.colorScheme.tertiary;
+        ownMessage ? theme.colorScheme.messageTextColor : theme.colorScheme.messageTextColor;
 
     final linkColor = ownMessage
         ? theme.brightness == Brightness.light
-            ? theme.colorScheme.tertiary
-            : theme.colorScheme.tertiary
-        : theme.colorScheme.primary;
+            ? theme.colorScheme.messageTextColor
+            : theme.colorScheme.messageTextColor
+        : theme.colorScheme.messageTextColor;
 
     final rowMainAxisAlignment =
         ownMessage ? MainAxisAlignment.end : MainAxisAlignment.start;
@@ -235,7 +235,7 @@ class Message extends StatelessWidget {
                       child: Material(
                         borderRadius:
                             BorderRadius.circular(AppConfig.borderRadius * 2),
-                        color: theme.colorScheme.secondary.withOpacity(0.6),
+                        color: theme.colorScheme.eventBubbleBackground,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 8.0,
@@ -246,7 +246,7 @@ class Message extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 12 * AppConfig.fontSizeFactor,
                               fontWeight: FontWeight.bold,
-                              color: theme.colorScheme.tertiary,
+                              color: theme.colorScheme.eventBubbleTextColor,
                             ),
                           ),
                         ),
@@ -280,8 +280,7 @@ class Message extends StatelessWidget {
                                 left: 0,
                                 right: 0,
                                 child: InkWell(
-                                  hoverColor: theme.colorScheme.surface
-                                      .withValues(alpha: 0.3),
+                                  hoverColor: theme.colorScheme.selectionMessageColor,
                                   enableFeedback: !selected,
                                   onTap: longPressSelect
                                       ? null
@@ -294,8 +293,7 @@ class Message extends StatelessWidget {
                                       AppConfig.borderRadius / 2,
                                     ),
                                     color: selected || highlightMarker
-                                        ? theme.colorScheme.primaryContainer
-                                            .withValues(alpha: 0.5)
+                                        ? theme.colorScheme.selectionMessageColor
                                         : Colors.transparent,
                                   ),
                                 ),
@@ -805,7 +803,7 @@ class Message extends StatelessWidget {
                                                                               0.75,
                                                                             )!,
                                                                             indicatorColor:
-                                                                                theme.colorScheme.onSecondary,
+                                                                                theme.colorScheme.emojiPickerIndicator,
                                                                           ),
                                                                         ),
                                                                       ),
@@ -869,7 +867,7 @@ class Message extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Divider(
-                        color: theme.colorScheme.surfaceContainerHighest,
+                        color: theme.colorScheme.messageReadUpToHereColor,
                       ),
                     ),
                     Container(
@@ -884,18 +882,18 @@ class Message extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius:
                             BorderRadius.circular(AppConfig.borderRadius / 3),
-                        color: theme.colorScheme.surface.withAlpha(128),
+                        color: theme.colorScheme.messageReadUpToHereColor,
                       ),
                       child: Text(
                         L10n.of(context).readUpToHere,
                         style: TextStyle(
                             fontSize: 12 * AppConfig.fontSizeFactor,
-                            color: theme.colorScheme.onSurface,),
+                            color: theme.colorScheme.messageTextColor,),
                       ),
                     ),
                     Expanded(
                       child: Divider(
-                        color: theme.colorScheme.surfaceContainerHighest,
+                        color: theme.colorScheme.messageReadUpToHereColor,
                       ),
                     ),
                   ],

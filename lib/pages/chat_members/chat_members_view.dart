@@ -68,7 +68,7 @@ class ChatMembersView extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.error_outline,
-                        color: theme.colorScheme.primary,
+                        color: theme.colorScheme.error,
                       ),
                       Text(error.toLocalizedString(context),
                           style: TextStyle(color: theme.colorScheme.error),),
