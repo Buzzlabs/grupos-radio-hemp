@@ -101,7 +101,7 @@ class RegisterView extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextField(
                         style: TextStyle(
-                          color: theme.colorScheme.userTxtFieldBorderColor,
+                          color: theme.colorScheme.userTxtFieldTextColor,
                           fontFamily: theme.colorScheme.loginFontFamily,
                         ),
                         readOnly: controller.loading,
@@ -139,6 +139,20 @@ class RegisterView extends StatelessWidget {
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
+                           errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.error, 
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.error,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                           errorText: controller.emailError,
                           labelText: L10n.of(context).email,
                         ),
@@ -188,6 +202,20 @@ class RegisterView extends StatelessWidget {
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
+                           errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.error, 
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.error,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                           errorText: controller.usernameError,
                           labelText: L10n.of(context).username,
                         ),
@@ -238,6 +266,20 @@ class RegisterView extends StatelessWidget {
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
+                           errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.error, 
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.error,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                           errorText: controller.passwordError,
                           suffixIcon: IconButton(
                             onPressed: controller.toggleShowPassword,

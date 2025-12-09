@@ -59,11 +59,7 @@ class MoreLoginMenuButton extends StatelessWidget {
             value: MoreLoginActions.store,
             child: Row(
               children: [
-                Icon(
-                Icons.shopping_cart,
-                color: theme.colorScheme.loginMenuIconColor,
-                size: 20,
-              ),
+                theme.colorScheme.menuIconStore,
                 // SvgPicture.asset(
                 //   'assets/icons/store.svg',
                 //   width: 30,
@@ -78,11 +74,7 @@ class MoreLoginMenuButton extends StatelessWidget {
             value: MoreLoginActions.course,
             child: Row(
               children: [
-                Icon(
-                Icons.book,
-                color: theme.colorScheme.loginMenuIconColor,
-                size: 20,
-              ),
+                theme.colorScheme.menuIconCourse,
                 // SvgPicture.asset(
                 //   'assets/icons/course.svg',
                 //   width: 30,
@@ -97,11 +89,7 @@ class MoreLoginMenuButton extends StatelessWidget {
             value: MoreLoginActions.podcasts,
             child: Row(
               children: [
-                 Icon(
-                Icons.mic,
-                color: theme.colorScheme.loginMenuIconColor,
-                size: 20,
-              ),
+                 theme.colorScheme.menuIconPodcast,
                 // SvgPicture.asset(
                 //   'assets/icons/podcast.svg',
                 //   width: 30,
@@ -118,10 +106,7 @@ class MoreLoginMenuButton extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(3),
-                  child: Icon(
-                    Icons.info_outlined,
-                    color: Theme.of(context).colorScheme.loginMenuIconColor,
-                  ),
+                  child: Theme.of(context).colorScheme.menuIconInfo
                 ),
                 const SizedBox(width: 12),
                 Text(L10n.of(context).about,style: TextStyle(color: theme.colorScheme.loginMenuTextColor),

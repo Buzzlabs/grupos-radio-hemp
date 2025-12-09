@@ -46,26 +46,26 @@ abstract class FluffyThemes {
   ]) {
     const colorScheme = ColorScheme(
       brightness: Brightness.dark,
-      primary: Color(0xFF3EC2CF), 
+      primary: Color(0xFF3EC2CF),
       onPrimary: Color(0xFF4F4F4F),
-      primaryFixed: Color.fromARGB(0, 255, 255, 255), 
-      primaryContainer: Color(0xFFadadad), 
-      onPrimaryContainer: Color(0xFF212529), 
-      secondary: Color(0xFF8B89AD), 
-      onSecondary: Color(0xCCF7F7F7), 
+      primaryFixed: Color.fromARGB(0, 255, 255, 255),
+      primaryContainer: Color(0xFFadadad),
+      onPrimaryContainer: Color(0xFF212529),
+      secondary: Color(0xFF8B89AD),
+      onSecondary: Color(0xCCF7F7F7),
       secondaryContainer: Color(0xFF8B89AD),
       onSecondaryContainer: Color(0xFFADB5BD),
-      tertiary: Color(0xFFF7F7F7), 
+      tertiary: Color(0xFFF7F7F7),
       onTertiary: Color(0xFF4F4F4F),
-      tertiaryContainer: Color(0xFF3D3D3D), 
-      onTertiaryContainer: Color(0xFF646464), 
-      surface: Color(0xFF4F4F4F), 
-      onSurface: Color(0xFF646464), 
-      surfaceContainerLow: Color(0xFF3EC2CF), 
-      surfaceContainer: Color(0xFFF7F7F7), 
-      surfaceContainerHighest: Color(0xFF8B89AD), 
-      surfaceContainerHigh: Color(0xFF4F4F4F), 
-      error: Color.fromARGB(255, 243, 117, 117), 
+      tertiaryContainer: Color(0xFF3D3D3D),
+      onTertiaryContainer: Color(0xFF646464),
+      surface: Color(0xFF4F4F4F),
+      onSurface: Color(0xFF646464),
+      surfaceContainerLow: Color(0xFF3EC2CF),
+      surfaceContainer: Color(0xFFF7F7F7),
+      surfaceContainerHighest: Color(0xFF8B89AD),
+      surfaceContainerHigh: Color(0xFF4F4F4F),
+      error: Color.fromARGB(255, 243, 117, 117),
       onError: Color.fromARGB(255, 243, 117, 117),
       errorContainer: Color.fromARGB(255, 243, 117, 117),
       onErrorContainer: Color(0xFF000000),
@@ -235,8 +235,11 @@ abstract class FluffyThemes {
       ),
       dialogTheme: DialogThemeData(
         backgroundColor: colorScheme.surface,
-        titleTextStyle:
-            TextStyle(fontFamily: 'GothamRndSSm', color: colorScheme.primary, fontSize: 18, fontWeight: FontWeight.w400),
+        titleTextStyle: TextStyle(
+            fontFamily: 'GothamRndSSm',
+            color: colorScheme.primary,
+            fontSize: 18,
+            fontWeight: FontWeight.w400),
         contentTextStyle: TextStyle(
           color: colorScheme.onSecondaryContainer,
           decorationColor: colorScheme.onSurface,
@@ -264,14 +267,17 @@ extension BubbleColorTheme on ThemeData {
       : colorScheme.secondary.withValues(alpha: 0.5);
 }
 
-extension ColorId on ColorScheme{
-
+extension ColorId on ColorScheme {
+  // logos 
   String get logoHorizontalSemFundo => 'assets/logo_horizontal_semfundo.png';
-  String get logoSingleSemFundo =>  'assets/logo_single_semfundo.png';
+  String get logoSingleSemFundo => 'assets/logo_single_semfundo.png';
+  
+  // geral
   Color get normalSnackBarTextColor => tertiary;
   Color get oopsMessageTextColor => onSecondaryContainer;
 
   // login and register
+  Icon get loginSenhaIconCadeado => Icon((Icons.lock_outlined));
   String get loginFontFamily => "Roboto";
   Color get loginBoxBackground => tertiary;
   Color get loginLabel => onSurface;
@@ -287,19 +293,42 @@ extension ColorId on ColorScheme{
   Color get loginAbove18CheckBoxCheckColor => tertiary;
   Color get loginIsAdultTextColor => onSurface;
 
-  // menu login 
+  // menu login
+  Icon get menuIconStore => Icon(
+                Icons.shopping_cart,
+                color: loginMenuIconColor,
+                size: 20,
+              ); 
+
+  Icon get menuIconCourse => Icon(
+                Icons.book,
+                color: loginMenuIconColor,
+                size: 20,
+              );
+  
+  Icon get menuIconPodcast => Icon(
+                Icons.mic,
+                color: loginMenuIconColor,
+                size: 20,
+              );
+
+  Icon get menuIconInfo => Icon(
+                    Icons.info_outlined,
+                    color: loginMenuIconColor,
+                  );
+
   Color get loginMenuIconColor => primary;
   Color get loginMenuTextColor => onSurface;
 
   // login scaffold
   List<Color> get gradientBackground => [
-             surfaceContainerLow,
-             surfaceContainer,
-             surfaceContainerHighest,
-            ];
+        surfaceContainerLow,
+        surfaceContainer,
+        surfaceContainerHighest,
+      ];
   Color get scaffoldBorderColor => primary;
 
-  // chatlist 
+  // chatlist
   // view
   Color get chatListBackground => surface;
 
@@ -316,14 +345,51 @@ extension ColorId on ColorScheme{
   Color get circularProgressIndicatorColor => primary;
 
   // client chooser button
+   Icon get iconEdit => Icon(
+                Icons.edit_outlined,
+                color: clientChooserButtonIconColor,
+                size: 22,
+              );
+
+  Icon get iconHome => Icon(
+                Icons.home,
+                color: clientChooserButtonIconColor,
+                size: 22,
+              );
+  
+  Icon get iconCourse => Icon(
+                Icons.book,
+                color: clientChooserButtonIconColor,
+                size: 22,
+              );
+
+  Icon get iconSetting => Icon(
+                Icons.settings,
+                color: clientChooserButtonIconColor,
+                size: 22,
+              );
+
+  Icon get iconInfo => Icon(
+                Icons.info_outlined,
+                color: clientChooserButtonIconColor,
+                size: 22,
+              );
+
+  Icon get iconShare => Icon(
+                Icons.adaptive.share_outlined,
+                color: clientChooserShareIconColor,
+                size: 22,
+              );
+  
   Color get clientChooserButtonIconColor => tertiary;
   Color get clientChooserButtonTextColor => tertiary;
   Color get clientChooserShareIconColor => primary;
   Color get clientChooserShareTextColor => primary;
-    // show about info
-    String get showAboutInfoFontFamily => 'GothamRndSSm';
-    Color get showAboutInfoTitleColor => primary;
-    Color get showAboutInfoSourceTextColor => tertiary;
+
+  // show about info
+  String get showAboutInfoFontFamily => 'GothamRndSSm';
+  Color get showAboutInfoTitleColor => primary;
+  Color get showAboutInfoSourceTextColor => tertiary;
 
   // body
   Color get searchTitleBackGroud => surface;
@@ -346,6 +412,42 @@ extension ColorId on ColorScheme{
   Color get chatItemUnreadColor => primary;
 
   // navirail
+  Icon get navirailIconHomeUnselected => Icon(
+                                Icons.home,
+                                color: unselectediconColor,
+                                size: 40,
+                              );
+
+  Icon get navirailIconChatUnselected => Icon(
+                                Icons.chat_bubble_outline,
+                                color: unselectediconColor,
+                                size: 40,
+                              );
+
+  Icon get navirailIconChatSelected => Icon(
+                                Icons.chat_bubble_outline,
+                                color: selectediconColor,
+                                size: 40,
+                              );
+
+  Icon get navirailIconCourseUnselected => Icon(
+                                Icons.book,
+                                color: unselectediconColor,
+                                size: 40,
+                              );
+
+  Icon get navirailIconSettingUnselected => Icon(
+                          Icons.settings,
+                          color: unselectediconColor,
+                          size: 40,
+                        );
+
+  Icon get navirailIconSettingSelected => Icon(
+                          Icons.settings,
+                          color: selectediconColor,
+                          size: 40,
+                        );
+
   Color get selectedContainerColor => primary;
   Color get selectediconColor => primary;
   Color get unselectediconColor => tertiary;
@@ -354,41 +456,41 @@ extension ColorId on ColorScheme{
   // input bar
   Color get inputBarBackground => surfaceContainerHigh;
   Color get sendIconColor => tertiary;
-  Color get sendPaddingColor => secondary;
-  Color get textSelectionColor =>  onTertiaryContainer;
+  Color get sendPaddingColor => secondary; //MOSTRA ESSE
+  Color get textSelectionColor => onTertiaryContainer;
   Color get answerAndShareButtonTextColor => onSecondaryContainer;
   Color get answerAndShareIconColor => onSecondaryContainer;
   Color get addCirclePopupBackground => surface;
   Color get addCircleAndEmojiIconColor => tertiary;
   Color get addCirclePopupTextColor => tertiary;
-  Color get addCirclePopupIconColor => surface;
-  Color get addCirclePopupIconPaddingColor => tertiary;
+  Color get addCirclePopupIconColor => tertiary;
+  Color get addCirclePopupIconPaddingColor => surface;
   Color get messageInputTextColor => tertiary;
 
-    // send file 
-    Color get fileTypeTextColor => onSecondaryContainer;
-    Color get fileCompressionSwitchActiveColor => primary;
-    Color get fileCompressionSwitchInactiveColor => tertiaryContainer;
-    Color get fileCompressionTextColor => onSecondaryContainer;
-    
-    // answer
-    Color get senderNameBeingAnsweredTextColor => secondary;
-    Color get messageBeingAnsweredTextColor => tertiary;
-    Color get closeMessageBeingAnsweredIconColor => onSecondary;
+  // send file
+  Color get fileTypeTextColor => onSecondaryContainer;
+  Color get fileCompressionSwitchActiveColor => primary;
+  Color get fileCompressionSwitchInactiveColor => tertiaryContainer;
+  Color get fileCompressionTextColor => onSecondaryContainer;
 
-    // edit
-    Color get editMessageIconColor => secondary;
+  // answer
+  Color get senderNameBeingAnsweredTextColor => secondary;
+  Color get messageBeingAnsweredTextColor => tertiary;
+  Color get closeMessageBeingAnsweredIconColor => onSecondary;
 
-    // emoji picker
-    Color get emojiTabSelectedColor => primary;
-    Color get emojitabUnselectedColor => primary.withAlpha(128);
-    Color get emojiIconSelectedColor => primary;
-    Color get emojiIconUnselectedColor => primary.withAlpha(128);
-    Color get emojiPickerBackground => surface;
-    Color get emojiPickerIndicator => onSurface;
-    Color get emojiIconTextColor => tertiary;
+  // edit
+  Color get editMessageIconColor => secondary;
 
-  // bar 
+  // emoji picker
+  Color get emojiTabSelectedColor => primary;
+  Color get emojitabUnselectedColor => primary.withAlpha(128);
+  Color get emojiIconSelectedColor => primary;
+  Color get emojiIconUnselectedColor => primary.withAlpha(128);
+  Color get emojiPickerBackground => surface;
+  Color get emojiPickerIndicator => onSurface;
+  Color get emojiIconTextColor => tertiary;
+
+  // bar
   String get chatAppBarFontFamily => "GothamRndSSm";
   Color get chatAppBarTileTextColor => tertiary;
   Color get chatAppBarTileIconColor => tertiary;
@@ -398,42 +500,43 @@ extension ColorId on ColorScheme{
   Color get chatAppBarBackButtonColor => onSecondaryContainer;
   Color get jumpToLastMessagePaddingColor => secondary;
 
-    // info about the message
-    Color get infoAboutMessageTextColor => tertiary;
-    Color get infoAboutMessageBackground => surface;
+  // info about the message
+  Color get infoAboutMessageTextColor => tertiary;
+  Color get infoAboutMessageBackground => surface;
 
   // body
   Color get chatBackground => tertiary;
-    //  message
-    Color get reactionBarBackground => surface;
-    Color get seenByBackground => surface;
-    Color get messageTextColor => tertiary;
-    Color get messageReadUpToHereColor => secondary.withOpacity(0.6);
-    Color get reactionBarMoreReactionIconColor => onSecondaryContainer;
-    Color get reactionTextColor => onSurface;
-    Color get reactionInkColor => primaryContainer;
-    Color get selectionMessageColor => primaryContainer.withValues(alpha: 0.5);
 
-      // reaction popup
-      Color get reactionPopupTextColor => tertiary;
+  //  message
+  Color get reactionBarBackground => surface;
+  Color get seenByBackground => surface;
+  Color get messageTextColor => tertiary;
+  Color get messageReadUpToHereColor => secondary.withOpacity(0.6);
+  Color get reactionBarMoreReactionIconColor => onSecondaryContainer;
+  Color get reactionTextColor => onSurface;
+  Color get reactionInkColor => primaryContainer;
+  Color get selectionMessageColor => primaryContainer.withValues(alpha: 0.5);
 
-    // pinned message
-    Color get pinnedMessageBackground => surface;
-    Color get pinnedMessageIconColor => primary;
-    Color get pinnedMessageTextColor => tertiary;
-    Color get pinnedMessageButtonColor => primary.withValues(alpha: 0.8);
+  // reaction popup
+  Color get reactionPopupTextColor => tertiary;
 
-    // chat events (ex: amigo alterou o avatar do chat)
-    Color get eventBubbleBackground => secondary.withOpacity(0.6);
-    Color get eventBubbleTextColor => tertiary;
-    Color get eventBubbleMoreEventsTextColor => secondary;
+  // pinned message
+  Color get pinnedMessageBackground => surface;
+  Color get pinnedMessageIconColor => primary;
+  Color get pinnedMessageTextColor => tertiary;
+  Color get pinnedMessageButtonColor => primary.withValues(alpha: 0.8);
+
+  // chat events (ex: amigo alterou o avatar do chat)
+  Color get eventBubbleBackground => secondary.withOpacity(0.6);
+  Color get eventBubbleTextColor => tertiary;
+  Color get eventBubbleMoreEventsTextColor => secondary;
 
   // livestream
   Color get liveStreamBackground => surface;
   Color get liveStreamIconColor => onSecondaryContainer;
   Color get liveStreamTitleColor => onSecondary;
   Color get liveStreamMenuTextColor => tertiary;
- 
+
   // vods popup
   String get vodsPopupFontFamily => 'GothamRndSSm';
   Color get vodsPopupBackground => surface;
@@ -455,7 +558,7 @@ extension ColorId on ColorScheme{
   // text input dialog
   Color get textInputDialogTitleTextColor => primary;
 
-  // dialog text field 
+  // dialog text field
   String get dialogTextFieldFontFamily => 'Roboto';
   Color get dialogTextFieldTextColor => tertiary;
   Color get dialogTextFieldBackground => tertiaryContainer;
@@ -463,7 +566,18 @@ extension ColorId on ColorScheme{
   Color get dialogTextFieldHintTextColor => onSecondaryContainer;
   Color get dialogTextFieldSuffixPrefixColor => primary;
 
-  // details 
+  // ok cancel alert dialog
+  Color get okCancelAlertTitleTextColor => primary;
+  Color get okCancelAlertMessageTextColor => onSecondaryContainer;
+  Color get okCancelAlertOkButtonColor => primary;
+
+  // alert dialog (default: AlertDialogTheme)
+  Color get alertDialogBackground => surface;
+  Color get alertDialogAreYouSureTextColor => primary;
+  Color get alertDialogDescriptionTextColor => onSecondaryContainer;
+  Color get alertDialogCancelTextColor => primary;
+
+  // details
   Color get detailsBackButtonColor => tertiary;
   Color get detailsIconColor => tertiary;
   Color get detailsMainIconColor => primary;
@@ -478,7 +592,7 @@ extension ColorId on ColorScheme{
   Color get detailParticipantsInvitePaddingColor => secondary;
   Color get detailParticipantsInviteIconColor => tertiary;
 
-  // participants 
+  // participants
   String get participantsFontFamily => 'GothamRndSSm';
   Color get participantNameTextColor => primary;
   Color get participantPowerLevelabove100MainColor => primary;
@@ -488,11 +602,11 @@ extension ColorId on ColorScheme{
   Color get participantScreenBackButton => tertiary;
   Color get participantScreenTitle => tertiary;
 
-    // popup
-    Color get participantApproveTextColor => tertiary;
-    Color get participantLevelIconColor => primary;
+  // popup
+  Color get participantApproveTextColor => tertiary;
+  Color get participantLevelIconColor => primary;
 
-  // search 
+  // search
   Color get searchScreenBackButton => tertiary;
   Color get searchScreenTitle => tertiary;
   Color get searchScreenTabBarSelected => primary;
@@ -512,12 +626,12 @@ extension ColorId on ColorScheme{
   Color get extensionIconText => tertiary;
   Color get extensionSubtitleText => onSecondaryContainer;
 
-    // live preview dialog
-    Color get livePreviewTitleColor => primary;
-    Color get livePreviewIconColor => primary;
-    Color get livePreviewLiveTitleColor => tertiary;
-    Color get liveTextButtonPaddingColor => primary;
-    Color get liveTextButtonTextColor => tertiary;
+  // live preview dialog
+  Color get livePreviewTitleColor => primary;
+  Color get livePreviewIconColor => primary;
+  Color get livePreviewLiveTitleColor => tertiary;
+  Color get liveTextButtonPaddingColor => primary;
+  Color get liveTextButtonTextColor => tertiary;
 
   // emojis and stickers
   Color get emojisAndStickersScreenBackButton => tertiary;
@@ -545,11 +659,12 @@ extension ColorId on ColorScheme{
   Color get permissionsDividerColor => primary;
   Color get permissionsScreenTagColor => primary;
   Color get permissionsTextColor => tertiary;
-    // permissions colors 
-    Color get permissionsPowerLevelabove100MainColor => primary;
-    Color get permissionsPowerLevelabove50MainColor => secondary;
-    Color get permissionsPowerLevelabove0MainColor => primaryFixed;
-  
+
+  // permissions colors
+  Color get permissionsPowerLevelabove100MainColor => primary;
+  Color get permissionsPowerLevelabove50MainColor => secondary;
+  Color get permissionsPowerLevelabove0MainColor => primaryFixed;
+
   // invitation
   Color get invitationScreenBackButton => tertiary;
   Color get invitationScreenTextColor => tertiary;
@@ -563,7 +678,7 @@ extension ColorId on ColorScheme{
   Color get progressBarColor => primary;
   Color get progressBaseColor => onTertiary;
   Color get timeLabelsTextColor => onSecondaryContainer;
-  
+
   // settings
   Color get settingScreenBackButton => tertiary;
   Color get floatingButtonPaddingColor => primary;
@@ -577,6 +692,4 @@ extension ColorId on ColorScheme{
   Color get deviceSettingInfoColor => onSecondaryContainer;
   Color get deviceSettingTextColor => tertiary;
   Color get deviceSettingPaddingColor => secondary;
-
- 
 }

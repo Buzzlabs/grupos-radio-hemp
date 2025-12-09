@@ -121,7 +121,7 @@ class LoginView extends StatelessWidget {
                           fillColor: theme.colorScheme.userTxtFieldFilledColor,
                           disabledBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide(color: theme.colorScheme.primary, width: 2),
+                                BorderSide(color: theme.colorScheme.userTxtFieldBorderColor, width: 2),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           border: OutlineInputBorder(
@@ -141,6 +141,20 @@ class LoginView extends StatelessWidget {
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: theme.colorScheme.userTxtFieldBorderColor,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.error,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.error, 
                               width: 2,
                             ),
                             borderRadius: BorderRadius.circular(10),
@@ -201,6 +215,20 @@ class LoginView extends StatelessWidget {
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
+                          errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.error, 
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.userTxtFieldBorderColor,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                           errorText: controller.passwordError,
                           errorStyle: TextStyle(
                             color: Theme.of(context).colorScheme.error,

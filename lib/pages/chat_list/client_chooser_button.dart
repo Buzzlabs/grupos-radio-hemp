@@ -58,11 +58,7 @@ class ClientChooserButton extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Icon(
-                Icons.edit_outlined,
-                color: theme.colorScheme.clientChooserButtonIconColor,
-                size: 22,
-              ),
+              child: theme.colorScheme.iconEdit,
             ),
             const SizedBox(width: 18),
             Text(
@@ -79,11 +75,7 @@ class ClientChooserButton extends StatelessWidget {
             Padding(
               //padding: const EdgeInsets.only(bottom: 8),
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Icon(
-                Icons.home,
-                color: theme.colorScheme.clientChooserButtonIconColor,
-                size: 22,
-              ),
+              child: theme.colorScheme.iconHome,
               // SvgPicture.asset(
               //   'assets/icons/home.svg',
               //   width: 30,
@@ -129,11 +121,7 @@ class ClientChooserButton extends StatelessWidget {
             Padding(
               // padding: const EdgeInsets.symmetric(vertical: 8),
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Icon(
-                Icons.book,
-                color: theme.colorScheme.clientChooserButtonIconColor,
-                size: 22,
-              ),
+              child: theme.colorScheme.iconCourse,
               // SvgPicture.asset(
               //   'assets/icons/course.svg',
               //   width: 30,
@@ -180,11 +168,7 @@ class ClientChooserButton extends StatelessWidget {
             Padding(
               // padding: const EdgeInsets.only(left: 3, top: 8, bottom: 8),
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Icon(
-                Icons.settings,
-                color: theme.colorScheme.clientChooserButtonIconColor,
-                size: 22,
-              ),
+              child: theme.colorScheme.iconSetting,
               // SvgPicture.asset(
               //   'assets/icons/configs.svg',
               //   width: 27,
@@ -206,11 +190,7 @@ class ClientChooserButton extends StatelessWidget {
             Padding(
               // padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Icon(
-                Icons.info_outlined,
-                color: theme.colorScheme.clientChooserButtonIconColor,
-                size: 22,
-              ),
+              child: theme.colorScheme.iconInfo,
             ),
             const SizedBox(width: 12),
             Text(
@@ -228,11 +208,7 @@ class ClientChooserButton extends StatelessWidget {
             Padding(
               // padding: const EdgeInsets.symmetric(horizontal: 5),
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Icon(
-                Icons.adaptive.share_outlined,
-                color: theme.colorScheme.clientChooserShareIconColor,
-                size: 22,
-              ),
+              child: theme.colorScheme.iconShare
             ),
             const SizedBox(width: 18),
             Text(

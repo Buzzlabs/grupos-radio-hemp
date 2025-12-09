@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -70,14 +71,14 @@ class ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
                     final theme = Theme.of(context);
 
                     return AlertDialog(
-                      backgroundColor: theme.colorScheme.surface,
+                      backgroundColor: theme.colorScheme.alertDialogBackground,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
                       title: Text(
                         L10n.of(context).areYouSure,
                         style: TextStyle(
-                          color: theme.colorScheme.primary,
+                          color: theme.colorScheme.alertDialogAreYouSureTextColor,
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
                         ),
@@ -85,7 +86,7 @@ class ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
                       content: Text(
                         L10n.of(context).archiveRoomDescription,
                         style: TextStyle(
-                          color: theme.colorScheme.onSecondaryContainer,
+                          color: theme.colorScheme.alertDialogDescriptionTextColor,
                           fontSize: 16,
                         ),
                       ),
@@ -95,7 +96,7 @@ class ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
                           child: Text(
                             L10n.of(context).cancel,
                             style: TextStyle(
-                              color: theme.colorScheme.primary,
+                              color: theme.colorScheme.alertDialogCancelTextColor,
                             ),
                           ),
                         ),

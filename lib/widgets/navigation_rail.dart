@@ -70,11 +70,7 @@ class SpacesNavigationRail extends StatelessWidget {
                             },
                             icon: Padding(
                               padding: const EdgeInsets.all(10),
-                              child: Icon(
-                                Icons.home,
-                                color: theme.colorScheme.unselectediconColor,
-                                size: 40,
-                              ), //SvgPicture.asset('assets/icons/home.svg'),
+                              child: theme.colorScheme.navirailIconHomeUnselected, //SvgPicture.asset('assets/icons/home.svg'),
                             ),
                             toolTip: L10n.of(context).menuHome,
                           ),
@@ -83,19 +79,11 @@ class SpacesNavigationRail extends StatelessWidget {
                             onTap: onGoToChats,
                             icon: Padding(
                               padding: const EdgeInsets.all(10),
-                              child: Icon(
-                                Icons.chat_bubble_outline,
-                                color: theme.colorScheme.unselectediconColor,
-                                size: 40,
-                              ), // SvgPicture.asset('assets/icons/chat.svg'),
+                              child: theme.colorScheme.navirailIconChatUnselected  // SvgPicture.asset('assets/icons/chat.svg'),
                             ),
                             selectedIcon: Padding(
                               padding: const EdgeInsets.all(10),
-                              child: Icon(
-                                Icons.chat_bubble_outline,
-                                color: theme.colorScheme.selectediconColor,
-                                size: 40,
-                              ), // SvgPicture.asset('assets/icons/chat.svg'),
+                              child: theme.colorScheme.navirailIconChatSelected // SvgPicture.asset('assets/icons/chat.svg'),
                             ),
                             toolTip: L10n.of(context).chats,
                             unreadBadgeFilter: (room) => true,
@@ -169,11 +157,7 @@ class SpacesNavigationRail extends StatelessWidget {
                             },
                             icon: Padding(
                               padding: const EdgeInsets.all(10),
-                              child: Icon(
-                                Icons.book,
-                                color: theme.colorScheme.unselectediconColor,
-                                size: 40,
-                              ), //SvgPicture.asset('assets/icons/course.svg'),
+                              child: theme.colorScheme.navirailIconCourseUnselected //SvgPicture.asset('assets/icons/course.svg'),
                             ),
                             toolTip: L10n.of(context).menuCourse,
                           ),
@@ -222,19 +206,11 @@ class SpacesNavigationRail extends StatelessWidget {
                       onTap: () => context.go('/rooms/settings'),
                       icon: Padding(
                         padding: const EdgeInsets.all(10),
-                        child: Icon(
-                          Icons.settings,
-                          color: theme.colorScheme.unselectediconColor,
-                          size: 40,
-                        ), // SvgPicture.asset('assets/icons/configs.svg'),
+                        child: theme.colorScheme.navirailIconSettingUnselected // SvgPicture.asset('assets/icons/configs.svg'),
                       ),
                       selectedIcon: Padding(
                         padding: const EdgeInsets.all(10),
-                        child: Icon(
-                          Icons.settings,
-                          color: theme.colorScheme.selectediconColor,
-                          size: 40,
-                        ), // SvgPicture.asset('assets/icons/configs.svg'),
+                        child: theme.colorScheme.navirailIconSettingSelected  // SvgPicture.asset('assets/icons/configs.svg'),
                       ),
                       toolTip: L10n.of(context).settings,
                     ),
