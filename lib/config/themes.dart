@@ -268,10 +268,10 @@ extension BubbleColorTheme on ThemeData {
 }
 
 extension ColorId on ColorScheme {
-  // logos 
+  // logos
   String get logoHorizontalSemFundo => 'assets/logo_horizontal_semfundo.png';
   String get logoSingleSemFundo => 'assets/logo_single_semfundo.png';
-  
+
   // geral
   Color get normalSnackBarTextColor => tertiary;
   Color get oopsMessageTextColor => onSecondaryContainer;
@@ -295,27 +295,27 @@ extension ColorId on ColorScheme {
 
   // menu login
   Icon get menuIconStore => Icon(
-                Icons.shopping_cart,
-                color: loginMenuIconColor,
-                size: 20,
-              ); 
+        Icons.shopping_cart,
+        color: loginMenuIconColor,
+        size: 20,
+      );
 
   Icon get menuIconCourse => Icon(
-                Icons.book,
-                color: loginMenuIconColor,
-                size: 20,
-              );
-  
+        Icons.book,
+        color: loginMenuIconColor,
+        size: 20,
+      );
+
   Icon get menuIconPodcast => Icon(
-                Icons.mic,
-                color: loginMenuIconColor,
-                size: 20,
-              );
+        Icons.mic,
+        color: loginMenuIconColor,
+        size: 20,
+      );
 
   Icon get menuIconInfo => Icon(
-                    Icons.info_outlined,
-                    color: loginMenuIconColor,
-                  );
+        Icons.info_outlined,
+        color: loginMenuIconColor,
+      );
 
   Color get loginMenuIconColor => primary;
   Color get loginMenuTextColor => onSurface;
@@ -329,6 +329,12 @@ extension ColorId on ColorScheme {
   Color get scaffoldBorderColor => primary;
 
   // chatlist
+  // discover
+  Color get chatlistDiscoverTextColor => tertiary;
+  Color get chatlistDiscoverTileGroupNameTextColor => primary;
+  Color get chatlistDiscoverTileDescriptionTextColor => tertiary;
+  Color get chatlistDiscoverButtonTextColor => tertiary;
+  Color get chatlistDiscoverButtonColor => primary;
   // view
   Color get chatListBackground => surface;
 
@@ -345,42 +351,42 @@ extension ColorId on ColorScheme {
   Color get circularProgressIndicatorColor => primary;
 
   // client chooser button
-   Icon get iconEdit => Icon(
-                Icons.edit_outlined,
-                color: clientChooserButtonIconColor,
-                size: 22,
-              );
+  Icon get iconEdit => Icon(
+        Icons.edit_outlined,
+        color: clientChooserButtonIconColor,
+        size: 22,
+      );
 
   Icon get iconHome => Icon(
-                Icons.home,
-                color: clientChooserButtonIconColor,
-                size: 22,
-              );
-  
+        Icons.home,
+        color: clientChooserButtonIconColor,
+        size: 22,
+      );
+
   Icon get iconCourse => Icon(
-                Icons.book,
-                color: clientChooserButtonIconColor,
-                size: 22,
-              );
+        Icons.book,
+        color: clientChooserButtonIconColor,
+        size: 22,
+      );
 
   Icon get iconSetting => Icon(
-                Icons.settings,
-                color: clientChooserButtonIconColor,
-                size: 22,
-              );
+        Icons.settings,
+        color: clientChooserButtonIconColor,
+        size: 22,
+      );
 
   Icon get iconInfo => Icon(
-                Icons.info_outlined,
-                color: clientChooserButtonIconColor,
-                size: 22,
-              );
+        Icons.info_outlined,
+        color: clientChooserButtonIconColor,
+        size: 22,
+      );
 
   Icon get iconShare => Icon(
-                Icons.adaptive.share_outlined,
-                color: clientChooserShareIconColor,
-                size: 22,
-              );
-  
+        Icons.adaptive.share_outlined,
+        color: clientChooserShareIconColor,
+        size: 22,
+      );
+
   Color get clientChooserButtonIconColor => tertiary;
   Color get clientChooserButtonTextColor => tertiary;
   Color get clientChooserShareIconColor => primary;
@@ -413,40 +419,40 @@ extension ColorId on ColorScheme {
 
   // navirail
   Icon get navirailIconHomeUnselected => Icon(
-                                Icons.home,
-                                color: unselectediconColor,
-                                size: 40,
-                              );
+        Icons.home,
+        color: unselectediconColor,
+        size: 40,
+      );
 
   Icon get navirailIconChatUnselected => Icon(
-                                Icons.chat_bubble_outline,
-                                color: unselectediconColor,
-                                size: 40,
-                              );
+        Icons.chat_bubble_outline,
+        color: unselectediconColor,
+        size: 40,
+      );
 
   Icon get navirailIconChatSelected => Icon(
-                                Icons.chat_bubble_outline,
-                                color: selectediconColor,
-                                size: 40,
-                              );
+        Icons.chat_bubble_outline,
+        color: selectediconColor,
+        size: 40,
+      );
 
   Icon get navirailIconCourseUnselected => Icon(
-                                Icons.book,
-                                color: unselectediconColor,
-                                size: 40,
-                              );
+        Icons.book,
+        color: unselectediconColor,
+        size: 40,
+      );
 
   Icon get navirailIconSettingUnselected => Icon(
-                          Icons.settings,
-                          color: unselectediconColor,
-                          size: 40,
-                        );
+        Icons.settings,
+        color: unselectediconColor,
+        size: 40,
+      );
 
   Icon get navirailIconSettingSelected => Icon(
-                          Icons.settings,
-                          color: selectediconColor,
-                          size: 40,
-                        );
+        Icons.settings,
+        color: selectediconColor,
+        size: 40,
+      );
 
   Color get selectedContainerColor => primary;
   Color get selectediconColor => primary;

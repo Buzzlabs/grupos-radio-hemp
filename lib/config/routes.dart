@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fluffychat/pages/chat_list/rooms_list/discover_rooms_view.dart';
 import 'package:fluffychat/pages/login/auto_login.dart';
 import 'package:flutter/material.dart';
 
@@ -153,6 +154,14 @@ abstract class AppRoutes {
                   ),
           ),
           routes: [
+            GoRoute(
+                  path: 'discover',
+                  pageBuilder: (context, state) => defaultPageBuilder(
+                    context,
+                    state,
+                    const DiscoverRoomsView(),
+                  ),
+                ),
             GoRoute(
               path: 'archive',
               pageBuilder: (context, state) => defaultPageBuilder(
