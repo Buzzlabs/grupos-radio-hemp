@@ -28,15 +28,15 @@ class DiscoverRoom {
       roomId: json['room_id'],
       accessType:
           json['type'] == 'paid' ? RoomAccessType.paid : RoomAccessType.free,
-      memberCount: json['member_count'],
+      memberCount: json['member_count'] ?? 0,
       price: json['price'] ?? 0,
     );
   }
-}
+} 
 
 Future<List<DiscoverRoom>> fetchDiscoverRooms(Client client) async {
   final uri = Uri.parse(
-    '${client.homeserver}/_matrix/discover/rooms',
+    '${client.homeserver}/_matrix/admin/rooms',
   );
 
   final response = await http.get(
@@ -231,9 +231,10 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                           if (!approved) return;
                         }
 
-                        final community = room.accessType == RoomAccessType.paid
-                            ? 'vip'
-                            : 'free';
+                        final community =
+                            room.accessType == RoomAccessType.paid
+                                ? 'vip'
+                                : 'free';
 
                         await inviteToCommunity(
                           client: client,
