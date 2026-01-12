@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluffychat/config/themes.dart';
 import 'package:fluffychat/widgets/matrix.dart';
@@ -32,7 +33,7 @@ class DiscoverRoom {
       price: json['price'] ?? 0,
     );
   }
-} 
+}
 
 Future<List<DiscoverRoom>> fetchDiscoverRooms(Client client) async {
   final uri = Uri.parse(
@@ -46,9 +47,6 @@ Future<List<DiscoverRoom>> fetchDiscoverRooms(Client client) async {
       'Content-Type': 'application/json',
     },
   );
-
-  debugPrint('DISCOVER STATUS: ${response.statusCode}');
-  debugPrint('DISCOVER BODY: ${response.body}');
 
   if (response.statusCode != 200) {
     throw Exception(
@@ -88,9 +86,6 @@ Future<void> inviteToCommunity({
     }),
   );
 
-  debugPrint('INVITE STATUS: ${response.statusCode}');
-  debugPrint('INVITE BODY: ${response.body}');
-
   if (response.statusCode != 200) {
     throw Exception(
       'Invite failed: ${response.statusCode} ${response.body}',
@@ -107,6 +102,8 @@ class DiscoverRoomsView extends StatefulWidget {
 
 class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
   late Future<List<DiscoverRoom>> future = Future.value([]);
+
+  static const double _bottomButtonHeight = 72;
 
   @override
   void initState() {
@@ -134,6 +131,36 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
           ),
         ),
       ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  backgroundColor:
+                      theme.colorScheme.chatlistDiscoverButtonColor,
+                  foregroundColor:
+                      theme.colorScheme.chatlistDiscoverButtonTextColor,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                ),
+                icon: const Icon(Icons.add),
+                label: const Text('Novo Grupo'),
+                onPressed: () {
+                  context.go('/rooms/newgroup');
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
       body: FutureBuilder<List<DiscoverRoom>>(
         future: future,
         builder: (context, snapshot) {
@@ -157,6 +184,9 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
           }
 
           return ListView.builder(
+            padding: EdgeInsets.only(
+              bottom: _bottomButtonHeight + 24,
+            ),
             itemCount: rooms.length,
             itemBuilder: (context, index) {
               final room = rooms[index];
@@ -231,10 +261,9 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                           if (!approved) return;
                         }
 
-                        final community =
-                            room.accessType == RoomAccessType.paid
-                                ? 'vip'
-                                : 'free';
+                        final community = room.accessType == RoomAccessType.paid
+                            ? 'vip'
+                            : 'free';
 
                         await inviteToCommunity(
                           client: client,
