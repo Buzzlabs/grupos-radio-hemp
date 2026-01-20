@@ -344,6 +344,9 @@ extension ColorId on ColorScheme {
   Color get newGroupPhotoTemplateIconColor => tertiary;
   Color get newGroupButtonSegmentSelectedTextColor => surface;
   Color get newGroupButtonSegmentUnselectedTextColor => primary;
+  Color get newGroupTextFieldFilledColor => tertiaryContainer;
+  Color get newGroupTextFieldHintColor => onSecondaryContainer;
+  Color get newGroupTextFieldTextColor => tertiary;
 
   // view
   Color get chatListBackground => surface;

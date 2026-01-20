@@ -293,14 +293,14 @@ Widget build(BuildContext context) {
 
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Entrou no grupo ${room.name}')),
+                            SnackBar(content: Text('Entrou no grupo ${room.name}', style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor ))),
                           );
                           Navigator.pop(context);
                         }
                       } catch (e) {
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Falha ao entrar: $e')),
+                            SnackBar(content: Text('Falha ao entrar: $e', style: TextStyle(color: theme.colorScheme.oopsMessageTextColor ))),
                           );
                         }
                       }

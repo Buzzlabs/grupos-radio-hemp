@@ -18,6 +18,7 @@ class NewGroupView extends StatelessWidget {
 
     final avatar = controller.avatar;
     final error = controller.error;
+
     return Scaffold(
       appBar: AppBar(
         leading: Center(
@@ -37,50 +38,23 @@ class NewGroupView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SegmentedButton<CreateGroupType>(
-                selected: {controller.createGroupType},
-                onSelectionChanged: controller.setCreateGroupType,
-                segments: [
-                  ButtonSegment(
-                    value: CreateGroupType.group,
-                    label: Text(
-                      L10n.of(context).group,
-                      style: TextStyle(
-                        color:
-                            controller.createGroupType == CreateGroupType.group
-                                ? theme.colorScheme.primary
-                                : theme.colorScheme.secondary,
-                      ),
-                    ),
-                  ),
-                  ButtonSegment(
-                    value: CreateGroupType.space,
-                    label: Text(
-                      L10n.of(context).space,
-                      style: TextStyle(
-                        color:
-                            controller.createGroupType == CreateGroupType.space
-                                ? theme.colorScheme.primary
-                                : theme.colorScheme.secondary,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
             const SizedBox(height: 16),
+
+            /// ============================
+            /// AVATAR
+            /// ============================
             InkWell(
               borderRadius: BorderRadius.circular(90),
               onTap: controller.loading ? null : controller.selectPhoto,
               child: CircleAvatar(
                 radius: Avatar.defaultSize,
-                backgroundColor: theme.colorScheme.primary,
+                backgroundColor:
+                    theme.colorScheme.newGroupPhotoTemplateBackgroundColor,
                 child: avatar == null
                     ? Icon(
                         Icons.add_a_photo_outlined,
-                        color: theme.colorScheme.tertiary,
+                        color:
+                            theme.colorScheme.newGroupPhotoTemplateIconColor,
                       )
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(90),
@@ -93,132 +67,122 @@ class NewGroupView extends StatelessWidget {
                       ),
               ),
             ),
+
             const SizedBox(height: 32),
+
+            /// ============================
+            /// NOME DO GRUPO
+            /// ============================
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: TextField(
+                style: TextStyle(color: theme.colorScheme.newGroupTextFieldTextColor),
                 autofocus: true,
                 controller: controller.nameController,
                 autocorrect: false,
                 readOnly: controller.loading,
                 decoration: InputDecoration(
-                  fillColor: theme.colorScheme.tertiaryContainer,
-                  prefixIcon: Icon(
-                    Icons.people_outlined,
-                    color: theme.colorScheme.onSecondaryContainer,
-                  ),
-                  labelText: controller.createGroupType == CreateGroupType.space
-                      ? L10n.of(context).spaceName
-                      : L10n.of(context).groupName,
-                  disabledBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: theme.colorScheme.surface, width: 2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: theme.colorScheme.surface,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: theme.colorScheme.surface,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: theme.colorScheme.surface,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+                  fillColor: theme.colorScheme.newGroupTextFieldFilledColor,
+                  prefixIcon: const Icon(Icons.people_outlined),
+                  labelText: L10n.of(context).groupName,
                 ),
-                style: TextStyle(color: theme.colorScheme.tertiary),
               ),
             ),
+
             const SizedBox(height: 16),
+
+            /// ============================
+            /// PÚBLICO / PRIVADO
+            /// ============================
             SwitchListTile.adaptive(
+              inactiveThumbColor: theme.colorScheme.newGroupSwitchActiveColor,
+              activeThumbColor: theme.colorScheme.newGroupSwitchInactiveColor,
+              inactiveTrackColor: theme.colorScheme.newGroupSwitchInactiveColor,
+              activeTrackColor: theme.colorScheme.newGroupSwitchActiveColor,
               contentPadding: const EdgeInsets.symmetric(horizontal: 32),
-              secondary: const Icon(
-                Icons.public_outlined,
-              ),
-              title: Text(
-                controller.createGroupType == CreateGroupType.space
-                    ? L10n.of(context).spaceIsPublic
-                    : L10n.of(context).groupIsPublic,
-              ),
+              secondary:  Icon(Icons.public_outlined, color: theme.colorScheme.newGroupOptionsTextColor ),
+              title: Text(L10n.of(context).groupIsPublic, style: TextStyle(color: theme.colorScheme.newGroupOptionsTextColor),),
               value: controller.publicGroup,
-              onChanged: controller.loading ? null : controller.setPublicGroup,
+              onChanged:
+                  controller.loading ? null : controller.setPublicGroup,
             ),
+
+            /// ============================
+            /// VISÍVEL / ENCONTRÁVEL
+            /// ============================
+            SwitchListTile.adaptive(
+              inactiveThumbColor: theme.colorScheme.newGroupSwitchActiveColor,
+              activeThumbColor: theme.colorScheme.newGroupSwitchInactiveColor,
+              inactiveTrackColor: theme.colorScheme.newGroupSwitchInactiveColor,
+              activeTrackColor: theme.colorScheme.newGroupSwitchActiveColor,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 32),
+              secondary: Icon(Icons.search_outlined, color: theme.colorScheme.newGroupOptionsTextColor),
+              title: Text(
+                L10n.of(context).groupCanBeFoundViaSearch,
+                style: TextStyle(color: theme.colorScheme.newGroupOptionsTextColor)
+              ),
+              value: controller.groupCanBeFound,
+              onChanged:
+                  controller.loading ? null : controller.setGroupCanBeFound,
+            ),
+
+            /// ============================
+            /// KEYWORD (somente se VISÍVEL)
+            /// ============================
             AnimatedSize(
               duration: FluffyThemes.animationDuration,
               curve: FluffyThemes.animationCurve,
-              child: controller.publicGroup
-                  ? SwitchListTile.adaptive(
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 32),
-                      secondary: Icon(
-                        Icons.search_outlined,
-                        color: theme.colorScheme.tertiary,
+              child: controller.groupCanBeFound
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 8,
                       ),
-                      title: Text(
-                        L10n.of(context).groupCanBeFoundViaSearch,
-                        style: TextStyle(color: theme.colorScheme.tertiary),
-                      ),
-                      value: controller.groupCanBeFound,
-                      onChanged: controller.loading
-                          ? null
-                          : controller.setGroupCanBeFound,
-                    )
-                  : const SizedBox.shrink(),
-            ),
-            AnimatedSize(
-              duration: FluffyThemes.animationDuration,
-              curve: FluffyThemes.animationCurve,
-              child: controller.createGroupType == CreateGroupType.space
-                  ? const SizedBox.shrink()
-                  : SwitchListTile.adaptive(
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 32),
-                      secondary: Icon(
-                        Icons.lock_outlined,
-                        color: theme.colorScheme.tertiary,
-                      ),
-                      title: Text(
-                        L10n.of(context).enableEncryption,
-                        style: TextStyle(
-                          color: theme.colorScheme.tertiary,
+                      child: TextField(
+                        style: TextStyle(color: theme.colorScheme.newGroupTextFieldTextColor),
+                        controller: controller.keywordController,
+                        readOnly: controller.loading,
+                        decoration: InputDecoration(
+                          fillColor: theme.colorScheme.newGroupTextFieldFilledColor,
+                          prefixIcon:  Icon(Icons.tag_outlined, color: theme.colorScheme.newGroupTextFieldHintColor),
+                          labelText: 'keyword',
                         ),
-                      ),
-                      value: !controller.publicGroup,
-                      onChanged: null,
-                    ),
-            ),
-            AnimatedSize(
-              duration: FluffyThemes.animationDuration,
-              curve: FluffyThemes.animationCurve,
-              child: controller.createGroupType == CreateGroupType.space
-                  ? ListTile(
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 32),
-                      trailing: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Icon(
-                          Icons.info_outlined,
-                          color: theme.colorScheme.tertiary,
-                        ),
-                      ),
-                      subtitle: Text(
-                        L10n.of(context).newSpaceDescription,
-                        style: TextStyle(color: theme.colorScheme.tertiary),
                       ),
                     )
                   : const SizedBox.shrink(),
             ),
+
+            /// ============================
+            /// PREÇO (VISÍVEL + PRIVADO)
+            /// ============================
+            AnimatedSize(
+              duration: FluffyThemes.animationDuration,
+              curve: FluffyThemes.animationCurve,
+              child: controller.groupCanBeFound && !controller.publicGroup
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 8,
+                      ),
+                      child: TextField(
+                        style: TextStyle(color: theme.colorScheme.newGroupTextFieldTextColor),
+                        controller: controller.priceController,
+                        keyboardType: TextInputType.number,
+                        readOnly: controller.loading,
+                        decoration: InputDecoration(
+                          fillColor: theme.colorScheme.newGroupTextFieldFilledColor,
+                          prefixIcon:
+                               Icon(Icons.attach_money_outlined, color: theme.colorScheme.newGroupTextFieldHintColor ),
+                          labelText: 'preço',
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+
+            /// ============================
+            /// SUBMIT
+            /// ============================
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: SizedBox(
@@ -229,14 +193,16 @@ class NewGroupView extends StatelessWidget {
                   child: controller.loading
                       ? const LinearProgressIndicator()
                       : Text(
-                          controller.createGroupType == CreateGroupType.space
-                              ? L10n.of(context).createNewSpace
-                              : L10n.of(context).createGroupAndInviteUsers,
-                          style: TextStyle(color: theme.colorScheme.tertiary),
+                          L10n.of(context)
+                              .createGroupAndInviteUsers,
                         ),
                 ),
               ),
             ),
+
+            /// ============================
+            /// ERRO
+            /// ============================
             AnimatedSize(
               duration: FluffyThemes.animationDuration,
               curve: FluffyThemes.animationCurve,
