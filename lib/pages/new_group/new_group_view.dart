@@ -53,8 +53,8 @@ class NewGroupView extends StatelessWidget {
                 child: avatar == null
                     ? Icon(
                         Icons.add_a_photo_outlined,
-                        color:
-                            theme.colorScheme.newGroupPhotoTemplateIconColor,
+                        color: theme
+                            .colorScheme.newGroupPhotoTemplateIconColor,
                       )
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(90),
@@ -76,13 +76,17 @@ class NewGroupView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: TextField(
-                style: TextStyle(color: theme.colorScheme.newGroupTextFieldTextColor),
+                style: TextStyle(
+                  color:
+                      theme.colorScheme.newGroupTextFieldTextColor,
+                ),
                 autofocus: true,
                 controller: controller.nameController,
                 autocorrect: false,
                 readOnly: controller.loading,
                 decoration: InputDecoration(
-                  fillColor: theme.colorScheme.newGroupTextFieldFilledColor,
+                  fillColor:
+                      theme.colorScheme.newGroupTextFieldFilledColor,
                   prefixIcon: const Icon(Icons.people_outlined),
                   labelText: L10n.of(context).groupName,
                 ),
@@ -95,61 +99,95 @@ class NewGroupView extends StatelessWidget {
             /// PÚBLICO / PRIVADO
             /// ============================
             SwitchListTile.adaptive(
-              inactiveThumbColor: theme.colorScheme.newGroupSwitchActiveColor,
-              activeThumbColor: theme.colorScheme.newGroupSwitchInactiveColor,
-              inactiveTrackColor: theme.colorScheme.newGroupSwitchInactiveColor,
-              activeTrackColor: theme.colorScheme.newGroupSwitchActiveColor,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 32),
-              secondary:  Icon(Icons.public_outlined, color: theme.colorScheme.newGroupOptionsTextColor ),
-              title: Text(L10n.of(context).groupIsPublic, style: TextStyle(color: theme.colorScheme.newGroupOptionsTextColor),),
+              inactiveThumbColor:
+                  theme.colorScheme.newGroupSwitchActiveColor,
+              activeThumbColor:
+                  theme.colorScheme.newGroupSwitchInactiveColor,
+              inactiveTrackColor:
+                  theme.colorScheme.newGroupSwitchInactiveColor,
+              activeTrackColor:
+                  theme.colorScheme.newGroupSwitchActiveColor,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 32),
+              secondary: Icon(
+                Icons.public_outlined,
+                color:
+                    theme.colorScheme.newGroupOptionsTextColor,
+              ),
+              title: Text(
+                L10n.of(context).groupIsPublic,
+                style: TextStyle(
+                  color:
+                      theme.colorScheme.newGroupOptionsTextColor,
+                ),
+              ),
               value: controller.publicGroup,
-              onChanged:
-                  controller.loading ? null : controller.setPublicGroup,
+              onChanged: controller.loading
+                  ? null
+                  : controller.setPublicGroup,
             ),
 
             /// ============================
             /// VISÍVEL / ENCONTRÁVEL
             /// ============================
             SwitchListTile.adaptive(
-              inactiveThumbColor: theme.colorScheme.newGroupSwitchActiveColor,
-              activeThumbColor: theme.colorScheme.newGroupSwitchInactiveColor,
-              inactiveTrackColor: theme.colorScheme.newGroupSwitchInactiveColor,
-              activeTrackColor: theme.colorScheme.newGroupSwitchActiveColor,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 32),
-              secondary: Icon(Icons.search_outlined, color: theme.colorScheme.newGroupOptionsTextColor),
+              inactiveThumbColor:
+                  theme.colorScheme.newGroupSwitchActiveColor,
+              activeThumbColor:
+                  theme.colorScheme.newGroupSwitchInactiveColor,
+              inactiveTrackColor:
+                  theme.colorScheme.newGroupSwitchInactiveColor,
+              activeTrackColor:
+                  theme.colorScheme.newGroupSwitchActiveColor,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 32),
+              secondary: Icon(
+                Icons.search_outlined,
+                color:
+                    theme.colorScheme.newGroupOptionsTextColor,
+              ),
               title: Text(
                 L10n.of(context).groupCanBeFoundViaSearch,
-                style: TextStyle(color: theme.colorScheme.newGroupOptionsTextColor)
+                style: TextStyle(
+                  color:
+                      theme.colorScheme.newGroupOptionsTextColor,
+                ),
               ),
               value: controller.groupCanBeFound,
-              onChanged:
-                  controller.loading ? null : controller.setGroupCanBeFound,
+              onChanged: controller.loading
+                  ? null
+                  : controller.setGroupCanBeFound,
             ),
 
             /// ============================
-            /// KEYWORD (somente se VISÍVEL)
+            /// KEYWORD (SEMPRE OBRIGATÓRIA)
             /// ============================
-            AnimatedSize(
-              duration: FluffyThemes.animationDuration,
-              curve: FluffyThemes.animationCurve,
-              child: controller.groupCanBeFound
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 8,
-                      ),
-                      child: TextField(
-                        style: TextStyle(color: theme.colorScheme.newGroupTextFieldTextColor),
-                        controller: controller.keywordController,
-                        readOnly: controller.loading,
-                        decoration: InputDecoration(
-                          fillColor: theme.colorScheme.newGroupTextFieldFilledColor,
-                          prefixIcon:  Icon(Icons.tag_outlined, color: theme.colorScheme.newGroupTextFieldHintColor),
-                          labelText: 'keyword',
-                        ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24,
+                vertical: 8,
+              ),
+              child: TextField(
+                style: TextStyle(
+                  color: theme.colorScheme.newGroupTextFieldTextColor,
+                ),
+                controller: controller.keywordController,
+                readOnly: controller.loading,
+                decoration: InputDecoration(
+                  fillColor:
+                      theme.colorScheme.newGroupTextFieldFilledColor,
+                  prefixIcon: Icon(
+                    Icons.tag_outlined,
+                    color: controller.keywordAlreadyExists
+                        ? theme.colorScheme.error
+                        : theme.colorScheme.newGroupTextFieldHintColor,
+                  ),
+                  labelText: 'keyword',
+                  errorText: controller.keywordAlreadyExists
+                      ? 'Keyword já está em uso'
+                      : null,
+                ),
+              ),
             ),
 
             /// ============================
@@ -158,21 +196,29 @@ class NewGroupView extends StatelessWidget {
             AnimatedSize(
               duration: FluffyThemes.animationDuration,
               curve: FluffyThemes.animationCurve,
-              child: controller.groupCanBeFound && !controller.publicGroup
+              child: controller.groupCanBeFound &&
+                      !controller.publicGroup
                   ? Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 8,
                       ),
                       child: TextField(
-                        style: TextStyle(color: theme.colorScheme.newGroupTextFieldTextColor),
+                        style: TextStyle(
+                          color: theme.colorScheme
+                              .newGroupTextFieldTextColor,
+                        ),
                         controller: controller.priceController,
                         keyboardType: TextInputType.number,
                         readOnly: controller.loading,
                         decoration: InputDecoration(
-                          fillColor: theme.colorScheme.newGroupTextFieldFilledColor,
-                          prefixIcon:
-                               Icon(Icons.attach_money_outlined, color: theme.colorScheme.newGroupTextFieldHintColor ),
+                          fillColor: theme.colorScheme
+                              .newGroupTextFieldFilledColor,
+                          prefixIcon: Icon(
+                            Icons.attach_money_outlined,
+                            color: theme.colorScheme
+                                .newGroupTextFieldHintColor,
+                          ),
                           labelText: 'preço',
                         ),
                       ),
@@ -188,8 +234,9 @@ class NewGroupView extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed:
-                      controller.loading ? null : controller.submitAction,
+                  onPressed: controller.loading
+                      ? null
+                      : controller.submitAction,
                   child: controller.loading
                       ? const LinearProgressIndicator()
                       : Text(

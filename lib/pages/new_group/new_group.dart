@@ -10,9 +10,6 @@ import 'package:fluffychat/pages/new_group/new_group_view.dart';
 import 'package:fluffychat/utils/file_selector.dart';
 import 'package:fluffychat/widgets/matrix.dart';
 
-/// ============================
-/// ENUM
-/// ============================
 enum CreateGroupType { group, space }
 
 class NewGroup extends StatefulWidget {
@@ -28,18 +25,16 @@ class NewGroup extends StatefulWidget {
 }
 
 class NewGroupController extends State<NewGroup> {
-  /// Nome do grupo
   final TextEditingController nameController = TextEditingController();
-
-  /// Keyword (somente se visível)
   final TextEditingController keywordController = TextEditingController();
-
-  /// Preço — somente se visível + privado
   final TextEditingController priceController =
       TextEditingController(text: '0');
 
   bool publicGroup = false;
   bool groupCanBeFound = false;
+
+  /// 🔴 ERRO DE KEYWORD
+  bool keywordAlreadyExists = false;
 
   Uint8List? avatar;
   Uri? avatarUrl;
@@ -49,19 +44,18 @@ class NewGroupController extends State<NewGroup> {
 
   CreateGroupType get createGroupType =>
       _createGroupType ?? widget.createGroupType;
-
   CreateGroupType? _createGroupType;
 
   @override
   void initState() {
     super.initState();
 
-    // /// Auto-sugere keyword baseada no nome
-    // nameController.addListener(() {
-    //   if (keywordController.text.isEmpty) {
-    //     keywordController.text = _slugify(nameController.text);
-    //   }
-    // });
+    /// limpa erro quando digita
+    keywordController.addListener(() {
+      if (keywordAlreadyExists) {
+        setState(() => keywordAlreadyExists = false);
+      }
+    });
   }
 
   @override
@@ -72,18 +66,12 @@ class NewGroupController extends State<NewGroup> {
     super.dispose();
   }
 
-  void setCreateGroupType(Set<CreateGroupType> b) =>
-      setState(() => _createGroupType = b.single);
-
   void setPublicGroup(bool b) =>
       setState(() => publicGroup = b);
 
   void setGroupCanBeFound(bool b) =>
       setState(() => groupCanBeFound = b);
 
-  /// ============================
-  /// HELPERS
-  /// ============================
   String _slugify(String value) {
     return value
         .trim()
@@ -94,61 +82,38 @@ class NewGroupController extends State<NewGroup> {
 
   int _calculatePrice() {
     if (!groupCanBeFound || publicGroup) return 0;
-
-    final text = priceController.text
-        .replaceAll(',', '.')
-        .trim();
-
-    final value = double.tryParse(text);
-    if (value == null) return 0;
-
-    return (value * 100).round();
+    final value = double.tryParse(
+      priceController.text.replaceAll(',', '.'),
+    );
+    return value == null ? 0 : (value * 100).round();
   }
 
-
-  /// ============================
-  /// VALIDAÇÃO
-  /// ============================
   void _validateForm() {
     if (nameController.text.trim().isEmpty) {
       throw Exception('Nome do grupo é obrigatório');
     }
 
-    if (groupCanBeFound) {
-      if (keywordController.text.trim().isEmpty) {
-        throw Exception('Keyword é obrigatória para grupos visíveis');
-      }
+    if (keywordController.text.trim().isEmpty) {
+      throw Exception('Keyword é obrigatória');
+    }
 
-      if (_slugify(keywordController.text.trim()) !=
-          keywordController.text.trim()) {
-        throw Exception('Keyword inválida');
-      }
+    if (_slugify(keywordController.text.trim()) !=
+        keywordController.text.trim()) {
+      throw Exception('Keyword inválida');
+    }
 
-      if (!publicGroup) {
-        final price = int.tryParse(priceController.text) ?? 0;
-        if (price <= 0) {
-          throw Exception(
-            'Grupos privados visíveis precisam ter preço',
-          );
-        }
+    if (groupCanBeFound && !publicGroup) {
+      final price = int.tryParse(priceController.text) ?? 0;
+      if (price <= 0) {
+        throw Exception(
+          'Grupos privados visíveis precisam ter preço',
+        );
       }
     }
   }
 
-  /// ============================
-  /// BACKEND
-  /// ============================
   Future<String> _createGroupViaModule() async {
     final client = Matrix.of(context).client;
-
-    final body = {
-      "room_kind": "group",
-      "name": nameController.text.trim(),
-      "keyword": keywordController.text.trim(),
-      "access_type": publicGroup ? "free" : "paid",
-      "visible": true,
-      "price": _calculatePrice(),
-    };
 
     final res = await http.post(
       Uri.parse(
@@ -158,8 +123,23 @@ class NewGroupController extends State<NewGroup> {
         'Authorization': 'Bearer ${client.accessToken}',
         'Content-Type': 'application/json',
       },
-      body: jsonEncode(body),
+      body: jsonEncode({
+        "room_kind": "group",
+        "name": nameController.text.trim(),
+        "keyword": keywordController.text.trim(),
+        "access_type": publicGroup ? "public" : "private",
+        "visible": groupCanBeFound,
+        "price": groupCanBeFound ? _calculatePrice() : 0,
+      }),
     );
+
+    if (res.statusCode == 409) {
+      setState(() {
+        keywordAlreadyExists = true;
+        loading = false;
+      });
+      throw Exception('KEYWORD_ALREADY_EXISTS');
+    }
 
     if (res.statusCode != 200) {
       throw Exception(res.body);
@@ -168,21 +148,6 @@ class NewGroupController extends State<NewGroup> {
     return jsonDecode(res.body)['room_id'] as String;
   }
 
-  Future<String> _createNormalGroup() async {
-    final client = Matrix.of(context).client;
-
-    return await client.createRoom(
-      name: nameController.text.trim(),
-      visibility: publicGroup
-          ? sdk.Visibility.public
-          : sdk.Visibility.private,
-      preset: sdk.CreateRoomPreset.privateChat,
-    );
-  }
-
-  /// ============================
-  /// SUBMIT
-  /// ============================
   void submitAction([_]) async {
     final client = Matrix.of(context).client;
 
@@ -192,6 +157,7 @@ class NewGroupController extends State<NewGroup> {
       setState(() {
         loading = true;
         error = null;
+        keywordAlreadyExists = false;
       });
 
       final avatarBytes = avatar;
@@ -201,13 +167,13 @@ class NewGroupController extends State<NewGroup> {
 
       if (!mounted) return;
 
-      final roomId = groupCanBeFound
-          ? await _createGroupViaModule()
-          : await _createNormalGroup();
+      final roomId = await _createGroupViaModule();
 
       if (!mounted) return;
       context.go('/rooms/$roomId/invite');
     } catch (e, s) {
+      if (e.toString().contains('KEYWORD_ALREADY_EXISTS')) return;
+
       sdk.Logs().d('Unable to create group', e, s);
       setState(() {
         error = e;
@@ -216,9 +182,6 @@ class NewGroupController extends State<NewGroup> {
     }
   }
 
-  /// ============================
-  /// AVATAR
-  /// ============================
   void selectPhoto() async {
     final photo = await selectFiles(
       context,
