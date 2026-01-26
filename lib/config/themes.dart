@@ -665,6 +665,7 @@ extension ColorId on ColorScheme {
   // access and visibility
   Color get accessScreenBackButton => tertiary;
   Color get accessScreenTextColor => tertiary;
+  Color get accessScreenHintTextColor => onSecondary;
   Color get accessScreenTagColor => primary;
   Color get accessTextColor => tertiary;
   Color get accessDividerColor => primary;

@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart' hide Visibility;
 
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
 import 'package:matrix/matrix.dart';
 
 import 'package:fluffychat/l10n/l10n.dart';
@@ -25,7 +28,52 @@ class ChatAccessSettingsController extends State<ChatAccessSettings> {
   bool visibilityLoading = false;
   bool historyVisibilityLoading = false;
   bool guestAccessLoading = false;
+  bool businessVisible = true;
+  final TextEditingController priceController = TextEditingController();
   Room get room => Matrix.of(context).client.getRoomById(widget.roomId)!;
+  bool isAdmin = false;
+  bool isAdminLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBusinessVisibility();
+    _loadAdminStatus();
+  }
+
+  Future<void> _loadBusinessVisibility() async {
+    final client = Matrix.of(context).client;
+
+    try {
+      final res = await client.httpClient.post(
+        Uri.parse('${client.homeserver}/_synapse/room_service/getvisibility'),
+        headers: {
+          'Authorization': 'Bearer ${client.accessToken}',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'room_id': room.id,
+        }),
+      );
+
+      if (res.statusCode != 200) {
+        throw Exception(res.body);
+      }
+
+      final json = jsonDecode(res.body);
+      final visible = json['visible'] as bool;
+      final price = json['price'] as int;
+
+      if (!mounted) return;
+
+      setState(() {
+        businessVisible = visible;
+        priceController.text = (price / 100).toString();
+      });
+    } catch (e, s) {
+      Logs().w('Failed to load business visibility', e, s);
+    }
+  }
 
   String get roomVersion =>
       room
@@ -34,28 +82,195 @@ class ChatAccessSettingsController extends State<ChatAccessSettings> {
           .tryGet<String>('room_version') ??
       'Unknown';
 
-  /// Calculates which join rules are available based on the information on
-  /// https://spec.matrix.org/v1.11/rooms/#feature-matrix
   List<JoinRules> get availableJoinRules {
     final joinRules = Set<JoinRules>.from(JoinRules.values);
 
     final roomVersionInt = int.tryParse(roomVersion);
 
-    // Knock is only supported for rooms up from version 7:
     if (roomVersionInt != null && roomVersionInt <= 6) {
       joinRules.remove(JoinRules.knock);
     }
 
-    // Not yet supported in FluffyChat:
     joinRules.remove(JoinRules.restricted);
     joinRules.remove(JoinRules.knockRestricted);
 
-    // If an unsupported join rule is the current join rule, display it:
     final currentJoinRule = room.joinRules;
-    if (currentJoinRule != null) joinRules.add(currentJoinRule);
+    if (currentJoinRule != null) {
+      joinRules.add(currentJoinRule);
+    }
 
     return joinRules.toList();
   }
+
+  Future<void> _loadAdminStatus() async {
+    final client = Matrix.of(context).client;
+
+    try {
+      final admin = await fetchIsAdmin(client);
+      if (!mounted) return;
+
+      setState(() {
+        isAdmin = admin;
+        isAdminLoading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        isAdmin = false;
+        isAdminLoading = false;
+      });
+    }
+  }
+
+ Future<void> setPrice() async {
+  if (!isAdmin) return;
+
+  final client = Matrix.of(context).client;
+  final theme = Theme.of(context);
+
+  final parsed = int.tryParse(priceController.text.trim());
+
+  if (parsed == null || parsed < 0) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Preço inválido',
+          style: TextStyle(color: theme.colorScheme.error),
+        ),
+      ),
+    );
+    return;
+  }
+
+  try {
+    await client.httpClient.post(
+  Uri.parse('${client.homeserver}/_synapse/room_service/changeprice'),
+  headers: {
+    'Authorization': 'Bearer ${client.accessToken}',
+    'Content-Type': 'application/json',
+  },
+  body: jsonEncode({
+    'room_id': room.id,
+    'price': parsed * 100,
+  }),
+);
+    
+  } catch (e, s) {
+    Logs().w('Failed to change price', e, s);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.toLocalizedString(context),
+            style: TextStyle(color: theme.colorScheme.error),
+          ),
+        ),
+      );
+    }
+  }
+}
+
+
+  Future<bool> fetchIsAdmin(Client client) async {
+    final uri =
+        Uri.parse('${client.homeserver}/_synapse/room_service/is_admin');
+
+    final response = await http.get(
+      uri,
+      headers: {
+        'Authorization': 'Bearer ${client.accessToken}',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      return false;
+    }
+
+    final decoded = jsonDecode(utf8.decode(response.bodyBytes));
+    return decoded['is_admin'] == true;
+  }
+
+  Future<void> setBusinessVisibility(bool visible) async {
+    final theme = Theme.of(context);
+    final client = Matrix.of(context).client;
+
+    int price;
+
+    if (!visible) {
+      price = 0;
+    } else {
+      final parsed = int.tryParse(priceController.text.trim());
+
+      // Se for público, preço pode ser 0
+      if (room.joinRules == JoinRules.public) {
+        price = parsed ?? 0;
+      } else {
+        // privado precisa ser > 0
+        if (parsed == null || parsed <= 0) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Preço obrigatório para chats privados visíveis',
+                style: TextStyle(color: theme.colorScheme.error),
+              ),
+            ),
+          );
+          return;
+        }
+        price = parsed;
+      }
+    }
+
+    setState(() => visibilityLoading = true);
+
+    try {
+      final res = await client.httpClient.post(
+        Uri.parse(
+          '${client.homeserver}/_synapse/room_service/changevisibility',
+        ),
+        headers: {
+          'Authorization': 'Bearer ${client.accessToken}',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'room_id': room.id,
+          'visible': visible,
+          'price': price * 100,
+        }),
+      );
+
+      if (res.statusCode != 200) {
+        throw Exception(res.body);
+      }
+
+      setState(() {
+        businessVisible = visible;
+        if (!visible) {
+          priceController.text = '0';
+        }
+      });
+    } catch (e, s) {
+      Logs().w('Unable to change business visibility', e, s);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e.toLocalizedString(context),
+              style: TextStyle(color: theme.colorScheme.error),
+            ),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => visibilityLoading = false);
+      }
+    }
+  }
+
+  /// Calculates which join rules are available based on the information on
+  /// https://spec.matrix.org/v1.11/rooms/#feature-matrix
 
   void setJoinRule(JoinRules? newJoinRules) async {
     if (newJoinRules == null) return;
@@ -264,40 +479,40 @@ class ChatAccessSettingsController extends State<ChatAccessSettings> {
     setState(() {});
   }
 
-  void setChatVisibilityOnDirectory(bool? visibility) async {
-    final theme = Theme.of(context);
+  // void setChatVisibilityOnDirectory(bool? visibility) async {
+  //   final theme = Theme.of(context);
 
-    if (visibility == null) return;
-    setState(() {
-      visibilityLoading = true;
-    });
+  //   if (visibility == null) return;
+  //   setState(() {
+  //     visibilityLoading = true;
+  //   });
 
-    try {
-      await room.client.setRoomVisibilityOnDirectory(
-        room.id,
-        visibility: visibility == true ? Visibility.public : Visibility.private,
-      );
-      setState(() {});
-    } catch (e, s) {
-      Logs().w('Unable to change visibility', e, s);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              e.toLocalizedString(context),
-              style: TextStyle(color: theme.colorScheme.error),
-            ),
-          ),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          visibilityLoading = false;
-        });
-      }
-    }
-  }
+  //   try {
+  //     await room.client.setRoomVisibilityOnDirectory(
+  //       room.id,
+  //       visibility: visibility == true ? Visibility.public : Visibility.private,
+  //     );
+  //     setState(() {});
+  //   } catch (e, s) {
+  //     Logs().w('Unable to change visibility', e, s);
+  //     if (mounted) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Text(
+  //             e.toLocalizedString(context),
+  //             style: TextStyle(color: theme.colorScheme.error),
+  //           ),
+  //         ),
+  //       );
+  //     }
+  //   } finally {
+  //     if (mounted) {
+  //       setState(() {
+  //         visibilityLoading = false;
+  //       });
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

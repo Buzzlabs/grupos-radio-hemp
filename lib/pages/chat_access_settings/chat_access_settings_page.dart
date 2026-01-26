@@ -1,5 +1,6 @@
 import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart' hide Visibility;
+import 'package:flutter/services.dart';
 
 import 'package:matrix/matrix.dart';
 
@@ -58,7 +59,8 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                     title: Text(
                       historyVisibility
                           .getLocalizedString(MatrixLocals(L10n.of(context))),
-                      style: TextStyle(color: theme.colorScheme.accessTextColor),
+                      style:
+                          TextStyle(color: theme.colorScheme.accessTextColor),
                     ),
                     value: historyVisibility,
                     groupValue: room.historyVisibility,
@@ -82,7 +84,8 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                     RadioListTile<JoinRules>.adaptive(
                       title: Text(
                         joinRule.localizedString(L10n.of(context)),
-                        style: TextStyle(color: theme.colorScheme.accessTextColor),
+                        style:
+                            TextStyle(color: theme.colorScheme.accessTextColor),
                       ),
                       value: joinRule,
                       groupValue: room.joinRules,
@@ -109,7 +112,8 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                         guestAccess.getLocalizedString(
                           MatrixLocals(L10n.of(context)),
                         ),
-                        style: TextStyle(color: theme.colorScheme.accessTextColor),
+                        style:
+                            TextStyle(color: theme.colorScheme.accessTextColor),
                       ),
                       value: guestAccess,
                       groupValue: room.guestAccess,
@@ -179,28 +183,58 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                       );
                     },
                   ),
-                  Divider(color: theme.colorScheme.accessDividerColor),
-                  FutureBuilder(
-                    future: room.client.getRoomVisibilityOnDirectory(room.id),
-                    builder: (context, snapshot) => SwitchListTile(
-                      value: snapshot.data == Visibility.public,
-                      title: Text(
-                        L10n.of(context).chatCanBeDiscoveredViaSearchOnServer(
-                          room.client.userID!.domain!,
-                        ),
-                        style: TextStyle(color: theme.colorScheme.accessTextColor),
-                      ),
-                      onChanged: controller.setChatVisibilityOnDirectory,
-                      activeThumbColor: theme.colorScheme.accessSwitchInactiveColor,
-                      inactiveThumbColor: theme.colorScheme.accessSwitchActiveColor,
-                      activeTrackColor: theme.colorScheme.accessSwitchActiveColor,
-                      inactiveTrackColor: theme.colorScheme.accessSwitchInactiveColor,
-                      trackOutlineColor: WidgetStateProperty.resolveWith(
-                        (states) => theme.colorScheme.accessSwitchActiveColor,
-                      ),
-                    ),
-                  ),
                 ],
+                // Divider(color: theme.colorScheme.accessDividerColor),
+                SwitchListTile(
+                  inactiveThumbColor: theme.colorScheme.accessSwitchActiveColor,
+                  activeThumbColor: theme.colorScheme.accessSwitchInactiveColor,
+                  inactiveTrackColor:
+                      theme.colorScheme.accessSwitchInactiveColor,
+                  activeTrackColor: theme.colorScheme.accessSwitchActiveColor,
+                  value: controller.businessVisible,
+                  title: Text(
+                    L10n.of(context).chatCanBeDiscoveredViaSearchOnServer(
+                      room.client.userID!.domain!,
+                    ),
+                    style: TextStyle(color: theme.colorScheme.accessTextColor),
+                  ),
+                  onChanged: controller.visibilityLoading ||
+                          controller.isAdminLoading ||
+                          !controller.isAdmin
+                      ? null
+                      : (value) =>
+                          controller.setBusinessVisibility(value ?? false),
+                ),
+                const SizedBox(height: 5),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: TextField(
+                    controller: controller.priceController,
+                    keyboardType: TextInputType.number,
+                    enabled: controller.isAdmin && room.joinRules != JoinRules.public,
+                    onSubmitted: (_) => controller.setPrice(),
+                    style: TextStyle(
+                      color: theme.colorScheme.newGroupTextFieldTextColor,
+                    ),
+                    decoration: InputDecoration(
+                      helperStyle: TextStyle(
+                          color: theme.colorScheme.accessScreenHintTextColor),
+                      labelText: 'Preço do chat',
+                      helperText: !controller.businessVisible
+                          ? 'Preço será usado quando o chat ficar visível'
+                          : room.joinRules != JoinRules.private
+                              ? 'Salas públicas sempre custam 0'
+                              : 'Preço obrigatório para chats privados visíveis',
+                      fillColor: theme.colorScheme.newGroupTextFieldFilledColor,
+                    ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                  ),
+                ),
+
+                Divider(color: theme.colorScheme.accessDividerColor),
+
                 ListTile(
                   title: Text(
                     L10n.of(context).globalChatId,
