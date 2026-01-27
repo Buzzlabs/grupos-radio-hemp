@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart' hide Visibility;
 
 import 'package:go_router/go_router.dart';
@@ -122,7 +123,7 @@ class ChatAccessSettingsController extends State<ChatAccessSettings> {
     }
   }
 
- Future<void> setPrice() async {
+  Future<void> setPrice() async {
   if (!isAdmin) return;
 
   final client = Matrix.of(context).client;
@@ -143,25 +144,74 @@ class ChatAccessSettingsController extends State<ChatAccessSettings> {
   }
 
   try {
-    await client.httpClient.post(
-  Uri.parse('${client.homeserver}/_synapse/room_service/changeprice'),
-  headers: {
-    'Authorization': 'Bearer ${client.accessToken}',
-    'Content-Type': 'application/json',
-  },
-  body: jsonEncode({
-    'room_id': room.id,
-    'price': parsed * 100,
-  }),
-);
-    
+    final res = await client.httpClient.post(
+      Uri.parse('${client.homeserver}/_synapse/room_service/changeprice'),
+      headers: {
+        'Authorization': 'Bearer ${client.accessToken}',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'room_id': room.id,
+        'price': parsed * 100,
+      }),
+    );
+
+    if (res.statusCode >= 400) {
+      String message = 'Não foi possível alterar o preço';
+
+      try {
+        final body = jsonDecode(res.body);
+        final error = body['error'] ?? body['message'];
+
+        switch (error) {
+          case 'Cannot set price on a non-visible room':
+            message = 'Essa sala está invisível e não pode ter preço';
+            break;
+
+          case 'Public rooms cannot have a price':
+            message = 'Salas públicas não podem ter preço';
+            break;
+
+          case 'Private visible rooms must have price > 0':
+            message = 'Salas privadas precisam de um preço maior que zero';
+            break;
+
+          default:
+            if (error is String && error.isNotEmpty) {
+              message = error;
+            }
+        }
+      } catch (_) {
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              message,
+              style: TextStyle(color: theme.colorScheme.error),
+            ),
+          ),
+        );
+      }
+      return;
+    }
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Preço atualizado com sucesso', style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor)),
+        ),
+      );
+    }
   } catch (e, s) {
     Logs().w('Failed to change price', e, s);
+
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            e.toLocalizedString(context),
+            'Erro inesperado ao alterar o preço',
             style: TextStyle(color: theme.colorScheme.error),
           ),
         ),
