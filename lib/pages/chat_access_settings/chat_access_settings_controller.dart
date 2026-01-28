@@ -330,6 +330,7 @@ class ChatAccessSettingsController extends State<ChatAccessSettings> {
 
     try {
       await room.setJoinRules(newJoinRules);
+      await _syncAccessTypeWithJoinRule(newJoinRules);
     } catch (e, s) {
       Logs().w('Unable to change join rules', e, s);
       if (mounted) {
@@ -350,6 +351,78 @@ class ChatAccessSettingsController extends State<ChatAccessSettings> {
       }
     }
   }
+
+Future<void> _syncAccessTypeWithJoinRule(JoinRules joinRule) async {
+  if (!isAdmin) return;
+
+  final client = Matrix.of(context).client;
+
+  late final String accessType;
+
+  switch (joinRule) {
+    case JoinRules.public:
+      accessType = 'public';
+      break;
+
+    case JoinRules.invite:
+    case JoinRules.knock:
+      accessType = 'private';
+      break;
+
+    default:
+      return;
+  }
+
+  try {
+    final res = await client.httpClient.post(
+      Uri.parse(
+        '${client.homeserver}/_synapse/room_service/changeaccesstype',
+      ),
+      headers: {
+        'Authorization': 'Bearer ${client.accessToken}',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'room_id': room.id,
+        'access_type': accessType,
+      }),
+    );
+
+    if (!mounted) return;
+
+    if (res.statusCode == 200) {
+      final body = jsonDecode(res.body) as Map<String, dynamic>;
+      final price = body['price'] as int?;
+
+      if (price != null) {
+        setState(() {
+          priceController.text = (price / 100).toString();
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+        content: Text('Preço ajustado automaticamente', style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor)),
+      ),
+    );
+      }
+    } else {
+      throw Exception('Failed to change access type');
+    }
+  } catch (e, s) {
+    Logs().w('Failed to sync access type with join rule', e, s);
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          e.toLocalizedString(context),
+        ),
+      ),
+    );
+  }
+}
+
+
 
   void setHistoryVisibility(HistoryVisibility? historyVisibility) async {
     if (historyVisibility == null) return;
