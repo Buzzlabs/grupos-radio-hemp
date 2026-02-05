@@ -336,6 +336,20 @@ extension ColorId on ColorScheme {
   Color get chatlistDiscoverButtonTextColor => tertiary;
   Color get chatlistDiscoverButtonColor => primary.withValues(alpha: 0.6);
 
+  // new private chat
+  Color get newPrivateTextColor => tertiary;
+  Color get newPrivateBorderColor => primary;
+  Color get newPrivateQRCodeColor => primary;
+  Color get newPrivateBackgroundColor => surface;
+  Color get newPrivateTextFieldFilledColor => tertiaryContainer;
+  Color get newPrivateTextFieldHintColor => onSecondaryContainer;
+  Color get newPrivateTextFieldTextColor => tertiary;
+  Color get newPrivateListTileBackgroundColor => primary;
+  Color get newPrivateListTileTextColor => tertiary;
+  Color get newPrivateNoFoundTextColor => onSecondaryContainer;
+  Color get newPrivateUserNameTextColor => primary;
+  Color get newPrivateUserIdTextColor => tertiary;
+
   // new Group
   Color get newGroupSwitchActiveColor => primary;
   Color get newGroupSwitchInactiveColor => tertiaryContainer;
