@@ -350,7 +350,7 @@ extension ColorId on ColorScheme {
   Color get newPrivateUserNameTextColor => primary;
   Color get newPrivateUserIdTextColor => tertiary;
 
-  // new Group
+  // new Group and Spaces
   Color get newGroupSwitchActiveColor => primary;
   Color get newGroupSwitchInactiveColor => tertiaryContainer;
   Color get newGroupOptionsTextColor => tertiary;

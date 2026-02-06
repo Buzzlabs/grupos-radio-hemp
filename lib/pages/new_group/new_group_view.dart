@@ -39,6 +39,38 @@ class NewGroupView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SegmentedButton<CreateGroupType>(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                    (states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return theme.colorScheme.newGroupSwitchActiveColor;
+                      }
+                      return theme.colorScheme.newGroupSwitchInactiveColor;
+                    },
+                  ),
+                  foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+                    (states) {
+                      return theme.colorScheme.newGroupOptionsTextColor;
+                    },
+                  ),
+                ),
+                selected: {controller.createGroupType},
+                onSelectionChanged: controller.setCreateGroupType,
+                segments: [
+                  ButtonSegment(
+                    value: CreateGroupType.group,
+                    label: Text(L10n.of(context).group),
+                  ),
+                  ButtonSegment(
+                    value: CreateGroupType.space,
+                    label: Text(L10n.of(context).space),
+                  ),
+                ],
+              ),
+            ),
 
             /// ============================
             /// AVATAR
@@ -53,8 +85,7 @@ class NewGroupView extends StatelessWidget {
                 child: avatar == null
                     ? Icon(
                         Icons.add_a_photo_outlined,
-                        color: theme
-                            .colorScheme.newGroupPhotoTemplateIconColor,
+                        color: theme.colorScheme.newGroupPhotoTemplateIconColor,
                       )
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(90),
@@ -77,16 +108,14 @@ class NewGroupView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: TextField(
                 style: TextStyle(
-                  color:
-                      theme.colorScheme.newGroupTextFieldTextColor,
+                  color: theme.colorScheme.newGroupTextFieldTextColor,
                 ),
                 autofocus: true,
                 controller: controller.nameController,
                 autocorrect: false,
                 readOnly: controller.loading,
                 decoration: InputDecoration(
-                  fillColor:
-                      theme.colorScheme.newGroupTextFieldFilledColor,
+                  fillColor: theme.colorScheme.newGroupTextFieldFilledColor,
                   prefixIcon: const Icon(Icons.people_outlined),
                   labelText: L10n.of(context).groupName,
                 ),
@@ -99,64 +128,47 @@ class NewGroupView extends StatelessWidget {
             /// PÚBLICO / PRIVADO
             /// ============================
             SwitchListTile.adaptive(
-              inactiveThumbColor:
-                  theme.colorScheme.newGroupSwitchActiveColor,
-              activeThumbColor:
-                  theme.colorScheme.newGroupSwitchInactiveColor,
-              inactiveTrackColor:
-                  theme.colorScheme.newGroupSwitchInactiveColor,
-              activeTrackColor:
-                  theme.colorScheme.newGroupSwitchActiveColor,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 32),
+              inactiveThumbColor: theme.colorScheme.newGroupSwitchActiveColor,
+              activeThumbColor: theme.colorScheme.newGroupSwitchInactiveColor,
+              inactiveTrackColor: theme.colorScheme.newGroupSwitchInactiveColor,
+              activeTrackColor: theme.colorScheme.newGroupSwitchActiveColor,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 32),
               secondary: Icon(
                 Icons.public_outlined,
-                color:
-                    theme.colorScheme.newGroupOptionsTextColor,
+                color: theme.colorScheme.newGroupOptionsTextColor,
               ),
               title: Text(
                 L10n.of(context).groupIsPublic,
                 style: TextStyle(
-                  color:
-                      theme.colorScheme.newGroupOptionsTextColor,
+                  color: theme.colorScheme.newGroupOptionsTextColor,
                 ),
               ),
               value: controller.publicGroup,
-              onChanged: controller.loading
-                  ? null
-                  : controller.setPublicGroup,
+              onChanged: controller.loading ? null : controller.setPublicGroup,
             ),
 
             /// ============================
             /// VISÍVEL / ENCONTRÁVEL
             /// ============================
             SwitchListTile.adaptive(
-              inactiveThumbColor:
-                  theme.colorScheme.newGroupSwitchActiveColor,
-              activeThumbColor:
-                  theme.colorScheme.newGroupSwitchInactiveColor,
-              inactiveTrackColor:
-                  theme.colorScheme.newGroupSwitchInactiveColor,
-              activeTrackColor:
-                  theme.colorScheme.newGroupSwitchActiveColor,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 32),
+              inactiveThumbColor: theme.colorScheme.newGroupSwitchActiveColor,
+              activeThumbColor: theme.colorScheme.newGroupSwitchInactiveColor,
+              inactiveTrackColor: theme.colorScheme.newGroupSwitchInactiveColor,
+              activeTrackColor: theme.colorScheme.newGroupSwitchActiveColor,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 32),
               secondary: Icon(
                 Icons.search_outlined,
-                color:
-                    theme.colorScheme.newGroupOptionsTextColor,
+                color: theme.colorScheme.newGroupOptionsTextColor,
               ),
               title: Text(
                 L10n.of(context).groupCanBeFoundViaSearch,
                 style: TextStyle(
-                  color:
-                      theme.colorScheme.newGroupOptionsTextColor,
+                  color: theme.colorScheme.newGroupOptionsTextColor,
                 ),
               ),
               value: controller.groupCanBeFound,
-              onChanged: controller.loading
-                  ? null
-                  : controller.setGroupCanBeFound,
+              onChanged:
+                  controller.loading ? null : controller.setGroupCanBeFound,
             ),
 
             /// ============================
@@ -174,8 +186,7 @@ class NewGroupView extends StatelessWidget {
                 controller: controller.keywordController,
                 readOnly: controller.loading,
                 decoration: InputDecoration(
-                  fillColor:
-                      theme.colorScheme.newGroupTextFieldFilledColor,
+                  fillColor: theme.colorScheme.newGroupTextFieldFilledColor,
                   prefixIcon: Icon(
                     Icons.tag_outlined,
                     color: controller.keywordAlreadyExists
@@ -196,8 +207,7 @@ class NewGroupView extends StatelessWidget {
             AnimatedSize(
               duration: FluffyThemes.animationDuration,
               curve: FluffyThemes.animationCurve,
-              child: controller.groupCanBeFound &&
-                      !controller.publicGroup
+              child: controller.groupCanBeFound && !controller.publicGroup
                   ? Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
@@ -205,19 +215,17 @@ class NewGroupView extends StatelessWidget {
                       ),
                       child: TextField(
                         style: TextStyle(
-                          color: theme.colorScheme
-                              .newGroupTextFieldTextColor,
+                          color: theme.colorScheme.newGroupTextFieldTextColor,
                         ),
                         controller: controller.priceController,
                         keyboardType: TextInputType.number,
                         readOnly: controller.loading,
                         decoration: InputDecoration(
-                          fillColor: theme.colorScheme
-                              .newGroupTextFieldFilledColor,
+                          fillColor:
+                              theme.colorScheme.newGroupTextFieldFilledColor,
                           prefixIcon: Icon(
                             Icons.attach_money_outlined,
-                            color: theme.colorScheme
-                                .newGroupTextFieldHintColor,
+                            color: theme.colorScheme.newGroupTextFieldHintColor,
                           ),
                           labelText: 'preço',
                         ),
@@ -234,14 +242,12 @@ class NewGroupView extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: controller.loading
-                      ? null
-                      : controller.submitAction,
+                  onPressed:
+                      controller.loading ? null : controller.submitAction,
                   child: controller.loading
                       ? const LinearProgressIndicator()
                       : Text(
-                          L10n.of(context)
-                              .createGroupAndInviteUsers,
+                          L10n.of(context).createGroupAndInviteUsers,
                         ),
                 ),
               ),

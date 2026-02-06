@@ -33,7 +33,6 @@ class NewGroupController extends State<NewGroup> {
   bool publicGroup = false;
   bool groupCanBeFound = false;
 
-  /// 🔴 ERRO DE KEYWORD
   bool keywordAlreadyExists = false;
 
   Uint8List? avatar;
@@ -65,6 +64,13 @@ class NewGroupController extends State<NewGroup> {
     priceController.dispose();
     super.dispose();
   }
+
+  void setCreateGroupType(Set<CreateGroupType> value) {
+    setState(() {
+      _createGroupType = value.first;
+    });
+  }
+
 
   void setPublicGroup(bool b) =>
       setState(() => publicGroup = b);
@@ -124,7 +130,9 @@ class NewGroupController extends State<NewGroup> {
         'Content-Type': 'application/json',
       },
       body: jsonEncode({
-        "room_kind": "group",
+        "room_kind": createGroupType == CreateGroupType.space
+        ? "space"
+        : "group",
         "name": nameController.text.trim(),
         "keyword": keywordController.text.trim(),
         "access_type": publicGroup ? "public" : "private",
