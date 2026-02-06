@@ -530,6 +530,86 @@ Future<void> _syncAccessTypeWithJoinRule(JoinRules joinRule) async {
     context.go('/rooms/${room.id}');
   }
 
+  Future<void> confirmDeleteRoom() async {
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Apagar grupo'),
+      content: const Text(
+        'Tem certeza que deseja apagar este grupo?\n\n'
+        'Essa ação não pode ser desfeita.',
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('Cancelar'),
+        ),
+        TextButton(
+          style: TextButton.styleFrom(
+            foregroundColor: Theme.of(context).colorScheme.error,
+          ),
+          onPressed: () => Navigator.of(context).pop(true),
+          child: const Text('Apagar'),
+        ),
+      ],
+    ),
+  );
+
+  if (confirmed == true) {
+    await deleteRoom();
+  }
+}
+
+Future<void> deleteRoom() async {
+  if (!isAdmin) return;
+
+  setState(() {
+    isAdminLoading = true;
+  });
+
+  try {
+    final client = Matrix.of(context).client;
+
+    final res = await client.httpClient.post(
+      Uri.parse('${client.homeserver}/_synapse/room_service/deleteroom'),
+      headers: {
+        'Authorization': 'Bearer ${client.accessToken}',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'room_id': room.id,
+      }),
+    );
+
+    if (res.statusCode != 200) {
+      throw Exception(res.body);
+    }
+
+    if (!mounted) return;
+    context.pop(); // fecha a tela
+  } catch (e, s) {
+    Logs().w('Failed to delete room', e, s);
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Erro ao apagar o grupo',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.error,
+          ),
+        ),
+      ),
+    );
+  } finally {
+    if (mounted) {
+      setState(() {
+        isAdminLoading = false;
+      });
+    }
+  }
+}
+
+
   Future<void> addAlias() async {
     final domain = room.client.userID?.domain;
     if (domain == null) {

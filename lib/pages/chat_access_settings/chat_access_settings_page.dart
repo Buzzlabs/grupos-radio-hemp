@@ -275,6 +275,24 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                         )
                       : null,
                 ),
+                if (controller.isAdmin) ...[
+  const SizedBox(height: 16),
+  Divider(color: theme.colorScheme.accessDividerColor),
+  Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: theme.colorScheme.error,
+        foregroundColor: theme.colorScheme.normalSnackBarTextColor,
+        minimumSize: const Size.fromHeight(48),
+      ),
+      icon: const Icon(Icons.delete_forever_outlined),
+      label: const Text('Apagar grupo'),
+      onPressed: controller.confirmDeleteRoom,
+    ),
+  ),
+],
+
               ],
             );
           },
