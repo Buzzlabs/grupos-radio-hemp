@@ -39,38 +39,38 @@ class NewGroupView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SegmentedButton<CreateGroupType>(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                    (states) {
-                      if (states.contains(MaterialState.selected)) {
-                        return theme.colorScheme.newGroupSwitchActiveColor;
-                      }
-                      return theme.colorScheme.newGroupSwitchInactiveColor;
-                    },
-                  ),
-                  foregroundColor: MaterialStateProperty.resolveWith<Color?>(
-                    (states) {
-                      return theme.colorScheme.newGroupOptionsTextColor;
-                    },
-                  ),
-                ),
-                selected: {controller.createGroupType},
-                onSelectionChanged: controller.setCreateGroupType,
-                segments: [
-                  ButtonSegment(
-                    value: CreateGroupType.group,
-                    label: Text(L10n.of(context).group),
-                  ),
-                  ButtonSegment(
-                    value: CreateGroupType.space,
-                    label: Text(L10n.of(context).space),
-                  ),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(16.0),
+            //   child: SegmentedButton<CreateGroupType>(
+            //     style: ButtonStyle(
+            //       backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+            //         (states) {
+            //           if (states.contains(MaterialState.selected)) {
+            //             return theme.colorScheme.newGroupSwitchActiveColor;
+            //           }
+            //           return theme.colorScheme.newGroupSwitchInactiveColor;
+            //         },
+            //       ),
+            //       foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+            //         (states) {
+            //           return theme.colorScheme.newGroupOptionsTextColor;
+            //         },
+            //       ),
+            //     ),
+            //     selected: {controller.createGroupType},
+            //     onSelectionChanged: controller.setCreateGroupType,
+            //     segments: [
+            //       ButtonSegment(
+            //         value: CreateGroupType.group,
+            //         label: Text(L10n.of(context).group),
+            //       ),
+            //       ButtonSegment(
+            //         value: CreateGroupType.space,
+            //         label: Text(L10n.of(context).space),
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
             /// ============================
             /// AVATAR
