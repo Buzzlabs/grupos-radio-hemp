@@ -597,6 +597,8 @@ class ChatListController extends State<ChatList>
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
+                     style:
+                      TextStyle(color: Theme.of(context).colorScheme.chatListPopupTextColor),
                     L10n.of(context).goToSpace(space.getLocalizedDisplayname()),
                   ),
                 ),
@@ -671,9 +673,9 @@ class ChatListController extends State<ChatList>
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.group_work_outlined),
+                  Icon(Icons.group_work_outlined, color: theme.colorScheme.chatListPopupIconColor,),
                   const SizedBox(width: 12),
-                  Text(L10n.of(context).addToSpace),
+                  Text(L10n.of(context).addToSpace, style: TextStyle(color: theme.colorScheme.chatListPopupTextColor),),
                 ],
               ),
             ),

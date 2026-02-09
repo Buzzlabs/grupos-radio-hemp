@@ -329,6 +329,10 @@ extension ColorId on ColorScheme {
   Color get scaffoldBorderColor => primary;
 
   // chatlist
+  // space view 
+  Color get spaceViewNameTextColor => primary;
+  Color get spaceViewDescriptionTextColor => tertiary;
+  
   // discover
   Color get chatlistDiscoverTextColor => tertiary;
   Color get chatlistDiscoverTileGroupNameTextColor => primary;

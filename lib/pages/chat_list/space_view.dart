@@ -87,8 +87,11 @@ class _SpaceViewState extends State<SpaceView> {
     } catch (e, s) {
       Logs().w('Unable to load hierarchy', e, s);
       if (!mounted) return;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toLocalizedString(context), style: TextStyle(color: Theme.of(context).colorScheme.error),)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+        e.toLocalizedString(context),
+        style: TextStyle(color: Theme.of(context).colorScheme.error),
+      )));
       setState(() {
         _isLoading = false;
       });
@@ -248,6 +251,9 @@ class _SpaceViewState extends State<SpaceView> {
             borderRadius: BorderRadius.circular(AppConfig.borderRadius / 2),
           ),
           title: Text(
+            style: TextStyle(
+                color: theme.colorScheme.spaceViewNameTextColor,
+                fontWeight: FontWeight.bold),
             displayname,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -255,6 +261,9 @@ class _SpaceViewState extends State<SpaceView> {
           subtitle: room == null
               ? null
               : Text(
+                  style: TextStyle(
+                    color: theme.colorScheme.spaceViewDescriptionTextColor,
+                  ),
                   L10n.of(context).countChatsAndCountParticipants(
                     room.spaceChildren.length,
                     room.summary.mJoinedMemberCount ?? 1,
@@ -459,8 +468,9 @@ class _SpaceViewState extends State<SpaceView> {
                                 child: Text(
                                   L10n.of(context).noMoreChatsFound,
                                   style: TextStyle(
-                                      fontSize: 13,
-                                      color: theme.colorScheme.onSurface,),
+                                    fontSize: 13,
+                                    color: theme.colorScheme.onSurface,
+                                  ),
                                 ),
                               ),
                             );
@@ -544,7 +554,8 @@ class _SpaceViewState extends State<SpaceView> {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                    color: theme.colorScheme.onSecondary,),
+                                  color: theme.colorScheme.onSecondary,
+                                ),
                               ),
                             ),
                           ),
