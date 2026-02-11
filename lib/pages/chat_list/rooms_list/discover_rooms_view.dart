@@ -138,36 +138,6 @@ Widget build(BuildContext context) {
       ),
 
     ),
-    // to do
-    // bottomNavigationBar: SafeArea(
-    //   child: Padding(
-    //     padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-    //     child: Row(
-    //       mainAxisAlignment: MainAxisAlignment.end,
-    //       children: [
-    //         ElevatedButton.icon(
-    //           style: ElevatedButton.styleFrom(
-    //             shape: RoundedRectangleBorder(
-    //               borderRadius: BorderRadius.circular(8),
-    //             ),
-    //             backgroundColor: theme.colorScheme.chatlistDiscoverButtonColor,
-    //             foregroundColor:
-    //                 theme.colorScheme.chatlistDiscoverButtonTextColor,
-    //             padding: const EdgeInsets.symmetric(
-    //               horizontal: 16,
-    //               vertical: 12,
-    //             ),
-    //           ),
-    //           icon: const Icon(Icons.add),
-    //           label: const Text('Novo Grupo'),
-    //           onPressed: () {
-    //             context.go('/rooms/newgroup');
-    //           },
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // ),
     body: FutureBuilder<List<DiscoverRoom>>(
       future: future,
       builder: (context, snapshot) {
