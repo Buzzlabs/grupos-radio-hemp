@@ -35,35 +35,82 @@ class _EventsTableState extends State<EventsTable> {
   List<Events> allEvents = [];
 
   Future<void> _fetchEvents() async {
-    final baseUrl = 'http://localhost:3333';
-    final url = Uri.parse('$baseUrl/api/calendar/events');
+  await Future.delayed(const Duration(milliseconds: 300));
 
-    try {
-      final response = await http.get(url).timeout(const Duration(seconds: 8));
+  try {
+    final mockResponse = {
+      "items": [
+        {
+          "summary": "Live Especial",
+          "start": {
+            "dateTime": "2026-02-15T20:00:00"
+          }
+        },
+        {
+          "summary": "Podcast Semanal",
+          "start": {
+            "dateTime": "2026-02-16T18:00:00"
+          }
+        },
+        {
+          "summary": "Evento Presencial",
+          "start": {
+            "dateTime": "2026-02-20T19:30:00"
+          }
+        },
+      ]
+    };
 
-      if (response.statusCode != 200) {
-        throw Exception('HTTP ${response.statusCode}');
-      }
+    final items = mockResponse['items'];
 
-      final decoded = jsonDecode(response.body);
-      final items = decoded['items'];
-      if (items == null || items is! List) {
-        throw Exception('Campo "items" ausente ou inválido');
-      }
-
-      final fetchedEvents =
-          items.map<Events>((dynamic item) => Events.fromJson(item)).toList();
-
-      if (!mounted) return;
-      setState(() {
-        allEvents = fetchedEvents;
-      });
-    } on TimeoutException catch (_) {
-      debugPrint('Requisição expirou');
-    } catch (e, st) {
-      debugPrint('Erro ao buscar eventos: $e\n$st');
+    if (items == null || items is! List) {
+      throw Exception('Campo "items" ausente ou inválido');
     }
+
+    final fetchedEvents =
+        items.map<Events>((dynamic item) => Events.fromJson(item)).toList();
+
+    if (!mounted) return;
+
+    setState(() {
+      allEvents = fetchedEvents;
+    });
+  } catch (e, st) {
+    debugPrint('Erro mock ao buscar eventos: $e\n$st');
   }
+}
+
+
+  // Future<void> _fetchEvents() async {
+  //   final baseUrl = 'http://localhost:3333';
+  //   final url = Uri.parse('$baseUrl/api/calendar/events');
+
+  //   try {
+  //     final response = await http.get(url).timeout(const Duration(seconds: 8));
+
+  //     if (response.statusCode != 200) {
+  //       throw Exception('HTTP ${response.statusCode}');
+  //     }
+
+  //     final decoded = jsonDecode(response.body);
+  //     final items = decoded['items'];
+  //     if (items == null || items is! List) {
+  //       throw Exception('Campo "items" ausente ou inválido');
+  //     }
+
+  //     final fetchedEvents =
+  //         items.map<Events>((dynamic item) => Events.fromJson(item)).toList();
+
+  //     if (!mounted) return;
+  //     setState(() {
+  //       allEvents = fetchedEvents;
+  //     });
+  //   } on TimeoutException catch (_) {
+  //     debugPrint('Requisição expirou');
+  //   } catch (e, st) {
+  //     debugPrint('Erro ao buscar eventos: $e\n$st');
+  //   }
+  // }
 
   @override
   void initState() {

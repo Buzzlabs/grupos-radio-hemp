@@ -57,75 +57,156 @@ class _VodsWidgetState extends State<VodsWidget> {
   }
 
   Future<void> _fetchLives({bool append = false}) async {
-    if (isLoading) return;
-    setState(() => isLoading = true);
+  if (isLoading) return;
+  setState(() => isLoading = true);
 
-    final baseUrl = 'http://localhost:3333';
-    final url = Uri.parse(
-        '$baseUrl/dashboard/api/streams/vods?page=$currentPage&limit=10');
+  await Future.delayed(const Duration(milliseconds: 600)); 
 
-    try {
-      final response = await http.get(url).timeout(const Duration(seconds: 8));
-      final decoded = jsonDecode(response.body);
+  try {
+    const int totalPagesMock = 3;
+    lastPage = totalPagesMock;
 
-      final meta = decoded['meta'];
-      lastPage = meta['last_page'];
+    final List<Map<String, dynamic>> mockData = List.generate(10, (index) {
+      final int idNumber = ((currentPage - 1) * 10) + index + 1;
 
-      final List<dynamic> data = decoded['data'];
-      final List<LiveShow> fetchedLives = data.map<LiveShow>((item) {
-        final map = item as Map<String, dynamic>;
+      return {
+        "id": idNumber,
+        "title": idNumber % 2 == 0 ? "Main Channel" : "Podcast #$idNumber",
+        "recordingStartedAt": "2026-02-${(idNumber % 28) + 1}T20:00:00",
+        "isLive": idNumber % 3 == 0,
+        "recordedRelativeTime": "há ${idNumber} dias",
+        "latestThumbnail": "https://via.placeholder.com/300",
+        "avatarUrl": null,
+        "masterPlaylistUrl": "https://test-stream-$idNumber.m3u8",
+      };
+    });
 
-         String title = map['title'] ?? 'Sem título';
+    final List<LiveShow> fetchedLives = mockData.map<LiveShow>((map) {
+      String title = map['title'] ?? 'Sem título';
 
-         final startedAtRaw = map['recordingStartedAt'];
-         DateTime? startedAt;
+      final startedAtRaw = map['recordingStartedAt'];
+      DateTime? startedAt;
 
-         if (startedAtRaw != null) {
-          startedAt = DateTime.tryParse(startedAtRaw);
-        }
-        
-        if (title == 'Main Channel' && startedAt != null) {
-          final formatted =
-              '${startedAt.day.toString().padLeft(2, '0')}/${startedAt.month.toString().padLeft(2, '0')}/${startedAt.year.toString().substring(2)}';
-
-          title = 'Live $formatted';
-        }
-
-        return LiveShow(
-          id: map['id'].toString(),
-          title: title,
-          category: map['isLive'] == true ? 'Ao vivo' : 'Gravação',
-          date: map['recordedRelativeTime'] ?? '',
-          startedAt: map['recordingStartedAt'] ?? '',
-          thumbnailUrl: map['latestThumbnail'] ?? '',
-          avatarUrl: map['avatarUrl'] ?? 'assets/logo_single_comfundo.png',
-          videoUrl: map['masterPlaylistUrl'] ?? '',
-          isLive: map['isLive'] ?? false,
-        );
-      }).toList();
-
-      if (append) {
-        allLives.addAll(fetchedLives);
-      } else {
-        allLives = fetchedLives;
+      if (startedAtRaw != null) {
+        startedAt = DateTime.tryParse(startedAtRaw);
       }
 
-      loadedCount = filteredLives.length;
+      if (title == 'Main Channel' && startedAt != null) {
+        final formatted =
+            '${startedAt.day.toString().padLeft(2, '0')}/'
+            '${startedAt.month.toString().padLeft(2, '0')}/'
+            '${startedAt.year.toString().substring(2)}';
 
-      setState(() {
-        _applyFilter();
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() => isLoading = false);
+        title = 'Live $formatted';
+      }
+
+      return LiveShow(
+        id: map['id'].toString(),
+        title: title,
+        category: map['isLive'] == true ? 'Ao vivo' : 'Gravação',
+        date: map['recordedRelativeTime'] ?? '',
+        startedAt: map['recordingStartedAt'] ?? '',
+        thumbnailUrl: map['latestThumbnail'] ?? '',
+        avatarUrl: map['avatarUrl'] ?? 'assets/logo_single_comfundo.png',
+        videoUrl: map['masterPlaylistUrl'] ?? '',
+        isLive: map['isLive'] ?? false,
+      );
+    }).toList();
+
+    if (append) {
+      allLives.addAll(fetchedLives);
+    } else {
+      allLives = fetchedLives;
     }
 
-    if (widget.filter.isNotEmpty && filteredLives.length < visibleCount && currentPage < lastPage) {
-        currentPage++;
-        _fetchLives(append: true);
-    }
+    loadedCount = filteredLives.length;
 
+    setState(() {
+      _applyFilter();
+      isLoading = false;
+    });
+  } catch (e) {
+    setState(() => isLoading = false);
   }
+
+  if (widget.filter.isNotEmpty &&
+      filteredLives.length < visibleCount &&
+      currentPage < lastPage) {
+    currentPage++;
+    _fetchLives(append: true);
+  }
+}
+
+  // Future<void> _fetchLives({bool append = false}) async {
+  //   if (isLoading) return;
+  //   setState(() => isLoading = true);
+
+  //   final baseUrl = 'http://localhost:3333';
+  //   final url = Uri.parse(
+  //       '$baseUrl/dashboard/api/streams/vods?page=$currentPage&limit=10');
+
+  //   try {
+  //     final response = await http.get(url).timeout(const Duration(seconds: 8));
+  //     final decoded = jsonDecode(response.body);
+
+  //     final meta = decoded['meta'];
+  //     lastPage = meta['last_page'];
+
+  //     final List<dynamic> data = decoded['data'];
+  //     final List<LiveShow> fetchedLives = data.map<LiveShow>((item) {
+  //       final map = item as Map<String, dynamic>;
+
+  //        String title = map['title'] ?? 'Sem título';
+
+  //        final startedAtRaw = map['recordingStartedAt'];
+  //        DateTime? startedAt;
+
+  //        if (startedAtRaw != null) {
+  //         startedAt = DateTime.tryParse(startedAtRaw);
+  //       }
+        
+  //       if (title == 'Main Channel' && startedAt != null) {
+  //         final formatted =
+  //             '${startedAt.day.toString().padLeft(2, '0')}/${startedAt.month.toString().padLeft(2, '0')}/${startedAt.year.toString().substring(2)}';
+
+  //         title = 'Live $formatted';
+  //       }
+
+  //       return LiveShow(
+  //         id: map['id'].toString(),
+  //         title: title,
+  //         category: map['isLive'] == true ? 'Ao vivo' : 'Gravação',
+  //         date: map['recordedRelativeTime'] ?? '',
+  //         startedAt: map['recordingStartedAt'] ?? '',
+  //         thumbnailUrl: map['latestThumbnail'] ?? '',
+  //         avatarUrl: map['avatarUrl'] ?? 'assets/logo_single_comfundo.png',
+  //         videoUrl: map['masterPlaylistUrl'] ?? '',
+  //         isLive: map['isLive'] ?? false,
+  //       );
+  //     }).toList();
+
+  //     if (append) {
+  //       allLives.addAll(fetchedLives);
+  //     } else {
+  //       allLives = fetchedLives;
+  //     }
+
+  //     loadedCount = filteredLives.length;
+
+  //     setState(() {
+  //       _applyFilter();
+  //       isLoading = false;
+  //     });
+  //   } catch (e) {
+  //     setState(() => isLoading = false);
+  //   }
+
+  //   if (widget.filter.isNotEmpty && filteredLives.length < visibleCount && currentPage < lastPage) {
+  //       currentPage++;
+  //       _fetchLives(append: true);
+  //   }
+
+  // }
 
   bool _applyFilter() {
   filteredLives = allLives
