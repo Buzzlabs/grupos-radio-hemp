@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -33,6 +34,7 @@ class ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     notificationChangeSub ??= Matrix.of(context)
         .client
         .onSync
@@ -52,28 +54,77 @@ class ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
       children: [
         const SizedBox.shrink(),
         PopupMenuButton<ChatPopupMenuActions>(
+          icon: Icon(
+            Icons.more_vert,
+            color: theme.colorScheme.tertiary,
+          ),
+          color: theme.colorScheme.surface,
           useRootNavigator: true,
           onSelected: (choice) async {
             switch (choice) {
               case ChatPopupMenuActions.leave:
                 final router = GoRouter.of(context);
-                final confirmed = await showOkCancelAlertDialog(
+
+                final confirmed = await showDialog<bool>(
                   context: context,
-                  title: L10n.of(context).areYouSure,
-                  message: L10n.of(context).archiveRoomDescription,
-                  okLabel: L10n.of(context).leave,
-                  cancelLabel: L10n.of(context).cancel,
-                  isDestructive: true,
+                  builder: (context) {
+                    final theme = Theme.of(context);
+
+                    return AlertDialog(
+                      backgroundColor: theme.colorScheme.alertDialogBackground,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      title: Text(
+                        L10n.of(context).areYouSure,
+                        style: TextStyle(
+                          color: theme.colorScheme.alertDialogAreYouSureTextColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      content: Text(
+                        L10n.of(context).archiveRoomDescription,
+                        style: TextStyle(
+                          color: theme.colorScheme.alertDialogDescriptionTextColor,
+                          fontSize: 16,
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: Text(
+                            L10n.of(context).cancel,
+                            style: TextStyle(
+                              color: theme.colorScheme.alertDialogCancelTextColor,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          child: Text(
+                            L10n.of(context).leave,
+                            style: TextStyle(
+                              color: theme.colorScheme.error,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 );
-                if (confirmed != OkCancelResult.ok) return;
+
+                if (confirmed != true) return;
+
                 final result = await showFutureLoadingDialog(
                   context: context,
                   future: () => widget.room.leave(),
                 );
+
                 if (result.error == null) {
                   router.go('/rooms');
                 }
-
                 break;
               case ChatPopupMenuActions.mute:
                 await showFutureLoadingDialog(
@@ -103,9 +154,13 @@ class ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
                 value: ChatPopupMenuActions.details,
                 child: Row(
                   children: [
-                    const Icon(Icons.info_outline_rounded),
+                    Icon(
+                      Icons.info_outline_rounded,
+                      color: theme.colorScheme.tertiary,
+                    ),
                     const SizedBox(width: 12),
-                    Text(L10n.of(context).chatDetails),
+                    Text(L10n.of(context).chatDetails,
+                        style: TextStyle(color: theme.colorScheme.tertiary),),
                   ],
                 ),
               ),
@@ -114,9 +169,11 @@ class ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
                 value: ChatPopupMenuActions.mute,
                 child: Row(
                   children: [
-                    const Icon(Icons.notifications_off_outlined),
+                    Icon(Icons.notifications_off_outlined,
+                        color: theme.colorScheme.tertiary,),
                     const SizedBox(width: 12),
-                    Text(L10n.of(context).muteChat),
+                    Text(L10n.of(context).muteChat,
+                        style: TextStyle(color: theme.colorScheme.tertiary),),
                   ],
                 ),
               )
@@ -125,9 +182,11 @@ class ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
                 value: ChatPopupMenuActions.unmute,
                 child: Row(
                   children: [
-                    const Icon(Icons.notifications_on_outlined),
+                    Icon(Icons.notifications_on_outlined,
+                        color: theme.colorScheme.tertiary,),
                     const SizedBox(width: 12),
-                    Text(L10n.of(context).unmuteChat),
+                    Text(L10n.of(context).unmuteChat,
+                        style: TextStyle(color: theme.colorScheme.tertiary),),
                   ],
                 ),
               ),
@@ -135,9 +194,11 @@ class ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
               value: ChatPopupMenuActions.search,
               child: Row(
                 children: [
-                  const Icon(Icons.search_outlined),
+                  Icon(Icons.search_outlined,
+                      color: theme.colorScheme.tertiary,),
                   const SizedBox(width: 12),
-                  Text(L10n.of(context).search),
+                  Text(L10n.of(context).search,
+                      style: TextStyle(color: theme.colorScheme.tertiary),),
                 ],
               ),
             ),
@@ -145,9 +206,10 @@ class ChatSettingsPopupMenuState extends State<ChatSettingsPopupMenu> {
               value: ChatPopupMenuActions.leave,
               child: Row(
                 children: [
-                  const Icon(Icons.delete_outlined),
+                  Icon(Icons.delete_outlined, color: theme.colorScheme.error),
                   const SizedBox(width: 12),
-                  Text(L10n.of(context).leave),
+                  Text(L10n.of(context).leave,
+                      style: TextStyle(color: theme.colorScheme.error),),
                 ],
               ),
             ),

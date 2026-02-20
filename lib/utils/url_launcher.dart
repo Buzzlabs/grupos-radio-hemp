@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart' show IterableExtension;
@@ -38,7 +39,7 @@ class UrlLauncher {
     if (uri == null) {
       // we can't open this thing
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(L10n.of(context).cantOpenUri(url!))),
+        SnackBar(content: Text(L10n.of(context).cantOpenUri(url!), style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor))),
       );
       return;
     }
@@ -92,7 +93,7 @@ class UrlLauncher {
     }
     if (uri.host.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(L10n.of(context).cantOpenUri(url!))),
+        SnackBar(content: Text(L10n.of(context).cantOpenUri(url!), style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor))),
       );
       return;
     }

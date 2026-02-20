@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
@@ -21,7 +22,7 @@ class LiveCard extends StatelessWidget {
         width: cardWidth,
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
+          color: theme.colorScheme.vodCardBackgroundColor,
           borderRadius: BorderRadius.circular(5),
         ),
         clipBehavior: Clip.antiAlias,
@@ -97,9 +98,10 @@ class LiveCard extends StatelessWidget {
                             live.title,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              color: theme.colorScheme.onSecondary,
+                              fontFamily: theme.colorScheme.vodCardFontFamily,
+                              color: theme.colorScheme.vodCardTextColor,
                               fontSize: 16,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ),
@@ -118,15 +120,14 @@ class LiveCard extends StatelessWidget {
                               _infoChip(
                                   theme,
                                   live.date,
-                                  theme.colorScheme.onSecondaryContainer
-                                      .withOpacity(0.15),
-                                  13),
+                                  theme.colorScheme.vodCardDateChipColor,
+                                  13,),
                               // to do
                               _infoChip(
                                   theme,
                                   live.category,
-                                  theme.colorScheme.primary.withOpacity(0.15),
-                                  12),
+                                  theme.colorScheme.vodCardCategoryChipColor,
+                                  12,),
                             ],
                           ),
                         ),
@@ -139,7 +140,7 @@ class LiveCard extends StatelessWidget {
                                 'https://grupos.radiohemp.com/#/rooms/$roomId/vod/${live.id}';
                             Clipboard.setData(ClipboardData(text: shareLink));
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Link copiado!')),
+                              SnackBar(content: Text('Link copiado!', style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor),),),
                             );
                           },
                           child: Padding(
@@ -147,12 +148,12 @@ class LiveCard extends StatelessWidget {
                             child: Icon(
                               Icons.share,
                               size: 18,
-                              color: theme.colorScheme.onSecondary,
+                              color: theme.colorScheme.vodCardIconColor,
                             ),
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ],
@@ -160,7 +161,7 @@ class LiveCard extends StatelessWidget {
           ),
         ),
       );
-    });
+    },);
   }
 
   Widget _infoChip(ThemeData theme, String text, Color bg, double fontSize) {
@@ -173,7 +174,7 @@ class LiveCard extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: theme.colorScheme.onSecondary,
+          color: theme.colorScheme.vodCardTextColor,
           fontSize: fontSize,
         ),
       ),

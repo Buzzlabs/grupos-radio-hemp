@@ -61,14 +61,23 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final room = Matrix.of(context).client.getRoomById(roomId);
     if (room == null) {
       return Scaffold(
-        appBar: AppBar(title: Text(L10n.of(context).oopsSomethingWentWrong)),
+        appBar: AppBar(
+          title: Text(
+            L10n.of(context).oopsSomethingWentWrong,
+            style: TextStyle(color: theme.colorScheme.onSecondaryContainer),
+          ),
+        ),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Text(L10n.of(context).youAreNoLongerParticipatingInThisChat),
+            child: Text(
+              L10n.of(context).youAreNoLongerParticipatingInThisChat,
+              style: TextStyle(color: theme.colorScheme.onSecondaryContainer),
+            ),
           ),
         ),
       );
@@ -724,6 +733,8 @@ class ChatController extends State<ChatPageWithRoom>
         SnackBar(
           content: Text(
             (e as Object).toLocalizedString(context),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
+
           ),
         ),
       );
@@ -835,7 +846,7 @@ class ChatController extends State<ChatPageWithRoom>
       selectedEvents.clear();
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(L10n.of(context).contentHasBeenReported)),
+      SnackBar(content: Text(L10n.of(context).contentHasBeenReported, style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor),),),
     );
   }
 
@@ -1325,7 +1336,7 @@ class ChatController extends State<ChatPageWithRoom>
       await voipPlugin!.voip.inviteToCall(room, callType);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toLocalizedString(context))),
+        SnackBar(content: Text(e.toLocalizedString(context), style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor),)),
       );
     }
   }
@@ -1411,6 +1422,8 @@ class ChatController extends State<ChatPageWithRoom>
   }
 
   Future<void> closeLiveWidget() async {
+    final theme = Theme.of(context);
+
     final confirmed = await showOkCancelAlertDialog(
       context: context,
       title: L10n.of(context).confirm.toUpperCase(),
@@ -1433,7 +1446,10 @@ class ChatController extends State<ChatPageWithRoom>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(L10n.of(context).liveClosedSuccess),
+            content: Text(
+              L10n.of(context).liveClosedSuccess,
+              style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor),
+            ),
             duration: const Duration(seconds: 3),
           ),
         );
@@ -1442,7 +1458,10 @@ class ChatController extends State<ChatPageWithRoom>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(L10n.of(context).liveCloseError(e.toString())),
+            content: Text(
+              L10n.of(context).liveCloseError(e.toString()),
+              style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor),
+            ),
             duration: const Duration(seconds: 3),
           ),
         );
@@ -1497,7 +1516,8 @@ class ChatController extends State<ChatPageWithRoom>
                       child: ChatDetails(
                         roomId: roomId,
                         embeddedCloseButton: IconButton(
-                          icon: const Icon(Icons.close),
+                          icon: Icon(Icons.close,
+                              color: theme.colorScheme.tertiary,),
                           onPressed: toggleDisplayChatDetailsColumn,
                         ),
                       ),

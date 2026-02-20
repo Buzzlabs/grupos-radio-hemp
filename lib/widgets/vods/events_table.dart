@@ -24,8 +24,7 @@ class Events {
 }
 
 class EventsTable extends StatefulWidget {
-  final bool showHeader;
-  const EventsTable({required this.showHeader, super.key});
+  const EventsTable({super.key});
 
   @override
   State<EventsTable> createState() => _EventsTableState();
@@ -34,6 +33,36 @@ class EventsTable extends StatefulWidget {
 class _EventsTableState extends State<EventsTable> {
   List<Events> allEvents = [];
 
+  // Future<void> _fetchEvents() async {
+  //   final baseUrl = 'http://localhost:3333';
+  //   final url = Uri.parse('$baseUrl/api/calendar/events');
+
+  //   try {
+  //     final response = await http.get(url).timeout(const Duration(seconds: 8));
+
+  //     if (response.statusCode != 200) {
+  //       throw Exception('HTTP ${response.statusCode}');
+  //     }
+
+  //     final decoded = jsonDecode(response.body);
+  //     final items = decoded['items'];
+  //     if (items == null || items is! List) {
+  //       throw Exception('Campo "items" ausente ou inválido');
+  //     }
+
+  //     final fetchedEvents =
+  //         items.map<Events>((dynamic item) => Events.fromJson(item)).toList();
+
+  //     if (!mounted) return;
+  //     setState(() {
+  //       allEvents = fetchedEvents;
+  //     });
+  //   } on TimeoutException catch (_) {
+  //     debugPrint('Requisição expirou');
+  //   } catch (e, st) {
+  //     debugPrint('Erro ao buscar eventos: $e\n$st');
+  //   }
+  // }
   Future<void> _fetchEvents() async {
   await Future.delayed(const Duration(milliseconds: 300));
 
@@ -162,18 +191,6 @@ class _EventsTableState extends State<EventsTable> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.showHeader)
-            Text(
-              'PRÓXIMOS EVENTOS',
-              style: GoogleFonts.righteous(
-                textStyle: TextStyle(
-                  color: theme.colorScheme.primary,
-                  fontSize: 25,
-                  fontWeight: FontWeight.w100,
-                ),
-              ),
-            ),
-          const SizedBox(height: 16),
           Expanded(
             child: allEvents.isEmpty
                 ? const Center(child: CircularProgressIndicator())
@@ -202,14 +219,14 @@ class _EventsTableState extends State<EventsTable> {
                                 Expanded(
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: eventColor.withOpacity(0.05),
+                                      color: eventColor.withOpacity(0.2),
                                       borderRadius: const BorderRadius.only(
                                         topRight: Radius.circular(12),
                                         bottomRight: Radius.circular(12),
                                       ),
                                     ),
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 10),
+                                        horizontal: 12, vertical: 10,),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -228,7 +245,8 @@ class _EventsTableState extends State<EventsTable> {
                                             event.summary,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
+                                            style:  TextStyle(
+                                              color: theme.colorScheme.tertiary,
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500,
                                             ),

@@ -31,7 +31,6 @@ import 'package:fluffychat/widgets/matrix.dart';
 import 'package:fluffychat/widgets/share_scaffold_dialog.dart';
 import 'package:fluffychat/guard/guard.dart';
 import 'package:fluffychat/pages/screen_vod.dart';
-import 'package:fluffychat/pages/lives_data.dart';
 
 abstract class AppRoutes {
   static FutureOr<String?> loggedInRedirect(
@@ -376,15 +375,21 @@ abstract class AppRoutes {
               redirect: loggedOutRedirect,
               routes: [
                 GoRoute(
-                  name: 'vod',
                   path: 'vod/:id',
-                  builder: (context, state) {
+                  pageBuilder: (context, state) {
                     final id = state.pathParameters['id']!;
-                    final live = getLiveById(id);
-                    if (live != null) return ScreenVod(live: live);
-                    return ScreenVod(liveId: id);
+
+                    return AppRoutes.defaultPageBuilder(
+                      context,
+                      state,
+                      ScreenVod(
+                        key: ValueKey(id),
+                        liveId: id,
+                      ),
+                    );
                   },
                 ),
+
                 GoRoute(
                   path: 'search',
                   pageBuilder: (context, state) => defaultPageBuilder(

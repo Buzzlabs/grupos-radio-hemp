@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +49,9 @@ class SendFileDialogState extends State<SendFileDialog> {
       if (!widget.room.otherPartyCanReceiveMessages) {
         throw OtherPartyCanNotReceiveMessages();
       }
-      scaffoldMessenger.showLoadingSnackBar(l10n.prepareSendingAttachment);
+      scaffoldMessenger.showLoadingSnackBar(
+        l10n.prepareSendingAttachment,
+      );
       Navigator.of(context, rootNavigator: false).pop();
       final clientConfig = await widget.room.client.getConfig();
       final maxUploadSize = clientConfig.mUploadSize ?? 100 * 1000 * 1000;
@@ -303,6 +306,7 @@ class SendFileDialogState extends State<SendFileDialog> {
                                         ? Icons.audio_file_outlined
                                         : Icons.description_outlined,
                             size: 32,
+                            color: theme.colorScheme.searchFileIconColor,
                           ),
                           const SizedBox(width: 8),
                           Expanded(
@@ -318,8 +322,9 @@ class SendFileDialogState extends State<SendFileDialog> {
                                 Text(
                                   '$sizeString - $fileTypes',
                                   style: TextStyle(
-                                      color: theme.colorScheme.onSurface,
-                                      fontSize: 10),
+                                    color: theme.colorScheme.fileTypeTextColor,
+                                    fontSize: 10,
+                                  ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -334,7 +339,7 @@ class SendFileDialogState extends State<SendFileDialog> {
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: DialogTextField(
                         controller: _labelTextController,
-                        labelText: L10n.of(context).optionalMessage,
+                        hintText: L10n.of(context).optionalMessage,
                         minLines: 1,
                         maxLines: 3,
                         maxLength: 255,
@@ -353,6 +358,7 @@ class SendFileDialogState extends State<SendFileDialog> {
                             onChanged: compressionSupported
                                 ? (v) => setState(() => compress = v)
                                 : null,
+                            activeColor: theme.colorScheme.fileCompressionSwitchActiveColor,
                           )
                         else
                           Switch.adaptive(
@@ -360,6 +366,15 @@ class SendFileDialogState extends State<SendFileDialog> {
                             onChanged: compressionSupported
                                 ? (v) => setState(() => compress = v)
                                 : null,
+                            activeColor: theme
+                                .colorScheme.fileCompressionSwitchInactiveColor, // iOS thumb
+                            activeTrackColor: theme.colorScheme.fileCompressionSwitchActiveColor,
+                            inactiveThumbColor: theme.colorScheme.fileCompressionSwitchActiveColor,
+                            inactiveTrackColor:
+                                theme.colorScheme.fileCompressionSwitchInactiveColor,
+                            trackOutlineColor: WidgetStateProperty.resolveWith(
+                              (states) => theme.colorScheme.fileCompressionSwitchActiveColor,
+                            ),
                           ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -373,7 +388,8 @@ class SendFileDialogState extends State<SendFileDialog> {
                                   Text(
                                     L10n.of(context).compress,
                                     style: TextStyle(
-                                      color: theme.colorScheme.onSurface,
+                                      color: theme
+                                          .colorScheme.fileCompressionTextColor,
                                     ),
                                     textAlign: TextAlign.left,
                                   ),
@@ -434,7 +450,8 @@ extension on ScaffoldMessengerState {
               ),
             ),
             const SizedBox(width: 16),
-            Text(title),
+            Text(title, style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor),
+),
           ],
         ),
       ),

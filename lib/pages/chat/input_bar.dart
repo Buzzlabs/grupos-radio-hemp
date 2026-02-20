@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -395,6 +396,7 @@ class InputBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return TypeAheadField<Map<String, String?>>(
       direction: VerticalDirection.up,
       hideOnEmpty: true,
@@ -405,10 +407,11 @@ class InputBar extends StatelessWidget {
       debounceDuration: const Duration(milliseconds: 50),
       // show suggestions after 50ms idle time (default is 300)
       builder: (context, controller, focusNode) => TextField(
-        style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
+        style: TextStyle(color: Theme.of(context).colorScheme.messageInputTextColor),
         controller: controller,
         focusNode: focusNode,
         readOnly: readOnly,
+        cursorColor: theme.colorScheme.messageInputTextColor,
         contextMenuBuilder: (c, e) => markdownContextBuilder(c, e, controller),
         contentInsertionConfiguration: ContentInsertionConfiguration(
           onContentInserted: (KeyboardInsertedContent content) {

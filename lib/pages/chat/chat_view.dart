@@ -41,33 +41,38 @@ class ChatView extends StatelessWidget {
   const ChatView(this.controller, {super.key});
 
   List<Widget> _appBarActions(BuildContext context) {
+    final theme = Theme.of(context);
     if (controller.selectMode) {
       return [
         if (controller.canEditSelectedEvents)
           IconButton(
-            icon: const Icon(Icons.edit_outlined),
+            icon: Icon(Icons.edit_outlined, color: theme.colorScheme.chatAppBarTileIconColor,),
             tooltip: L10n.of(context).edit,
+            color: theme.colorScheme.chatAppBarTileTextColor,
             onPressed: controller.editSelectedEventAction,
           ),
         IconButton(
-          icon: const Icon(Icons.copy_outlined),
+          icon: Icon(Icons.copy_outlined, color: theme.colorScheme.chatAppBarTileIconColor,),
           tooltip: L10n.of(context).copy,
           onPressed: controller.copyEventsAction,
         ),
         if (controller.canPinSelectedEvents)
           IconButton(
-            icon: const Icon(Icons.push_pin_outlined),
+            icon: Icon(Icons.push_pin_outlined, color: theme.colorScheme.chatAppBarTileIconColor,),
             onPressed: controller.pinEvent,
             tooltip: L10n.of(context).pinMessage,
           ),
         if (controller.canRedactSelectedEvents)
           IconButton(
-            icon: const Icon(Icons.delete_outlined),
+            icon: Icon(Icons.delete_outlined, color: theme.colorScheme.error,),
             tooltip: L10n.of(context).redactMessage,
             onPressed: controller.redactEventsAction,
           ),
         if (controller.selectedEvents.length == 1)
           PopupMenuButton<_EventContextAction>(
+            icon: Icon(Icons.more_vert, 
+            color: theme.colorScheme.chatAppBarTileIconColor,),
+            color: theme.colorScheme.chatAppBarTileBackground,
             useRootNavigator: true,
             onSelected: (action) {
               switch (action) {
@@ -88,9 +93,9 @@ class ChatView extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.download_outlined),
+                      Icon(Icons.download_outlined, color: theme.colorScheme.chatAppBarTileIconColor),
                       const SizedBox(width: 12),
-                      Text(L10n.of(context).downloadFile),
+                      Text(L10n.of(context).downloadFile, style: TextStyle(color: theme.colorScheme.chatAppBarTileTextColor),),
                     ],
                   ),
                 ),
@@ -99,9 +104,9 @@ class ChatView extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.info_outlined),
+                    Icon(Icons.info_outlined, color: theme.colorScheme.chatAppBarTileIconColor),
                     const SizedBox(width: 12),
-                    Text(L10n.of(context).messageInfo),
+                    Text(L10n.of(context).messageInfo, style: TextStyle(color: theme.colorScheme.chatAppBarTileTextColor),),
                   ],
                 ),
               ),
@@ -116,7 +121,7 @@ class ChatView extends StatelessWidget {
                         color: Colors.red,
                       ),
                       const SizedBox(width: 12),
-                      Text(L10n.of(context).reportMessage),
+                      Text(L10n.of(context).reportMessage, style: TextStyle(color: theme.colorScheme.error),),
                     ],
                   ),
                 ),
@@ -130,9 +135,9 @@ class ChatView extends StatelessWidget {
             right: MediaQuery.of(context).size.width * 0.01,
           ),
           child: FractionallySizedBox(
-            heightFactor: 0.7,
+            heightFactor: 0.6,
             child: Image.asset(
-              'assets/logo_horizontal_semfundo.png',
+              theme.colorScheme.logoHorizontalSemFundo,
               fit: BoxFit.contain,
               filterQuality: FilterQuality.high,
             ),
@@ -200,15 +205,15 @@ class ChatView extends StatelessWidget {
                       : theme.colorScheme.onTertiaryContainer,
                 ),
                 backgroundColor: controller.selectedEvents.isEmpty
-                    ? null
-                    : theme.colorScheme.tertiaryContainer,
+                    ? theme.colorScheme.chatAppBarTileBackground
+                    : theme.colorScheme.chatAppBarTileSelectedBackground,
                 automaticallyImplyLeading: false,
                 leading: controller.selectMode
                     ? IconButton(
-                        icon: const Icon(Icons.close),
+                        icon: Icon(Icons.close, color: theme.colorScheme.chatAppBarTileIconColor,),
                         onPressed: controller.clearSelectedEvents,
                         tooltip: L10n.of(context).close,
-                        color: theme.colorScheme.onTertiaryContainer,
+                        color: theme.colorScheme.chatAppBarTileIconColor,
                       )
                     : FluffyThemes.isColumnMode(context)
                         ? null
@@ -221,7 +226,7 @@ class ChatView extends StatelessWidget {
                               filter: (r) => r.id != controller.roomId,
                               badgePosition:
                                   BadgePosition.topEnd(end: 8, top: 4),
-                              child: const Center(child: BackButton()),
+                              child: Center(child: BackButton(color: theme.colorScheme.chatAppBarBackButtonColor)),
                             ),
                           ),
                 titleSpacing: FluffyThemes.isColumnMode(context) ? 24 : 0,
@@ -236,8 +241,8 @@ class ChatView extends StatelessWidget {
                       if (scrollUpBannerEventId != null)
                         ChatAppBarListTile(
                           leading: IconButton(
-                            color: theme.colorScheme.onSurfaceVariant,
-                            icon: const Icon(Icons.close),
+                            color: theme.colorScheme.chatAppBarTileIconColor,
+                            icon: Icon(Icons.close, color: theme.colorScheme.chatAppBarTileIconColor,),
                             tooltip: L10n.of(context).close,
                             onPressed: () {
                               controller.discardScrollUpBannerEventId();
@@ -252,7 +257,7 @@ class ChatView extends StatelessWidget {
                               );
                               controller.discardScrollUpBannerEventId();
                             },
-                            child: Text(L10n.of(context).jump),
+                            child: Text(L10n.of(context).jump, style: TextStyle(color: theme.colorScheme.chatAppBarTileTextColor)),
                           ),
                         ),
                     ],
@@ -269,9 +274,9 @@ class ChatView extends StatelessWidget {
                         onPressed: controller.scrollDown,
                         heroTag: null,
                         mini: true,
-                        backgroundColor: theme.colorScheme.surface,
-                        foregroundColor: theme.colorScheme.onSurface,
-                        child: const Icon(Icons.arrow_downward_outlined),
+                        backgroundColor: theme.colorScheme.jumpToLastMessagePaddingColor,
+                        foregroundColor: theme.colorScheme.chatAppBarTileIconColor,
+                        child: Icon(Icons.arrow_downward_outlined, color: theme.colorScheme.chatAppBarTileIconColor),
                       ),
                     )
                   : null,
@@ -283,14 +288,15 @@ class ChatView extends StatelessWidget {
                   children: <Widget>[
                     Positioned.fill(
                       child: Material(
-                        color: theme.colorScheme.tertiary,
+                        color: theme.colorScheme.chatBackground,
                         child: SafeArea(
                           child: Column(
                             children: <Widget>[
-                              const SizedBox(height: 1),
+                              Divider(color: theme.dividerColor,
+                                height: 1,),
                               Material(
                                 elevation: 4,
-                                color: theme.colorScheme.surface,
+                                color: theme.colorScheme.pinnedMessageBackground,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.vertical(
                                     bottom: Radius.circular(
@@ -313,7 +319,7 @@ class ChatView extends StatelessWidget {
                               if (controller.showScrollDownButton)
                                 Divider(
                                   height: 1,
-                                  color: theme.dividerColor,
+                                  color: theme.colorScheme.tertiary,
                                 ),
                               if (controller.room.isExtinct)
                                 Container(
@@ -321,7 +327,8 @@ class ChatView extends StatelessWidget {
                                   width: double.infinity,
                                   child: ElevatedButton.icon(
                                     icon: const Icon(Icons.chevron_right),
-                                    label: Text(L10n.of(context).enterNewChat),
+                                    label: Text(L10n.of(context).enterNewChat,
+                                    style: TextStyle(color: theme.colorScheme.tertiary),),
                                     onPressed: controller.goToNewRoomAction,
                                   ),
                                 )
@@ -349,9 +356,9 @@ class ChatView extends StatelessWidget {
                                       clipBehavior: Clip.hardEdge,
                                       color: controller
                                               .selectedEvents.isNotEmpty
-                                          ? theme.colorScheme.tertiaryContainer
+                                          ? theme.colorScheme.inputBarBackground
                                           : theme
-                                              .colorScheme.surfaceContainerHigh,
+                                              .colorScheme.inputBarBackground,
                                       borderRadius: const BorderRadius.all(
                                         Radius.circular(24),
                                       ),

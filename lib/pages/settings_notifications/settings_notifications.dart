@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -88,7 +89,7 @@ class SettingsNotificationsController extends State<SettingsNotifications> {
       Logs().w('Unable to toggle push rule', e, s);
       if (!mounted) return;
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toLocalizedString(context))));
+          .showSnackBar(SnackBar(content: Text(e.toLocalizedString(context), style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor))));
     } finally {
       if (mounted) {
         setState(() {
@@ -179,7 +180,7 @@ class SettingsNotificationsController extends State<SettingsNotifications> {
           Logs().w('Unable to delete push rule', e, s);
           if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(e.toLocalizedString(context))),
+            SnackBar(content: Text(e.toLocalizedString(context), style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor))),
           );
         } finally {
           if (mounted) {

@@ -51,7 +51,7 @@ class SeenByRow extends StatelessWidget {
                 width: 16,
                 height: 16,
                 child: Material(
-                  color: theme.colorScheme.surface,
+                  color: theme.colorScheme.seenByBackground,
                   borderRadius: BorderRadius.circular(32),
                   child: Center(
                     child: Text(

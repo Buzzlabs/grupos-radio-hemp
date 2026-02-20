@@ -1,12 +1,10 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_linkify/flutter_linkify.dart';
 
 import 'package:fluffychat/l10n/l10n.dart';
-import 'package:fluffychat/utils/url_launcher.dart';
 import 'package:fluffychat/widgets/adaptive_dialogs/adaptive_dialog_action.dart';
 import 'package:fluffychat/widgets/adaptive_dialogs/dialog_text_field.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 Future<String?> showTextInputDialog({
   required BuildContext context,
@@ -44,6 +42,7 @@ Future<String?> showTextInputDialog({
             constraints: const BoxConstraints(maxWidth: 256),
             child: Text(
               title.toUpperCase(),
+              style: TextStyle(color: theme.colorScheme.textInputDialogTitleTextColor),
             ),
           ),
           content: ConstrainedBox(

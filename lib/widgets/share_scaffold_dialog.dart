@@ -77,8 +77,8 @@ class _ShareScaffoldDialogState extends State<ShareScaffoldDialog> {
     final filter = _filterController.text.trim().toLowerCase();
     return Scaffold(
       appBar: AppBar(
-        leading: Center(child: CloseButton(onPressed: context.pop)),
-        title: Text(L10n.of(context).share),
+        leading: Center(child: CloseButton(onPressed: context.pop, color: theme.colorScheme.tertiary,)),
+        title: Text(L10n.of(context).share, style: TextStyle(color: theme.colorScheme.tertiary),),
       ),
       body: CustomScrollView(
         slivers: [
@@ -94,7 +94,7 @@ class _ShareScaffoldDialogState extends State<ShareScaffoldDialog> {
               textInputAction: TextInputAction.search,
               decoration: InputDecoration(
                 filled: true,
-                fillColor: theme.colorScheme.secondaryContainer,
+                fillColor: theme.colorScheme.tertiaryContainer,
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.circular(99),
@@ -102,7 +102,7 @@ class _ShareScaffoldDialogState extends State<ShareScaffoldDialog> {
                 contentPadding: EdgeInsets.zero,
                 hintText: L10n.of(context).search,
                 hintStyle: TextStyle(
-                  color: theme.colorScheme.onPrimaryContainer,
+                  color: theme.colorScheme.onSecondaryContainer,
                   fontWeight: FontWeight.normal,
                 ),
                 floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -110,7 +110,7 @@ class _ShareScaffoldDialogState extends State<ShareScaffoldDialog> {
                   onPressed: () {},
                   icon: Icon(
                     Icons.search_outlined,
-                    color: theme.colorScheme.onPrimaryContainer,
+                    color: theme.colorScheme.onSecondaryContainer,
                   ),
                 ),
               ),
@@ -146,7 +146,7 @@ class _ShareScaffoldDialogState extends State<ShareScaffoldDialog> {
                       name: displayname,
                       size: Avatar.defaultSize * 0.75,
                     ),
-                    title: Text(displayname),
+                    title: Text(displayname, style: TextStyle(color: theme.colorScheme.tertiary),),
                     value: selectedRoomId == room.id,
                     onChanged: (_) => _toggleRoom(room.id),
                   ),
@@ -168,7 +168,7 @@ class _ShareScaffoldDialogState extends State<ShareScaffoldDialog> {
                   padding: const EdgeInsets.all(16.0),
                   child: ElevatedButton(
                     onPressed: _forwardAction,
-                    child: Text(L10n.of(context).forward),
+                    child: Text(L10n.of(context).forward, style: TextStyle(color: theme.colorScheme.tertiary),),
                   ),
                 ),
               ),

@@ -135,7 +135,7 @@ class BootstrapDialogState extends State<BootstrapDialog> {
                   readOnly: true,
                   style: TextStyle(
                       fontFamily: 'RobotoMono',
-                      color: theme.colorScheme.onSurface),
+                      color: theme.colorScheme.onSurface,),
                   controller: TextEditingController(text: key),
                   decoration: const InputDecoration(
                     contentPadding: EdgeInsets.all(16),

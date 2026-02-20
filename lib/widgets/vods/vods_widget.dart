@@ -1,9 +1,11 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluffychat/widgets/vods/live_card.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:fluffychat/pages/lives_data.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class VodsWidget extends StatefulWidget {
   final String streamsWidgetTag;
@@ -11,7 +13,7 @@ class VodsWidget extends StatefulWidget {
   final VoidCallback? onBackPressed;
   final String filter;
   final bool filterOnServer;
-
+  final String? idCardOnShow;
   final bool isAdmin;
   final int numColumns;
   final int initialVisibleCount;
@@ -21,6 +23,7 @@ class VodsWidget extends StatefulWidget {
 
   const VodsWidget({
     this.filterOnServer = false,
+    this.idCardOnShow,
     this.filter = "",
     this.streamsWidgetTag = "",
     this.numColumns = 3,
@@ -39,6 +42,7 @@ class VodsWidget extends StatefulWidget {
 }
 
 class _VodsWidgetState extends State<VodsWidget> {
+  List<LiveShow> allLives = [];
   List<LiveShow> filteredLives = [];
   late int visibleCount;
   bool isLoading = false;
@@ -46,14 +50,14 @@ class _VodsWidgetState extends State<VodsWidget> {
   int loadedCount = 0;
   int currentPage = 1;
   int lastPage = 1;
-  int limit = 5; 
+  int limit = 5;
 
   @override
   void initState() {
     super.initState();
     visibleCount = widget.initialVisibleCount;
     limit = widget.initialVisibleCount;
-    _fetchLives(); 
+    _fetchLives();
   }
 
   Future<void> _fetchLives({bool append = false}) async {
@@ -209,14 +213,17 @@ class _VodsWidgetState extends State<VodsWidget> {
   // }
 
   bool _applyFilter() {
-  filteredLives = allLives
-      .where((live) => live.title.toLowerCase().contains(widget.filter.toLowerCase()))
-      .toList();
-  return filteredLives.length >= visibleCount;
-}
-
+    filteredLives = allLives
+        .where((live) =>
+            live.title.toLowerCase().contains(widget.filter.toLowerCase()),)
+        .toList();
+    return filteredLives.length >= visibleCount;
+  }
 
   void _showMore() {
+    if (widget.onShowMorePressed != null && widget.initialVisibleCount == visibleCount) {
+      widget.onShowMorePressed!.call();
+    }
     final remainingVisible = loadedCount - visibleCount;
 
     if (remainingVisible >= widget.loadMoreCount) {
@@ -252,7 +259,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                   Text(
                     widget.streamsWidgetTag,
                     style: TextStyle(
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.vodsCategoryTagTextColor,
                       fontSize: 20,
                       fontWeight: FontWeight.w100,
                     ),
@@ -262,21 +269,21 @@ class _VodsWidgetState extends State<VodsWidget> {
               if (visibleCount > widget.initialVisibleCount)
                 Row(
                   children: [
-                    const SizedBox(width: 24),
-                    TextButton(
-                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    const SizedBox(width: 10),
+                    IconButton(   
+                    icon: const Icon(Icons.arrow_back),
+                    color: theme.colorScheme.vodsBackButtonColor,
                       onPressed: () {
                         setState(() {
-                          currentPage = 1; 
+                          currentPage = 1;
                           visibleCount = widget.initialVisibleCount;
-                          allLives.clear(); 
+                          allLives.clear();
                         });
 
-                        _fetchLives(); 
+                        _fetchLives();
                         widget.onBackPressed?.call();
                       },
-                      child: const Text('< Voltar',
-                          style: TextStyle(fontSize: 14)),
+                      
                     ),
                   ],
                 ),
@@ -299,7 +306,7 @@ class _VodsWidgetState extends State<VodsWidget> {
 
               const minCardWidth = 250.0;
 
-              int columns = (screenWidth / (minCardWidth + spacing)).floor();
+              var columns = (screenWidth / (minCardWidth + spacing)).floor();
               if (columns < 1) columns = 1;
 
               final totalSpacing =
@@ -310,21 +317,20 @@ class _VodsWidgetState extends State<VodsWidget> {
 
               if ((screenWidth / (minCardWidth + spacing)) >= 1.5 &&
                   (screenWidth / (minCardWidth + spacing)) < 2) {
-                cardAspectRatio = 4 / 3.4; 
+                cardAspectRatio = 4 / 3.4;
               } else if ((screenWidth / (minCardWidth + spacing)) < 1.5) {
-                cardAspectRatio = 4 / 3.6; 
-              }
-              else if ((screenWidth / (minCardWidth + spacing)) >= 2.8 &&
+                cardAspectRatio = 4 / 3.6;
+              } else if ((screenWidth / (minCardWidth + spacing)) >= 2.8 &&
                   (screenWidth / (minCardWidth + spacing)) <= 3) {
                 cardAspectRatio = 4 / 3.5;
               } else if ((screenWidth / (minCardWidth + spacing)) >= 2.5 &&
                   (screenWidth / (minCardWidth + spacing)) <= 2.8) {
-                cardAspectRatio = 4 / 3.78; 
+                cardAspectRatio = 4 / 3.78;
               } else if ((screenWidth / (minCardWidth + spacing)) >= 2 &&
                   (screenWidth / (minCardWidth + spacing)) < 2.5) {
-                cardAspectRatio = 4 / 3.95; 
+                cardAspectRatio = 4 / 3.95;
               } else {
-                cardAspectRatio = 1; 
+                cardAspectRatio = 1;
               }
               final itemHeight = itemWidth / cardAspectRatio;
               final wrapWidth = columns * itemWidth + (columns - 1) * spacing;
@@ -360,7 +366,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                     height: 1,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     color:
-                        theme.colorScheme.onSecondaryContainer.withOpacity(0.2),
+                        theme.colorScheme.vodsShowMoreColor.withOpacity(0.6),
                   ),
                 ),
                 TextButton(
@@ -375,7 +381,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                     'Mostrar mais >',
                     style: TextStyle(
                       fontSize: 14,
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.vodsShowMoreColor,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -385,7 +391,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                     height: 1,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     color:
-                        theme.colorScheme.onSecondaryContainer.withOpacity(0.2),
+                        theme.colorScheme.vodsShowMoreColor.withOpacity(0.6),
                   ),
                 ),
               ],

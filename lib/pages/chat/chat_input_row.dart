@@ -38,7 +38,7 @@ class ChatInputRow extends StatelessWidget {
     }
 
     final selectedTextButtonStyle = TextButton.styleFrom(
-      foregroundColor: theme.colorScheme.onTertiaryContainer,
+      foregroundColor: theme.colorScheme.textSelectionColor,
     );
 
     return AnimatedPadding(
@@ -57,7 +57,7 @@ class ChatInputRow extends StatelessWidget {
                     height: height,
                     child: TextButton(
                       style: TextButton.styleFrom(
-                        foregroundColor: theme.colorScheme.secondary,
+                        foregroundColor: theme.colorScheme.error,
                       ),
                       onPressed: controller.deleteErrorEventsAction,
                       child: Row(
@@ -76,8 +76,8 @@ class ChatInputRow extends StatelessWidget {
                       onPressed: controller.forwardEventsAction,
                       child: Row(
                         children: <Widget>[
-                          const Icon(Icons.keyboard_arrow_left_outlined),
-                          Text(L10n.of(context).forward),
+                          Icon(Icons.keyboard_arrow_left_outlined, color: theme.colorScheme.answerAndShareIconColor),
+                          Text(L10n.of(context).forward, style: TextStyle(color: theme.colorScheme.answerAndShareButtonTextColor),),
                         ],
                       ),
                     ),
@@ -94,8 +94,8 @@ class ChatInputRow extends StatelessWidget {
                               onPressed: controller.replyAction,
                               child: Row(
                                 children: <Widget>[
-                                  Text(L10n.of(context).reply),
-                                  const Icon(Icons.keyboard_arrow_right),
+                                  Text(L10n.of(context).reply,style: TextStyle(color: theme.colorScheme.answerAndShareButtonTextColor)),
+                                  Icon(Icons.keyboard_arrow_right, color: theme.colorScheme.answerAndShareIconColor),
                                 ],
                               ),
                             ),
@@ -107,9 +107,9 @@ class ChatInputRow extends StatelessWidget {
                               onPressed: controller.sendAgainAction,
                               child: Row(
                                 children: <Widget>[
-                                  Text(L10n.of(context).tryToSendAgain),
+                                  Text(L10n.of(context).tryToSendAgain, style: TextStyle(color: theme.colorScheme.sendPaddingColor)),
                                   const SizedBox(width: 4),
-                                  const Icon(Icons.send_outlined, size: 16),
+                                  Icon(Icons.send_outlined, size: 16, color: theme.colorScheme.sendPaddingColor),
                                 ],
                               ),
                             ),
@@ -127,9 +127,11 @@ class ChatInputRow extends StatelessWidget {
                   decoration: const BoxDecoration(),
                   clipBehavior: Clip.hardEdge,
                   child: PopupMenuButton<String>(
+                    color: theme.colorScheme.addCirclePopupBackground,
                     useRootNavigator: true,
-                    icon: const Icon(Icons.add_circle_outline),
-                    iconColor: theme.colorScheme.onSecondary,
+                    icon: Icon(Icons.add_circle_outline,
+                    color: theme.colorScheme.addCircleAndEmojiIconColor,),
+                    
                     onSelected: controller.onAddPopupMenuButtonSelected,
                     itemBuilder: (BuildContext context) =>
                         <PopupMenuEntry<String>>[
@@ -138,11 +140,12 @@ class ChatInputRow extends StatelessWidget {
                           value: 'location',
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: theme.colorScheme.tertiary,
-                              foregroundColor: theme.colorScheme.onSecondary,
+                              backgroundColor: theme.colorScheme.addCirclePopupIconPaddingColor,
+                              foregroundColor: theme.colorScheme.addCirclePopupIconColor,
                               child: const Icon(Icons.gps_fixed_outlined),
                             ),
-                            title: Text(L10n.of(context).shareLocation),
+                            title: Text(L10n.of(context).shareLocation,
+                            style: TextStyle(color: theme.colorScheme.addCirclePopupTextColor,), ),
                             contentPadding: const EdgeInsets.all(0),
                           ),
                         ),
@@ -150,11 +153,12 @@ class ChatInputRow extends StatelessWidget {
                         value: 'image',
                         child: ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: theme.colorScheme.tertiary,
-                            foregroundColor: theme.colorScheme.onSecondary,
+                            backgroundColor: theme.colorScheme.addCirclePopupIconPaddingColor,
+                            foregroundColor: theme.colorScheme.addCirclePopupIconColor,
                             child: const Icon(Icons.photo_outlined),
                           ),
-                          title: Text(L10n.of(context).sendImage),
+                          title: Text(L10n.of(context).sendImage,
+                          style: TextStyle(color: theme.colorScheme.addCirclePopupTextColor,),),
                           contentPadding: const EdgeInsets.all(0),
                         ),
                       ),
@@ -162,11 +166,12 @@ class ChatInputRow extends StatelessWidget {
                         value: 'video',
                         child: ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: theme.colorScheme.tertiary,
-                            foregroundColor: theme.colorScheme.onSecondary,
+                            backgroundColor: theme.colorScheme.addCirclePopupIconPaddingColor,
+                            foregroundColor: theme.colorScheme.addCirclePopupIconColor,
                             child: const Icon(Icons.video_camera_back_outlined),
                           ),
-                          title: Text(L10n.of(context).sendVideo),
+                          title: Text(L10n.of(context).sendVideo,
+                          style: TextStyle(color: theme.colorScheme.addCirclePopupTextColor,),),
                           contentPadding: const EdgeInsets.all(0),
                         ),
                       ),
@@ -174,11 +179,12 @@ class ChatInputRow extends StatelessWidget {
                         value: 'file',
                         child: ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: theme.colorScheme.tertiary,
-                            foregroundColor: theme.colorScheme.onSecondary,
+                            backgroundColor: theme.colorScheme.addCirclePopupIconPaddingColor,
+                            foregroundColor: theme.colorScheme.addCirclePopupIconColor,
                             child: const Icon(Icons.attachment_outlined),
                           ),
-                          title: Text(L10n.of(context).sendFile),
+                          title: Text(L10n.of(context).sendFile,
+                          style: TextStyle(color: theme.colorScheme.addCirclePopupTextColor,),),
                           contentPadding: const EdgeInsets.all(0),
                         ),
                       ),
@@ -205,11 +211,11 @@ class ChatInputRow extends StatelessWidget {
                           value: 'camera-video',
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: theme.colorScheme.tertiary,
-                              foregroundColor: theme.colorScheme.onSecondary,
+                              backgroundColor: theme.colorScheme.addCirclePopupIconPaddingColor,
+                              foregroundColor: theme.colorScheme.addCirclePopupIconColor,
                               child: const Icon(Icons.videocam_outlined),
                             ),
-                            title: Text(L10n.of(context).recordAVideo),
+                            title: Text(L10n.of(context).recordAVideo, style: TextStyle(color: theme.colorScheme.addCirclePopupTextColor,)),
                             contentPadding: const EdgeInsets.all(0),
                           ),
                         ),
@@ -217,11 +223,11 @@ class ChatInputRow extends StatelessWidget {
                           value: 'camera',
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: theme.colorScheme.tertiary,
-                              foregroundColor: theme.colorScheme.onSecondary,
+                              backgroundColor: theme.colorScheme.addCirclePopupIconPaddingColor,
+                              foregroundColor: theme.colorScheme.addCirclePopupIconColor,
                               child: const Icon(Icons.camera_alt_outlined),
                             ),
-                            title: Text(L10n.of(context).takeAPhoto),
+                            title: Text(L10n.of(context).takeAPhoto, style: TextStyle(color: theme.colorScheme.addCirclePopupTextColor,)),
                             contentPadding: const EdgeInsets.all(0),
                           ),
                         ),
@@ -234,7 +240,7 @@ class ChatInputRow extends StatelessWidget {
                   alignment: Alignment.center,
                   child: IconButton(
                     tooltip: L10n.of(context).emojis,
-                    color: theme.colorScheme.onSecondary,
+                    color: theme.colorScheme.addCircleAndEmojiIconColor,
                     icon: PageTransitionSwitcher(
                       transitionBuilder: (
                         Widget child,
@@ -286,6 +292,7 @@ class ChatInputRow extends StatelessWidget {
                       focusNode: controller.inputFocus,
                       controller: controller.sendController,
                       decoration: InputDecoration(
+                        labelStyle: TextStyle(color: theme.colorScheme.messageInputTextColor),
                         contentPadding: const EdgeInsets.only(
                           left: 6.0,
                           right: 6.0,
@@ -294,6 +301,10 @@ class ChatInputRow extends StatelessWidget {
                         ),
                         counter: const SizedBox.shrink(),
                         hintText: L10n.of(context).writeAMessage,
+                        hintStyle: TextStyle(
+                            color: theme.colorScheme.messageInputTextColor, 
+                            fontSize: 14,
+                          ),
                         hintMaxLines: 1,
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
@@ -331,9 +342,9 @@ class ChatInputRow extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(height),
                           ),
-                          backgroundColor: theme.bubbleColor,
-                          foregroundColor: theme.onBubbleColor,
-                          child: const Icon(Icons.send_outlined),
+                          backgroundColor: theme.colorScheme.sendPaddingColor,
+                          foregroundColor: theme.colorScheme.sendPaddingColor,
+                          child: Icon(Icons.send_outlined, color: theme.colorScheme.sendIconColor),
                         ),
                 ),
               ],

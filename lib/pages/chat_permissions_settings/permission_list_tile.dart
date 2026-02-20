@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -74,14 +75,14 @@ class PermissionsListTile extends StatelessWidget {
     final theme = Theme.of(context);
 
     final color = permission >= 100
-        ? theme.colorScheme.secondary
+        ? theme.colorScheme.permissionsPowerLevelabove100MainColor
         : permission >= 50
-            ? const Color.fromARGB(255, 169, 198, 250)
-            : const Color.fromARGB(255, 171, 253, 213);
+            ? theme.colorScheme.permissionsPowerLevelabove50MainColor
+            : theme.colorScheme.permissionsPowerLevelabove0MainColor;
     return ListTile(
       title: Text(
         getLocalizedPowerLevelString(context),
-        style: TextStyle(color: theme.colorScheme.onSurface),
+        style: TextStyle(color: theme.colorScheme.permissionsTextColor),
       ),
       trailing: Material(
         color: color.withAlpha(32),
@@ -97,7 +98,7 @@ class PermissionsListTile extends StatelessWidget {
               value: permission < 50 ? permission : 0,
               child: Text(
                 L10n.of(context).userLevel(permission < 50 ? permission : 0),
-                style: TextStyle(color: theme.colorScheme.onSurface),
+                style: TextStyle(color: theme.colorScheme.permissionsTextColor),
               ),
             ),
             DropdownMenuItem(
@@ -106,7 +107,7 @@ class PermissionsListTile extends StatelessWidget {
                 L10n.of(context).moderatorLevel(
                   permission < 100 && permission >= 50 ? permission : 50,
                 ),
-                style: TextStyle(color: theme.colorScheme.onSurface),
+                style: TextStyle(color: theme.colorScheme.permissionsTextColor),
               ),
             ),
             DropdownMenuItem(
@@ -114,14 +115,14 @@ class PermissionsListTile extends StatelessWidget {
               child: Text(
                 L10n.of(context)
                     .adminLevel(permission >= 100 ? permission : 100),
-                style: TextStyle(color: theme.colorScheme.onSurface),
+                style: TextStyle(color: theme.colorScheme.permissionsTextColor),
               ),
             ),
             DropdownMenuItem(
               value: null,
               child: Text(
                 L10n.of(context).custom,
-                style: TextStyle(color: theme.colorScheme.onSurface),
+                style: TextStyle(color: theme.colorScheme.permissionsTextColor),
               ),
             ),
           ],

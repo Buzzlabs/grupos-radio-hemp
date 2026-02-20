@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluffychat/pages/lives_data.dart';
@@ -5,14 +6,12 @@ import 'package:fluffychat/widgets/vods/vod_player.dart';
 import 'package:fluffychat/widgets/vods/vods_widget.dart';
 
 class ScreenVod extends StatefulWidget {
-  final LiveShow? live;
   final String? liveId;
 
-  const ScreenVod({
-    this.live,
+  ScreenVod({
+    Key? key,
     this.liveId,
-    super.key,
-  });
+  }) : super(key: ValueKey(liveId));
 
   @override
   State<ScreenVod> createState() => _ScreenVodState();
@@ -24,9 +23,18 @@ class _ScreenVodState extends State<ScreenVod> {
   bool _error = false;
 
   @override
+  void didUpdateWidget(covariant ScreenVod oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.liveId != widget.liveId) {
+      _live = null;
+      _fetchLive(widget.liveId!);
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
-    _live = widget.live;
 
     if (_live == null && widget.liveId != null) {
       _fetchLive(widget.liveId!);
@@ -58,7 +66,8 @@ class _ScreenVodState extends State<ScreenVod> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
+    final theme = Theme.of(context);
     if (_loading) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
@@ -88,7 +97,7 @@ class _ScreenVodState extends State<ScreenVod> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: IconButton(
-                          icon: const Icon(Icons.arrow_back),
+                          icon: Icon(Icons.arrow_back, color: theme.colorScheme.vodCardBackgroundColor,),
                           onPressed: () {
                             final router = GoRouter.of(context);
                             if (router.canPop()) {
@@ -118,8 +127,9 @@ class _ScreenVodState extends State<ScreenVod> {
                       const SizedBox(height: 16),
 
                       // LISTA DE OUTROS VODs
-                      const VodsWidget(
+                      VodsWidget(
                         numColumns: 2,
+                        idCardOnShow: _live!.id,
                         initialVisibleCount: 6,
                         loadMoreCount: 2,
                         showHeader: false,
@@ -141,23 +151,24 @@ class _ScreenVodState extends State<ScreenVod> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Positioned(
-                                  top: 8,
-                                  left: 0,
-                                  child: IconButton(
-                                    icon: const Icon(Icons.arrow_back),
-                                    onPressed: () {
-                                      final router = GoRouter.of(context);
-                                      if (router.canPop()) {
-                                        router.pop();
-                                      } else {
-                                        router.go('/rooms');
-                                      }
-                                    },
-                                  ),
-                                ),
+                            top: 8,
+                            left: 0,
+                            child: IconButton(
+                              icon: Icon(Icons.arrow_back, color: theme.colorScheme.vodScreenBackButtonColor,),
+                              onPressed: () {
+                                final router = GoRouter.of(context);
+                                if (router.canPop()) {
+                                  router.pop();
+                                } else {
+                                  router.go('/rooms');
+                                }
+                              },
+                            ),
+                          ),
+
                           /// PLAYER (lado esquerdo)
                           Expanded(
-                            flex: 3,
+                            flex: 5,
                             child: Stack(
                               children: [
                                 VodPlayer(
@@ -169,7 +180,6 @@ class _ScreenVodState extends State<ScreenVod> {
                                   category: _live!.category,
                                   id: _live!.id,
                                 ),
-                                
                               ],
                             ),
                           ),
@@ -177,13 +187,14 @@ class _ScreenVodState extends State<ScreenVod> {
                           const SizedBox(width: 32),
 
                           /// LISTA (lado direito)
-                          const Expanded(
-                            flex: 1,
+                          Expanded(
+                            flex: 2,
                             child: Column(
-                              children: const [
-                                SizedBox(height: 10),
+                              children: [
+                                const SizedBox(height: 10),
                                 VodsWidget(
                                   numColumns: 1,
+                                  idCardOnShow: _live!.id,
                                   initialVisibleCount: 8,
                                   loadMoreCount: 4,
                                   showHeader: false,

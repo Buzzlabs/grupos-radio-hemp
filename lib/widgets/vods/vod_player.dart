@@ -77,7 +77,7 @@ class VodPlayerController extends State<VodPlayer> {
   }
 
   void setPosition(Offset newPosition, double maxWidth, double maxHeight,
-      bool isMobileMode) {
+      bool isMobileMode,) {
     if (!mounted) return;
 
     final dx = isMobileMode ? position.dx : newPosition.dx.clamp(16, maxWidth);

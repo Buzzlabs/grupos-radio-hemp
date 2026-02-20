@@ -72,6 +72,7 @@ class ChatAccessSettingsController extends State<ChatAccessSettings> {
           SnackBar(
             content: Text(
               e.toLocalizedString(context),
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
         );
@@ -100,6 +101,7 @@ class ChatAccessSettingsController extends State<ChatAccessSettings> {
           SnackBar(
             content: Text(
               e.toLocalizedString(context),
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
         );
@@ -128,6 +130,7 @@ class ChatAccessSettingsController extends State<ChatAccessSettings> {
           SnackBar(
             content: Text(
               e.toLocalizedString(context),
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),
         );
@@ -262,6 +265,8 @@ class ChatAccessSettingsController extends State<ChatAccessSettings> {
   }
 
   void setChatVisibilityOnDirectory(bool? visibility) async {
+    final theme = Theme.of(context);
+
     if (visibility == null) return;
     setState(() {
       visibilityLoading = true;
@@ -280,6 +285,7 @@ class ChatAccessSettingsController extends State<ChatAccessSettings> {
           SnackBar(
             content: Text(
               e.toLocalizedString(context),
+              style: TextStyle(color: theme.colorScheme.error),
             ),
           ),
         );

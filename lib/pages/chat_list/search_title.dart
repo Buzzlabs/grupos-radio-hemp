@@ -52,7 +52,7 @@ class SearchTitle extends StatelessWidget {
                     title,
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                      color: theme.colorScheme.onSurface,
+                      color: theme.colorScheme.tertiary,
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),

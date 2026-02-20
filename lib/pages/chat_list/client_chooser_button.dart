@@ -5,14 +5,12 @@ import 'package:matrix/matrix.dart';
 
 import 'package:fluffychat/config/themes.dart';
 import 'package:fluffychat/l10n/l10n.dart';
-import 'package:fluffychat/widgets/adaptive_dialogs/show_ok_cancel_alert_dialog.dart';
 import 'package:fluffychat/widgets/avatar.dart';
 import 'package:fluffychat/widgets/matrix.dart';
 import '../../utils/fluffy_share.dart';
 import 'chat_list.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../utils/platform_infos.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class ClientChooserButton extends StatelessWidget {
   final ChatListController controller;
@@ -60,95 +58,127 @@ class ClientChooserButton extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Icon(
-                Icons.edit_outlined,
-                color: theme.colorScheme.primaryFixed,
-                size: 20,
-              ),
+              child: theme.colorScheme.iconEdit,
             ),
             const SizedBox(width: 18),
-            Text(L10n.of(context).setStatus),
+            Text(
+              L10n.of(context).setStatus,
+              style: TextStyle(color: theme.colorScheme.clientChooserButtonTextColor),
+            ),
           ],
         ),
       ),
       PopupMenuItem(
-        value: SettingsAction.store,
+        value: SettingsAction.home,
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: SvgPicture.asset(
-                'assets/icons/home.svg',
-                width: 30,
-              ),
+              //padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: theme.colorScheme.iconHome,
+              // SvgPicture.asset(
+              //   'assets/icons/home.svg',
+              //   width: 30,
+              // ),
             ),
             const SizedBox(width: 18),
-            Text(L10n.of(context).menuHome),
+            Text(
+              L10n.of(context).menuHome,
+              style: TextStyle(color: theme.colorScheme.clientChooserButtonTextColor),
+            ),
           ],
         ),
       ),
-      PopupMenuItem(
-        value: SettingsAction.store,
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: SvgPicture.asset(
-                'assets/icons/store.svg',
-                width: 30,
-              ),
-            ),
-            const SizedBox(width: 18),
-            Text(L10n.of(context).menuStore),
-          ],
-        ),
-      ),
+      // PopupMenuItem(
+      //   value: SettingsAction.store,
+      //   child: Row(
+      //     children: [
+      //       Padding(
+      //         // padding: const EdgeInsets.only(bottom: 8),
+      //         padding: const EdgeInsets.symmetric(horizontal: 5),
+      //         child: Icon(
+      //           Icons.shopping_cart,
+      //           color: theme.colorScheme.tertiary,
+      //           size: 22,
+      //         ),
+      //         // SvgPicture.asset(
+      //         //   'assets/icons/store.svg',
+      //         //   width: 30,
+      //         // ),
+      //       ),
+      //       const SizedBox(width: 18),
+      //       Text(
+      //         L10n.of(context).menuStore,
+      //         style: TextStyle(color: theme.colorScheme.tertiary),
+      //       ),
+      //     ],
+      //   ),
+      // ),
       PopupMenuItem(
         value: SettingsAction.course,
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: SvgPicture.asset(
-                'assets/icons/course.svg',
-                width: 30,
-              ),
+              // padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: theme.colorScheme.iconCourse,
+              // SvgPicture.asset(
+              //   'assets/icons/course.svg',
+              //   width: 30,
+              // ),
             ),
             const SizedBox(width: 18),
-            Text(L10n.of(context).menuCourse),
+            Text(
+              L10n.of(context).menuCourse,
+              style: TextStyle(color: theme.colorScheme.clientChooserButtonTextColor),
+            ),
           ],
         ),
       ),
 
-      PopupMenuItem(
-        value: SettingsAction.podcasts,
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: SvgPicture.asset(
-                'assets/icons/podcast.svg',
-                width: 30,
-              ),
-            ),
-            const SizedBox(width: 18),
-            Text(L10n.of(context).menuPodcasts),
-          ],
-        ),
-      ),
+      // PopupMenuItem(
+      //   value: SettingsAction.podcasts,
+      //   child: Row(
+      //     children: [
+      //       Padding(
+      //         // padding: const EdgeInsets.symmetric(vertical: 8),
+      //         padding: const EdgeInsets.symmetric(horizontal: 5),
+      //         child: Icon(
+      //           Icons.mic,
+      //           color: theme.colorScheme.tertiary,
+      //           size: 22,
+      //         ),
+      //         // SvgPicture.asset(
+      //         //   'assets/icons/podcast.svg',
+      //         //   width: 30,
+      //         // ),
+      //       ),
+      //       const SizedBox(width: 18),
+      //       Text(
+      //         L10n.of(context).menuPodcasts,
+      //         style: TextStyle(color: theme.colorScheme.tertiary),
+      //       ),
+      //     ],
+      //   ),
+      // ),
       PopupMenuItem(
         value: SettingsAction.settings,
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 3, top: 8, bottom: 8),
-              child: SvgPicture.asset(
-                'assets/icons/configs.svg',
-                width: 27,
-              ),
+              // padding: const EdgeInsets.only(left: 3, top: 8, bottom: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: theme.colorScheme.iconSetting,
+              // SvgPicture.asset(
+              //   'assets/icons/configs.svg',
+              //   width: 27,
+              // ),
             ),
             const SizedBox(width: 18),
-            Text(L10n.of(context).settings),
+            Text(
+              L10n.of(context).settings,
+              style: TextStyle(color: theme.colorScheme.clientChooserButtonTextColor),
+            ),
           ],
         ),
       ),
@@ -158,15 +188,15 @@ class ClientChooserButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-              child: Icon(
-                Icons.info_outlined,
-                color: theme.colorScheme.primaryFixed,
-                size: 22,
-              ),
+              // padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: theme.colorScheme.iconInfo,
             ),
             const SizedBox(width: 12),
-            Text(L10n.of(context).about),
+            Text(
+              L10n.of(context).about,
+              style: TextStyle(color: theme.colorScheme.clientChooserButtonTextColor),
+            ),
           ],
         ),
       ),
@@ -176,15 +206,15 @@ class ClientChooserButton extends StatelessWidget {
         child: Row(
           children: [
             Padding(
+              // padding: const EdgeInsets.symmetric(horizontal: 5),
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Icon(
-                Icons.adaptive.share_outlined,
-                color: theme.colorScheme.primaryFixed,
-                size: 20,
-              ),
+              child: theme.colorScheme.iconShare
             ),
             const SizedBox(width: 18),
-            Text('${L10n.of(context).inviteContact} 🔥'),
+            Text(
+              '${L10n.of(context).inviteContact} 🔥',
+              style: TextStyle(color: theme.colorScheme.clientChooserShareTextColor),
+            ),
           ],
         ),
       ),
@@ -334,10 +364,17 @@ class ClientChooserButton extends StatelessWidget {
           );
           break;
 
+         case SettingsAction.home:
+          await launchUrl(
+            Uri.parse('https://nexojornal.com.br/'),
+            mode: LaunchMode.externalApplication,
+          );
+          break;
+
         case SettingsAction.course:
           await launchUrl(
             Uri.parse(
-              'https://www.radiohemp.com/produto/como-plantar-maconha-medicinal/',
+              'https://pp.nexojornal.com.br/',
             ),
             mode: LaunchMode.externalApplication,
           );
@@ -362,6 +399,7 @@ enum SettingsAction {
   // addAccount,
   // newGroup,
   setStatus,
+  home,
   invite,
   settings,
   about,

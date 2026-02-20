@@ -75,7 +75,6 @@ Future<LiveShow?> fetchLiveById(String id) async {
   );
 }
 
-
 // Future<LiveShow?> fetchLiveById(String id) async {
 //   try {
 //     final url = Uri.parse('http://localhost:3333/dashboard/api/streams');

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:file_picker/file_picker.dart';
@@ -46,6 +47,7 @@ extension MatrixFileExtension on MatrixFile {
       SnackBar(
         content: Text(
           L10n.of(context).fileHasBeenSavedAt(downloadPath),
+          style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor)
         ),
       ),
     );

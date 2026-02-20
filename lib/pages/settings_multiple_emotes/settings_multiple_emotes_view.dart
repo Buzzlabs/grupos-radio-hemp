@@ -14,11 +14,12 @@ class MultipleEmotesSettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final room = Matrix.of(context).client.getRoomById(controller.roomId!)!;
     return Scaffold(
       appBar: AppBar(
-        leading: const Center(child: BackButton()),
-        title: Text(L10n.of(context).emotePacks),
+        leading: Center(child: BackButton(color: theme.colorScheme.tertiary,)),
+        title: Text(L10n.of(context).emotePacks, style: TextStyle(color: theme.colorScheme.tertiary),),
       ),
       body: StreamBuilder(
         stream: room.client.onRoomState.stream
@@ -47,7 +48,7 @@ class MultipleEmotesSettingsView extends StatelessWidget {
                   (keys[i].isNotEmpty ? keys[i] : 'Default Pack');
 
               return ListTile(
-                title: Text(packName),
+                title: Text(packName, style: TextStyle(color: theme.colorScheme.tertiary),),
                 onTap: () async {
                   context.go(
                     ['', 'rooms', room.id, 'details', 'emotes', keys[i]]

@@ -50,6 +50,7 @@ class MessageContent extends StatelessWidget {
         SnackBar(
           content: Text(
             event.calcLocalizedBodyFallback(MatrixLocals(l10n)),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         ),
       );
