@@ -328,13 +328,25 @@ extension ColorId on ColorScheme {
       ];
   Color get scaffoldBorderColor => primary;
 
-  // chatlist
-  // discover
+  // chatlist 
+  // discover 
   Color get chatlistDiscoverTextColor => tertiary;
-  Color get chatlistDiscoverTileGroupNameTextColor => primary;
-  Color get chatlistDiscoverTileDescriptionTextColor => tertiary;
-  Color get chatlistDiscoverButtonTextColor => tertiary;
-  Color get chatlistDiscoverButtonColor => primary.withValues(alpha: 0.6);
+  Color get chatlistDiscoverRoomTileGroupNameTextColor => tertiary;
+  Color get chatlistDiscoverRoomTilePriceDescriptionTextColor => tertiary;
+  Color get chatlistDiscoverRoomTileBackgroundColor => secondary.withValues(alpha: 0.4);
+  Color get chatlistDiscoverRoomTileDescriptionTextColor => onSecondaryContainer;
+  Color get chatlistDiscoverRoomButtonTextColor => tertiary;
+  Color get chatlistDiscoverRoomAccessButtonColor => secondary;
+  Color get chatlistDiscoverRoomButtonColor => primary.withValues(alpha: 0.6);
+
+  
+  Color get chatlistDiscoverBundleTileGroupNameTextColor => tertiary;
+  Color get chatlistDiscoverBundleTilePriceDescriptionTextColor => tertiary;
+  Color get chatlistDiscoverBundleTileBackgroundColor => Color.fromARGB(255, 109, 100, 209).withValues(alpha: 0.4);
+  Color get chatlistDiscoverBundleTileDescriptionTextColor => onSecondaryContainer;
+  Color get chatlistDiscoverBundleButtonTextColor => tertiary;
+  Color get chatlistDiscoverBundleAccessButtonColor => Color.fromARGB(255, 109, 100, 209);
+  Color get chatlistDiscoverBundleButtonColor => primary.withValues(alpha: 0.6);
 
   // new private chat
   Color get newPrivateTextColor => tertiary;
