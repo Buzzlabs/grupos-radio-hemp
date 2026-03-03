@@ -150,14 +150,40 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            bundle.name,
-            style: TextStyle(
-              color: theme.colorScheme.chatlistDiscoverBundleTileGroupNameTextColor,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+  children: [
+    Expanded(
+      child: Text(
+        bundle.name,
+        style: TextStyle(
+          color: theme.colorScheme
+              .chatlistDiscoverBundleTileGroupNameTextColor,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+    if (bundle.isDraft)
+      Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 8,
+          vertical: 4,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.orange.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Text(
+          'Rascunho',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: Colors.orange,
           ),
+        ),
+      ),
+  ],
+),
           const SizedBox(height: 8),
           Text(
             'R\$ ${(bundle.price / 100).toStringAsFixed(2)}',
@@ -199,7 +225,7 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                       await _showFakePayment(context, bundle.price);
                   if (!approved) return;
 
-                  for (final keyword in bundle.rooms) {
+                  for (final keyword in bundle.keywords) {
                     await inviteToRoom(
                       client: client,
                       keyword: keyword,

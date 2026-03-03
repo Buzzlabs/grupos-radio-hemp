@@ -113,13 +113,19 @@ class DiscoverBundle {
   final String name;
   final int price;
   final List<String> rooms;
+  final List<String> keywords;
+  final String status;
 
   DiscoverBundle({
     required this.id,
     required this.name,
     required this.price,
     required this.rooms,
+    required this.keywords,
+    required this.status,
   });
+
+  bool get isDraft => status == 'draft';
 
   factory DiscoverBundle.fromJson(Map<String, dynamic> json) {
     return DiscoverBundle(
@@ -127,6 +133,8 @@ class DiscoverBundle {
       name: json['bundle_name'],
       price: json['price'] ?? 0,
       rooms: List<String>.from(json['rooms'] ?? []),
+      keywords: List<String>.from(json['keywords'] ?? []),
+      status: json['status'] ?? 'published',
     );
   }
 }
