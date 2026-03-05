@@ -57,30 +57,44 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
         ),
       ),
       bottomNavigationBar: (!adminLoaded || !isAdmin)
-          ? null
-          : SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            theme.colorScheme.chatlistDiscoverRoomButtonColor,
-                        foregroundColor:
-                            theme.colorScheme.chatlistDiscoverRoomButtonTextColor,
-                      ),
-                      icon: const Icon(Icons.add),
-                      label: const Text('Novo Grupo'),
-                      onPressed: () {
-                        context.go('/rooms/newgroup');
-                      },
-                    ),
-                  ],
+    ? null
+    : SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      theme.colorScheme.chatlistDiscoverRoomButtonColor,
+                  foregroundColor:
+                      theme.colorScheme.chatlistDiscoverRoomButtonTextColor,
                 ),
+                icon: const Icon(Icons.inventory_2_outlined),
+                label: const Text('Novo Bundle'),
+                onPressed: () {
+                  context.go('/rooms/newbundle');
+                },
               ),
-            ),
+              const SizedBox(width: 12),
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      theme.colorScheme.chatlistDiscoverRoomButtonColor,
+                  foregroundColor:
+                      theme.colorScheme.chatlistDiscoverRoomButtonTextColor,
+                ),
+                icon: const Icon(Icons.add),
+                label: const Text('Novo Grupo'),
+                onPressed: () {
+                  context.go('/rooms/newgroup');
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
       body: FutureBuilder(
         future: Future.wait([roomsFuture, bundlesFuture]),
         builder: (context, snapshot) {
