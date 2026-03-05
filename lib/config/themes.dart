@@ -374,6 +374,17 @@ extension ColorId on ColorScheme {
   Color get newGroupTextFieldHintColor => onSecondaryContainer;
   Color get newGroupTextFieldTextColor => tertiary;
 
+  // new bundle
+  Color get newBundleTextColor => tertiary;
+  Color get newBundleSelectTextColor => primary;
+  Color get newBundleSelectNameTextColor => primary;
+  Color get newBundleSelectRoomidTextColor => tertiary;
+  Color get newBundleButtonTextColor => tertiary;
+  Color get newBundleTextFieldFillColor => tertiaryContainer;
+  Color get newBundleTextFieldHintTextColor => onSecondaryContainer;
+  Color get newBundleCheckBoxFillColor => surface;
+  Color get newBundleCheckBoxSideColor => primary;
+  Color get newBundleCheckBoxCheckColor => primary;
   // view
   Color get chatListBackground => surface;
 

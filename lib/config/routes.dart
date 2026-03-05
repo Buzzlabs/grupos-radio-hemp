@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:fluffychat/pages/chat_list/rooms_list/discover_rooms_view.dart';
 import 'package:fluffychat/pages/creation_guard/admin_redirect.dart';
 import 'package:fluffychat/pages/login/auto_login.dart';
+import 'package:fluffychat/pages/new_bundle/new_bundle.dart';
+import 'package:fluffychat/pages/new_bundle/new_bundle_view.dart';
 import 'package:fluffychat/pages/new_group/new_group.dart';
 import 'package:fluffychat/pages/new_private_chat/new_private_chat.dart';
 import 'package:flutter/material.dart';
@@ -206,7 +208,23 @@ abstract class AppRoutes {
               ),
               redirect: adminRedirect,
             ),
+            GoRoute(
+              path: 'newbundle',
+              pageBuilder: (context, state) => defaultPageBuilder(
+                context,
+                state,
+                Builder(
+                  builder: (context) {
+                    final client = Matrix.of(context).client;
 
+                    return CreateBundleView(
+                      CreateBundleController(client),
+                    );
+                  },
+                ),
+              ),
+              redirect: adminRedirect,
+            ),
             // GoRoute(
             //   path: 'newspace',
             //   pageBuilder: (context, state) => defaultPageBuilder(

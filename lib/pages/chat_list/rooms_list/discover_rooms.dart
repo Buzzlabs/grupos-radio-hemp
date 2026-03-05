@@ -141,7 +141,7 @@ class DiscoverBundle {
 
 Future<List<DiscoverBundle>> fetchBundles(Client client) async {
   try {
-    final uri = Uri.parse('${client.homeserver}/_synapse/bundles');
+    final uri = Uri.parse('${client.homeserver}/_synapse/bundles/list');
 
     final response = await http.get(
       uri,
