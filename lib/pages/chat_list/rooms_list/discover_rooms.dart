@@ -139,6 +139,29 @@ class DiscoverBundle {
   }
 }
 
+Future<void> publishBundle({
+  required Client client,
+  required String bundleId,
+}) async {
+  final uri =
+      Uri.parse('${client.homeserver}/_synapse/bundles/publish');
+
+  final response = await http.post(
+    uri,
+    headers: {
+      'Authorization': 'Bearer ${client.accessToken}',
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode({
+      'bundle_id': bundleId,
+    }),
+  );
+
+  if (response.statusCode != 200) {
+    throw Exception('Erro ao publicar bundle');
+  }
+}
+
 Future<List<DiscoverBundle>> fetchBundles(Client client) async {
   try {
     final uri = Uri.parse('${client.homeserver}/_synapse/bundles/list');
