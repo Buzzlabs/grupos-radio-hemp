@@ -139,6 +139,29 @@ class DiscoverBundle {
   }
 }
 
+Future<void> deleteBundle({
+  required Client client,
+  required String bundleId,
+}) async {
+  final uri =
+      Uri.parse('${client.homeserver}/_synapse/bundles/delete');
+
+  final response = await http.post(
+    uri,
+    headers: {
+      'Authorization': 'Bearer ${client.accessToken}',
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode({
+      'bundle_id': bundleId,
+    }),
+  );
+
+  if (response.statusCode != 200) {
+    throw Exception('Erro ao deletar bundle');
+  }
+}
+
 Future<void> publishBundle({
   required Client client,
   required String bundleId,

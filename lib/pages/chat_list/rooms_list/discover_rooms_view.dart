@@ -57,44 +57,44 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
         ),
       ),
       bottomNavigationBar: (!adminLoaded || !isAdmin)
-    ? null
-    : SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      theme.colorScheme.chatlistDiscoverRoomButtonColor,
-                  foregroundColor:
-                      theme.colorScheme.chatlistDiscoverRoomButtonTextColor,
+          ? null
+          : SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            theme.colorScheme.chatlistDiscoverRoomButtonColor,
+                        foregroundColor: theme
+                            .colorScheme.chatlistDiscoverRoomButtonTextColor,
+                      ),
+                      icon: const Icon(Icons.inventory_2_outlined),
+                      label: const Text('Novo Bundle'),
+                      onPressed: () {
+                        context.go('/rooms/newbundle');
+                      },
+                    ),
+                    const SizedBox(width: 12),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            theme.colorScheme.chatlistDiscoverRoomButtonColor,
+                        foregroundColor: theme
+                            .colorScheme.chatlistDiscoverRoomButtonTextColor,
+                      ),
+                      icon: const Icon(Icons.add),
+                      label: const Text('Novo Grupo'),
+                      onPressed: () {
+                        context.go('/rooms/newgroup');
+                      },
+                    ),
+                  ],
                 ),
-                icon: const Icon(Icons.inventory_2_outlined),
-                label: const Text('Novo Bundle'),
-                onPressed: () {
-                  context.go('/rooms/newbundle');
-                },
               ),
-              const SizedBox(width: 12),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      theme.colorScheme.chatlistDiscoverRoomButtonColor,
-                  foregroundColor:
-                      theme.colorScheme.chatlistDiscoverRoomButtonTextColor,
-                ),
-                icon: const Icon(Icons.add),
-                label: const Text('Novo Grupo'),
-                onPressed: () {
-                  context.go('/rooms/newgroup');
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
       body: FutureBuilder(
         future: Future.wait([roomsFuture, bundlesFuture]),
         builder: (context, snapshot) {
@@ -125,7 +125,6 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                 const Divider(),
                 const SizedBox(height: 16),
               ],
-
               Text(
                 '👥 Grupos',
                 style: TextStyle(
@@ -135,10 +134,8 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                 ),
               ),
               const SizedBox(height: 12),
-
               if (rooms.isEmpty)
                 const Center(child: Text('Nenhum grupo disponível')),
-
               ...rooms
                   .map((room) => _buildRoomTile(room, client, userId))
                   .toList(),
@@ -165,123 +162,217 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-  children: [
-    Expanded(
-      child: Text(
-        bundle.name,
-        style: TextStyle(
-          color: theme.colorScheme
-              .chatlistDiscoverBundleTileGroupNameTextColor,
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-
-    if (bundle.isDraft)
-      Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 8,
-          vertical: 4,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.orange.withOpacity(0.15),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: const Text(
-          'Rascunho',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: Colors.orange,
-          ),
-        ),
-      ),
-
-    if (isAdmin)
-      PopupMenuButton<String>(
-        icon: Icon(
-          Icons.more_vert,
-          color: theme.colorScheme
-              .chatlistDiscoverBundleMenuItemTextColor,
-        ),
-        onSelected: (value) async {
-          if (value == 'publish') {
-            try {
-              await publishBundle(
-                client: client,
-                bundleId: bundle.id,
-              );
-
-              if (!mounted) return;
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                 SnackBar(
-                  content: Text('Bundle publicado!', style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor)),
+            children: [
+              Expanded(
+                child: Text(
+                  bundle.name,
+                  style: TextStyle(
+                    color: theme.colorScheme
+                        .chatlistDiscoverBundleTileGroupNameTextColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              );
+              ),
+              if (bundle.isDraft)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    'Rascunho',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ),
+              if (isAdmin)
+                PopupMenuButton<String>(
+                  icon: Icon(
+                    Icons.more_vert,
+                    color: theme
+                        .colorScheme.chatlistDiscoverBundleMenuItemTextColor,
+                  ),
+                  onSelected: (value) async {
+                    if (value == 'publish') {
+                      try {
+                        await publishBundle(
+                          client: client,
+                          bundleId: bundle.id,
+                        );
 
-              setState(() {
-                bundlesFuture = fetchBundles(client);
-              });
-            } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Erro: $e', style: TextStyle(color: theme.colorScheme.error))),
-              );
-            }
-          }
+                        if (!mounted) return;
 
-          if (value == 'edit') {
-            // FUTURO
-          }
-        },
-        itemBuilder: (context) => [
-          if (bundle.isDraft)
-            PopupMenuItem(
-              value: 'publish',
-              child: Text('Publicar', style: TextStyle(color: theme.colorScheme.chatlistDiscoverBundleMenuItemTextColor),),
-            ),
-           
-        ],
-      ),
-  ],
-),
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Bundle publicado!',
+                                style: TextStyle(
+                                    color: theme
+                                        .colorScheme.normalSnackBarTextColor)),
+                          ),
+                        );
+
+                        setState(() {
+                          bundlesFuture = fetchBundles(client);
+                        });
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text('Erro: $e',
+                                  style: TextStyle(
+                                      color: theme.colorScheme.error))),
+                        );
+                      }
+                    }
+
+                    if (value == 'edit') {
+                      // FUTURO
+                    }
+                    if (value == 'delete') {
+                      final confirm = await showDialog<bool>(
+                        context: context,
+                        builder: (dialogContext) => AlertDialog(
+                          title: const Text('Deletar bundle'),
+                          content: const Text(
+                              'Tem certeza que deseja deletar este bundle?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () =>
+                                  Navigator.pop(dialogContext, false),
+                              child: const Text('Cancelar'),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            theme.colorScheme.error,
+                        foregroundColor: theme
+                            .colorScheme.chatlistDiscoverBundleButtonTextColor,
+                      ),
+                              onPressed: () =>
+                                  Navigator.pop(dialogContext, true),
+                              child: Text('Deletar', style: TextStyle(
+                                      color: theme.colorScheme.chatlistDiscoverBundleButtonTextColor)),
+                            ),
+                          ],
+                        ),
+                      );
+
+                      if (confirm != true) return;
+
+                      try {
+                        await deleteBundle(
+                          client: client,
+                          bundleId: bundle.id,
+                        );
+
+                        if (!mounted) return;
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Bundle deletado!',
+                              style: TextStyle(
+                                color:
+                                    theme.colorScheme.normalSnackBarTextColor,
+                              ),
+                            ),
+                          ),
+                        );
+
+                        setState(() {
+                          bundlesFuture = fetchBundles(client);
+                        });
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Erro: $e',
+                              style: TextStyle(color: theme.colorScheme.error),
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    if (bundle.isDraft)
+                      PopupMenuItem(
+                        value: 'publish',
+                        child: Text(
+                          'Publicar',
+                          style: TextStyle(
+                              color: theme.colorScheme
+                                  .chatlistDiscoverBundleMenuItemTextColor),
+                        ),
+                      ),
+                    PopupMenuItem(
+                      value: 'edit',
+                      child: Text(
+                        'Editar',
+                        style: TextStyle(
+                            color: theme.colorScheme
+                                .chatlistDiscoverBundleMenuItemTextColor),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 'delete',
+                      child: Text(
+                        'Deletar',
+                        style: TextStyle(color: theme.colorScheme.error),
+                      ),
+                    ),
+                  ],
+                ),
+            ],
+          ),
           const SizedBox(height: 8),
           Text(
             'R\$ ${(bundle.price / 100).toStringAsFixed(2)}',
-            style:  TextStyle(
-              color: theme.colorScheme.chatlistDiscoverBundleTilePriceDescriptionTextColor,
+            style: TextStyle(
+              color: theme.colorScheme
+                  .chatlistDiscoverBundleTilePriceDescriptionTextColor,
               fontSize: 16,
               fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: 4),
-          Text('Inclui ${bundle.rooms.length} grupos', style: TextStyle(color: theme.colorScheme.chatlistDiscoverBundleTileDescriptionTextColor )),
+          Text('Inclui ${bundle.rooms.length} grupos',
+              style: TextStyle(
+                  color: theme.colorScheme
+                      .chatlistDiscoverBundleTileDescriptionTextColor)),
           const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
-  style: TextButton.styleFrom(
-    padding: EdgeInsets.zero,
-    minimumSize: Size.zero,
-    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-  ),
-  onPressed: () {
-    _showBundleDetails(context, bundle);
-  },
-  child: Text(
-    'Mais detalhes >',
-    style: TextStyle(
-      color: theme.colorScheme.chatlistDiscoverBundleTileDescriptionTextColor,
-    ),
-  ),
-),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                onPressed: () {
+                  _showBundleDetails(context, bundle);
+                },
+                child: Text(
+                  'Mais detalhes >',
+                  style: TextStyle(
+                    color: theme.colorScheme
+                        .chatlistDiscoverBundleTileDescriptionTextColor,
+                  ),
+                ),
+              ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  theme.colorScheme.chatlistDiscoverBundleAccessButtonColor,
-            ),
+                  backgroundColor:
+                      theme.colorScheme.chatlistDiscoverBundleAccessButtonColor,
+                ),
                 onPressed: () async {
                   final approved =
                       await _showFakePayment(context, bundle.price);
@@ -303,7 +394,12 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                     );
                   }
                 },
-                child:  Text('Pagar', style: TextStyle(color: theme.colorScheme.chatlistDiscoverBundleButtonTextColor),),
+                child: Text(
+                  'Pagar',
+                  style: TextStyle(
+                      color: theme
+                          .colorScheme.chatlistDiscoverBundleButtonTextColor),
+                ),
               )
             ],
           )
@@ -329,45 +425,46 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
           title: Text(
             room.name,
             style: TextStyle(
-              color: theme.colorScheme.chatlistDiscoverRoomTileGroupNameTextColor,
+              color:
+                  theme.colorScheme.chatlistDiscoverRoomTileGroupNameTextColor,
               fontWeight: FontWeight.bold,
             ),
           ),
           subtitle: Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    Text(
-      room.accessType == RoomAccessType.paid
-          ? 'Premium • R\$ ${(room.price / 100).toStringAsFixed(2)}'
-          : 'Entrada livre',
-      style: TextStyle(
-        fontSize: 12,
-        color: theme
-            .colorScheme.chatlistDiscoverRoomTilePriceDescriptionTextColor,
-      ),
-    ),
-    const SizedBox(height: 4),
-    Row(
-      children: [
-        Icon(
-          Icons.person_outline,
-          size: 16,
-          color: theme.colorScheme
-              .chatlistDiscoverRoomTilePriceDescriptionTextColor,
-        ),
-        const SizedBox(width: 4),
-        Text(
-          '${room.memberCount} participantes',
-          style: TextStyle(
-            fontSize: 12,
-            color: theme.colorScheme
-                .chatlistDiscoverRoomTilePriceDescriptionTextColor,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                room.accessType == RoomAccessType.paid
+                    ? 'Premium • R\$ ${(room.price / 100).toStringAsFixed(2)}'
+                    : 'Entrada livre',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: theme.colorScheme
+                      .chatlistDiscoverRoomTilePriceDescriptionTextColor,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  Icon(
+                    Icons.person_outline,
+                    size: 16,
+                    color: theme.colorScheme
+                        .chatlistDiscoverRoomTilePriceDescriptionTextColor,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${room.memberCount} participantes',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: theme.colorScheme
+                          .chatlistDiscoverRoomTilePriceDescriptionTextColor,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ),
-      ],
-    ),
-  ],
-),
           trailing: ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor:
@@ -417,7 +514,8 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                 child: Text(
                   'Pagar',
                   style: TextStyle(
-                    color: theme.colorScheme.chatlistDiscoverRoomButtonTextColor,
+                    color:
+                        theme.colorScheme.chatlistDiscoverRoomButtonTextColor,
                   ),
                 ),
               ),
@@ -426,48 +524,49 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
         ) ??
         false;
   }
-  Future<void> _showBundleDetails(
-  BuildContext context,
-  DiscoverBundle bundle,
-) async {
-  final theme = Theme.of(context);
 
-  await showDialog(
-    context: context,
-    builder: (dialogContext) => AlertDialog(
-      title: Text(
-        '👥 Grupos incluídos',
-        style: TextStyle(
-          color: theme.colorScheme.chatlistDiscoverTextColor,
+  Future<void> _showBundleDetails(
+    BuildContext context,
+    DiscoverBundle bundle,
+  ) async {
+    final theme = Theme.of(context);
+
+    await showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(
+          '👥 Grupos incluídos',
+          style: TextStyle(
+            color: theme.colorScheme.chatlistDiscoverTextColor,
+          ),
         ),
-      ),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: bundle.rooms
-              .map(
-                (room) => Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
-                  child: Text(
-                    '• $room',
-                    style: TextStyle(
-                      color: theme.colorScheme
-                          .chatlistDiscoverBundleTileDescriptionTextColor,
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: bundle.rooms
+                .map(
+                  (room) => Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Text(
+                      '• $room',
+                      style: TextStyle(
+                        color: theme.colorScheme
+                            .chatlistDiscoverBundleTileDescriptionTextColor,
+                      ),
                     ),
                   ),
-                ),
-              )
-              .toList(),
+                )
+                .toList(),
+          ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Fechar'),
+          ),
+        ],
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(dialogContext),
-          child: const Text('Fechar'),
-        ),
-      ],
-    ),
-  );
-}
+    );
+  }
 }
