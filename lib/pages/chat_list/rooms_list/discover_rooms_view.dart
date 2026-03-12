@@ -233,7 +233,7 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                     }
 
                     if (value == 'edit') {
-                      // FUTURO
+                      context.go('/rooms/editbundle/${bundle.id}');
                     }
                     if (value == 'delete') {
                       final confirm = await showDialog<bool>(

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:fluffychat/config/themes.dart';
 import 'package:fluffychat/widgets/layouts/max_width_body.dart';
-import 'package:fluffychat/pages/new_bundle/new_bundle.dart';
+import 'bundle_form.dart';
 
-class CreateBundleView extends StatelessWidget {
-  final CreateBundleController controller;
+class BundleFormView extends StatelessWidget {
+  final BundleFormController controller;
 
-  const CreateBundleView(this.controller, {super.key});
+  const BundleFormView(this.controller, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,15 +15,12 @@ class CreateBundleView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Center(
-          child: BackButton(
-            onPressed:
-                controller.loading ? null : () => Navigator.of(context).pop(),
-            color: theme.colorScheme.newBundleTextColor,
-          ),
+        leading: BackButton(
+          onPressed: () => context.go("/rooms/discover"),
+          color: theme.colorScheme.newBundleTextColor,
         ),
         title: Text(
-          "Criar Bundle",
+          controller.isEdit ? "Editar Bundle" : "Criar Bundle",
           style: TextStyle(color: theme.colorScheme.newBundleTextColor),
         ),
       ),
@@ -37,17 +35,21 @@ class CreateBundleView extends StatelessWidget {
                 children: [
                   const SizedBox(height: 24),
 
-                  /// NOME
+                  /// NAME
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: TextField(
-                      style: TextStyle(
-                  color: theme.colorScheme.newBundleTextColor,),
                       controller: controller.nameController,
-                      readOnly: controller.loading,
-                      decoration:  InputDecoration(
-                        fillColor: theme.colorScheme.newBundleTextFieldFillColor ,
-                        hintStyle: TextStyle(color: theme.colorScheme.newBundleTextFieldHintTextColor),
+                      style: TextStyle(
+                        color: theme.colorScheme.newBundleTextColor,
+                      ),
+                      decoration: InputDecoration(
+                        fillColor:
+                            theme.colorScheme.newBundleTextFieldFillColor,
+                        hintStyle: TextStyle(
+                          color: theme
+                              .colorScheme.newBundleTextFieldHintTextColor,
+                        ),
                         prefixIcon: const Icon(Icons.inventory_2_outlined),
                         labelText: "Nome do bundle",
                       ),
@@ -56,18 +58,22 @@ class CreateBundleView extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
-                  /// PREÇO
+                  /// PRICE
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: TextField(
-                      style: TextStyle(
-                  color: theme.colorScheme.newBundleTextColor,),
                       controller: controller.priceController,
-                      readOnly: controller.loading,
                       keyboardType: TextInputType.number,
+                      style: TextStyle(
+                        color: theme.colorScheme.newBundleTextColor,
+                      ),
                       decoration: InputDecoration(
-                        fillColor: theme.colorScheme.newBundleTextFieldFillColor ,
-                        hintStyle: TextStyle(color: theme.colorScheme.newBundleTextFieldHintTextColor),
+                        fillColor:
+                            theme.colorScheme.newBundleTextFieldFillColor,
+                        hintStyle: TextStyle(
+                          color: theme
+                              .colorScheme.newBundleTextFieldHintTextColor,
+                        ),
                         prefixIcon: const Icon(Icons.attach_money_outlined),
                         labelText: "Preço",
                       ),
@@ -76,7 +82,7 @@ class CreateBundleView extends StatelessWidget {
 
                   const SizedBox(height: 24),
 
-                  /// SALAS
+                  /// ROOMS
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
@@ -86,25 +92,34 @@ class CreateBundleView extends StatelessWidget {
                           "Salas incluídas (opcional)",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
+
                         const SizedBox(height: 8),
 
                         ...controller.selectedRooms.map(
                           (room) => ListTile(
                             contentPadding: EdgeInsets.zero,
-                            title: Text(room.name ?? room.id, style: TextStyle(color: theme.colorScheme.newBundleSelectNameTextColor)),
+                            title: Text(
+                              room.name,
+                              style: TextStyle(
+                                color: theme
+                                    .colorScheme.newBundleSelectNameTextColor,
+                              ),
+                            ),
                             trailing: IconButton(
-                              icon: Icon(Icons.close, color: theme.colorScheme.newBundleButtonTextColor),
-                              onPressed: controller.loading
-                                  ? null
-                                  : () => controller.removeRoom(room),
+                              icon: Icon(
+                                Icons.close,
+                                color: theme
+                                    .colorScheme.newBundleButtonTextColor,
+                              ),
+                              onPressed: () =>
+                                  controller.removeRoom(room),
                             ),
                           ),
                         ),
 
                         TextButton.icon(
-                          onPressed: controller.loading
-                              ? null
-                              : () => controller.selectRooms(context),
+                          onPressed: () =>
+                              controller.selectRooms(context),
                           icon: const Icon(Icons.add),
                           label: const Text("Adicionar salas"),
                         ),
@@ -114,15 +129,14 @@ class CreateBundleView extends StatelessWidget {
 
                   const SizedBox(height: 32),
 
-                  /// BOTÃO
+                  /// BUTTON
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: controller.loading
-                            ? null
-                            : () => controller.submit(context),
+                        onPressed: () =>
+                            controller.submit(context),
                         child: controller.loading
                             ? const SizedBox(
                                 height: 18,
@@ -131,12 +145,20 @@ class CreateBundleView extends StatelessWidget {
                                   strokeWidth: 2,
                                 ),
                               )
-                            : Text("Criar Bundle",style: TextStyle(color: theme.colorScheme.newBundleButtonTextColor),),
+                            : Text(
+                                controller.isEdit
+                                    ? "Salvar alterações"
+                                    : "Criar Bundle",
+                                style: TextStyle(
+                                  color: theme
+                                      .colorScheme.newBundleButtonTextColor,
+                                ),
+                              ),
                       ),
                     ),
                   ),
 
-                  /// ERRO
+                  /// ERROR
                   AnimatedSize(
                     duration: FluffyThemes.animationDuration,
                     curve: FluffyThemes.animationCurve,
