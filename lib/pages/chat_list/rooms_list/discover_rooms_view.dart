@@ -549,7 +549,7 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                   (room) => Padding(
                     padding: const EdgeInsets.only(bottom: 6),
                     child: Text(
-                      '• $room',
+                      '• ${room.name}',
                       style: TextStyle(
                         color: theme.colorScheme
                             .chatlistDiscoverBundleTileDescriptionTextColor,
