@@ -67,21 +67,9 @@ class BundleFormController extends ChangeNotifier {
       final price = bundle["price"] ?? 0;
       priceController.text = (price ~/ 100).toString();
 
-      final roomIds = List<String>.from(bundle["rooms"] ?? []);
+      final List rooms = bundle["rooms"] ?? [];
 
-      final discoverResponse = await client.httpClient.get(
-        Uri.parse("${client.homeserver}/_synapse/room_service/discover"),
-        headers: {
-          "Authorization": "Bearer ${client.accessToken}",
-          "Content-Type": "application/json",
-        },
-      );
-
-      final discoverData = jsonDecode(discoverResponse.body);
-      final List discoverRooms = discoverData["rooms"];
-
-      selectedRooms = discoverRooms
-          .where((room) => roomIds.contains(room["room_id"]))
+      selectedRooms = rooms
           .map((room) => BundleRoom(
                 id: room["room_id"],
                 name: room["name"] ?? "Sem nome",
@@ -167,7 +155,8 @@ class BundleFormController extends ChangeNotifier {
               ElevatedButton(
                 onPressed: () {
                   selectedRooms = rooms
-                      .where((room) => tempSelected.contains(room["room_id"]))
+                      .where((room) =>
+                          tempSelected.contains(room["room_id"]))
                       .map((room) => BundleRoom(
                             id: room["room_id"],
                             name: room["name"] ?? "Sem nome",
