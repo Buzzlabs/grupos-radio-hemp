@@ -108,12 +108,28 @@ Future<void> inviteToRoom({
   }
 }
 
+class BundleRoom {
+  final String roomId;
+  final String name;
+
+  BundleRoom({
+    required this.roomId,
+    required this.name,
+  });
+
+  factory BundleRoom.fromJson(Map<String, dynamic> json) {
+    return BundleRoom(
+      roomId: json['room_id'],
+      name: json['name'] ?? 'Sem nome',
+    );
+  }
+}
 
 class DiscoverBundle {
   final String id;
   final String name;
   final int price;
-  final List<String> rooms;
+  final List<BundleRoom> rooms;
   final List<String> keywords;
   final String status;
 
@@ -133,7 +149,9 @@ class DiscoverBundle {
       id: json['bundle_id'],
       name: json['bundle_name'],
       price: json['price'] ?? 0,
-      rooms: List<String>.from(json['rooms'] ?? []),
+      rooms: (json['rooms'] as List? ?? [])
+          .map((e) => BundleRoom.fromJson(e))
+          .toList(),
       keywords: List<String>.from(json['keywords'] ?? []),
       status: json['status'] ?? 'published',
     );
