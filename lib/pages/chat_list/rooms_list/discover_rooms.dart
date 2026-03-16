@@ -230,3 +230,28 @@ Future<List<DiscoverBundle>> fetchBundles(Client client) async {
     return [];
   }
 }
+
+Future<void> inviteToBundle({
+  required Client client,
+  required String bundleId,
+  required String userId,
+}) async {
+  final uri =
+      Uri.parse('${client.homeserver}/_synapse/bundles/invite');
+
+  final response = await http.post(
+    uri,
+    headers: {
+      'Authorization': 'Bearer ${client.accessToken}',
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode({
+      'bundle_id': bundleId,
+      'user_id': userId,
+    }),
+  );
+
+  if (response.statusCode != 200) {
+    throw Exception('Erro ao desbloquear bundle');
+  }
+}

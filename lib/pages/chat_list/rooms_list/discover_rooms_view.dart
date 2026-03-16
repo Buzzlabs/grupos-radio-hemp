@@ -378,18 +378,24 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                       await _showFakePayment(context, bundle.price);
                   if (!approved) return;
 
-                  for (final keyword in bundle.keywords) {
-                    await inviteToRoom(
-                      client: client,
-                      keyword: keyword,
-                      userId: userId,
-                    );
-                  }
+                  // for (final keyword in bundle.keywords) {
+                  //   await inviteToRoom(
+                  //     client: client,
+                  //     keyword: keyword,
+                  //     userId: userId,
+                  //   );
+                  // }
+
+                  await inviteToBundle(
+                    client: client,
+                    bundleId: bundle.id,
+                    userId: userId,
+                  );
 
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Bundle desbloqueado!'),
+                       SnackBar(
+                        content: Text('Bundle desbloqueado!', style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor ),),
                       ),
                     );
                   }
