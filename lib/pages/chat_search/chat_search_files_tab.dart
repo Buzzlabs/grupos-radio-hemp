@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -42,7 +43,7 @@ class ChatSearchFilesTab extends StatelessWidget {
                     MatrixLocals(L10n.of(context)),
                   ),
                 ),
-                style: TextStyle(color: theme.colorScheme.onSurface),
+                style: TextStyle(color: theme.colorScheme.searchScreenTitle),
               ),
             ],
           );
@@ -56,7 +57,7 @@ class ChatSearchFilesTab extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 L10n.of(context).nothingFound,
-                style: TextStyle(color: theme.colorScheme.onSurface),
+                style: TextStyle(color: theme.colorScheme.oopsMessageTextColor),
               ),
             ],
           );
@@ -87,19 +88,20 @@ class ChatSearchFilesTab extends StatelessWidget {
                     padding: const EdgeInsets.all(16.0),
                     child: TextButton.icon(
                       style: TextButton.styleFrom(
-                        backgroundColor: theme.colorScheme.secondaryContainer,
-                        foregroundColor: theme.colorScheme.onSecondaryContainer,
+                        backgroundColor: theme.colorScheme.searchTextButtonPaddingColor,
+                        foregroundColor: theme.colorScheme.searchTextButtonTextColor,
                       ),
                       onPressed: () => startSearch(
                         prevBatch: nextBatch,
                         previousSearchResult: events,
                       ),
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.arrow_downward_outlined,
+                        color: theme.colorScheme.searchTextButtonTextColor,
                       ),
                       label: Text(
                         L10n.of(context).searchMore,
-                        style: TextStyle(color: theme.colorScheme.onSurface),
+                        style: TextStyle(color: theme.colorScheme.searchTextButtonTextColor),
                       ),
                     ),
                   ),
@@ -141,8 +143,9 @@ class ChatSearchFilesTab extends StatelessWidget {
                             child: Text(
                               event.originServerTs.localizedTime(context),
                               style: TextStyle(
-                                  fontSize: 12,
-                                  color: theme.colorScheme.onSurface),
+                                fontSize: 12,
+                                color: theme.colorScheme.searchTextButtonTextColor,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -162,15 +165,17 @@ class ChatSearchFilesTab extends StatelessWidget {
                       color: theme.colorScheme.onInverseSurface,
                       clipBehavior: Clip.hardEdge,
                       child: ListTile(
-                        leading: const Icon(Icons.file_present_outlined),
+                        leading: Icon(Icons.file_present_outlined,
+                            color: theme.colorScheme.searchFileIconColor),
                         title: Text(
                           filename,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style:
-                              TextStyle(color: theme.colorScheme.onSecondary),
+                          style: TextStyle(color: theme.colorScheme.searchTextButtonTextColor),
                         ),
-                        subtitle: Text('$sizeString | $filetype'),
+                        subtitle: Text('$sizeString | $filetype',
+                            style: TextStyle(
+                                color: theme.colorScheme.fileTypeTextColor)),
                         onTap: () => event.saveFile(context),
                       ),
                     ),

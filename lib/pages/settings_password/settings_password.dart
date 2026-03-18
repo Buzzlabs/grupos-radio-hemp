@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -60,7 +61,7 @@ class SettingsPasswordController extends State<SettingsPassword> {
           );
       scaffoldMessenger.showSnackBar(
         SnackBar(
-          content: Text(L10n.of(context).passwordHasBeenChanged),
+          content: Text(L10n.of(context).passwordHasBeenChanged, style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor)),
         ),
       );
       if (mounted) context.pop();

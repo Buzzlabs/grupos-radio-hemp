@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -38,6 +39,9 @@ class ParticipantListItem extends StatelessWidget {
             child: Text(
               user.calcDisplayname(),
               overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontFamily: theme.colorScheme.participantsFontFamily,
+                color: theme.colorScheme.participantNameTextColor,),
             ),
           ),
           if (permissionBatch.isNotEmpty)
@@ -48,8 +52,8 @@ class ParticipantListItem extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: user.powerLevel >= 100
-                    ? theme.colorScheme.tertiary
-                    : theme.colorScheme.tertiaryContainer,
+                    ? theme.colorScheme.participantPowerLevelabove100MainColor
+                    : theme.colorScheme.participantPowerLevelbelow100MainColor,
                 borderRadius: BorderRadius.circular(
                   AppConfig.borderRadius,
                 ),
@@ -58,8 +62,8 @@ class ParticipantListItem extends StatelessWidget {
                 permissionBatch,
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: user.powerLevel >= 100
-                      ? theme.colorScheme.onSecondary
-                      : theme.colorScheme.onTertiaryContainer,
+                      ? theme.colorScheme.participantPowerLevelTextColor
+                      : theme.colorScheme.participantPowerLevelTextColor,
                 ),
               ),
             ),
@@ -70,14 +74,14 @@ class ParticipantListItem extends StatelessWidget {
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.secondaryContainer,
+                    color: theme.colorScheme.participantPowerLevelabove100MainColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
                     child: Text(
                       membershipBatch,
                       style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSecondaryContainer,
+                        color: theme.colorScheme.participantPowerLevelTextColor,
                       ),
                     ),
                   ),
@@ -88,6 +92,8 @@ class ParticipantListItem extends StatelessWidget {
         user.id,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: theme.colorScheme.participantTextColor,),
       ),
       leading: Opacity(
         opacity: user.membership == Membership.join ? 1 : 0.5,
@@ -95,6 +101,7 @@ class ParticipantListItem extends StatelessWidget {
           mxContent: user.avatarUrl,
           name: user.calcDisplayname(),
           presenceUserId: user.stateKey,
+          presenceBackgroundColor: Colors.transparent,
         ),
       ),
     );

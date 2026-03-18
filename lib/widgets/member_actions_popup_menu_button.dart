@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:matrix/matrix.dart';
@@ -37,6 +38,7 @@ void showMemberActionsPopupMenu({
   final action = await showMenu<_MemberActions>(
     context: context,
     position: position,
+    color: theme.colorScheme.surface,
     items: <PopupMenuEntry<_MemberActions>>[
       PopupMenuItem(
         value: _MemberActions.info,
@@ -47,7 +49,7 @@ void showMemberActionsPopupMenu({
               name: displayname,
               mxContent: user.avatarUrl,
               presenceUserId: user.id,
-              presenceBackgroundColor: theme.colorScheme.surfaceContainer,
+              presenceBackgroundColor: Colors.transparent,
             ),
             Column(
               mainAxisSize: MainAxisSize.min,
@@ -59,7 +61,7 @@ void showMemberActionsPopupMenu({
                     displayname,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.participantNameTextColor,
                       fontSize: 15,
                     ),
                     maxLines: 1,
@@ -71,7 +73,8 @@ void showMemberActionsPopupMenu({
                   child: Text(
                     user.id,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 12),
+                    style: TextStyle(
+                        fontSize: 12, color: theme.colorScheme.participantTextColor,),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -89,10 +92,11 @@ void showMemberActionsPopupMenu({
             children: [
               Icon(
                 Icons.alternate_email_outlined,
-                color: theme.colorScheme.onSecondary,
+                color: theme.colorScheme.participantTextColor,
               ),
               const SizedBox(width: 18),
-              Text(L10n.of(context).mention),
+              Text(L10n.of(context).mention,
+                  style: TextStyle(color: theme.colorScheme.participantTextColor),),
             ],
           ),
         ),
@@ -106,42 +110,53 @@ void showMemberActionsPopupMenu({
                 color: theme.colorScheme.error,
               ),
               const SizedBox(width: 18),
-              Text(L10n.of(context).approve),
+              Text(
+                L10n.of(context).approve,
+                style: TextStyle(color: theme.colorScheme.participantApproveTextColor),
+              ),
             ],
           ),
         ),
       PopupMenuItem(
         enabled: user.room.canChangePowerLevel && user.canChangeUserPowerLevel,
         value: _MemberActions.setRole,
-        child: Row(
-          children: [
-            Icon(
-              Icons.admin_panel_settings_outlined,
-              color: theme.colorScheme.onSecondary,
-            ),
-            const SizedBox(width: 18),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+        child: IconTheme(
+          data: IconThemeData(
+            color: theme.colorScheme.participantPowerLevelTextColor,
+          ),
+          child: DefaultTextStyle(
+            style: TextStyle(color: theme.colorScheme.participantPowerLevelTextColor),
+            child: Row(
               children: [
-                Text(
-                  L10n.of(context).chatPermissions,
-                  style: TextStyle(color: theme.colorScheme.onSurface),
+                Icon(
+                  Icons.admin_panel_settings_outlined,
+                  color: theme.colorScheme.participantLevelIconColor,
                 ),
-                Text(
-                  user.powerLevel < 50
-                      ? L10n.of(context).userLevel(user.powerLevel)
-                      : user.powerLevel < 100
-                          ? L10n.of(context).moderatorLevel(user.powerLevel)
-                          : L10n.of(context).adminLevel(user.powerLevel),
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: theme.colorScheme.onSurface,
-                  ),
+                const SizedBox(width: 18),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      L10n.of(context).chatPermissions,
+                      style: TextStyle(color: theme.colorScheme.participantPowerLevelTextColor),
+                    ),
+                    Text(
+                      user.powerLevel < 50
+                          ? L10n.of(context).userLevel(user.powerLevel)
+                          : user.powerLevel < 100
+                              ? L10n.of(context).moderatorLevel(user.powerLevel)
+                              : L10n.of(context).adminLevel(user.powerLevel),
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: theme.colorScheme.participantPowerLevelTextColor,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
       if (user.canKick)
@@ -298,7 +313,11 @@ void showMemberActionsPopupMenu({
       );
       if (result.error != null) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(L10n.of(context).contentHasBeenReported)),
+        SnackBar(
+            content: Text(
+          L10n.of(context).contentHasBeenReported,
+          style: TextStyle(color: theme.colorScheme.tertiary),
+        ),),
       );
       return;
     case _MemberActions.info:

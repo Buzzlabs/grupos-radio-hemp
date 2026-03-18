@@ -38,7 +38,8 @@ class MaxWidthBody extends StatelessWidget {
                         borderRadius:
                             BorderRadius.circular(AppConfig.borderRadius),
                         side: BorderSide(
-                          color: theme.dividerColor,
+                          color: theme.colorScheme.primary,
+                          width: 2,
                         ),
                       ),
                       clipBehavior: Clip.hardEdge,

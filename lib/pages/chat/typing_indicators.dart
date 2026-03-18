@@ -81,7 +81,7 @@ class TypingIndicators extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Material(
-                  color: theme.colorScheme.surfaceContainerHigh,
+                  color: theme.colorScheme.typingIconBaseColor,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(AppConfig.borderRadius),
                   ),
@@ -155,7 +155,7 @@ class __TypingDotsState extends State<_TypingDots> {
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(size * 2),
-              color: theme.colorScheme.secondary,
+              color: theme.colorScheme.typingIconBallsColor,
             ),
           ),
       ],

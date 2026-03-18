@@ -16,30 +16,36 @@ class ChatSearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final room = controller.room;
     if (room == null) {
       return Scaffold(
-        appBar: AppBar(title: Text(L10n.of(context).oopsSomethingWentWrong)),
+        appBar: AppBar(
+            title: Text(L10n.of(context).oopsSomethingWentWrong,
+                style:
+                    TextStyle(color: theme.colorScheme.oopsMessageTextColor),),),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Text(L10n.of(context).youAreNoLongerParticipatingInThisChat),
+            child: Text(L10n.of(context).youAreNoLongerParticipatingInThisChat,
+                style:
+                    TextStyle(color: theme.colorScheme.oopsMessageTextColor),),
           ),
         ),
       );
     }
 
-    final theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
-        leading: const Center(child: BackButton()),
+        leading: Center(child: BackButton(color: theme.colorScheme.searchScreenBackButton)),
         titleSpacing: 0,
         title: Text(
-          L10n.of(context).searchIn(
-            room.getLocalizedDisplayname(MatrixLocals(L10n.of(context))),
-          ),
-        ),
+            L10n.of(context).searchIn(
+              room.getLocalizedDisplayname(MatrixLocals(
+                L10n.of(context),
+              ),),
+            ),
+            style: TextStyle(color: theme.colorScheme.searchScreenTitle),),
       ),
       body: MaxWidthBody(
         withScrolling: false,
@@ -57,22 +63,45 @@ class ChatSearchView extends StatelessWidget {
                 autofocus: true,
                 enabled: controller.tabController.index == 0,
                 decoration: InputDecoration(
+                  fillColor: theme.colorScheme.dialogTextFieldBackground,
                   hintText: L10n.of(context).search,
-                  prefixIcon: const Icon(Icons.search_outlined),
+                  labelStyle:
+                      TextStyle(color: theme.colorScheme.dialogTextFieldHintTextColor),
+                  prefixIcon: Icon(Icons.search_outlined,
+                      color: theme.colorScheme.dialogTextFieldHintTextColor,),
+                  disabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: theme.colorScheme.dialogTextFieldBorderColor, width: 2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: theme.colorScheme.onSurface,
+                      color: theme.colorScheme.dialogTextFieldBorderColor,
                       width: 2,
                     ),
-                    borderRadius: BorderRadius.circular(99),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: theme.colorScheme.dialogTextFieldBorderColor,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: theme.colorScheme.dialogTextFieldBorderColor,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   hintStyle: TextStyle(
-                    color: theme.colorScheme.onSurface,
+                    color: theme.colorScheme.dialogTextFieldHintTextColor,
                     fontWeight: FontWeight.normal,
                   ),
                 ),
                 style: TextStyle(
-                  color: theme.colorScheme.onSecondary,
+                  color: theme.colorScheme.dialogTextFieldTextColor,
                 ),
               ),
             ),
@@ -83,6 +112,9 @@ class ChatSearchView extends StatelessWidget {
                 Tab(child: Text(L10n.of(context).gallery)),
                 Tab(child: Text(L10n.of(context).files)),
               ],
+              labelColor: theme.colorScheme.searchScreenTabBarSelected,
+              unselectedLabelColor: theme.colorScheme.searchScreenTabBarUnelected,
+              indicatorColor: theme.colorScheme.searchScreenTabBarSelected,
             ),
             Expanded(
               child: TabBarView(

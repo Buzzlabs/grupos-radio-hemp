@@ -54,7 +54,7 @@ class ChatListItem extends StatelessWidget {
         : 0.0;
     final hasNotifications = room.notificationCount > 0;
     final backgroundColor =
-        activeChat ? theme.colorScheme.primary.withValues(alpha: 0.2) : null;
+        activeChat ? theme.colorScheme.activeChatBackground : null;
     final displayname = room.getLocalizedDisplayname(
       MatrixLocals(L10n.of(context)),
     );
@@ -138,13 +138,13 @@ class ChatListItem extends StatelessWidget {
                               scale: listTileHovered ? 1.0 : 0.0,
                               child: Material(
                                 color: activeChat
-                                    ? theme.colorScheme.primaryContainer
-                                    : theme.colorScheme.tertiary,
+                                    ? theme.colorScheme.dropDownIconColor
+                                    : theme.colorScheme.dropDownIconColor,
                                 borderRadius: BorderRadius.circular(16),
                                 child: Icon(
                                   Icons.arrow_drop_down_circle_outlined,
                                   size: 18,
-                                  color: theme.colorScheme.onSecondary,
+                                  color: theme.colorScheme.dropDownDetailIconColor,
                                 ),
                               ),
                             ),
@@ -169,7 +169,8 @@ class ChatListItem extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           softWrap: false,
                           style: TextStyle(
-                            color: theme.colorScheme.primary,
+                            fontFamily: theme.colorScheme.chatNameFontFamily,
+                            color: theme.colorScheme.chatNameTextColor,
                             fontWeight: unread || room.hasNewMessages
                                 ? FontWeight.w500
                                 : null,
@@ -177,11 +178,12 @@ class ChatListItem extends StatelessWidget {
                         ),
                       ),
                       if (isMuted)
-                        const Padding(
-                          padding: EdgeInsets.only(left: 4.0),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4.0),
                           child: Icon(
                             Icons.notifications_off_outlined,
                             size: 16,
+                            color: theme.colorScheme.error,
                           ),
                         ),
                       if (room.isFavourite)
@@ -192,7 +194,7 @@ class ChatListItem extends StatelessWidget {
                           child: Icon(
                             Icons.push_pin,
                             size: 16,
-                            color: theme.colorScheme.primary,
+                            color: theme.colorScheme.chatStatusIconColor,
                           ),
                         ),
                       if (isLive)
@@ -225,7 +227,7 @@ class ChatListItem extends StatelessWidget {
                                 .localizedTimeShort(context),
                             style: TextStyle(
                               fontSize: 12,
-                              color: theme.colorScheme.onSurface,
+                              color: theme.colorScheme.localizedTimeShortColor,
                             ),
                           ),
                         ),
@@ -256,7 +258,7 @@ class ChatListItem extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 4),
                     child: Icon(
                       Icons.edit_outlined,
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.chatItemIconColor,
                       size: 14,
                     ),
                   ),
@@ -268,13 +270,13 @@ class ChatListItem extends StatelessWidget {
                               (room.summary.mJoinedMemberCount ?? 1),
                             ),
                             style:
-                                TextStyle(color: theme.colorScheme.onSurface),
+                                TextStyle(color: theme.colorScheme.chatItemTextColor),
                           )
                         : typingText.isNotEmpty
                             ? Text(
                                 typingText,
                                 style: TextStyle(
-                                  color: theme.colorScheme.onSurface,
+                                  color: theme.colorScheme.chatItemTextColor,
                                 ),
                                 maxLines: 1,
                                 softWrap: false,
@@ -332,8 +334,8 @@ class ChatListItem extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         color: unread || room.hasNewMessages
-                                            ? theme.colorScheme.onSecondary
-                                            : theme.colorScheme.onSurface,
+                                            ? theme.colorScheme.chatItemUnreadColor
+                                            : theme.colorScheme.chatItemTextColor,
                                         decoration:
                                             room.lastEvent?.redacted == true
                                                 ? TextDecoration.lineThrough
@@ -358,8 +360,8 @@ class ChatListItem extends StatelessWidget {
                       color: room.highlightCount > 0
                           ? theme.colorScheme.error
                           : hasNotifications || room.markedUnread
-                              ? theme.colorScheme.primary
-                              : theme.colorScheme.primaryContainer,
+                              ? theme.colorScheme.chatItemUnreadColor
+                              : theme.colorScheme.chatItemUnreadColor,
                       borderRadius: BorderRadius.circular(7),
                     ),
                     child: hasNotifications
@@ -369,8 +371,8 @@ class ChatListItem extends StatelessWidget {
                               color: room.highlightCount > 0
                                   ? theme.colorScheme.onError
                                   : hasNotifications
-                                      ? theme.colorScheme.onPrimary
-                                      : theme.colorScheme.onPrimaryContainer,
+                                      ? theme.colorScheme.chatItemTextColor
+                                      : theme.colorScheme.chatItemTextColor,
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
                             ),
@@ -385,7 +387,10 @@ class ChatListItem extends StatelessWidget {
                   ? room.membership == Membership.invite
                       ? IconButton(
                           tooltip: L10n.of(context).declineInvitation,
-                          icon: const Icon(Icons.delete_forever_outlined),
+                          icon: Icon(
+                            Icons.delete_forever_outlined,
+                            color: theme.colorScheme.error,
+                          ),
                           color: theme.colorScheme.error,
                           onPressed: () async {
                             final consent = await showOkCancelAlertDialog(
@@ -405,7 +410,10 @@ class ChatListItem extends StatelessWidget {
                         )
                       : null
                   : IconButton(
-                      icon: const Icon(Icons.delete_outlined),
+                      icon: Icon(
+                        Icons.delete_outlined,
+                        color: theme.colorScheme.error,
+                      ),
                       onPressed: onForget,
                     ),
             ),

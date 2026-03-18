@@ -122,19 +122,22 @@ class ChatListViewBody extends StatelessWidget {
                           if (controller.isSearchMode) ...[
                             SearchTitle(
                               title: L10n.of(context).publicRooms,
-                              icon: const Icon(Icons.explore_outlined),
+                              color: theme.colorScheme.searchTitleBackGroud,
+                              icon: Icon(Icons.explore_outlined,  color: theme.colorScheme.searchTitleIconColor,),
                             ),
                             PublicRoomsHorizontalList(publicRooms: publicRooms),
                             SearchTitle(
                               title: L10n.of(context).publicSpaces,
-                              icon: const Icon(Icons.workspaces_outlined),
+                              color: theme.colorScheme.searchTitleBackGroud,
+                              icon: Icon(Icons.workspaces_outlined,  color: theme.colorScheme.searchTitleIconColor,),
                             ),
                             PublicRoomsHorizontalList(
                               publicRooms: publicSpaces,
                             ),
                             SearchTitle(
                               title: L10n.of(context).users,
-                              icon: const Icon(Icons.group_outlined),
+                              color: theme.colorScheme.searchTitleBackGroud,
+                              icon: Icon(Icons.group_outlined, color: theme.colorScheme.searchTitleIconColor,),
                             ),
                             AnimatedContainer(
                               clipBehavior: Clip.hardEdge,
@@ -228,7 +231,7 @@ class ChatListViewBody extends StatelessWidget {
                                     Icon(
                                       CupertinoIcons.chat_bubble_text_fill,
                                       size: 128,
-                                      color: theme.colorScheme.onSurface,
+                                      color: theme.colorScheme.noChatsFoundIconColor,
                                     ),
                                   ],
                                 ),
@@ -241,7 +244,7 @@ class ChatListViewBody extends StatelessWidget {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 18,
-                                      color: theme.colorScheme.onSurface,
+                                      color: theme.colorScheme.noChatsFoundTextColor,
                                     ),
                                   ),
                                 ),

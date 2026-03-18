@@ -78,7 +78,7 @@ class _LockScreenState extends State<LockScreen> {
               children: [
                 Center(
                   child: Image.asset(
-                    'assets/logo_horizontal_semfundo.png',
+                    Theme.of(context).colorScheme.logoHorizontalSemFundo,
                     width: 256,
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -54,12 +55,39 @@ class DialogTextField extends StatelessWidget {
           maxLength: maxLength,
           keyboardType: keyboardType,
           autocorrect: autocorrect,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: theme.colorScheme.dialogTextFieldTextColor,
             fontWeight: FontWeight.normal,
-            fontFamily: 'Roboto',
+            fontFamily: theme.colorScheme.dialogTextFieldFontFamily,
           ),
           decoration: InputDecoration(
+            disabledBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: theme.colorScheme.dialogTextFieldBorderColor, width: 2),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: theme.colorScheme.dialogTextFieldBorderColor,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: theme.colorScheme.dialogTextFieldBorderColor,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: theme.colorScheme.dialogTextFieldBorderColor,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            fillColor: theme.colorScheme.dialogTextFieldBackground,
             errorText: errorText,
             hintText: hintText,
             labelText: labelText,

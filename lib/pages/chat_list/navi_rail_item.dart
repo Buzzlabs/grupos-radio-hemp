@@ -52,7 +52,7 @@ class NaviRailItem extends StatelessWidget {
                   duration: FluffyThemes.animationDuration,
                   curve: FluffyThemes.animationCurve,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary,
+                    color: theme.colorScheme.selectedContainerColor,
                     borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(90),
                       bottomRight: Radius.circular(90),

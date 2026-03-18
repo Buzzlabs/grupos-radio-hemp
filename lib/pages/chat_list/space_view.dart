@@ -88,7 +88,7 @@ class _SpaceViewState extends State<SpaceView> {
       Logs().w('Unable to load hierarchy', e, s);
       if (!mounted) return;
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toLocalizedString(context))));
+          .showSnackBar(SnackBar(content: Text(e.toLocalizedString(context), style: TextStyle(color: Theme.of(context).colorScheme.error),)));
       setState(() {
         _isLoading = false;
       });
@@ -460,7 +460,7 @@ class _SpaceViewState extends State<SpaceView> {
                                   L10n.of(context).noMoreChatsFound,
                                   style: TextStyle(
                                       fontSize: 13,
-                                      color: theme.colorScheme.onSurface),
+                                      color: theme.colorScheme.onSurface,),
                                 ),
                               ),
                             );
@@ -544,7 +544,7 @@ class _SpaceViewState extends State<SpaceView> {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                    color: theme.colorScheme.onSecondary),
+                                    color: theme.colorScheme.onSecondary,),
                               ),
                             ),
                           ),

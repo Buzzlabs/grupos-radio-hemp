@@ -100,8 +100,9 @@ class Message extends StatelessWidget {
     final client = Matrix.of(context).client;
     final ownMessage = event.senderId == client.userID;
     final alignment = ownMessage ? Alignment.topRight : Alignment.topLeft;
-
-    var color = theme.colorScheme.surfaceContainerHigh;
+    var color = ownMessage
+        ? theme.colorScheme.secondary   
+        : theme.colorScheme.surface;  
     final displayTime = event.type == EventTypes.RoomCreate ||
         nextEvent == null ||
         !event.originServerTs.sameEnvironment(nextEvent!.originServerTs);
@@ -124,13 +125,13 @@ class Message extends StatelessWidget {
         previousEvent!.originServerTs.sameEnvironment(event.originServerTs);
 
     final textColor =
-        ownMessage ? theme.onBubbleColor : theme.colorScheme.onSecondary;
+        ownMessage ? theme.colorScheme.messageTextColor : theme.colorScheme.messageTextColor;
 
     final linkColor = ownMessage
         ? theme.brightness == Brightness.light
-            ? theme.colorScheme.primaryFixed
-            : theme.colorScheme.onTertiaryContainer
-        : theme.colorScheme.primary;
+            ? theme.colorScheme.messageTextColor
+            : theme.colorScheme.messageTextColor
+        : theme.colorScheme.messageTextColor;
 
     final rowMainAxisAlignment =
         ownMessage ? MainAxisAlignment.end : MainAxisAlignment.start;
@@ -234,7 +235,7 @@ class Message extends StatelessWidget {
                       child: Material(
                         borderRadius:
                             BorderRadius.circular(AppConfig.borderRadius * 2),
-                        color: theme.colorScheme.surface.withAlpha(128),
+                        color: theme.colorScheme.eventBubbleBackground,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 8.0,
@@ -245,7 +246,7 @@ class Message extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 12 * AppConfig.fontSizeFactor,
                               fontWeight: FontWeight.bold,
-                              color: theme.colorScheme.onSurface,
+                              color: theme.colorScheme.eventBubbleTextColor,
                             ),
                           ),
                         ),
@@ -279,8 +280,7 @@ class Message extends StatelessWidget {
                                 left: 0,
                                 right: 0,
                                 child: InkWell(
-                                  hoverColor: theme.colorScheme.surface
-                                      .withValues(alpha: 0.3),
+                                  hoverColor: theme.colorScheme.selectionMessageColor,
                                   enableFeedback: !selected,
                                   onTap: longPressSelect
                                       ? null
@@ -293,8 +293,7 @@ class Message extends StatelessWidget {
                                       AppConfig.borderRadius / 2,
                                     ),
                                     color: selected || highlightMarker
-                                        ? theme.colorScheme.primaryContainer
-                                            .withValues(alpha: 0.5)
+                                        ? theme.colorScheme.selectionMessageColor
                                         : Colors.transparent,
                                   ),
                                 ),
@@ -657,7 +656,7 @@ class Message extends StatelessWidget {
                                                         AppConfig.borderRadius,
                                                       ),
                                                       shadowColor: theme
-                                                          .colorScheme.surface
+                                                          .colorScheme.reactionBarBackground
                                                           .withAlpha(128),
                                                       child:
                                                           SingleChildScrollView(
@@ -715,9 +714,10 @@ class Message extends StatelessWidget {
                                                               ),
                                                             ),
                                                             IconButton(
-                                                              icon: const Icon(
+                                                              icon: Icon(
                                                                 Icons
                                                                     .add_reaction_outlined,
+                                                                    color: theme.colorScheme.reactionBarMoreReactionIconColor,
                                                               ),
                                                               tooltip: L10n.of(
                                                                 context,
@@ -738,9 +738,10 @@ class Message extends StatelessWidget {
                                                                           Text(
                                                                         L10n.of(context)
                                                                             .customReaction,
-                                                                      ),
+                                                                      style: TextStyle(color: theme.colorScheme.reactionPopupTextColor),),
                                                                       leading:
                                                                           CloseButton(
+                                                                            color: theme.colorScheme.reactionPopupTextColor,
                                                                         onPressed:
                                                                             () =>
                                                                                 Navigator.of(
@@ -783,28 +784,26 @@ class Message extends StatelessWidget {
                                                                             initCategory:
                                                                                 Category.SMILEYS,
                                                                             backspaceColor:
-                                                                                theme.colorScheme.primary,
+                                                                                theme.colorScheme.emojiIconSelectedColor,
                                                                             iconColor:
-                                                                                theme.colorScheme.primary.withAlpha(
-                                                                              128,
-                                                                            ),
+                                                                                theme.colorScheme.emojitabUnselectedColor,
                                                                             iconColorSelected:
-                                                                                theme.colorScheme.primary,
+                                                                                theme.colorScheme.emojiTabSelectedColor,
                                                                             indicatorColor:
-                                                                                theme.colorScheme.primary,
+                                                                                theme.colorScheme.emojiTabSelectedColor,
                                                                             backgroundColor:
-                                                                                theme.colorScheme.surface,
+                                                                                theme.colorScheme.emojiPickerBackground,
                                                                           ),
                                                                           skinToneConfig:
                                                                               SkinToneConfig(
                                                                             dialogBackgroundColor:
                                                                                 Color.lerp(
-                                                                              theme.colorScheme.surface,
-                                                                              theme.colorScheme.primaryContainer,
+                                                                              theme.colorScheme.emojiPickerBackground,
+                                                                              theme.colorScheme.emojiPickerBackground,
                                                                               0.75,
                                                                             )!,
                                                                             indicatorColor:
-                                                                                theme.colorScheme.onSecondary,
+                                                                                theme.colorScheme.emojiPickerIndicator,
                                                                           ),
                                                                         ),
                                                                       ),
@@ -868,7 +867,7 @@ class Message extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Divider(
-                        color: theme.colorScheme.surfaceContainerHighest,
+                        color: theme.colorScheme.messageReadUpToHereColor,
                       ),
                     ),
                     Container(
@@ -883,18 +882,18 @@ class Message extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius:
                             BorderRadius.circular(AppConfig.borderRadius / 3),
-                        color: theme.colorScheme.surface.withAlpha(128),
+                        color: theme.colorScheme.messageReadUpToHereColor,
                       ),
                       child: Text(
                         L10n.of(context).readUpToHere,
                         style: TextStyle(
                             fontSize: 12 * AppConfig.fontSizeFactor,
-                            color: theme.colorScheme.onSurface),
+                            color: theme.colorScheme.messageTextColor,),
                       ),
                     ),
                     Expanded(
                       child: Divider(
-                        color: theme.colorScheme.surfaceContainerHighest,
+                        color: theme.colorScheme.messageReadUpToHereColor,
                       ),
                     ),
                   ],

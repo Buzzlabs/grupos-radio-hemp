@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
-
 import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/config/themes.dart';
-import 'package:fluffychat/l10n/l10n.dart';
 import 'package:fluffychat/pages/chat_list/chat_list.dart';
 import 'package:fluffychat/widgets/navigation_rail.dart';
 import 'chat_list_body.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:fluffychat/widgets/streaming/audio_player_streaming.dart';
 
 class ChatListView extends StatelessWidget {
@@ -66,7 +62,7 @@ class ChatListView extends StatelessWidget {
                           child: Container(
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: theme.colorScheme.surface,
+                              color: theme.colorScheme.chatListBackground,
                             ),
                             padding: const EdgeInsets.only(
                               left: 20,

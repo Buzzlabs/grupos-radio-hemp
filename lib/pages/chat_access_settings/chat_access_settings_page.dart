@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart' hide Visibility;
 
 import 'package:matrix/matrix.dart';
@@ -19,8 +20,15 @@ class ChatAccessSettingsPageView extends StatelessWidget {
     final room = controller.room;
     return Scaffold(
       appBar: AppBar(
-        leading: const Center(child: BackButton()),
-        title: Text(L10n.of(context).accessAndVisibility),
+        leading: Center(
+          child: BackButton(
+            color: theme.colorScheme.accessScreenBackButton,
+          ),
+        ),
+        title: Text(
+          L10n.of(context).accessAndVisibility,
+          style: TextStyle(color: theme.colorScheme.accessScreenTextColor),
+        ),
       ),
       body: MaxWidthBody(
         child: StreamBuilder<Object>(
@@ -40,7 +48,7 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                   title: Text(
                     L10n.of(context).visibilityOfTheChatHistory,
                     style: TextStyle(
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.accessScreenTagColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -50,6 +58,7 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                     title: Text(
                       historyVisibility
                           .getLocalizedString(MatrixLocals(L10n.of(context))),
+                      style: TextStyle(color: theme.colorScheme.accessTextColor),
                     ),
                     value: historyVisibility,
                     groupValue: room.historyVisibility,
@@ -58,12 +67,12 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                         ? null
                         : controller.setHistoryVisibility,
                   ),
-                Divider(color: theme.dividerColor),
+                Divider(color: theme.colorScheme.accessDividerColor),
                 ListTile(
                   title: Text(
                     L10n.of(context).whoIsAllowedToJoinThisGroup,
                     style: TextStyle(
-                      color: theme.colorScheme.primary,
+                      color: theme.colorScheme.accessScreenTagColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -73,6 +82,7 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                     RadioListTile<JoinRules>.adaptive(
                       title: Text(
                         joinRule.localizedString(L10n.of(context)),
+                        style: TextStyle(color: theme.colorScheme.accessTextColor),
                       ),
                       value: joinRule,
                       groupValue: room.joinRules,
@@ -81,14 +91,14 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                           ? null
                           : controller.setJoinRule,
                     ),
-                Divider(color: theme.dividerColor),
+                Divider(color: theme.colorScheme.accessDividerColor),
                 if ({JoinRules.public, JoinRules.knock}
                     .contains(room.joinRules)) ...[
                   ListTile(
                     title: Text(
                       L10n.of(context).areGuestsAllowedToJoin,
                       style: TextStyle(
-                        color: theme.colorScheme.primary,
+                        color: theme.colorScheme.accessScreenTagColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -99,6 +109,7 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                         guestAccess.getLocalizedString(
                           MatrixLocals(L10n.of(context)),
                         ),
+                        style: TextStyle(color: theme.colorScheme.accessTextColor),
                       ),
                       value: guestAccess,
                       groupValue: room.guestAccess,
@@ -107,17 +118,20 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                           ? null
                           : controller.setGuestAccess,
                     ),
-                  Divider(color: theme.dividerColor),
+                  Divider(color: theme.colorScheme.accessDividerColor),
                   ListTile(
                     title: Text(
                       L10n.of(context).publicChatAddresses,
                       style: TextStyle(
-                        color: theme.colorScheme.primary,
+                        color: theme.colorScheme.accessScreenTagColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     trailing: IconButton(
-                      icon: const Icon(Icons.add_outlined),
+                      icon: Icon(
+                        Icons.add_outlined,
+                        color: theme.colorScheme.accessScreenTagColor,
+                      ),
                       tooltip: L10n.of(context).createNewAddress,
                       onPressed: controller.addAlias,
                     ),
@@ -165,30 +179,49 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                       );
                     },
                   ),
-                  Divider(color: theme.dividerColor),
+                  Divider(color: theme.colorScheme.accessDividerColor),
                   FutureBuilder(
                     future: room.client.getRoomVisibilityOnDirectory(room.id),
-                    builder: (context, snapshot) => SwitchListTile.adaptive(
+                    builder: (context, snapshot) => SwitchListTile(
                       value: snapshot.data == Visibility.public,
                       title: Text(
                         L10n.of(context).chatCanBeDiscoveredViaSearchOnServer(
                           room.client.userID!.domain!,
                         ),
+                        style: TextStyle(color: theme.colorScheme.accessTextColor),
                       ),
                       onChanged: controller.setChatVisibilityOnDirectory,
+                      activeThumbColor: theme.colorScheme.accessSwitchInactiveColor,
+                      inactiveThumbColor: theme.colorScheme.accessSwitchActiveColor,
+                      activeTrackColor: theme.colorScheme.accessSwitchActiveColor,
+                      inactiveTrackColor: theme.colorScheme.accessSwitchInactiveColor,
+                      trackOutlineColor: WidgetStateProperty.resolveWith(
+                        (states) => theme.colorScheme.accessSwitchActiveColor,
+                      ),
                     ),
                   ),
                 ],
                 ListTile(
-                  title: Text(L10n.of(context).globalChatId),
+                  title: Text(
+                    L10n.of(context).globalChatId,
+                    style: TextStyle(color: theme.colorScheme.accessTextColor),
+                  ),
                   subtitle: SelectableText(room.id),
+                  subtitleTextStyle:
+                      TextStyle(color: theme.colorScheme.accessTextColor),
                   trailing: IconButton(
-                    icon: const Icon(Icons.copy_outlined),
+                    icon: Icon(
+                      Icons.copy_outlined,
+                      color: theme.colorScheme.accessTextColor,
+                    ),
                     onPressed: () => FluffyShare.share(room.id, context),
                   ),
                 ),
                 ListTile(
-                  title: Text(L10n.of(context).roomVersion),
+                  title: Text(
+                    L10n.of(context).roomVersion,
+                    style: TextStyle(color: theme.colorScheme.accessTextColor),
+                  ),
                   subtitle: SelectableText(
                     room
                             .getState(EventTypes.RoomCreate)!
@@ -196,9 +229,14 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                             .tryGet<String>('room_version') ??
                         'Unknown',
                   ),
+                  subtitleTextStyle:
+                      TextStyle(color: theme.colorScheme.accessTextColor),
                   trailing: room.canSendEvent(EventTypes.RoomTombstone)
                       ? IconButton(
-                          icon: const Icon(Icons.upgrade_outlined),
+                          icon: Icon(
+                            Icons.upgrade_outlined,
+                            color: theme.colorScheme.accessTextColor,
+                          ),
                           onPressed: controller.updateRoomAction,
                         )
                       : null,
@@ -231,8 +269,11 @@ class _AliasListTile extends StatelessWidget {
 
     return ListTile(
       leading: isCanonicalAlias
-          ? const Icon(Icons.star)
-          : const Icon(Icons.link_outlined),
+          ? Icon(Icons.star, color: theme.colorScheme.accessStarColor)
+          : Icon(
+              Icons.link_outlined,
+              color: theme.colorScheme.accessStarColor,
+            ),
       title: InkWell(
         onTap: () => FluffyShare.share(
           'https://matrix.to/#/$alias',
@@ -242,8 +283,8 @@ class _AliasListTile extends StatelessWidget {
           alias,
           style: TextStyle(
             decoration: TextDecoration.underline,
-            decorationColor: theme.colorScheme.primary,
-            color: theme.colorScheme.primary,
+            decorationColor: theme.colorScheme.accessStarColor,
+            color: theme.colorScheme.accessStarColor,
             fontSize: 14,
           ),
         ),

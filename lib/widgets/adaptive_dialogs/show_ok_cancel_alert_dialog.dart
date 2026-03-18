@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -23,7 +24,7 @@ Future<OkCancelResult?> showOkCancelAlertDialog({
       builder: (context) => AlertDialog.adaptive(
         title: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 256),
-          child: Text(title.toUpperCase()),
+          child: Text(title.toUpperCase(), style: TextStyle(color: Theme.of(context).colorScheme.okCancelAlertTitleTextColor),),
         ),
         content: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 256),
@@ -31,6 +32,7 @@ Future<OkCancelResult?> showOkCancelAlertDialog({
               ? null
               : Text(
                   message,
+                  style: TextStyle(color: Theme.of(context).colorScheme.okCancelAlertMessageTextColor),
                 ),
         ),
         actions: [
@@ -46,7 +48,7 @@ Future<OkCancelResult?> showOkCancelAlertDialog({
             child: Text(
               okLabel ?? L10n.of(context).ok,
               style: isDestructive
-                  ? TextStyle(color: Theme.of(context).colorScheme.primary)
+                  ? TextStyle(color: Theme.of(context).colorScheme.error)
                   : null,
             ),
           ),
@@ -68,7 +70,7 @@ Future<OkCancelResult?> showOkAlertDialog({
       builder: (context) => AlertDialog.adaptive(
         title: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 256),
-          child: Text(title),
+          child: Text(title, style: TextStyle(color: Theme.of(context).colorScheme.okCancelAlertTitleTextColor), ),
         ),
         content: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 256),
@@ -81,13 +83,13 @@ Future<OkCancelResult?> showOkAlertDialog({
                   text: message,
                   textScaleFactor: MediaQuery.textScalerOf(context).scale(1),
                   linkStyle: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    decorationColor: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.okCancelAlertOkButtonColor,
+                    decorationColor: Theme.of(context).colorScheme.okCancelAlertOkButtonColor,
                   ),
                   options: const LinkifyOptions(humanize: false),
                   onOpen: (url) => UrlLauncher(context, url.url).launchUrl(),
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
+                    color: Theme.of(context).colorScheme.okCancelAlertMessageTextColor,
                     fontSize: 18,
                   ),
                 ),
@@ -96,7 +98,7 @@ Future<OkCancelResult?> showOkAlertDialog({
                 Text(
                   detail,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.okCancelAlertMessageTextColor,
                   ),
                 ),
               ],

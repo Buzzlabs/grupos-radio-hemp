@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart';
 import 'package:fluffychat/l10n/l10n.dart';
@@ -44,17 +45,17 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                     globalSearch: globalSearch,
                   ),
                   style: TextStyle(
-                    color: theme.colorScheme.onSecondary,
+                    color: theme.colorScheme.navigationSearchTextColor,
                   ),
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: theme.colorScheme.tertiary,
+                    fillColor: theme.colorScheme.navigationSearchFilledColor,
                     contentPadding: EdgeInsets.zero,
                     hintText: hide
                         ? L10n.of(context).searchChatsRooms
                         : status.calcLocalizedString(context),
                     hintStyle: TextStyle(
-                      color: theme.colorScheme.onSecondary,
+                      color: theme.colorScheme.navigationSearchHintTextColor,
                       fontWeight: FontWeight.normal,
                     ),
                     border: OutlineInputBorder(
@@ -75,13 +76,13 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                                 tooltip: L10n.of(context).cancel,
                                 icon: const Icon(Icons.close_outlined),
                                 onPressed: controller.cancelSearch,
-                                color: theme.colorScheme.onSecondary,
+                                color: theme.colorScheme.navigationSearchIconColor,
                               )
                             : IconButton(
                                 onPressed: controller.startSearch,
                                 icon: Icon(
                                   Icons.search_outlined,
-                                  color: theme.colorScheme.onSecondary,
+                                  color: theme.colorScheme.navigationSearchIconColor,
                                 ),
                               )
                         : Container(
@@ -94,7 +95,7 @@ class ChatListHeader extends StatelessWidget implements PreferredSizeWidget {
                                 value: status.progress,
                                 valueColor: status.error != null
                                     ? AlwaysStoppedAnimation<Color>(
-                                        theme.colorScheme.secondary,
+                                        theme.colorScheme.circularProgressIndicatorColor,
                                       )
                                     : null,
                               ),

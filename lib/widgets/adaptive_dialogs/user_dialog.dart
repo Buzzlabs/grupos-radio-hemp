@@ -12,7 +12,6 @@ import 'package:fluffychat/widgets/adaptive_dialogs/adaptive_dialog_action.dart'
 import 'package:fluffychat/widgets/avatar.dart';
 import 'package:fluffychat/widgets/presence_builder.dart';
 import '../../utils/url_launcher.dart';
-import '../future_loading_dialog.dart';
 import '../hover_builder.dart';
 import '../matrix.dart';
 import '../mxc_image_viewer.dart';

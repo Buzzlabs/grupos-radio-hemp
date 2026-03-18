@@ -15,20 +15,23 @@ class ArchiveView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return FutureBuilder<List<Room>>(
       future: controller.getArchive(context),
       builder: (BuildContext context, snapshot) => Scaffold(
         appBar: AppBar(
-          leading: const Center(child: BackButton()),
-          title: Text(L10n.of(context).archive),
+          leading: Center(child: BackButton(color: theme.colorScheme.tertiary,
+),),
+          title: Text(L10n.of(context).archive, style: TextStyle(color: theme.colorScheme.tertiary),),
           actions: [
             if (snapshot.data?.isNotEmpty ?? false)
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextButton.icon(
                   onPressed: controller.forgetAllAction,
-                  label: Text(L10n.of(context).clearArchive),
-                  icon: const Icon(Icons.cleaning_services_outlined),
+                  label: Text(L10n.of(context).clearArchive, style: TextStyle(color: theme.colorScheme.tertiary),),
+                  icon: Icon(Icons.cleaning_services_outlined, color: theme.colorScheme.tertiary,),
                 ),
               ),
           ],
@@ -42,6 +45,7 @@ class ArchiveView extends StatelessWidget {
                   child: Text(
                     L10n.of(context).oopsSomethingWentWrong,
                     textAlign: TextAlign.center,
+                    style: TextStyle(color: theme.colorScheme.onSecondaryContainer),
                   ),
                 );
               }
@@ -51,8 +55,8 @@ class ArchiveView extends StatelessWidget {
                 );
               } else {
                 if (controller.archive.isEmpty) {
-                  return const Center(
-                    child: Icon(Icons.archive_outlined, size: 80),
+                  return Center(
+                    child: Icon(Icons.archive_outlined, size: 80, color: theme.colorScheme.tertiary,),
                   );
                 }
                 return ListView.builder(
