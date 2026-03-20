@@ -4,6 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:image/image.dart';
 import 'package:matrix/matrix.dart';
 
+class SelectableRoom {
+  final String id;
+  final String name;
+
+  SelectableRoom({
+    required this.id,
+    required this.name,
+  });
+}
+
 class CreateBundleController extends ChangeNotifier {
   CreateBundleController(this.client);
 
@@ -14,8 +24,9 @@ class CreateBundleController extends ChangeNotifier {
 
   bool loading = false;
   String? error;
+  
 
-  List<Room> selectedRooms = [];
+  List<SelectableRoom> selectedRooms = [];
 
   /// ============================
   /// DISCOVER + SELECT ROOMS
@@ -106,15 +117,20 @@ class CreateBundleController extends ChangeNotifier {
                 child: const Text("Cancelar"),
               ),
               ElevatedButton(
-                onPressed: () {
-                  selectedRooms = tempSelected
-                      .map((id) => client.getRoomById(id))
-                      .whereType<Room>()
-                      .toList();
+               onPressed: () {
+                selectedRooms = rooms
+                    .where((room) => tempSelected.contains(room["room_id"]))
+                    .map<SelectableRoom>(
+                      (room) => SelectableRoom(
+                        id: room["room_id"],
+                        name: room["name"] ?? "Sem nome",
+                      ),
+                    )
+                    .toList();
 
-                  notifyListeners();
-                  Navigator.pop(context);
-                },
+                notifyListeners();
+                Navigator.pop(context);
+              },
                 child: Text("Confirmar", style: TextStyle(color: theme.colorScheme.newBundleButtonTextColor),),
               ),
             ],
@@ -128,7 +144,7 @@ class CreateBundleController extends ChangeNotifier {
     }
   }
 
-  void removeRoom(Room room) {
+  void removeRoom(SelectableRoom room) {
     selectedRooms.remove(room);
     notifyListeners();
   }
