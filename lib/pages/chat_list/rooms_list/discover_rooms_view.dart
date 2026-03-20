@@ -102,16 +102,34 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
+           if (snapshot.hasError) {
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                     Text('Erro ao carregar dados', style: TextStyle(color: theme.colorScheme.error),),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          final client = Matrix.of(context).client;
+                          roomsFuture = fetchDiscoverRooms(client);
+                          bundlesFuture = fetchBundles(client);
+                        });
+                      },
+                      child: Text('Tentar novamente', style: TextStyle(color: theme.colorScheme.error)),
+                    ),
+                  ],
+                ),
+              );
+            }
 
           final rooms = snapshot.data![0] as List<DiscoverRoom>;
           final bundles = snapshot.data![1] as List<DiscoverBundle>;
 
           if (rooms.isEmpty && bundles.isEmpty) {
-            return const Center(
-              child: Text('Nada disponível no momento'),
+            return  Center(
+              child: Text('Nada disponível no momento', style: TextStyle(color: theme.colorScheme.chatlistDiscoverNotingFoundTextColor),),
             );
           }
           return ListView(
@@ -137,7 +155,7 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
               const SizedBox(height: 12),
 
               if (rooms.isEmpty)
-                const Center(child: Text('Nenhum grupo disponível')),
+                 Center(child: Text('Nenhum grupo disponível', style: TextStyle(color: theme.colorScheme.chatlistDiscoverNotingFoundTextColor))),
 
               ...rooms
                   .map((room) => _buildRoomTile(room, client, userId))
@@ -283,22 +301,29 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                   theme.colorScheme.chatlistDiscoverBundleAccessButtonColor,
             ),
                 onPressed: () async {
-                  final approved =
-                      await _showFakePayment(context, bundle.price);
+                  final approved = await _showFakePayment(context, bundle.price);
                   if (!approved) return;
 
-                  for (final keyword in bundle.keywords) {
-                    await inviteToRoom(
-                      client: client,
-                      keyword: keyword,
-                      userId: userId,
-                    );
-                  }
+                  try {
+                    for (final keyword in bundle.keywords) {
+                      await inviteToRoom(
+                        client: client,
+                        keyword: keyword,
+                        userId: userId,
+                      );
+                    }
 
-                  if (context.mounted) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Bundle desbloqueado!', style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor),)),
+                      );
+                    }
+                  } catch (e) {
+                    if (!context.mounted) return;
+
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Bundle desbloqueado!'),
+                      SnackBar(
+                        content: Text('Erro ao entrar nos grupos: ${e.toString()}', style: TextStyle(color: theme.colorScheme.error)),
                       ),
                     );
                   }
@@ -380,17 +405,33 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
               ),
             ),
             onPressed: () async {
-              if (room.accessType == RoomAccessType.paid) {
-                final approved = await _showFakePayment(context, room.price);
-                if (!approved) return;
-              }
+  try {
+    if (room.accessType == RoomAccessType.paid) {
+      final approved = await _showFakePayment(context, room.price);
+      if (!approved) return;
+    }
 
-              await inviteToRoom(
-                client: client,
-                keyword: room.keyword,
-                userId: userId,
-              );
-            },
+    await inviteToRoom(
+      client: client,
+      keyword: room.keyword,
+      userId: userId,
+    );
+
+    if (!context.mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+       SnackBar(content: Text('Entrou no grupo!', style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor))),
+    );
+  } catch (e) {
+    if (!context.mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Erro ao entrar: ${e.toString()}', style: TextStyle(color: theme.colorScheme.error)),
+      ),
+    );
+  }
+}
           ),
         ),
       ),
@@ -426,48 +467,48 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
         ) ??
         false;
   }
-  Future<void> _showBundleDetails(
-  BuildContext context,
-  DiscoverBundle bundle,
-) async {
-  final theme = Theme.of(context);
+ Future<void> _showBundleDetails(
+    BuildContext context,
+    DiscoverBundle bundle,
+  ) async {
+    final theme = Theme.of(context);
 
-  await showDialog(
-    context: context,
-    builder: (dialogContext) => AlertDialog(
-      title: Text(
-        '👥 Grupos incluídos',
-        style: TextStyle(
-          color: theme.colorScheme.chatlistDiscoverTextColor,
+    await showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(
+          '👥 Grupos incluídos',
+          style: TextStyle(
+            color: theme.colorScheme.chatlistDiscoverTextColor,
+          ),
         ),
-      ),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: bundle.rooms
-              .map(
-                (room) => Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
-                  child: Text(
-                    '• $room',
-                    style: TextStyle(
-                      color: theme.colorScheme
-                          .chatlistDiscoverBundleTileDescriptionTextColor,
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: bundle.rooms
+                .map(
+                  (room) => Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Text(
+                      '• ${room.name}',
+                      style: TextStyle(
+                        color: theme.colorScheme
+                            .chatlistDiscoverBundleTileDescriptionTextColor,
+                      ),
                     ),
                   ),
-                ),
-              )
-              .toList(),
+                )
+                .toList(),
+          ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Fechar'),
+          ),
+        ],
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(dialogContext),
-          child: const Text('Fechar'),
-        ),
-      ],
-    ),
-  );
-}
+    );
+  }
 }

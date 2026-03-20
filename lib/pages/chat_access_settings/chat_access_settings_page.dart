@@ -200,7 +200,8 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                   ),
                   onChanged: controller.visibilityLoading ||
                           controller.isAdminLoading ||
-                          !controller.isAdmin
+                          !controller.isAdmin ||
+                          !room.canChangeJoinRules
                       ? null
                       : (value) =>
                           controller.setBusinessVisibility(value ?? false),
@@ -211,7 +212,7 @@ class ChatAccessSettingsPageView extends StatelessWidget {
                   child: TextField(
                     controller: controller.priceController,
                     keyboardType: TextInputType.number,
-                    enabled: controller.isAdmin && room.joinRules != JoinRules.public,
+                    enabled: controller.isAdmin && room.canChangeJoinRules && room.joinRules != JoinRules.public,
                     onSubmitted: (_) => controller.setPrice(),
                     style: TextStyle(
                       color: theme.colorScheme.newGroupTextFieldTextColor,

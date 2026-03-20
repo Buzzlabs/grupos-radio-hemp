@@ -107,7 +107,10 @@ class LoginController extends State<Login> {
       initialDeviceDisplayName: PlatformInfos.clientName,
     );
 
-
+      // This block was commented out because the authentication flow was simplified to use email-only login, 
+      // avoiding the automatic detection of multiple identifier types (email, phone number, and userId), which 
+      // is unnecessary in the current scenario and may cause inconsistencies with the authentication backend.
+      //
       // final username = usernameController.text;
       // AuthenticationIdentifier identifier;
       // if (username.isEmail) {
