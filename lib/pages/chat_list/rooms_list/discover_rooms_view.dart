@@ -39,7 +39,6 @@ class DiscoverRoom {
   }
 }
 
-
 Future<List<DiscoverRoom>> fetchDiscoverRooms(Client client) async {
   final uri = Uri.parse('${client.homeserver}/_synapse/room_service/discover');
 
@@ -110,7 +109,6 @@ Future<void> inviteToRoom({
   }
 }
 
-
 class DiscoverRoomsView extends StatefulWidget {
   const DiscoverRoomsView({super.key});
 
@@ -147,20 +145,13 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
     final theme = Theme.of(context);
     final userId = client.userID.toString();
 
-  static const double _bottomButtonHeight = 72;
-@override
-Widget build(BuildContext context) {
-  final client = Matrix.of(context).client;
-  final theme = Theme.of(context);
-  final userId = client.userID.toString();
-
-
-  return Scaffold(
-    appBar: AppBar(
-      title: Text(
-        'Descobrir Grupos',
-        style: TextStyle(
-          color: theme.colorScheme.chatlistDiscoverTextColor,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Descobrir Grupos',
+          style: TextStyle(
+            color: theme.colorScheme.chatlistDiscoverTextColor,
+          ),
         ),
       ),
       bottomNavigationBar: (!adminLoaded || !isAdmin)
@@ -233,53 +224,65 @@ Widget build(BuildContext context) {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        room.accessType == RoomAccessType.paid
-                            ? 'Premium • R\$ ${(room.price / 100).toStringAsFixed(2)}'
-                            : 'Entrada livre',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: theme.colorScheme.chatlistDiscoverTileDescriptionTextColor,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.person_outline,
-                            size: 16,
-                            color: theme.colorScheme.chatlistDiscoverTileDescriptionTextColor,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${room.memberCount} participantes',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: theme.colorScheme.chatlistDiscoverTileDescriptionTextColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  trailing: ElevatedButton(
-                    child: Text(
-                      room.accessType == RoomAccessType.free
-                          ? 'Entrar'
-                          : 'Desbloquear',
+                    title: Text(
+                      room.name,
                       style: TextStyle(
-                        color: theme.colorScheme.chatlistDiscoverButtonTextColor,
+                        color: theme
+                            .colorScheme.chatlistDiscoverTileGroupNameTextColor,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onPressed: () async {
-                      if (room.accessType == RoomAccessType.paid) {
-                        final approved = await _showFakePayment(context, room.price);
-                        if (!approved) return;
-                      }
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          room.accessType == RoomAccessType.paid
+                              ? 'Premium • R\$ ${(room.price / 100).toStringAsFixed(2)}'
+                              : 'Entrada livre',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: theme.colorScheme
+                                .chatlistDiscoverTileDescriptionTextColor,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.person_outline,
+                              size: 16,
+                              color: theme.colorScheme
+                                  .chatlistDiscoverTileDescriptionTextColor,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${room.memberCount} participantes',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: theme.colorScheme
+                                    .chatlistDiscoverTileDescriptionTextColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    trailing: ElevatedButton(
+                      child: Text(
+                        room.accessType == RoomAccessType.free
+                            ? 'Entrar'
+                            : 'Desbloquear',
+                        style: TextStyle(
+                          color:
+                              theme.colorScheme.chatlistDiscoverButtonTextColor,
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (room.accessType == RoomAccessType.paid) {
+                          final approved =
+                              await _showFakePayment(context, room.price);
+                          if (!approved) return;
+                        }
 
                         try {
                           await inviteToRoom(
@@ -313,15 +316,13 @@ Widget build(BuildContext context) {
                     ),
                   ),
                 ),
-              ),
-            );
-          },
-        );
-      },
-    ),
-  );
-}
-
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
 
   Future<bool> _showFakePayment(BuildContext context, int price) async {
     final theme = Theme.of(context);
