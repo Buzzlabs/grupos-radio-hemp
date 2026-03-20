@@ -102,16 +102,34 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
+           if (snapshot.hasError) {
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                     Text('Erro ao carregar dados', style: TextStyle(color: theme.colorScheme.error),),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          final client = Matrix.of(context).client;
+                          roomsFuture = fetchDiscoverRooms(client);
+                          bundlesFuture = fetchBundles(client);
+                        });
+                      },
+                      child: Text('Tentar novamente', style: TextStyle(color: theme.colorScheme.error)),
+                    ),
+                  ],
+                ),
+              );
+            }
 
           final rooms = snapshot.data![0] as List<DiscoverRoom>;
           final bundles = snapshot.data![1] as List<DiscoverBundle>;
 
           if (rooms.isEmpty && bundles.isEmpty) {
-            return const Center(
-              child: Text('Nada disponível no momento'),
+            return  Center(
+              child: Text('Nada disponível no momento', style: TextStyle(color: theme.colorScheme.chatlistDiscoverNotingFoundTextColor),),
             );
           }
           return ListView(
@@ -137,7 +155,7 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
               const SizedBox(height: 12),
 
               if (rooms.isEmpty)
-                const Center(child: Text('Nenhum grupo disponível')),
+                 Center(child: Text('Nenhum grupo disponível', style: TextStyle(color: theme.colorScheme.chatlistDiscoverNotingFoundTextColor))),
 
               ...rooms
                   .map((room) => _buildRoomTile(room, client, userId))
