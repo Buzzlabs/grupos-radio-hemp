@@ -55,8 +55,6 @@ class ChatListView extends StatelessWidget {
                   body: Stack(
                 children: [
                   ChatListViewBody(controller),
-
-                  // 🎵 Player (fica embaixo)
                   Positioned(
                     bottom: 0,
                     left: 0,
@@ -80,8 +78,6 @@ class ChatListView extends StatelessWidget {
                       ),
                     ),
                   ),
-
-                  // 🔒 BOTÃO — SEMPRE POR ÚLTIMO
                   Positioned(
                     bottom: 220,
                     right: 12,

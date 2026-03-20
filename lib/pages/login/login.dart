@@ -92,33 +92,52 @@ class LoginController extends State<Login> {
     _coolDown?.cancel();
 
     try {
-      final username = usernameController.text;
-      AuthenticationIdentifier identifier;
-      if (username.isEmail) {
-        identifier = AuthenticationThirdPartyIdentifier(
-          medium: 'email',
-          address: username,
-        );
-      } else if (username.isPhoneNumber) {
-        identifier = AuthenticationThirdPartyIdentifier(
-          medium: 'msisdn',
-          address: username,
-        );
-      } else {
-        identifier = AuthenticationUserIdentifier(user: username);
-      }
-      final client = await matrix.getLoginClient();
-      await client.login(
-        LoginType.mLoginPassword,
-        identifier: identifier,
-        // To stay compatible with older server versions
-        // ignore: deprecated_member_use
-        user: identifier.type == AuthenticationIdentifierTypes.userId
-            ? username
-            : null,
-        password: passwordController.text,
-        initialDeviceDisplayName: PlatformInfos.clientName,
-      );
+    final email = usernameController.text.trim();
+
+    final identifier = AuthenticationUserIdentifier(
+      user: email, 
+    );
+
+    final client = await matrix.getLoginClient();
+
+    await client.login(
+      LoginType.mLoginPassword,
+      identifier: identifier,
+      password: passwordController.text,
+      initialDeviceDisplayName: PlatformInfos.clientName,
+    );
+
+      // This block was commented out because the authentication flow was simplified to use email-only login, 
+      // avoiding the automatic detection of multiple identifier types (email, phone number, and userId), which 
+      // is unnecessary in the current scenario and may cause inconsistencies with the authentication backend.
+      //
+      // final username = usernameController.text;
+      // AuthenticationIdentifier identifier;
+      // if (username.isEmail) {
+      //   identifier = AuthenticationThirdPartyIdentifier(
+      //     medium: 'email',
+      //     address: username,
+      //   );
+      // } else if (username.isPhoneNumber) {
+      //   identifier = AuthenticationThirdPartyIdentifier(
+      //     medium: 'msisdn',
+      //     address: username,
+      //   );
+      // } else {
+      //   identifier = AuthenticationUserIdentifier(user: username);
+      // }
+      // final client = await matrix.getLoginClient();
+      // await client.login(
+      //   LoginType.mLoginPassword,
+      //   identifier: identifier,
+      //   // To stay compatible with older server versions
+      //   // ignore: deprecated_member_use
+      //   user: identifier.type == AuthenticationIdentifierTypes.userId
+      //       ? username
+      //       : null,
+      //   password: passwordController.text,
+      //   initialDeviceDisplayName: PlatformInfos.clientName,
+      // );
     } on MatrixException catch (exception) {
       String errorMessage;
 
