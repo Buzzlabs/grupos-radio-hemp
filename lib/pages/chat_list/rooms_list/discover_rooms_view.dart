@@ -100,11 +100,13 @@ Future<void> inviteToRoom({
     }),
   );
 
-  if (response.statusCode != 200) {
-    throw Exception('Invite failed: ${response.statusCode} ${response.body}');
-  }
-  if (response.statusCode != 403) {
+ if (response.statusCode == 200) {
+    return; // sucesso
+  } else if (response.statusCode == 403) {
     throw Exception('Invite failed: Already part of the group');
+  } else {
+    throw Exception(
+        'Invite failed: ${response.statusCode} ${response.body}');
   }
 }
 
