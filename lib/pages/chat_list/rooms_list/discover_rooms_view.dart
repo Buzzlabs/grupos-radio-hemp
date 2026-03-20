@@ -364,48 +364,48 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
         ) ??
         false;
   }
-  Future<void> _showBundleDetails(
-  BuildContext context,
-  DiscoverBundle bundle,
-) async {
-  final theme = Theme.of(context);
+ Future<void> _showBundleDetails(
+    BuildContext context,
+    DiscoverBundle bundle,
+  ) async {
+    final theme = Theme.of(context);
 
-  await showDialog(
-    context: context,
-    builder: (dialogContext) => AlertDialog(
-      title: Text(
-        '👥 Grupos incluídos',
-        style: TextStyle(
-          color: theme.colorScheme.chatlistDiscoverTextColor,
+    await showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(
+          '👥 Grupos incluídos',
+          style: TextStyle(
+            color: theme.colorScheme.chatlistDiscoverTextColor,
+          ),
         ),
-      ),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: bundle.rooms
-              .map(
-                (room) => Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
-                  child: Text(
-                    '• $room',
-                    style: TextStyle(
-                      color: theme.colorScheme
-                          .chatlistDiscoverBundleTileDescriptionTextColor,
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: bundle.rooms
+                .map(
+                  (room) => Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Text(
+                      '• ${room.name}',
+                      style: TextStyle(
+                        color: theme.colorScheme
+                            .chatlistDiscoverBundleTileDescriptionTextColor,
+                      ),
                     ),
                   ),
-                ),
-              )
-              .toList(),
+                )
+                .toList(),
+          ),
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Fechar'),
+          ),
+        ],
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(dialogContext),
-          child: const Text('Fechar'),
-        ),
-      ],
-    ),
-  );
-}
+    );
+  }
 }
