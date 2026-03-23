@@ -331,6 +331,7 @@ extension ColorId on ColorScheme {
   // chatlist 
   // discover 
   Color get chatlistDiscoverTextColor => tertiary;
+  Color get chatlistDiscoverNotingFoundTextColor => onSecondaryContainer;
   Color get chatlistDiscoverRoomTileGroupNameTextColor => tertiary;
   Color get chatlistDiscoverRoomTilePriceDescriptionTextColor => tertiary;
   Color get chatlistDiscoverRoomTileBackgroundColor => secondary.withValues(alpha: 0.4);

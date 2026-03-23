@@ -55,8 +55,6 @@ class ChatListView extends StatelessWidget {
                   body: Stack(
                 children: [
                   ChatListViewBody(controller),
-
-                  // 🎵 Player (fica embaixo)
                   Positioned(
                     bottom: 0,
                     left: 0,

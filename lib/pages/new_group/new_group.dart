@@ -33,7 +33,6 @@ class NewGroupController extends State<NewGroup> {
   bool publicGroup = false;
   bool groupCanBeFound = false;
 
-  /// 🔴 ERRO DE KEYWORD
   bool keywordAlreadyExists = false;
 
   Uint8List? avatar;
@@ -50,7 +49,6 @@ class NewGroupController extends State<NewGroup> {
   void initState() {
     super.initState();
 
-    /// limpa erro quando digita
     keywordController.addListener(() {
       if (keywordAlreadyExists) {
         setState(() => keywordAlreadyExists = false);
@@ -170,6 +168,16 @@ class NewGroupController extends State<NewGroup> {
       final roomId = await _createGroupViaModule();
 
       if (!mounted) return;
+      if (avatarUrl != null) {
+      await client.setRoomStateWithKey(
+        roomId,
+        'm.room.avatar',
+        '',
+        {
+          'url': avatarUrl.toString(),
+        },
+      );
+    }
       context.go('/rooms/$roomId/invite');
     } catch (e, s) {
       if (e.toString().contains('KEYWORD_ALREADY_EXISTS')) return;
