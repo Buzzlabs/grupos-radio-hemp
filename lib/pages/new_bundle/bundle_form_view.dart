@@ -16,7 +16,9 @@ class BundleFormView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed: () => context.go("/rooms/discover"),
+          onPressed: controller.loading
+            ? null
+            : () => context.go("/rooms/discover"),
           color: theme.colorScheme.newBundleTextColor,
         ),
         title: Text(
@@ -39,6 +41,7 @@ class BundleFormView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: TextField(
+                      readOnly: controller.loading, 
                       controller: controller.nameController,
                       style: TextStyle(
                         color: theme.colorScheme.newBundleTextColor,
@@ -62,6 +65,7 @@ class BundleFormView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: TextField(
+                      readOnly: controller.loading, 
                       controller: controller.priceController,
                       keyboardType: TextInputType.number,
                       style: TextStyle(
@@ -111,15 +115,17 @@ class BundleFormView extends StatelessWidget {
                                 color: theme
                                     .colorScheme.newBundleButtonTextColor,
                               ),
-                              onPressed: () =>
-                                  controller.removeRoom(room),
+                              onPressed: controller.loading
+                                ? null
+                                : () => controller.removeRoom(room),
                             ),
                           ),
                         ),
 
                         TextButton.icon(
-                          onPressed: () =>
-                              controller.selectRooms(context),
+                          onPressed: controller.loading
+                            ? null
+                            : () => controller.selectRooms(context),
                           icon: const Icon(Icons.add),
                           label: const Text("Adicionar salas"),
                         ),
@@ -135,8 +141,9 @@ class BundleFormView extends StatelessWidget {
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () =>
-                            controller.submit(context),
+                        onPressed: controller.loading
+                          ? null
+                          : () => controller.submit(context),
                         child: controller.loading
                             ? const SizedBox(
                                 height: 18,
