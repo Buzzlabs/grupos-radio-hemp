@@ -405,13 +405,11 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                   if (!approved) return;
 
                   try {
-                    for (final keyword in bundle.keywords) {
-                      await inviteToRoom(
-                        client: client,
-                        keyword: keyword,
-                        userId: userId,
-                      );
-                    }
+                    await inviteToBundle(
+                      client: client,
+                      bundleId: bundle.id,
+                      userId: userId,
+                    );
 
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
