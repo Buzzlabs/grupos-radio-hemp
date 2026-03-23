@@ -12,7 +12,7 @@ Future<String?> adminRedirect(
   final client = matrix.client;
 
   if (client.accessToken == null || client.homeserver == null) {
-    return '/rooms'; 
+    return '/rooms';
   }
 
   final adminService = AdminService(
@@ -20,11 +20,15 @@ Future<String?> adminRedirect(
     client.accessToken!,
   );
 
-  final isAdmin = await adminService.isAdmin();
+  try {
+    final isAdmin = await adminService.isAdmin();
 
-  if (!isAdmin) {
+    if (!isAdmin) {
+      return '/rooms';
+    }
+
+    return null; 
+  } catch (e) {
     return '/rooms';
   }
-
-  return null;
 }
