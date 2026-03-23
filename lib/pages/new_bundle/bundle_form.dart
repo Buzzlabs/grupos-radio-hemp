@@ -185,8 +185,8 @@ class BundleFormController extends ChangeNotifier {
   }
 
   /// SUBMIT
-  Future<void> submit(BuildContext context) async {
-    if (loading) return;
+  Future<bool> submit(BuildContext context) async {
+    if (loading) return false;
 
     final name = nameController.text.trim();
     final priceText = priceController.text.trim();
@@ -194,14 +194,14 @@ class BundleFormController extends ChangeNotifier {
     if (name.isEmpty) {
       error = "Nome do bundle é obrigatório";
       notifyListeners();
-      return;
+      return false;
     }
 
     final price = int.tryParse(priceText);
     if (price == null) {
       error = "Preço inválido";
       notifyListeners();
-      return;
+      return false;
     }
 
     error = null;
@@ -235,15 +235,16 @@ class BundleFormController extends ChangeNotifier {
         throw Exception(response.body);
       }
 
-      Navigator.pop(context);
+      return true;
     } catch (e) {
       error = e.toString();
-    }
-
+       return false;
+    } finally {
     loading = false;
     notifyListeners();
+    }
   }
-
+  
   @override
   void dispose() {
     nameController.dispose();

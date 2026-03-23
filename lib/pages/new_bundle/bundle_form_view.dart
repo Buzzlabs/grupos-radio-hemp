@@ -18,7 +18,7 @@ class BundleFormView extends StatelessWidget {
         leading: BackButton(
           onPressed: controller.loading
             ? null
-            : () => context.go("/rooms/discover"),
+            : () => context.pop(),
           color: theme.colorScheme.newBundleTextColor,
         ),
         title: Text(
@@ -143,7 +143,12 @@ class BundleFormView extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: controller.loading
                           ? null
-                          : () => controller.submit(context),
+                          : () async {
+                            final success = await controller.submit(context);
+                            if (success && context.mounted) {
+                              context.pop(true); 
+                            }
+                          },
                         child: controller.loading
                             ? const SizedBox(
                                 height: 18,
@@ -194,4 +199,6 @@ class BundleFormView extends StatelessWidget {
       ),
     );
   }
+
+  
 }
