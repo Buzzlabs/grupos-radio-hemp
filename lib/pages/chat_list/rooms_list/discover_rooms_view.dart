@@ -96,74 +96,74 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
         ),
       ),
       body: FutureBuilder(
-        future: Future.wait([roomsFuture, bundlesFuture]),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      future: Future.wait([
+        roomsFuture.then((value) => (value, null)).catchError((e) => (<DiscoverRoom>[], e)),
+        bundlesFuture.then((value) => (value, null)).catchError((e) => (<DiscoverBundle>[], e)),
+      ]),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-           if (snapshot.hasError) {
-              return Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                     Text('Erro ao carregar dados', style: TextStyle(color: theme.colorScheme.error),),
-                    const SizedBox(height: 8),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          final client = Matrix.of(context).client;
-                          roomsFuture = fetchDiscoverRooms(client);
-                          bundlesFuture = fetchBundles(client);
-                        });
-                      },
-                      child: Text('Tentar novamente', style: TextStyle(color: theme.colorScheme.error)),
-                    ),
-                  ],
-                ),
-              );
-            }
+        if (!snapshot.hasData) {
+          return _buildErrorState();
+        }
 
-          final rooms = snapshot.data![0] as List<DiscoverRoom>;
-          final bundles = snapshot.data![1] as List<DiscoverBundle>;
+        final roomsResult = snapshot.data![0] as (List<DiscoverRoom>, dynamic);
+        final bundlesResult = snapshot.data![1] as (List<DiscoverBundle>, dynamic);
 
-          if (rooms.isEmpty && bundles.isEmpty) {
-            return  Center(
-              child: Text('Nada disponível no momento', style: TextStyle(color: theme.colorScheme.chatlistDiscoverNotingFoundTextColor),),
-            );
-          }
-          return ListView(
-            padding: const EdgeInsets.only(
-                left: 16, right: 16, bottom: _bottomButtonHeight + 24),
-            children: [
-              if (bundles.isNotEmpty) ...[
-                ...bundles
-                    .map((bundle) => _buildBundleCard(bundle, client, userId)),
-                const SizedBox(height: 24),
-                const Divider(),
-                const SizedBox(height: 16),
-              ],
+        final rooms = roomsResult.$1;
+        final roomsError = roomsResult.$2 != null;
 
-              Text(
-                '👥 Grupos',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.chatlistDiscoverTextColor,
-                ),
+        final bundles = bundlesResult.$1;
+        final bundlesError = bundlesResult.$2 != null;
+
+        if (roomsError && bundlesError) {
+          return _buildErrorState();
+        }
+
+        return ListView(
+          padding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+            bottom: _bottomButtonHeight + 24,
+          ),
+          children: [
+            if (bundlesError)
+              _buildSectionError('Erro ao carregar bundles'),
+
+            if (bundles.isNotEmpty) ...[
+              ...bundles.map(
+                (bundle) => _buildBundleCard(bundle, client, userId),
               ),
-              const SizedBox(height: 12),
-
-              if (rooms.isEmpty)
-                 Center(child: Text('Nenhum grupo disponível', style: TextStyle(color: theme.colorScheme.chatlistDiscoverNotingFoundTextColor))),
-
-              ...rooms
-                  .map((room) => _buildRoomTile(room, client, userId))
-                  .toList(),
+              const SizedBox(height: 24),
+              const Divider(),
+              const SizedBox(height: 16),
             ],
-          );
-        },
-      ),
+
+            if (roomsError)
+              _buildSectionError('Erro ao carregar grupos'),
+
+            Text(
+              '👥 Grupos',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: theme.colorScheme.chatlistDiscoverTextColor,
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            if (rooms.isEmpty && !roomsError)
+              const Center(child: Text('Nenhum grupo disponível')),
+
+            ...rooms.map(
+              (room) => _buildRoomTile(room, client, userId),
+            ),
+          ],
+        );
+      },
+    ),
     );
   }
 
@@ -463,4 +463,37 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
       ),
     );
   }
+
+  Widget _buildErrorState() {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text('Erro ao carregar dados'),
+        const SizedBox(height: 8),
+        ElevatedButton(
+          onPressed: () {
+            final client = Matrix.of(context).client;
+            setState(() {
+              roomsFuture = fetchDiscoverRooms(client);
+              bundlesFuture = fetchBundles(client);
+            });
+          },
+          child: const Text('Tentar novamente'),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildSectionError(String message) {
+  final theme = Theme.of(context);
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 12),
+    child: Text(
+      message,
+      style: TextStyle(color: theme.colorScheme.error),
+    ),
+  );
+}
 }

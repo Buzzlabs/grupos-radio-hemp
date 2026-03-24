@@ -159,28 +159,24 @@ class DiscoverBundle {
 }
 
 Future<List<DiscoverBundle>> fetchBundles(Client client) async {
-  try {
-    final uri = Uri.parse('${client.homeserver}/_synapse/bundles/list');
+  final uri = Uri.parse('${client.homeserver}/_synapse/bundles/list');
 
-    final response = await http.get(
-      uri,
-      headers: {
-        'Authorization': 'Bearer ${client.accessToken}',
-        'Content-Type': 'application/json',
-      },
-    );
+  final response = await http.get(
+    uri,
+    headers: {
+      'Authorization': 'Bearer ${client.accessToken}',
+      'Content-Type': 'application/json',
+    },
+  );
 
-    if (response.statusCode != 200) {
-      return [];
-    }
-
-    final decoded = jsonDecode(utf8.decode(response.bodyBytes));
-    final List bundlesJson = decoded['bundles'] ?? [];
-
-    return bundlesJson
-        .map<DiscoverBundle>((e) => DiscoverBundle.fromJson(e))
-        .toList();
-  } catch (_) {
-    return [];
+  if (response.statusCode != 200) {
+    throw Exception('HTTP ${response.statusCode}: ${response.body}');
   }
+
+  final decoded = jsonDecode(utf8.decode(response.bodyBytes));
+  final List bundlesJson = decoded['bundles'] ?? [];
+
+  return bundlesJson
+      .map<DiscoverBundle>((e) => DiscoverBundle.fromJson(e))
+      .toList();
 }
