@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:fluffychat/utils/price_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
@@ -78,14 +79,6 @@ class NewGroupController extends State<NewGroup> {
         .replaceAll(RegExp(r'[^a-z0-9_]'), '');
   }
 
-  int _calculatePrice() {
-    if (!groupCanBeFound || publicGroup) return 0;
-    final value = double.tryParse(
-      priceController.text.replaceAll(',', '.'),
-    );
-    return value == null ? 0 : (value * 100).round();
-  }
-
   void _validateForm() {
     if (nameController.text.trim().isEmpty) {
       throw Exception('Nome do grupo é obrigatório');
@@ -101,13 +94,14 @@ class NewGroupController extends State<NewGroup> {
     }
 
     if (groupCanBeFound && !publicGroup) {
-      final price = int.tryParse(priceController.text) ?? 0;
-      if (price <= 0) {
-        throw Exception(
-          'Grupos privados visíveis precisam ter preço',
-        );
-      }
+    final price = PriceUtils.parseToCents(priceController.text);
+
+    if (price <= 0) {
+      throw Exception(
+        'Grupos privados visíveis precisam ter preço',
+      );
     }
+  }
   }
 
   Future<String> _createGroupViaModule() async {
@@ -127,7 +121,9 @@ class NewGroupController extends State<NewGroup> {
         "keyword": keywordController.text.trim(),
         "access_type": publicGroup ? "public" : "private",
         "visible": groupCanBeFound,
-        "price": groupCanBeFound ? _calculatePrice() : 0,
+        "price": (groupCanBeFound && !publicGroup)
+          ? PriceUtils.parseToCents(priceController.text)
+          : 0,
       }),
     );
 
@@ -215,6 +211,8 @@ class NewGroupController extends State<NewGroup> {
     });
   }
 
+  
   @override
   Widget build(BuildContext context) => NewGroupView(this);
 }
+
