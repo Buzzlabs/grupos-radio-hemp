@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:fluffychat/utils/price_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
@@ -78,14 +79,6 @@ class NewGroupController extends State<NewGroup> {
         .replaceAll(RegExp(r'[^a-z0-9_]'), '');
   }
 
-  int _calculatePrice() {
-    if (!groupCanBeFound || publicGroup) return 0;
-    final value = double.tryParse(
-      priceController.text.replaceAll(',', '.'),
-    );
-    return value == null ? 0 : (value * 100).round();
-  }
-
   void _validateForm() {
     if (nameController.text.trim().isEmpty) {
       throw Exception('Nome do grupo é obrigatório');
@@ -101,13 +94,14 @@ class NewGroupController extends State<NewGroup> {
     }
 
     if (groupCanBeFound && !publicGroup) {
-      final price = int.tryParse(priceController.text) ?? 0;
-      if (price <= 0) {
-        throw Exception(
-          'Grupos privados visíveis precisam ter preço',
-        );
-      }
+    final price = PriceUtils.parseToCents(priceController.text);
+
+    if (price <= 0) {
+      throw Exception(
+        'Grupos privados visíveis precisam ter preço',
+      );
     }
+  }
   }
 
   Future<String> _createGroupViaModule() async {
@@ -127,7 +121,9 @@ class NewGroupController extends State<NewGroup> {
         "keyword": keywordController.text.trim(),
         "access_type": publicGroup ? "public" : "private",
         "visible": groupCanBeFound,
-        "price": groupCanBeFound ? _calculatePrice() : 0,
+        "price": (groupCanBeFound && !publicGroup)
+          ? PriceUtils.parseToCents(priceController.text)
+          : 0,
       }),
     );
 
@@ -146,49 +142,57 @@ class NewGroupController extends State<NewGroup> {
     return jsonDecode(res.body)['room_id'] as String;
   }
 
-  void submitAction([_]) async {
-    final client = Matrix.of(context).client;
+ void submitAction([_]) async {
+  final client = Matrix.of(context).client;
 
+  String? roomId;
+
+  try {
+    _validateForm();
+
+    setState(() {
+      loading = true;
+      error = null;
+      keywordAlreadyExists = false;
+    });
+
+    roomId = await _createGroupViaModule();
+
+    if (!mounted) return;
     try {
-      _validateForm();
-
-      setState(() {
-        loading = true;
-        error = null;
-        keywordAlreadyExists = false;
-      });
-
       final avatarBytes = avatar;
-      avatarUrl ??= avatarBytes == null
+
+      final avatarUrlLocal = avatarUrl ??= avatarBytes == null
           ? null
           : await client.uploadContent(avatarBytes);
 
-      if (!mounted) return;
-
-      final roomId = await _createGroupViaModule();
-
-      if (!mounted) return;
-      if (avatarUrl != null) {
-      await client.setRoomStateWithKey(
-        roomId,
-        'm.room.avatar',
-        '',
-        {
-          'url': avatarUrl.toString(),
-        },
-      );
+      if (avatarUrlLocal != null) {
+        await client.setRoomStateWithKey(
+          roomId,
+          'm.room.avatar',
+          '',
+          {
+            'url': avatarUrlLocal.toString(),
+          },
+        );
+      }
+    } catch (avatarError, s) {
+      sdk.Logs().d('Erro ao setar avatar', avatarError, s);
     }
-      context.go('/rooms/$roomId/invite');
-    } catch (e, s) {
-      if (e.toString().contains('KEYWORD_ALREADY_EXISTS')) return;
 
-      sdk.Logs().d('Unable to create group', e, s);
-      setState(() {
-        error = e;
-        loading = false;
-      });
-    }
+    context.go('/rooms/$roomId/invite');
+
+  } catch (e, s) {
+    if (e.toString().contains('KEYWORD_ALREADY_EXISTS')) return;
+
+    sdk.Logs().d('Unable to create group', e, s);
+
+    setState(() {
+      error = e;
+      loading = false;
+    });
   }
+}
 
   void selectPhoto() async {
     final photo = await selectFiles(
@@ -207,6 +211,8 @@ class NewGroupController extends State<NewGroup> {
     });
   }
 
+  
   @override
   Widget build(BuildContext context) => NewGroupView(this);
 }
+
