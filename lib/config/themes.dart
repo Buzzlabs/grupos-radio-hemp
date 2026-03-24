@@ -345,6 +345,7 @@ extension ColorId on ColorScheme {
   Color get chatlistDiscoverBundleTilePriceDescriptionTextColor => tertiary;
   Color get chatlistDiscoverBundleTileBackgroundColor => Color.fromARGB(255, 109, 100, 209).withValues(alpha: 0.4);
   Color get chatlistDiscoverBundleTileDescriptionTextColor => onSecondaryContainer;
+  Color get chatlistDiscoverBundleMenuItemTextColor => tertiary;
   Color get chatlistDiscoverBundleButtonTextColor => tertiary;
   Color get chatlistDiscoverBundleAccessButtonColor => Color.fromARGB(255, 109, 100, 209);
   Color get chatlistDiscoverBundleButtonColor => primary.withValues(alpha: 0.6);

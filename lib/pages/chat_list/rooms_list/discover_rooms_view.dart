@@ -195,6 +195,7 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
         ),
       ),
     ),
+
     if (bundle.isDraft)
       Container(
         padding: const EdgeInsets.symmetric(
@@ -213,6 +214,53 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
             color: Colors.orange,
           ),
         ),
+      ),
+
+    if (isAdmin)
+      PopupMenuButton<String>(
+        icon: Icon(
+          Icons.more_vert,
+          color: theme.colorScheme
+              .chatlistDiscoverBundleMenuItemTextColor,
+        ),
+        onSelected: (value) async {
+          if (value == 'publish') {
+            try {
+              await publishBundle(
+                client: client,
+                bundleId: bundle.id,
+              );
+
+              if (!mounted) return;
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                 SnackBar(
+                  content: Text('Bundle publicado!', style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor)),
+                ),
+              );
+
+              setState(() {
+                bundlesFuture = fetchBundles(client);
+              });
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Erro: $e', style: TextStyle(color: theme.colorScheme.error))),
+              );
+            }
+          }
+
+          if (value == 'edit') {
+            // FUTURO
+          }
+        },
+        itemBuilder: (context) => [
+          if (bundle.isDraft)
+            PopupMenuItem(
+              value: 'publish',
+              child: Text('Publicar', style: TextStyle(color: theme.colorScheme.chatlistDiscoverBundleMenuItemTextColor),),
+            ),
+           
+        ],
       ),
   ],
 ),
