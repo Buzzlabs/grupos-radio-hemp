@@ -146,49 +146,57 @@ class NewGroupController extends State<NewGroup> {
     return jsonDecode(res.body)['room_id'] as String;
   }
 
-  void submitAction([_]) async {
-    final client = Matrix.of(context).client;
+ void submitAction([_]) async {
+  final client = Matrix.of(context).client;
 
+  String? roomId;
+
+  try {
+    _validateForm();
+
+    setState(() {
+      loading = true;
+      error = null;
+      keywordAlreadyExists = false;
+    });
+
+    roomId = await _createGroupViaModule();
+
+    if (!mounted) return;
     try {
-      _validateForm();
-
-      setState(() {
-        loading = true;
-        error = null;
-        keywordAlreadyExists = false;
-      });
-
       final avatarBytes = avatar;
-      avatarUrl ??= avatarBytes == null
+
+      final avatarUrlLocal = avatarUrl ??= avatarBytes == null
           ? null
           : await client.uploadContent(avatarBytes);
 
-      if (!mounted) return;
-
-      final roomId = await _createGroupViaModule();
-
-      if (!mounted) return;
-      if (avatarUrl != null) {
-      await client.setRoomStateWithKey(
-        roomId,
-        'm.room.avatar',
-        '',
-        {
-          'url': avatarUrl.toString(),
-        },
-      );
+      if (avatarUrlLocal != null) {
+        await client.setRoomStateWithKey(
+          roomId,
+          'm.room.avatar',
+          '',
+          {
+            'url': avatarUrlLocal.toString(),
+          },
+        );
+      }
+    } catch (avatarError, s) {
+      sdk.Logs().d('Erro ao setar avatar', avatarError, s);
     }
-      context.go('/rooms/$roomId/invite');
-    } catch (e, s) {
-      if (e.toString().contains('KEYWORD_ALREADY_EXISTS')) return;
 
-      sdk.Logs().d('Unable to create group', e, s);
-      setState(() {
-        error = e;
-        loading = false;
-      });
-    }
+    context.go('/rooms/$roomId/invite');
+
+  } catch (e, s) {
+    if (e.toString().contains('KEYWORD_ALREADY_EXISTS')) return;
+
+    sdk.Logs().d('Unable to create group', e, s);
+
+    setState(() {
+      error = e;
+      loading = false;
+    });
   }
+}
 
   void selectPhoto() async {
     final photo = await selectFiles(
