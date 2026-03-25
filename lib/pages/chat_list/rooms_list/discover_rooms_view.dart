@@ -76,6 +76,8 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                       onPressed: () async {
                         final result = await context.push("/rooms/newbundle");
 
+                        if (!mounted) return;
+
                         if (result == true) {
                           reloadBundles(); 
                         }
@@ -260,6 +262,8 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                    if (value == 'edit') {
                     final result = await context.push('/rooms/editbundle/${bundle.id}');
 
+                    if (!mounted) return;
+                    
                     if (result == true) {
                       reloadBundles();
                     }
