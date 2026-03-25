@@ -113,38 +113,59 @@ class BundleFormController extends ChangeNotifier {
         context: context,
         builder: (context) {
           final tempSelected = {...selectedIds};
+          final discoverIds = rooms.map((r) => r["room_id"]).toSet();
 
+          final hiddenRooms =
+              selectedRooms.where((r) => !discoverIds.contains(r.id)).toList();
           return AlertDialog(
             title: const Text("Selecionar Salas"),
             content: SizedBox(
               width: 400,
               child: ListView(
                 shrinkWrap: true,
-                children: rooms.map((room) {
-                  final roomId = room["room_id"];
-                  final name = room["name"] ?? "Sem nome";
-
-                  return StatefulBuilder(
-                    builder: (context, setState) {
-                      final isChecked = tempSelected.contains(roomId);
-
-                      return CheckboxListTile(
-                        value: isChecked,
-                        title: Text(name),
-                        subtitle: Text(roomId),
-                        onChanged: (value) {
-                          setState(() {
-                            if (value == true) {
-                              tempSelected.add(roomId);
-                            } else {
-                              tempSelected.remove(roomId);
-                            }
-                          });
+                children: [
+                  ...hiddenRooms.map((room) {
+                    return ListTile(
+                      title: Text("${room.name} (indisponível)"),
+                      subtitle: Text(room.id),
+                      leading: const Icon(Icons.warning, color: Colors.orange),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          tempSelected.remove(room.id);
+                          (context as Element)
+                              .markNeedsBuild(); // força rebuild
                         },
-                      );
-                    },
-                  );
-                }).toList(),
+                      ),
+                    );
+                  }),
+                  if (hiddenRooms.isNotEmpty) const Divider(),
+                  ...rooms.map((room) {
+                    final roomId = room["room_id"];
+                    final name = room["name"] ?? "Sem nome";
+
+                    return StatefulBuilder(
+                      builder: (context, setState) {
+                        final isChecked = tempSelected.contains(roomId);
+
+                        return CheckboxListTile(
+                          value: isChecked,
+                          title: Text(name),
+                          subtitle: Text(roomId),
+                          onChanged: (value) {
+                            setState(() {
+                              if (value == true) {
+                                tempSelected.add(roomId);
+                              } else {
+                                tempSelected.remove(roomId);
+                              }
+                            });
+                          },
+                        );
+                      },
+                    );
+                  }),
+                ],
               ),
             ),
             actions: [
@@ -154,14 +175,24 @@ class BundleFormController extends ChangeNotifier {
               ),
               ElevatedButton(
                 onPressed: () {
-                  selectedRooms = rooms
-                      .where((room) =>
-                          tempSelected.contains(room["room_id"]))
-                      .map((room) => BundleRoom(
-                            id: room["room_id"],
-                            name: room["name"] ?? "Sem nome",
-                          ))
-                      .toList();
+                  final Map<String, BundleRoom> finalRooms = {
+                    for (var room in selectedRooms) room.id: room,
+                  };
+
+                  finalRooms.removeWhere((id, _) => !tempSelected.contains(id));
+
+                  for (var room in rooms) {
+                    final roomId = room["room_id"];
+
+                    if (tempSelected.contains(roomId)) {
+                      finalRooms[roomId] = BundleRoom(
+                        id: roomId,
+                        name: room["name"] ?? "Sem nome",
+                      );
+                    }
+                  }
+
+                  selectedRooms = finalRooms.values.toList();
 
                   notifyListeners();
                   Navigator.pop(context);
@@ -238,13 +269,13 @@ class BundleFormController extends ChangeNotifier {
       return true;
     } catch (e) {
       error = e.toString();
-       return false;
+      return false;
     } finally {
-    loading = false;
-    notifyListeners();
+      loading = false;
+      notifyListeners();
     }
   }
-  
+
   @override
   void dispose() {
     nameController.dispose();
