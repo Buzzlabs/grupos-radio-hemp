@@ -654,4 +654,13 @@ Widget _buildSectionError(String message) {
     ),
   );
 }
+
+ void reloadBundles() {
+  final client = Matrix.of(context).client;
+
+  setState(() {
+    bundlesFuture = fetchBundles(client);
+  });
+}
+
 }
