@@ -2,12 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluffychat/config/themes.dart';
 import 'package:fluffychat/widgets/layouts/max_width_body.dart';
+import 'package:matrix/matrix.dart';
 import 'bundle_form.dart';
+class BundleFormView extends StatefulWidget {
+  final Client client;
+  final String? bundleId;
 
-class BundleFormView extends StatelessWidget {
-  final BundleFormController controller;
+  const BundleFormView(
+    this.client, {
+    this.bundleId,
+    super.key,
+  });
 
-  const BundleFormView(this.controller, {super.key});
+  @override
+  State<BundleFormView> createState() => _BundleFormViewState();
+}
+
+class _BundleFormViewState extends State<BundleFormView> {
+  late final BundleFormController controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.bundleId != null) {
+      controller =
+          BundleFormController.edit(widget.client, widget.bundleId);
+    } else {
+      controller = BundleFormController.create(widget.client);
+    }
+  }
+
+  @override
+  void dispose() {
+    controller.dispose(); 
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +46,7 @@ class BundleFormView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed: controller.loading
-            ? null
-            : () => context.pop(),
+          onPressed: controller.loading ? null : () => context.pop(),
           color: theme.colorScheme.newBundleTextColor,
         ),
         title: Text(
@@ -41,7 +69,7 @@ class BundleFormView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: TextField(
-                      readOnly: controller.loading, 
+                      readOnly: controller.loading,
                       controller: controller.nameController,
                       style: TextStyle(
                         color: theme.colorScheme.newBundleTextColor,
@@ -65,7 +93,7 @@ class BundleFormView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: TextField(
-                      readOnly: controller.loading, 
+                      readOnly: controller.loading,
                       controller: controller.priceController,
                       keyboardType: TextInputType.number,
                       style: TextStyle(
@@ -78,7 +106,8 @@ class BundleFormView extends StatelessWidget {
                           color: theme
                               .colorScheme.newBundleTextFieldHintTextColor,
                         ),
-                        prefixIcon: const Icon(Icons.attach_money_outlined),
+                        prefixIcon:
+                            const Icon(Icons.attach_money_outlined),
                         labelText: "Preço",
                       ),
                     ),
@@ -96,7 +125,6 @@ class BundleFormView extends StatelessWidget {
                           "Salas incluídas (opcional)",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-
                         const SizedBox(height: 8),
 
                         ...controller.selectedRooms.map(
@@ -105,27 +133,27 @@ class BundleFormView extends StatelessWidget {
                             title: Text(
                               room.name,
                               style: TextStyle(
-                                color: theme
-                                    .colorScheme.newBundleSelectNameTextColor,
+                                color: theme.colorScheme
+                                    .newBundleSelectNameTextColor,
                               ),
                             ),
                             trailing: IconButton(
                               icon: Icon(
                                 Icons.close,
-                                color: theme
-                                    .colorScheme.newBundleButtonTextColor,
+                                color: theme.colorScheme
+                                    .newBundleButtonTextColor,
                               ),
                               onPressed: controller.loading
-                                ? null
-                                : () => controller.removeRoom(room),
+                                  ? null
+                                  : () => controller.removeRoom(room),
                             ),
                           ),
                         ),
 
                         TextButton.icon(
                           onPressed: controller.loading
-                            ? null
-                            : () => controller.selectRooms(context),
+                              ? null
+                              : () => controller.selectRooms(context),
                           icon: const Icon(Icons.add),
                           label: const Text("Adicionar salas"),
                         ),
@@ -142,13 +170,14 @@ class BundleFormView extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: controller.loading
-                          ? null
-                          : () async {
-                            final success = await controller.submit(context);
-                            if (success && context.mounted) {
-                              context.pop(true); 
-                            }
-                          },
+                            ? null
+                            : () async {
+                                final success =
+                                    await controller.submit(context);
+                                if (success && context.mounted) {
+                                  context.pop(true);
+                                }
+                              },
                         child: controller.loading
                             ? const SizedBox(
                                 height: 18,
@@ -162,8 +191,8 @@ class BundleFormView extends StatelessWidget {
                                     ? "Salvar alterações"
                                     : "Criar Bundle",
                                 style: TextStyle(
-                                  color: theme
-                                      .colorScheme.newBundleButtonTextColor,
+                                  color: theme.colorScheme
+                                      .newBundleButtonTextColor,
                                 ),
                               ),
                       ),
@@ -199,6 +228,4 @@ class BundleFormView extends StatelessWidget {
       ),
     );
   }
-
-  
 }

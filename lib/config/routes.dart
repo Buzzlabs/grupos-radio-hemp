@@ -160,13 +160,13 @@ abstract class AppRoutes {
           ),
           routes: [
             GoRoute(
-                  path: 'discover',
-                  pageBuilder: (context, state) => defaultPageBuilder(
-                    context,
-                    state,
-                    const DiscoverRoomsView(),
-                  ),
-                ),
+              path: 'discover',
+              pageBuilder: (context, state) => defaultPageBuilder(
+                context,
+                state,
+                const DiscoverRoomsView(),
+              ),
+            ),
             GoRoute(
               path: 'archive',
               pageBuilder: (context, state) => defaultPageBuilder(
@@ -209,42 +209,39 @@ abstract class AppRoutes {
               redirect: adminRedirect,
             ),
             GoRoute(
-  path: 'newbundle',
-  pageBuilder: (context, state) => defaultPageBuilder(
-    context,
-    state,
-    Builder(
-      builder: (context) {
-        final client = Matrix.of(context).client;
+              path: 'newbundle',
+              pageBuilder: (context, state) => defaultPageBuilder(
+                context,
+                state,
+                Builder(
+                  builder: (context) {
+                    final client = Matrix.of(context).client;
 
-        return BundleFormView(
-          BundleFormController.create(client),
-        );
-      },
-    ),
-  ),
-  redirect: adminRedirect,
-),
-GoRoute(
-  path: 'editbundle/:id',
-  pageBuilder: (context, state) {
-    final client = Matrix.of(context).client;
+                    return BundleFormView(client);
+                  },
+                ),
+              ),
+              redirect: adminRedirect,
+            ),
+            GoRoute(
+              path: 'editbundle/:id',
+              pageBuilder: (context, state) => defaultPageBuilder(
+                context,
+                state,
+                Builder(
+                  builder: (context) {
+                    final client = Matrix.of(context).client;
+                    final bundleId = state.pathParameters['id']!;
 
-    final bundleId = state.pathParameters['id']!;
-
-    return defaultPageBuilder(
-      context,
-      state,
-      BundleFormView(
-        BundleFormController.edit(
-          client,
-          bundleId,
-        ),
-      ),
-    );
-  },
-  redirect: adminRedirect,
-),
+                    return BundleFormView(
+                      client,
+                      bundleId: bundleId,
+                    );
+                  },
+                ),
+              ),
+              redirect: adminRedirect,
+            ),
             // GoRoute(
             //   path: 'newspace',
             //   pageBuilder: (context, state) => defaultPageBuilder(
