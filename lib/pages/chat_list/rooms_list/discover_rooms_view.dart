@@ -1,113 +1,12 @@
-import 'dart:convert';
+// discover_rooms_view.dart
+
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
-import 'package:fluffychat/config/themes.dart';
-import 'package:fluffychat/widgets/matrix.dart';
 import 'package:flutter/material.dart';
+import 'package:fluffychat/widgets/matrix.dart';
+import 'package:fluffychat/config/themes.dart';
 import 'package:matrix/matrix.dart';
 
-enum RoomAccessType { free, paid }
-
-class DiscoverRoom {
-  final String roomId;
-  final String name;
-  final String keyword;
-  final RoomAccessType accessType;
-  final int price;
-  final int memberCount;
-
-  DiscoverRoom({
-    required this.roomId,
-    required this.name,
-    required this.keyword,
-    required this.accessType,
-    required this.price,
-    required this.memberCount,
-  });
-
-  factory DiscoverRoom.fromJson(Map<String, dynamic> json) {
-    return DiscoverRoom(
-      roomId: json['room_id'],
-      name: json['name'] ?? 'Sem nome',
-      keyword: json['keyword'],
-      accessType: json['access_type'] == 'private'
-          ? RoomAccessType.paid
-          : RoomAccessType.free,
-      price: json['price'] ?? 0,
-      memberCount: json['member_count'] ?? 0,
-    );
-  }
-}
-
-Future<List<DiscoverRoom>> fetchDiscoverRooms(Client client) async {
-  final uri = Uri.parse('${client.homeserver}/_synapse/room_service/discover');
-
-  final response = await http.get(
-    uri,
-    headers: {
-      'Authorization': 'Bearer ${client.accessToken}',
-      'Content-Type': 'application/json',
-    },
-  );
-
-  if (response.statusCode != 200) {
-    throw Exception('HTTP ${response.statusCode}: ${response.body}');
-  }
-
-  final decoded = jsonDecode(utf8.decode(response.bodyBytes));
-
-  final List roomsJson = decoded['rooms'];
-
-  return roomsJson.map<DiscoverRoom>((e) => DiscoverRoom.fromJson(e)).toList();
-}
-
-Future<bool> fetchIsAdmin(Client client) async {
-  final uri = Uri.parse('${client.homeserver}/_synapse/room_service/is_admin');
-
-  final response = await http.get(
-    uri,
-    headers: {
-      'Authorization': 'Bearer ${client.accessToken}',
-      'Content-Type': 'application/json',
-    },
-  );
-
-  if (response.statusCode != 200) {
-    return false;
-  }
-
-  final decoded = jsonDecode(utf8.decode(response.bodyBytes));
-  return decoded['is_admin'] == true;
-}
-
-Future<void> inviteToRoom({
-  required Client client,
-  required String keyword,
-  required String userId,
-}) async {
-  final uri = Uri.parse('${client.homeserver}/_synapse/room_service/invite');
-
-  final response = await http.post(
-    uri,
-    headers: {
-      'Authorization': 'Bearer ${client.accessToken}',
-      'Content-Type': 'application/json',
-    },
-    body: jsonEncode({
-      'keyword': keyword,
-      'user_id': userId,
-    }),
-  );
-
- if (response.statusCode == 200) {
-    return; // sucesso
-  } else if (response.statusCode == 403) {
-    throw Exception('Invite failed: Already part of the group');
-  } else {
-    throw Exception(
-        'Invite failed: ${response.statusCode} ${response.body}');
-  }
-}
+import 'discover_rooms.dart';
 
 class DiscoverRoomsView extends StatefulWidget {
   const DiscoverRoomsView({super.key});
@@ -117,16 +16,21 @@ class DiscoverRoomsView extends StatefulWidget {
 }
 
 class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
-  late Future<List<DiscoverRoom>> future;
+  late Future<List<DiscoverRoom>> roomsFuture;
+  late Future<List<DiscoverBundle>> bundlesFuture;
+
   bool isAdmin = false;
   bool adminLoaded = false;
+
+  static const double _bottomButtonHeight = 72;
 
   @override
   void initState() {
     super.initState();
     final client = Matrix.of(context).client;
 
-    future = fetchDiscoverRooms(client);
+    roomsFuture = fetchDiscoverRooms(client);
+    bundlesFuture = fetchBundles(client);
 
     fetchIsAdmin(client).then((value) {
       if (!mounted) return;
@@ -136,8 +40,6 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
       });
     });
   }
-
-  static const double _bottomButtonHeight = 72;
 
   @override
   Widget build(BuildContext context) {
@@ -164,17 +66,10 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                   children: [
                     ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
                         backgroundColor:
-                            theme.colorScheme.chatlistDiscoverButtonColor,
+                            theme.colorScheme.chatlistDiscoverRoomButtonColor,
                         foregroundColor:
-                            theme.colorScheme.chatlistDiscoverButtonTextColor,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
+                            theme.colorScheme.chatlistDiscoverRoomButtonTextColor,
                       ),
                       icon: const Icon(Icons.add),
                       label: const Text('Novo Grupo'),
@@ -186,140 +81,297 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                 ),
               ),
             ),
-      body: FutureBuilder<List<DiscoverRoom>>(
-        future: future,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: FutureBuilder(
+      future: Future.wait([
+        roomsFuture.then((value) => (value, null)).catchError((e) => (<DiscoverRoom>[], e)),
+        bundlesFuture.then((value) => (value, null)).catchError((e) => (<DiscoverBundle>[], e)),
+      ]),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                'Erro ao carregar grupos',
-                style: TextStyle(color: theme.colorScheme.error),
+        if (!snapshot.hasData) {
+          return _buildErrorState();
+        }
+
+        final roomsResult = snapshot.data![0] as (List<DiscoverRoom>, dynamic);
+        final bundlesResult = snapshot.data![1] as (List<DiscoverBundle>, dynamic);
+
+        final rooms = roomsResult.$1;
+        final roomsError = roomsResult.$2 != null;
+
+        final bundles = bundlesResult.$1;
+        final bundlesError = bundlesResult.$2 != null;
+
+        if (roomsError && bundlesError) {
+          return _buildErrorState();
+        }
+
+        return ListView(
+          padding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+            bottom: _bottomButtonHeight + 24,
+          ),
+          children: [
+            if (bundlesError)
+              _buildSectionError('Erro ao carregar bundles'),
+
+            if (bundles.isNotEmpty) ...[
+              ...bundles.map(
+                (bundle) => _buildBundleCard(bundle, client, userId),
               ),
-            );
-          }
+              const SizedBox(height: 24),
+              const Divider(),
+              const SizedBox(height: 16),
+            ],
 
-          final rooms = snapshot.data!;
+            if (roomsError)
+              _buildSectionError('Erro ao carregar grupos'),
 
-          if (rooms.isEmpty) {
-            return const Center(child: Text('Nenhum grupo disponível'));
-          }
+            Text(
+              '👥 Grupos',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: theme.colorScheme.chatlistDiscoverTextColor,
+              ),
+            ),
+            const SizedBox(height: 12),
 
-          return ListView.builder(
-            padding: const EdgeInsets.only(bottom: _bottomButtonHeight + 24),
-            itemCount: rooms.length,
-            itemBuilder: (context, index) {
-              final room = rooms[index];
+            if (rooms.isEmpty && !roomsError)
+              const Center(child: Text('Nenhum grupo disponível')),
 
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Material(
-                  borderRadius: BorderRadius.circular(14),
-                  color: theme.colorScheme.secondary.withValues(alpha: 0.4),
-                  child: ListTile(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    title: Text(
-                      room.name,
-                      style: TextStyle(
-                        color: theme
-                            .colorScheme.chatlistDiscoverTileGroupNameTextColor,
-                        fontWeight: FontWeight.bold,
+            ...rooms.map(
+              (room) => _buildRoomTile(room, client, userId),
+            ),
+          ],
+        );
+      },
+    ),
+    );
+  }
+
+  // BUNDLE CARD
+
+  Widget _buildBundleCard(DiscoverBundle bundle, Client client, String userId) {
+    final theme = Theme.of(context);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: theme.colorScheme.chatlistDiscoverBundleTileBackgroundColor,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+  children: [
+    Expanded(
+      child: Text(
+        bundle.name,
+        style: TextStyle(
+          color: theme.colorScheme
+              .chatlistDiscoverBundleTileGroupNameTextColor,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+    if (bundle.isDraft)
+      Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 8,
+          vertical: 4,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.orange.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Text(
+          'Rascunho',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: Colors.orange,
+          ),
+        ),
+      ),
+  ],
+),
+          const SizedBox(height: 8),
+          Text(
+            'R\$ ${(bundle.price / 100).toStringAsFixed(2)}',
+            style:  TextStyle(
+              color: theme.colorScheme.chatlistDiscoverBundleTilePriceDescriptionTextColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text('Inclui ${bundle.rooms.length} grupos', style: TextStyle(color: theme.colorScheme.chatlistDiscoverBundleTileDescriptionTextColor )),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+  style: TextButton.styleFrom(
+    padding: EdgeInsets.zero,
+    minimumSize: Size.zero,
+    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  ),
+  onPressed: () {
+    _showBundleDetails(context, bundle);
+  },
+  child: Text(
+    'Mais detalhes >',
+    style: TextStyle(
+      color: theme.colorScheme.chatlistDiscoverBundleTileDescriptionTextColor,
+    ),
+  ),
+),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+              backgroundColor:
+                  theme.colorScheme.chatlistDiscoverBundleAccessButtonColor,
+            ),
+                onPressed: () async {
+                  final approved = await _showFakePayment(context, bundle.price);
+                  if (!approved) return;
+
+                  try {
+                    for (final keyword in bundle.keywords) {
+                      await inviteToRoom(
+                        client: client,
+                        keyword: keyword,
+                        userId: userId,
+                      );
+                    }
+
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Bundle desbloqueado!', style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor),)),
+                      );
+                    }
+                  } catch (e) {
+                    if (!context.mounted) return;
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Erro ao entrar nos grupos: ${e.toString()}', style: TextStyle(color: theme.colorScheme.error)),
                       ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          room.accessType == RoomAccessType.paid
-                              ? 'Premium • R\$ ${(room.price / 100).toStringAsFixed(2)}'
-                              : 'Entrada livre',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: theme.colorScheme
-                                .chatlistDiscoverTileDescriptionTextColor,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.person_outline,
-                              size: 16,
-                              color: theme.colorScheme
-                                  .chatlistDiscoverTileDescriptionTextColor,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${room.memberCount} participantes',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: theme.colorScheme
-                                    .chatlistDiscoverTileDescriptionTextColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    trailing: ElevatedButton(
-                      child: Text(
-                        room.accessType == RoomAccessType.free
-                            ? 'Entrar'
-                            : 'Desbloquear',
-                        style: TextStyle(
-                          color:
-                              theme.colorScheme.chatlistDiscoverButtonTextColor,
-                        ),
-                      ),
-                      onPressed: () async {
-                        if (room.accessType == RoomAccessType.paid) {
-                          final approved =
-                              await _showFakePayment(context, room.price);
-                          if (!approved) return;
-                        }
+                    );
+                  }
+                },
+                child:  Text('Pagar', style: TextStyle(color: theme.colorScheme.chatlistDiscoverBundleButtonTextColor),),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
 
-                        try {
-                          await inviteToRoom(
-                            client: client,
-                            keyword: room.keyword,
-                            userId: userId,
-                          );
+  // ROOM TILE
 
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text('Entrou no grupo ${room.name}',
-                                      style: TextStyle(
-                                          color: theme.colorScheme
-                                              .normalSnackBarTextColor))),
-                            );
-                            Navigator.pop(context);
-                          }
-                        } catch (e) {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text('Falha ao entrar: $e',
-                                      style: TextStyle(
-                                          color: theme.colorScheme
-                                              .oopsMessageTextColor))),
-                            );
-                          }
-                        }
-                      },
-                    ),
-                  ),
-                ),
-              );
-            },
-          );
-        },
+  Widget _buildRoomTile(DiscoverRoom room, Client client, String userId) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Material(
+        borderRadius: BorderRadius.circular(14),
+        color: theme.colorScheme.chatlistDiscoverRoomTileBackgroundColor,
+        child: ListTile(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          title: Text(
+            room.name,
+            style: TextStyle(
+              color: theme.colorScheme.chatlistDiscoverRoomTileGroupNameTextColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          subtitle: Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Text(
+      room.accessType == RoomAccessType.paid
+          ? 'Premium • R\$ ${(room.price / 100).toStringAsFixed(2)}'
+          : 'Entrada livre',
+      style: TextStyle(
+        fontSize: 12,
+        color: theme
+            .colorScheme.chatlistDiscoverRoomTilePriceDescriptionTextColor,
+      ),
+    ),
+    const SizedBox(height: 4),
+    Row(
+      children: [
+        Icon(
+          Icons.person_outline,
+          size: 16,
+          color: theme.colorScheme
+              .chatlistDiscoverRoomTilePriceDescriptionTextColor,
+        ),
+        const SizedBox(width: 4),
+        Text(
+          '${room.memberCount} participantes',
+          style: TextStyle(
+            fontSize: 12,
+            color: theme.colorScheme
+                .chatlistDiscoverRoomTilePriceDescriptionTextColor,
+          ),
+        ),
+      ],
+    ),
+  ],
+),
+          trailing: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor:
+                  theme.colorScheme.chatlistDiscoverRoomAccessButtonColor,
+            ),
+            child: Text(
+              room.accessType == RoomAccessType.free ? 'Entrar' : 'Desbloquear',
+              style: TextStyle(
+                color: theme.colorScheme.chatlistDiscoverRoomButtonTextColor,
+              ),
+            ),
+            onPressed: () async {
+  try {
+    if (room.accessType == RoomAccessType.paid) {
+      final approved = await _showFakePayment(context, room.price);
+      if (!approved) return;
+    }
+
+    await inviteToRoom(
+      client: client,
+      keyword: room.keyword,
+      userId: userId,
+    );
+
+    if (!context.mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+       SnackBar(content: Text('Entrou no grupo!', style: TextStyle(color: theme.colorScheme.normalSnackBarTextColor))),
+    );
+  } catch (e) {
+    if (!context.mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Erro ao entrar: ${e.toString()}', style: TextStyle(color: theme.colorScheme.error)),
+      ),
+    );
+  }
+}
+          ),
+        ),
       ),
     );
   }
@@ -344,7 +396,7 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                 child: Text(
                   'Pagar',
                   style: TextStyle(
-                    color: theme.colorScheme.chatlistDiscoverButtonTextColor,
+                    color: theme.colorScheme.chatlistDiscoverRoomButtonTextColor,
                   ),
                 ),
               ),
@@ -353,4 +405,81 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
         ) ??
         false;
   }
+ Future<void> _showBundleDetails(
+    BuildContext context,
+    DiscoverBundle bundle,
+  ) async {
+    final theme = Theme.of(context);
+
+    await showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(
+          '👥 Grupos incluídos',
+          style: TextStyle(
+            color: theme.colorScheme.chatlistDiscoverTextColor,
+          ),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: bundle.rooms
+                .map(
+                  (room) => Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Text(
+                      '• ${room.name}',
+                      style: TextStyle(
+                        color: theme.colorScheme
+                            .chatlistDiscoverBundleTileDescriptionTextColor,
+                      ),
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Fechar'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState() {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text('Erro ao carregar dados'),
+        const SizedBox(height: 8),
+        ElevatedButton(
+          onPressed: () {
+            final client = Matrix.of(context).client;
+            setState(() {
+              roomsFuture = fetchDiscoverRooms(client);
+              bundlesFuture = fetchBundles(client);
+            });
+          },
+          child: const Text('Tentar novamente'),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildSectionError(String message) {
+  final theme = Theme.of(context);
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 12),
+    child: Text(
+      message,
+      style: TextStyle(color: theme.colorScheme.error),
+    ),
+  );
+}
 }

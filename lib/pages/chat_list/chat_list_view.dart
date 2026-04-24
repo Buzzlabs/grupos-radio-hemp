@@ -78,6 +78,7 @@ class ChatListView extends StatelessWidget {
                       ),
                     ),
                   ),
+
                   Positioned(
                     bottom: 220,
                     right: 12,
@@ -89,21 +90,21 @@ class ChatListView extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           backgroundColor:
-                              theme.colorScheme.chatlistDiscoverButtonColor,
+                              theme.colorScheme.chatlistDiscoverRoomButtonColor,
                           foregroundColor:
-                              theme.colorScheme.chatlistDiscoverButtonTextColor,
+                              theme.colorScheme.chatlistDiscoverRoomButtonTextColor,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 10),
                           minimumSize: const Size(130, 25),
                         ),
                         icon: Icon(Icons.explore,
                             color: theme
-                                .colorScheme.chatlistDiscoverButtonTextColor),
+                                .colorScheme.chatlistDiscoverRoomButtonTextColor),
                         label: Text(
                           'Descobrir Grupos',
                           style: TextStyle(
                               color: theme
-                                  .colorScheme.chatlistDiscoverButtonTextColor),
+                                  .colorScheme.chatlistDiscoverRoomButtonTextColor),
                         ),
                         onPressed: () {
                           context.go('/rooms/discover');
