@@ -1,12 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:fluffychat/config/themes.dart';
 import 'package:fluffychat/widgets/layouts/max_width_body.dart';
-import 'package:fluffychat/pages/new_bundle/new_bundle.dart';
+import 'package:matrix/matrix.dart';
+import 'bundle_form.dart';
+class BundleFormView extends StatefulWidget {
+  final Client client;
+  final String? bundleId;
 
-class CreateBundleView extends StatelessWidget {
-  final CreateBundleController controller;
+  const BundleFormView(
+    this.client, {
+    this.bundleId,
+    super.key,
+  });
 
-  const CreateBundleView(this.controller, {super.key});
+  @override
+  State<BundleFormView> createState() => _BundleFormViewState();
+}
+
+class _BundleFormViewState extends State<BundleFormView> {
+  late final BundleFormController controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.bundleId != null) {
+      controller =
+          BundleFormController.edit(widget.client, widget.bundleId);
+    } else {
+      controller = BundleFormController.create(widget.client);
+    }
+  }
+
+  @override
+  void dispose() {
+    controller.dispose(); 
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,15 +45,12 @@ class CreateBundleView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Center(
-          child: BackButton(
-            onPressed:
-                controller.loading ? null : () => Navigator.of(context).pop(),
-            color: theme.colorScheme.newBundleTextColor,
-          ),
+        leading: BackButton(
+          onPressed: controller.loading ? null : () => context.pop(),
+          color: theme.colorScheme.newBundleTextColor,
         ),
         title: Text(
-          "Criar Bundle",
+          controller.isEdit ? "Editar Bundle" : "Criar Bundle",
           style: TextStyle(color: theme.colorScheme.newBundleTextColor),
         ),
       ),
@@ -37,17 +65,22 @@ class CreateBundleView extends StatelessWidget {
                 children: [
                   const SizedBox(height: 24),
 
-                  /// NOME
+                  /// NAME
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: TextField(
-                      style: TextStyle(
-                  color: theme.colorScheme.newBundleTextColor,),
-                      controller: controller.nameController,
                       readOnly: controller.loading,
-                      decoration:  InputDecoration(
-                        fillColor: theme.colorScheme.newBundleTextFieldFillColor ,
-                        hintStyle: TextStyle(color: theme.colorScheme.newBundleTextFieldHintTextColor),
+                      controller: controller.nameController,
+                      style: TextStyle(
+                        color: theme.colorScheme.newBundleTextColor,
+                      ),
+                      decoration: InputDecoration(
+                        fillColor:
+                            theme.colorScheme.newBundleTextFieldFillColor,
+                        hintStyle: TextStyle(
+                          color: theme
+                              .colorScheme.newBundleTextFieldHintTextColor,
+                        ),
                         prefixIcon: const Icon(Icons.inventory_2_outlined),
                         labelText: "Nome do bundle",
                       ),
@@ -56,19 +89,25 @@ class CreateBundleView extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
-                  /// PREÇO
+                  /// PRICE
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: TextField(
-                      style: TextStyle(
-                  color: theme.colorScheme.newBundleTextColor,),
-                      controller: controller.priceController,
                       readOnly: controller.loading,
+                      controller: controller.priceController,
                       keyboardType: TextInputType.number,
+                      style: TextStyle(
+                        color: theme.colorScheme.newBundleTextColor,
+                      ),
                       decoration: InputDecoration(
-                        fillColor: theme.colorScheme.newBundleTextFieldFillColor ,
-                        hintStyle: TextStyle(color: theme.colorScheme.newBundleTextFieldHintTextColor),
-                        prefixIcon: const Icon(Icons.attach_money_outlined),
+                        fillColor:
+                            theme.colorScheme.newBundleTextFieldFillColor,
+                        hintStyle: TextStyle(
+                          color: theme
+                              .colorScheme.newBundleTextFieldHintTextColor,
+                        ),
+                        prefixIcon:
+                            const Icon(Icons.attach_money_outlined),
                         labelText: "Preço",
                       ),
                     ),
@@ -76,7 +115,7 @@ class CreateBundleView extends StatelessWidget {
 
                   const SizedBox(height: 24),
 
-                  /// SALAS
+                  /// ROOMS
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
@@ -91,9 +130,19 @@ class CreateBundleView extends StatelessWidget {
                         ...controller.selectedRooms.map(
                           (room) => ListTile(
                             contentPadding: EdgeInsets.zero,
-                            title: Text(room.name ?? room.id, style: TextStyle(color: theme.colorScheme.newBundleSelectNameTextColor)),
+                            title: Text(
+                              room.name,
+                              style: TextStyle(
+                                color: theme.colorScheme
+                                    .newBundleSelectNameTextColor,
+                              ),
+                            ),
                             trailing: IconButton(
-                              icon: Icon(Icons.close, color: theme.colorScheme.newBundleButtonTextColor),
+                              icon: Icon(
+                                Icons.close,
+                                color: theme.colorScheme
+                                    .newBundleButtonTextColor,
+                              ),
                               onPressed: controller.loading
                                   ? null
                                   : () => controller.removeRoom(room),
@@ -114,7 +163,7 @@ class CreateBundleView extends StatelessWidget {
 
                   const SizedBox(height: 32),
 
-                  /// BOTÃO
+                  /// BUTTON
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: SizedBox(
@@ -122,7 +171,13 @@ class CreateBundleView extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: controller.loading
                             ? null
-                            : () => controller.submit(context),
+                            : () async {
+                                final success =
+                                    await controller.submit(context);
+                                if (success && context.mounted) {
+                                  context.pop(true);
+                                }
+                              },
                         child: controller.loading
                             ? const SizedBox(
                                 height: 18,
@@ -131,12 +186,20 @@ class CreateBundleView extends StatelessWidget {
                                   strokeWidth: 2,
                                 ),
                               )
-                            : Text("Criar Bundle",style: TextStyle(color: theme.colorScheme.newBundleButtonTextColor),),
+                            : Text(
+                                controller.isEdit
+                                    ? "Salvar alterações"
+                                    : "Criar Bundle",
+                                style: TextStyle(
+                                  color: theme.colorScheme
+                                      .newBundleButtonTextColor,
+                                ),
+                              ),
                       ),
                     ),
                   ),
 
-                  /// ERRO
+                  /// ERROR
                   AnimatedSize(
                     duration: FluffyThemes.animationDuration,
                     curve: FluffyThemes.animationCurve,

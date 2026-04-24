@@ -73,8 +73,14 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                       ),
                       icon: const Icon(Icons.inventory_2_outlined),
                       label: const Text('Novo Bundle'),
-                      onPressed: () {
-                        context.go('/rooms/newbundle');
+                      onPressed: () async {
+                        final result = await context.push("/rooms/newbundle");
+
+                        if (!mounted) return;
+
+                        if (result == true) {
+                          reloadBundles(); 
+                        }
                       },
                     ),
                     const SizedBox(width: 12),
@@ -253,9 +259,15 @@ class _DiscoverRoomsViewState extends State<DiscoverRoomsView> {
                       }
                     }
 
-                    if (value == 'edit') {
-                      // FUTURO
+                   if (value == 'edit') {
+                    final result = await context.push('/rooms/editbundle/${bundle.id}');
+
+                    if (!mounted) return;
+                    
+                    if (result == true) {
+                      reloadBundles();
                     }
+                  }
                     if (value == 'delete') {
                       final confirm = await showDialog<bool>(
                         context: context,
@@ -646,4 +658,13 @@ Widget _buildSectionError(String message) {
     ),
   );
 }
+
+ void reloadBundles() {
+  final client = Matrix.of(context).client;
+
+  setState(() {
+    bundlesFuture = fetchBundles(client);
+  });
+}
+
 }
