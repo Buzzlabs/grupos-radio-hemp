@@ -331,6 +331,7 @@ extension ColorId on ColorScheme {
   // chatlist 
   // discover 
   Color get chatlistDiscoverTextColor => tertiary;
+  Color get chatlistDiscoverNotingFoundTextColor => onSecondaryContainer;
   Color get chatlistDiscoverRoomTileGroupNameTextColor => tertiary;
   Color get chatlistDiscoverRoomTilePriceDescriptionTextColor => tertiary;
   Color get chatlistDiscoverRoomTileBackgroundColor => secondary.withValues(alpha: 0.4);
@@ -344,6 +345,7 @@ extension ColorId on ColorScheme {
   Color get chatlistDiscoverBundleTilePriceDescriptionTextColor => tertiary;
   Color get chatlistDiscoverBundleTileBackgroundColor => Color.fromARGB(255, 109, 100, 209).withValues(alpha: 0.4);
   Color get chatlistDiscoverBundleTileDescriptionTextColor => onSecondaryContainer;
+  Color get chatlistDiscoverBundleMenuItemTextColor => tertiary;
   Color get chatlistDiscoverBundleButtonTextColor => tertiary;
   Color get chatlistDiscoverBundleAccessButtonColor => Color.fromARGB(255, 109, 100, 209);
   Color get chatlistDiscoverBundleButtonColor => primary.withValues(alpha: 0.6);
@@ -374,6 +376,17 @@ extension ColorId on ColorScheme {
   Color get newGroupTextFieldHintColor => onSecondaryContainer;
   Color get newGroupTextFieldTextColor => tertiary;
 
+  // new bundle
+  Color get newBundleTextColor => tertiary;
+  Color get newBundleSelectTextColor => primary;
+  Color get newBundleSelectNameTextColor => primary;
+  Color get newBundleSelectRoomidTextColor => tertiary;
+  Color get newBundleButtonTextColor => tertiary;
+  Color get newBundleTextFieldFillColor => tertiaryContainer;
+  Color get newBundleTextFieldHintTextColor => onSecondaryContainer;
+  Color get newBundleCheckBoxFillColor => surface;
+  Color get newBundleCheckBoxSideColor => primary;
+  Color get newBundleCheckBoxCheckColor => primary;
   // view
   Color get chatListBackground => surface;
 
