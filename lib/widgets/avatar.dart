@@ -112,11 +112,11 @@ class Avatar extends StatelessWidget {
                 child: Container(
                   width: 16,
                   height: 16,
-                  decoration: BoxDecoration(
-                    color:
-                        presenceBackgroundColor ?? theme.colorScheme.tertiary,
-                    borderRadius: BorderRadius.circular(32),
-                  ),
+                  // decoration: BoxDecoration(
+                  //   color:
+                  //       presenceBackgroundColor ?? theme.colorScheme.tertiary,
+                  //   borderRadius: BorderRadius.circular(32),
+                  // ),
                   alignment: Alignment.center,
                   child: Container(
                     width: 10,

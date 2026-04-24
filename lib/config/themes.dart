@@ -334,7 +334,34 @@ extension ColorId on ColorScheme {
   Color get chatlistDiscoverTileGroupNameTextColor => primary;
   Color get chatlistDiscoverTileDescriptionTextColor => tertiary;
   Color get chatlistDiscoverButtonTextColor => tertiary;
-  Color get chatlistDiscoverButtonColor => primary;
+  Color get chatlistDiscoverButtonColor => primary.withValues(alpha: 0.6);
+
+  // new private chat
+  Color get newPrivateTextColor => tertiary;
+  Color get newPrivateBorderColor => primary;
+  Color get newPrivateQRCodeColor => primary;
+  Color get newPrivateBackgroundColor => surface;
+  Color get newPrivateTextFieldFilledColor => tertiaryContainer;
+  Color get newPrivateTextFieldHintColor => onSecondaryContainer;
+  Color get newPrivateTextFieldTextColor => tertiary;
+  Color get newPrivateListTileBackgroundColor => primary;
+  Color get newPrivateListTileTextColor => tertiary;
+  Color get newPrivateNoFoundTextColor => onSecondaryContainer;
+  Color get newPrivateUserNameTextColor => primary;
+  Color get newPrivateUserIdTextColor => tertiary;
+
+  // new Group
+  Color get newGroupSwitchActiveColor => primary;
+  Color get newGroupSwitchInactiveColor => tertiaryContainer;
+  Color get newGroupOptionsTextColor => tertiary;
+  Color get newGroupPhotoTemplateBackgroundColor => primary;
+  Color get newGroupPhotoTemplateIconColor => tertiary;
+  Color get newGroupButtonSegmentSelectedTextColor => surface;
+  Color get newGroupButtonSegmentUnselectedTextColor => primary;
+  Color get newGroupTextFieldFilledColor => tertiaryContainer;
+  Color get newGroupTextFieldHintColor => onSecondaryContainer;
+  Color get newGroupTextFieldTextColor => tertiary;
+
   // view
   Color get chatListBackground => surface;
 
@@ -398,6 +425,7 @@ extension ColorId on ColorScheme {
   Color get showAboutInfoSourceTextColor => tertiary;
 
   // body
+  // searchtile (disabled)
   Color get searchTitleBackGroud => surface;
   Color get searchTitleIconColor => primary;
   Color get noChatsFoundIconColor => onSecondaryContainer;
@@ -651,6 +679,7 @@ extension ColorId on ColorScheme {
   // access and visibility
   Color get accessScreenBackButton => tertiary;
   Color get accessScreenTextColor => tertiary;
+  Color get accessScreenHintTextColor => onSecondary;
   Color get accessScreenTagColor => primary;
   Color get accessTextColor => tertiary;
   Color get accessDividerColor => primary;

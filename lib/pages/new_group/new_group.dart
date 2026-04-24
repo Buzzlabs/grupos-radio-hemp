@@ -1,18 +1,21 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:fluffychat/utils/price_utils.dart';
 import 'package:flutter/material.dart';
-
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
 import 'package:matrix/matrix.dart' as sdk;
-import 'package:matrix/matrix.dart';
 
-import 'package:fluffychat/l10n/l10n.dart';
 import 'package:fluffychat/pages/new_group/new_group_view.dart';
 import 'package:fluffychat/utils/file_selector.dart';
 import 'package:fluffychat/widgets/matrix.dart';
 
+enum CreateGroupType { group, space }
+
 class NewGroup extends StatefulWidget {
   final CreateGroupType createGroupType;
+
   const NewGroup({
     this.createGroupType = CreateGroupType.group,
     super.key,
@@ -23,31 +26,173 @@ class NewGroup extends StatefulWidget {
 }
 
 class NewGroupController extends State<NewGroup> {
-  TextEditingController nameController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController keywordController = TextEditingController();
+  final TextEditingController priceController =
+      TextEditingController(text: '0');
 
   bool publicGroup = false;
   bool groupCanBeFound = false;
 
-  Uint8List? avatar;
+  bool keywordAlreadyExists = false;
 
+  Uint8List? avatar;
   Uri? avatarUrl;
 
   Object? error;
-
   bool loading = false;
 
   CreateGroupType get createGroupType =>
       _createGroupType ?? widget.createGroupType;
-
   CreateGroupType? _createGroupType;
 
-  void setCreateGroupType(Set<CreateGroupType> b) =>
-      setState(() => _createGroupType = b.single);
+  @override
+  void initState() {
+    super.initState();
+
+    keywordController.addListener(() {
+      if (keywordAlreadyExists) {
+        setState(() => keywordAlreadyExists = false);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    keywordController.dispose();
+    priceController.dispose();
+    super.dispose();
+  }
 
   void setPublicGroup(bool b) =>
-      setState(() => publicGroup = groupCanBeFound = b);
+      setState(() => publicGroup = b);
 
-  void setGroupCanBeFound(bool b) => setState(() => groupCanBeFound = b);
+  void setGroupCanBeFound(bool b) =>
+      setState(() => groupCanBeFound = b);
+
+  String _slugify(String value) {
+    return value
+        .trim()
+        .toLowerCase()
+        .replaceAll(RegExp(r'\s+'), '_')
+        .replaceAll(RegExp(r'[^a-z0-9_]'), '');
+  }
+
+  void _validateForm() {
+    if (nameController.text.trim().isEmpty) {
+      throw Exception('Nome do grupo é obrigatório');
+    }
+
+    if (keywordController.text.trim().isEmpty) {
+      throw Exception('Keyword é obrigatória');
+    }
+
+    if (_slugify(keywordController.text.trim()) !=
+        keywordController.text.trim()) {
+      throw Exception('Keyword inválida');
+    }
+
+    if (groupCanBeFound && !publicGroup) {
+    final price = PriceUtils.parseToCents(priceController.text);
+
+    if (price <= 0) {
+      throw Exception(
+        'Grupos privados visíveis precisam ter preço',
+      );
+    }
+  }
+  }
+
+  Future<String> _createGroupViaModule() async {
+    final client = Matrix.of(context).client;
+
+    final res = await http.post(
+      Uri.parse(
+        '${client.homeserver}/_synapse/room_service/create',
+      ),
+      headers: {
+        'Authorization': 'Bearer ${client.accessToken}',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        "room_kind": "group",
+        "name": nameController.text.trim(),
+        "keyword": keywordController.text.trim(),
+        "access_type": publicGroup ? "public" : "private",
+        "visible": groupCanBeFound,
+        "price": (groupCanBeFound && !publicGroup)
+          ? PriceUtils.parseToCents(priceController.text)
+          : 0,
+      }),
+    );
+
+    if (res.statusCode == 409) {
+      setState(() {
+        keywordAlreadyExists = true;
+        loading = false;
+      });
+      throw Exception('KEYWORD_ALREADY_EXISTS');
+    }
+
+    if (res.statusCode != 200) {
+      throw Exception(res.body);
+    }
+
+    return jsonDecode(res.body)['room_id'] as String;
+  }
+
+ void submitAction([_]) async {
+  final client = Matrix.of(context).client;
+
+  String? roomId;
+
+  try {
+    _validateForm();
+
+    setState(() {
+      loading = true;
+      error = null;
+      keywordAlreadyExists = false;
+    });
+
+    roomId = await _createGroupViaModule();
+
+    if (!mounted) return;
+    try {
+      final avatarBytes = avatar;
+
+      final avatarUrlLocal = avatarUrl ??= avatarBytes == null
+          ? null
+          : await client.uploadContent(avatarBytes);
+
+      if (avatarUrlLocal != null) {
+        await client.setRoomStateWithKey(
+          roomId,
+          'm.room.avatar',
+          '',
+          {
+            'url': avatarUrlLocal.toString(),
+          },
+        );
+      }
+    } catch (avatarError, s) {
+      sdk.Logs().d('Erro ao setar avatar', avatarError, s);
+    }
+
+    context.go('/rooms/$roomId/invite');
+
+  } catch (e, s) {
+    if (e.toString().contains('KEYWORD_ALREADY_EXISTS')) return;
+
+    sdk.Logs().d('Unable to create group', e, s);
+
+    setState(() {
+      error = e;
+      loading = false;
+    });
+  }
+}
 
   void selectPhoto() async {
     final photo = await selectFiles(
@@ -55,97 +200,19 @@ class NewGroupController extends State<NewGroup> {
       type: FileSelectorType.images,
       allowMultiple: false,
     );
+
     final bytes = await photo.singleOrNull?.readAsBytes();
 
+    if (!mounted) return;
+
     setState(() {
-      avatarUrl = null;
       avatar = bytes;
+      avatarUrl = null;
     });
   }
 
-  Future<void> _createGroup() async {
-    if (!mounted) return;
-    final roomId = await Matrix.of(context).client.createGroupChat(
-      visibility:
-          groupCanBeFound ? sdk.Visibility.public : sdk.Visibility.private,
-      preset: publicGroup
-          ? sdk.CreateRoomPreset.publicChat
-          : sdk.CreateRoomPreset.privateChat,
-      groupName: nameController.text.isNotEmpty ? nameController.text : null,
-      initialState: [
-        if (avatar != null)
-          sdk.StateEvent(
-            type: sdk.EventTypes.RoomAvatar,
-            content: {'url': avatarUrl.toString()},
-          ),
-      ],
-    );
-    if (!mounted) return;
-    context.go('/rooms/$roomId/invite');
-  }
-
-  Future<void> _createSpace() async {
-    if (!mounted) return;
-    final spaceId = await Matrix.of(context).client.createRoom(
-          preset: publicGroup
-              ? sdk.CreateRoomPreset.publicChat
-              : sdk.CreateRoomPreset.privateChat,
-          creationContent: {'type': RoomCreationTypes.mSpace},
-          visibility: publicGroup ? sdk.Visibility.public : null,
-          roomAliasName: publicGroup
-              ? nameController.text.trim().toLowerCase().replaceAll(' ', '_')
-              : null,
-          name: nameController.text.trim(),
-          powerLevelContentOverride: {'events_default': 100},
-          initialState: [
-            if (avatar != null)
-              sdk.StateEvent(
-                type: sdk.EventTypes.RoomAvatar,
-                content: {'url': avatarUrl.toString()},
-              ),
-          ],
-        );
-    if (!mounted) return;
-    context.pop<String>(spaceId);
-  }
-
-  void submitAction([_]) async {
-    final client = Matrix.of(context).client;
-
-    try {
-      if (nameController.text.trim().isEmpty &&
-          createGroupType == CreateGroupType.space) {
-        setState(() => error = L10n.of(context).pleaseFillOut);
-        return;
-      }
-
-      setState(() {
-        loading = true;
-        error = null;
-      });
-
-      final avatar = this.avatar;
-      avatarUrl ??= avatar == null ? null : await client.uploadContent(avatar);
-
-      if (!mounted) return;
-
-      switch (createGroupType) {
-        case CreateGroupType.group:
-          await _createGroup();
-        case CreateGroupType.space:
-          await _createSpace();
-      }
-    } catch (e, s) {
-      sdk.Logs().d('Unable to create group', e, s);
-      setState(() {
-        error = e;
-        loading = false;
-      });
-    }
-  }
-
+  
   @override
   Widget build(BuildContext context) => NewGroupView(this);
 }
 
-enum CreateGroupType { group, space }

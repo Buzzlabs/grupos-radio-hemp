@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:fluffychat/pages/chat_list/rooms_list/discover_rooms_view.dart';
+import 'package:fluffychat/pages/creation_guard/admin_redirect.dart';
 import 'package:fluffychat/pages/login/auto_login.dart';
+import 'package:fluffychat/pages/new_group/new_group.dart';
+import 'package:fluffychat/pages/new_private_chat/new_private_chat.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -194,15 +197,16 @@ abstract class AppRoutes {
             //   ),
             //   redirect: loggedOutRedirect,
             // ),
-            // GoRoute(
-            //   path: 'newgroup',
-            //   pageBuilder: (context, state) => defaultPageBuilder(
-            //     context,
-            //     state,
-            //     const NewGroup(),
-            //   ),
-            //   redirect: loggedOutRedirect,
-            // ),
+            GoRoute(
+              path: 'newgroup',
+              pageBuilder: (context, state) => defaultPageBuilder(
+                context,
+                state,
+                const NewGroup(),
+              ),
+              redirect: adminRedirect,
+            ),
+
             // GoRoute(
             //   path: 'newspace',
             //   pageBuilder: (context, state) => defaultPageBuilder(
