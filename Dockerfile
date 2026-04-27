@@ -4,7 +4,7 @@ FROM dart:stable AS builder
 RUN apt-get update && apt-get install -y \
     curl wget jq build-essential git
 
-RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
+RUN git clone --depth 1 --branch stable https://github.com/flutter/flutter.git /usr/local/flutter
 ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
 RUN flutter precache && flutter config --enable-web
 
