@@ -1,0 +1,285 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:matrix/matrix.dart';
+
+class BundleRoom {
+  final String id;
+  final String name;
+
+  BundleRoom({required this.id, required this.name});
+}
+
+class BundleFormController extends ChangeNotifier {
+  BundleFormController.create(this.client);
+
+  BundleFormController.edit(this.client, this.bundleId) {
+    isEdit = true;
+    loadBundle();
+  }
+
+  final Client client;
+
+  bool isEdit = false;
+  String? bundleId;
+
+  final nameController = TextEditingController();
+  final priceController = TextEditingController();
+
+  bool loading = false;
+  String? error;
+
+  List<BundleRoom> selectedRooms = [];
+
+  /// LOAD BUNDLE
+  Future<void> loadBundle() async {
+    if (bundleId == null) return;
+
+    try {
+      loading = true;
+      notifyListeners();
+
+      final bundleResponse = await client.httpClient.get(
+        Uri.parse("${client.homeserver}/_synapse/bundles/list"),
+        headers: {
+          "Authorization": "Bearer ${client.accessToken}",
+          "Content-Type": "application/json",
+        },
+      );
+
+      if (bundleResponse.statusCode != 200) {
+        throw Exception("Erro ao carregar bundles");
+      }
+
+      final bundleData = jsonDecode(bundleResponse.body);
+      final List bundles = bundleData["bundles"];
+
+      final bundle = bundles.firstWhere(
+        (b) => b["bundle_id"] == bundleId,
+        orElse: () => null,
+      );
+
+      if (bundle == null) {
+        throw Exception("Bundle não encontrado");
+      }
+
+      nameController.text = bundle["bundle_name"] ?? "";
+
+      final price = bundle["price"] ?? 0;
+      priceController.text = (price ~/ 100).toString();
+
+      final List rooms = bundle["rooms"] ?? [];
+
+      selectedRooms = rooms
+          .map((room) => BundleRoom(
+                id: room["room_id"],
+                name: room["name"] ?? "Sem nome",
+              ))
+          .toList();
+    } catch (e) {
+      error = e.toString();
+    }
+
+    loading = false;
+    notifyListeners();
+  }
+
+  /// SELECT ROOMS
+  Future<void> selectRooms(BuildContext context) async {
+    try {
+      loading = true;
+      notifyListeners();
+
+      final response = await client.httpClient.get(
+        Uri.parse("${client.homeserver}/_synapse/room_service/discover"),
+        headers: {
+          "Authorization": "Bearer ${client.accessToken}",
+          "Content-Type": "application/json",
+        },
+      );
+
+      loading = false;
+      notifyListeners();
+
+      if (response.statusCode != 200) {
+        throw Exception("Erro ao buscar salas");
+      }
+
+      final data = jsonDecode(response.body);
+      final List rooms = data["rooms"];
+
+      final selectedIds = selectedRooms.map((r) => r.id).toSet();
+
+      await showDialog(
+        context: context,
+        builder: (context) {
+          final tempSelected = {...selectedIds};
+          final discoverIds = rooms.map((r) => r["room_id"]).toSet();
+
+          final hiddenRooms =
+              selectedRooms.where((r) => !discoverIds.contains(r.id)).toList();
+          return AlertDialog(
+            title: const Text("Selecionar Salas"),
+            content: SizedBox(
+              width: 400,
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  ...hiddenRooms.map((room) {
+                    return ListTile(
+                      title: Text("${room.name} (indisponível)"),
+                      subtitle: Text(room.id),
+                      leading: const Icon(Icons.warning, color: Colors.orange),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          tempSelected.remove(room.id);
+                          (context as Element)
+                              .markNeedsBuild(); // força rebuild
+                        },
+                      ),
+                    );
+                  }),
+                  if (hiddenRooms.isNotEmpty) const Divider(),
+                  ...rooms.map((room) {
+                    final roomId = room["room_id"];
+                    final name = room["name"] ?? "Sem nome";
+
+                    return StatefulBuilder(
+                      builder: (context, setState) {
+                        final isChecked = tempSelected.contains(roomId);
+
+                        return CheckboxListTile(
+                          value: isChecked,
+                          title: Text(name),
+                          subtitle: Text(roomId),
+                          onChanged: (value) {
+                            setState(() {
+                              if (value == true) {
+                                tempSelected.add(roomId);
+                              } else {
+                                tempSelected.remove(roomId);
+                              }
+                            });
+                          },
+                        );
+                      },
+                    );
+                  }),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Cancelar"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  final Map<String, BundleRoom> finalRooms = {
+                    for (var room in selectedRooms) room.id: room,
+                  };
+
+                  finalRooms.removeWhere((id, _) => !tempSelected.contains(id));
+
+                  for (var room in rooms) {
+                    final roomId = room["room_id"];
+
+                    if (tempSelected.contains(roomId)) {
+                      finalRooms[roomId] = BundleRoom(
+                        id: roomId,
+                        name: room["name"] ?? "Sem nome",
+                      );
+                    }
+                  }
+
+                  selectedRooms = finalRooms.values.toList();
+
+                  notifyListeners();
+                  Navigator.pop(context);
+                },
+                child: const Text("Confirmar"),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      loading = false;
+      error = e.toString();
+      notifyListeners();
+    }
+  }
+
+  void removeRoom(BundleRoom room) {
+    selectedRooms.remove(room);
+    notifyListeners();
+  }
+
+  /// SUBMIT
+  Future<bool> submit(BuildContext context) async {
+    if (loading) return false;
+
+    final name = nameController.text.trim();
+    final priceText = priceController.text.trim();
+
+    if (name.isEmpty) {
+      error = "Nome do bundle é obrigatório";
+      notifyListeners();
+      return false;
+    }
+
+    final price = int.tryParse(priceText);
+    if (price == null) {
+      error = "Preço inválido";
+      notifyListeners();
+      return false;
+    }
+
+    error = null;
+    loading = true;
+    notifyListeners();
+
+    try {
+      final endpoint =
+          isEdit ? "/_synapse/bundles/update" : "/_synapse/bundles/create";
+
+      final body = {
+        "bundle_name": name,
+        "price": price * 100,
+        "rooms": selectedRooms.map((r) => r.id).toList(),
+      };
+
+      if (isEdit) {
+        body["bundle_id"] = bundleId!;
+      }
+
+      final response = await client.httpClient.post(
+        Uri.parse("${client.homeserver}$endpoint"),
+        headers: {
+          "Authorization": "Bearer ${client.accessToken}",
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception(response.body);
+      }
+
+      return true;
+    } catch (e) {
+      error = e.toString();
+      return false;
+    } finally {
+      loading = false;
+      notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    priceController.dispose();
+    super.dispose();
+  }
+}

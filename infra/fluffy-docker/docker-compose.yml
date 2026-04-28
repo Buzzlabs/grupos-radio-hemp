@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  synapse:
+    image: matrixdotorg/synapse:latest
+    container_name: synapse
+    ports:
+      - "3000:3000"
+
+  fluffy:
+    image: fluffy-grupos
+    container_name: fluffy
+    ports:
+      - "8080:80"
+    depends_on:
+      - synapse

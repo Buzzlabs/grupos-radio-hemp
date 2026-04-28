@@ -268,10 +268,10 @@ extension BubbleColorTheme on ThemeData {
 }
 
 extension ColorId on ColorScheme {
-  // logos 
+  // logos
   String get logoHorizontalSemFundo => 'assets/logo_horizontal_semfundo.png';
   String get logoSingleSemFundo => 'assets/logo_single_semfundo.png';
-  
+
   // geral
   Color get normalSnackBarTextColor => tertiary;
   Color get oopsMessageTextColor => onSecondaryContainer;
@@ -295,27 +295,27 @@ extension ColorId on ColorScheme {
 
   // menu login
   Icon get menuIconStore => Icon(
-                Icons.shopping_cart,
-                color: loginMenuIconColor,
-                size: 20,
-              ); 
+        Icons.shopping_cart,
+        color: loginMenuIconColor,
+        size: 20,
+      );
 
   Icon get menuIconCourse => Icon(
-                Icons.book,
-                color: loginMenuIconColor,
-                size: 20,
-              );
-  
+        Icons.book,
+        color: loginMenuIconColor,
+        size: 20,
+      );
+
   Icon get menuIconPodcast => Icon(
-                Icons.mic,
-                color: loginMenuIconColor,
-                size: 20,
-              );
+        Icons.mic,
+        color: loginMenuIconColor,
+        size: 20,
+      );
 
   Icon get menuIconInfo => Icon(
-                    Icons.info_outlined,
-                    color: loginMenuIconColor,
-                  );
+        Icons.info_outlined,
+        color: loginMenuIconColor,
+      );
 
   Color get loginMenuIconColor => primary;
   Color get loginMenuTextColor => onSurface;
@@ -328,7 +328,65 @@ extension ColorId on ColorScheme {
       ];
   Color get scaffoldBorderColor => primary;
 
-  // chatlist
+  // chatlist 
+  // discover 
+  Color get chatlistDiscoverTextColor => tertiary;
+  Color get chatlistDiscoverNotingFoundTextColor => onSecondaryContainer;
+  Color get chatlistDiscoverRoomTileGroupNameTextColor => tertiary;
+  Color get chatlistDiscoverRoomTilePriceDescriptionTextColor => tertiary;
+  Color get chatlistDiscoverRoomTileBackgroundColor => secondary.withValues(alpha: 0.4);
+  Color get chatlistDiscoverRoomTileDescriptionTextColor => onSecondaryContainer;
+  Color get chatlistDiscoverRoomButtonTextColor => tertiary;
+  Color get chatlistDiscoverRoomAccessButtonColor => secondary;
+  Color get chatlistDiscoverRoomButtonColor => primary.withValues(alpha: 0.6);
+
+  
+  Color get chatlistDiscoverBundleTileGroupNameTextColor => tertiary;
+  Color get chatlistDiscoverBundleTilePriceDescriptionTextColor => tertiary;
+  Color get chatlistDiscoverBundleTileBackgroundColor => Color.fromARGB(255, 109, 100, 209).withValues(alpha: 0.4);
+  Color get chatlistDiscoverBundleTileDescriptionTextColor => onSecondaryContainer;
+  Color get chatlistDiscoverBundleMenuItemTextColor => tertiary;
+  Color get chatlistDiscoverBundleButtonTextColor => tertiary;
+  Color get chatlistDiscoverBundleAccessButtonColor => Color.fromARGB(255, 109, 100, 209);
+  Color get chatlistDiscoverBundleButtonColor => primary.withValues(alpha: 0.6);
+
+  // new private chat
+  Color get newPrivateTextColor => tertiary;
+  Color get newPrivateBorderColor => primary;
+  Color get newPrivateQRCodeColor => primary;
+  Color get newPrivateBackgroundColor => surface;
+  Color get newPrivateTextFieldFilledColor => tertiaryContainer;
+  Color get newPrivateTextFieldHintColor => onSecondaryContainer;
+  Color get newPrivateTextFieldTextColor => tertiary;
+  Color get newPrivateListTileBackgroundColor => primary;
+  Color get newPrivateListTileTextColor => tertiary;
+  Color get newPrivateNoFoundTextColor => onSecondaryContainer;
+  Color get newPrivateUserNameTextColor => primary;
+  Color get newPrivateUserIdTextColor => tertiary;
+
+  // new Group
+  Color get newGroupSwitchActiveColor => primary;
+  Color get newGroupSwitchInactiveColor => tertiaryContainer;
+  Color get newGroupOptionsTextColor => tertiary;
+  Color get newGroupPhotoTemplateBackgroundColor => primary;
+  Color get newGroupPhotoTemplateIconColor => tertiary;
+  Color get newGroupButtonSegmentSelectedTextColor => surface;
+  Color get newGroupButtonSegmentUnselectedTextColor => primary;
+  Color get newGroupTextFieldFilledColor => tertiaryContainer;
+  Color get newGroupTextFieldHintColor => onSecondaryContainer;
+  Color get newGroupTextFieldTextColor => tertiary;
+
+  // new bundle
+  Color get newBundleTextColor => tertiary;
+  Color get newBundleSelectTextColor => primary;
+  Color get newBundleSelectNameTextColor => primary;
+  Color get newBundleSelectRoomidTextColor => tertiary;
+  Color get newBundleButtonTextColor => tertiary;
+  Color get newBundleTextFieldFillColor => tertiaryContainer;
+  Color get newBundleTextFieldHintTextColor => onSecondaryContainer;
+  Color get newBundleCheckBoxFillColor => surface;
+  Color get newBundleCheckBoxSideColor => primary;
+  Color get newBundleCheckBoxCheckColor => primary;
   // view
   Color get chatListBackground => surface;
 
@@ -345,42 +403,42 @@ extension ColorId on ColorScheme {
   Color get circularProgressIndicatorColor => primary;
 
   // client chooser button
-   Icon get iconEdit => Icon(
-                Icons.edit_outlined,
-                color: clientChooserButtonIconColor,
-                size: 22,
-              );
+  Icon get iconEdit => Icon(
+        Icons.edit_outlined,
+        color: clientChooserButtonIconColor,
+        size: 22,
+      );
 
   Icon get iconHome => Icon(
-                Icons.home,
-                color: clientChooserButtonIconColor,
-                size: 22,
-              );
-  
+        Icons.home,
+        color: clientChooserButtonIconColor,
+        size: 22,
+      );
+
   Icon get iconCourse => Icon(
-                Icons.book,
-                color: clientChooserButtonIconColor,
-                size: 22,
-              );
+        Icons.book,
+        color: clientChooserButtonIconColor,
+        size: 22,
+      );
 
   Icon get iconSetting => Icon(
-                Icons.settings,
-                color: clientChooserButtonIconColor,
-                size: 22,
-              );
+        Icons.settings,
+        color: clientChooserButtonIconColor,
+        size: 22,
+      );
 
   Icon get iconInfo => Icon(
-                Icons.info_outlined,
-                color: clientChooserButtonIconColor,
-                size: 22,
-              );
+        Icons.info_outlined,
+        color: clientChooserButtonIconColor,
+        size: 22,
+      );
 
   Icon get iconShare => Icon(
-                Icons.adaptive.share_outlined,
-                color: clientChooserShareIconColor,
-                size: 22,
-              );
-  
+        Icons.adaptive.share_outlined,
+        color: clientChooserShareIconColor,
+        size: 22,
+      );
+
   Color get clientChooserButtonIconColor => tertiary;
   Color get clientChooserButtonTextColor => tertiary;
   Color get clientChooserShareIconColor => primary;
@@ -392,6 +450,7 @@ extension ColorId on ColorScheme {
   Color get showAboutInfoSourceTextColor => tertiary;
 
   // body
+  // searchtile (disabled)
   Color get searchTitleBackGroud => surface;
   Color get searchTitleIconColor => primary;
   Color get noChatsFoundIconColor => onSecondaryContainer;
@@ -413,40 +472,40 @@ extension ColorId on ColorScheme {
 
   // navirail
   Icon get navirailIconHomeUnselected => Icon(
-                                Icons.home,
-                                color: unselectediconColor,
-                                size: 40,
-                              );
+        Icons.home,
+        color: unselectediconColor,
+        size: 40,
+      );
 
   Icon get navirailIconChatUnselected => Icon(
-                                Icons.chat_bubble_outline,
-                                color: unselectediconColor,
-                                size: 40,
-                              );
+        Icons.chat_bubble_outline,
+        color: unselectediconColor,
+        size: 40,
+      );
 
   Icon get navirailIconChatSelected => Icon(
-                                Icons.chat_bubble_outline,
-                                color: selectediconColor,
-                                size: 40,
-                              );
+        Icons.chat_bubble_outline,
+        color: selectediconColor,
+        size: 40,
+      );
 
   Icon get navirailIconCourseUnselected => Icon(
-                                Icons.book,
-                                color: unselectediconColor,
-                                size: 40,
-                              );
+        Icons.book,
+        color: unselectediconColor,
+        size: 40,
+      );
 
   Icon get navirailIconSettingUnselected => Icon(
-                          Icons.settings,
-                          color: unselectediconColor,
-                          size: 40,
-                        );
+        Icons.settings,
+        color: unselectediconColor,
+        size: 40,
+      );
 
   Icon get navirailIconSettingSelected => Icon(
-                          Icons.settings,
-                          color: selectediconColor,
-                          size: 40,
-                        );
+        Icons.settings,
+        color: selectediconColor,
+        size: 40,
+      );
 
   Color get selectedContainerColor => primary;
   Color get selectediconColor => primary;
@@ -645,6 +704,7 @@ extension ColorId on ColorScheme {
   // access and visibility
   Color get accessScreenBackButton => tertiary;
   Color get accessScreenTextColor => tertiary;
+  Color get accessScreenHintTextColor => onSecondary;
   Color get accessScreenTagColor => primary;
   Color get accessTextColor => tertiary;
   Color get accessDividerColor => primary;
