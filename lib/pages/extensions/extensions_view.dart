@@ -17,9 +17,13 @@ class ExtensionsView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Center(child: BackButton(color: theme.colorScheme.extensionScreenBackButton)),
-        title: Text(L10n.of(context).extensions, style: TextStyle(color: theme.colorScheme.extensionScreenTextColor),
-     ),
+        leading: Center(
+            child:
+                BackButton(color: theme.colorScheme.extensionScreenBackButton)),
+        title: Text(
+          L10n.of(context).extensions,
+          style: TextStyle(color: theme.colorScheme.extensionScreenTextColor),
+        ),
       ),
       body: MaxWidthBody(
         child: Padding(
@@ -42,7 +46,7 @@ class ExtensionsView extends StatelessWidget {
                     icon: Icons.live_tv_outlined,
                     type: ExtensionType.live,
                     title: L10n.of(context).live,
-                    subtitle: L10n.of(context).liveBroadcastRadioHemp,
+                    subtitle: "Transmissão ao vivo",
                     roomId: controller.roomId,
                     roomName: controller.roomName,
                   ),
