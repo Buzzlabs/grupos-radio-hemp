@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:matrix/matrix.dart';
@@ -64,13 +65,16 @@ class SpacesNavigationRail extends StatelessWidget {
                             isSelected: false,
                             onTap: () async {
                               await launchUrl(
-                                Uri.parse('https://nexojornal.com.br/'),
+                                Uri.parse(
+                                  dotenv.env['HOME_ICON_LINK']!,
+                                ),
                                 mode: LaunchMode.externalApplication,
                               );
                             },
                             icon: Padding(
                               padding: const EdgeInsets.all(10),
-                              child: theme.colorScheme.navirailIconHomeUnselected, //SvgPicture.asset('assets/icons/home.svg'),
+                              child: theme.colorScheme
+                                  .navirailIconHomeUnselected, //SvgPicture.asset('assets/icons/home.svg'),
                             ),
                             toolTip: L10n.of(context).menuHome,
                           ),
@@ -78,13 +82,15 @@ class SpacesNavigationRail extends StatelessWidget {
                             isSelected: activeSpaceId == null && !isSettings,
                             onTap: onGoToChats,
                             icon: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: theme.colorScheme.navirailIconChatUnselected  // SvgPicture.asset('assets/icons/chat.svg'),
-                            ),
+                                padding: const EdgeInsets.all(10),
+                                child: theme.colorScheme
+                                    .navirailIconChatUnselected // SvgPicture.asset('assets/icons/chat.svg'),
+                                ),
                             selectedIcon: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: theme.colorScheme.navirailIconChatSelected // SvgPicture.asset('assets/icons/chat.svg'),
-                            ),
+                                padding: const EdgeInsets.all(10),
+                                child: theme.colorScheme
+                                    .navirailIconChatSelected // SvgPicture.asset('assets/icons/chat.svg'),
+                                ),
                             toolTip: L10n.of(context).chats,
                             unreadBadgeFilter: (room) => true,
                           ),
@@ -150,15 +156,16 @@ class SpacesNavigationRail extends StatelessWidget {
                             onTap: () async {
                               await launchUrl(
                                 Uri.parse(
-                                  'https://pp.nexojornal.com.br/',
+                                  dotenv.env['COURSE_ICON_LINK']!,
                                 ),
                                 mode: LaunchMode.externalApplication,
                               );
                             },
                             icon: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: theme.colorScheme.navirailIconCourseUnselected //SvgPicture.asset('assets/icons/course.svg'),
-                            ),
+                                padding: const EdgeInsets.all(10),
+                                child: theme.colorScheme
+                                    .navirailIconCourseUnselected //SvgPicture.asset('assets/icons/course.svg'),
+                                ),
                             toolTip: L10n.of(context).menuCourse,
                           ),
 
@@ -205,13 +212,15 @@ class SpacesNavigationRail extends StatelessWidget {
                       isSelected: isSettings,
                       onTap: () => context.go('/rooms/settings'),
                       icon: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: theme.colorScheme.navirailIconSettingUnselected // SvgPicture.asset('assets/icons/configs.svg'),
-                      ),
+                          padding: const EdgeInsets.all(10),
+                          child: theme.colorScheme
+                              .navirailIconSettingUnselected // SvgPicture.asset('assets/icons/configs.svg'),
+                          ),
                       selectedIcon: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: theme.colorScheme.navirailIconSettingSelected  // SvgPicture.asset('assets/icons/configs.svg'),
-                      ),
+                          padding: const EdgeInsets.all(10),
+                          child: theme.colorScheme
+                              .navirailIconSettingSelected // SvgPicture.asset('assets/icons/configs.svg'),
+                          ),
                       toolTip: L10n.of(context).settings,
                     ),
                     const SizedBox(height: 6),

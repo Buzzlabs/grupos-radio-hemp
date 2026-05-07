@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:matrix/matrix.dart';
@@ -63,7 +64,8 @@ class ClientChooserButton extends StatelessWidget {
             const SizedBox(width: 18),
             Text(
               L10n.of(context).setStatus,
-              style: TextStyle(color: theme.colorScheme.clientChooserButtonTextColor),
+              style: TextStyle(
+                  color: theme.colorScheme.clientChooserButtonTextColor),
             ),
           ],
         ),
@@ -84,7 +86,8 @@ class ClientChooserButton extends StatelessWidget {
             const SizedBox(width: 18),
             Text(
               L10n.of(context).menuHome,
-              style: TextStyle(color: theme.colorScheme.clientChooserButtonTextColor),
+              style: TextStyle(
+                  color: theme.colorScheme.clientChooserButtonTextColor),
             ),
           ],
         ),
@@ -130,7 +133,8 @@ class ClientChooserButton extends StatelessWidget {
             const SizedBox(width: 18),
             Text(
               L10n.of(context).menuCourse,
-              style: TextStyle(color: theme.colorScheme.clientChooserButtonTextColor),
+              style: TextStyle(
+                  color: theme.colorScheme.clientChooserButtonTextColor),
             ),
           ],
         ),
@@ -177,7 +181,8 @@ class ClientChooserButton extends StatelessWidget {
             const SizedBox(width: 18),
             Text(
               L10n.of(context).settings,
-              style: TextStyle(color: theme.colorScheme.clientChooserButtonTextColor),
+              style: TextStyle(
+                  color: theme.colorScheme.clientChooserButtonTextColor),
             ),
           ],
         ),
@@ -195,7 +200,8 @@ class ClientChooserButton extends StatelessWidget {
             const SizedBox(width: 12),
             Text(
               L10n.of(context).about,
-              style: TextStyle(color: theme.colorScheme.clientChooserButtonTextColor),
+              style: TextStyle(
+                  color: theme.colorScheme.clientChooserButtonTextColor),
             ),
           ],
         ),
@@ -206,14 +212,14 @@ class ClientChooserButton extends StatelessWidget {
         child: Row(
           children: [
             Padding(
-              // padding: const EdgeInsets.symmetric(horizontal: 5),
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: theme.colorScheme.iconShare
-            ),
+                // padding: const EdgeInsets.symmetric(horizontal: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: theme.colorScheme.iconShare),
             const SizedBox(width: 18),
             Text(
               '${L10n.of(context).inviteContact} 🔥',
-              style: TextStyle(color: theme.colorScheme.clientChooserShareTextColor),
+              style: TextStyle(
+                  color: theme.colorScheme.clientChooserShareTextColor),
             ),
           ],
         ),
@@ -359,14 +365,18 @@ class ClientChooserButton extends StatelessWidget {
 
         case SettingsAction.store:
           await launchUrl(
-            Uri.parse('https://www.radiohemp.com/store/'),
+            Uri.parse(
+              dotenv.env['STORE_ICON_LINK']!,
+            ),
             mode: LaunchMode.externalApplication,
           );
           break;
 
-         case SettingsAction.home:
+        case SettingsAction.home:
           await launchUrl(
-            Uri.parse('https://nexojornal.com.br/'),
+            Uri.parse(
+              dotenv.env['HOME_ICON_LINK']!,
+            ),
             mode: LaunchMode.externalApplication,
           );
           break;
@@ -374,7 +384,7 @@ class ClientChooserButton extends StatelessWidget {
         case SettingsAction.course:
           await launchUrl(
             Uri.parse(
-              'https://pp.nexojornal.com.br/',
+              dotenv.env['COURSE_ICON_LINK']!,
             ),
             mode: LaunchMode.externalApplication,
           );
@@ -382,7 +392,9 @@ class ClientChooserButton extends StatelessWidget {
 
         case SettingsAction.podcasts:
           await launchUrl(
-            Uri.parse('https://www.radiohemp.com/podcast/'),
+            Uri.parse(
+              dotenv.env['PODCASTS_ICON_LINK']!,
+            ),
             mode: LaunchMode.externalApplication,
           );
           break;

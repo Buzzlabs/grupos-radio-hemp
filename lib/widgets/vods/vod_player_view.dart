@@ -1,8 +1,8 @@
 import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
-
 
 class VodPlayerView extends StatefulWidget {
   final dynamic controller;
@@ -69,8 +69,6 @@ class _VodPlayerViewState extends State<VodPlayerView> {
                 ),
               ),
               const SizedBox(height: 12),
-          
-              
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -97,58 +95,71 @@ class _VodPlayerViewState extends State<VodPlayerView> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Row(children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3,),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.vodCardDateChipColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        widget.date,
-                        style: TextStyle(
-                          color: theme.colorScheme.vodCardTextColor,
-                          fontSize: 13,
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.vodCardDateChipColor,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          widget.date,
+                          style: TextStyle(
+                            color: theme.colorScheme.vodCardTextColor,
+                            fontSize: 13,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3,),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.vodCardCategoryChipColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        widget.category,
-                        style: TextStyle(
-                          color: theme.colorScheme.vodCardTextColor,
-                          fontSize: 12,
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.vodCardCategoryChipColor,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          widget.category,
+                          style: TextStyle(
+                            color: theme.colorScheme.vodCardTextColor,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
-                    ),
-                    const Spacer(),
-                    IconButton(
-                      onPressed: () {
-                        final roomId = GoRouterState.of(context)
-                            .pathParameters['roomid'];
-          
-                        final shareLink =
-                            'https://grupos.radiohemp.com/#/rooms/$roomId/vod/${widget.id}';
-                        Clipboard.setData(ClipboardData(text: shareLink));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Link copiado!', style: TextStyle(color: Theme.of(context).colorScheme.normalSnackBarTextColor),)),
-                        );
-                      },
-                      icon: Icon(
-                        Icons.share,
-                        size: 18,
-                        color: theme.colorScheme.vodCardIconColor,
+                      const Spacer(),
+                      IconButton(
+                        onPressed: () {
+                          final roomId = GoRouterState.of(context)
+                              .pathParameters['roomid'];
+                          final baseUrl = dotenv.env['BASE_URL']!;
+                          final shareLink =
+                              '$baseUrl/#/rooms/$roomId/vod/${widget.id}';
+                          Clipboard.setData(ClipboardData(text: shareLink));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text(
+                              'Link copiado!',
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .normalSnackBarTextColor),
+                            )),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.share,
+                          size: 18,
+                          color: theme.colorScheme.vodCardIconColor,
+                        ),
                       ),
-                    ),
-                  ],),
+                    ],
+                  ),
                   const SizedBox(height: 12),
                   GestureDetector(
                     onTap: () {

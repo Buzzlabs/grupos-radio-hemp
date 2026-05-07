@@ -1,5 +1,6 @@
 import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluffychat/l10n/l10n.dart';
 import 'package:fluffychat/utils/platform_infos.dart';
@@ -15,7 +16,9 @@ class MoreLoginMenuButton extends StatelessWidget {
   });
 
   Future<void> _handleAction(
-      BuildContext context, MoreLoginActions action,) async {
+    BuildContext context,
+    MoreLoginActions action,
+  ) async {
     switch (action) {
       case MoreLoginActions.about:
         PlatformInfos.showAboutInfo(context);
@@ -23,7 +26,9 @@ class MoreLoginMenuButton extends StatelessWidget {
 
       case MoreLoginActions.store:
         await launchUrl(
-          Uri.parse('https://www.radiohemp.com/store/'),
+          Uri.parse(
+            dotenv.env['STORE_ICON_LINK']!,
+          ),
           mode: LaunchMode.externalApplication,
         );
         break;
@@ -31,7 +36,7 @@ class MoreLoginMenuButton extends StatelessWidget {
       case MoreLoginActions.course:
         await launchUrl(
           Uri.parse(
-            'https://pp.nexojornal.com.br/',
+            dotenv.env['COURSE_ICON_LINK']!,
           ),
           mode: LaunchMode.externalApplication,
         );
@@ -39,7 +44,9 @@ class MoreLoginMenuButton extends StatelessWidget {
 
       case MoreLoginActions.podcasts:
         await launchUrl(
-          Uri.parse('https://www.radiohemp.com/podcast/'),
+          Uri.parse(
+            dotenv.env['PODCASTS_ICON_LINK']!,
+          ),
           mode: LaunchMode.externalApplication,
         );
         break;
@@ -65,8 +72,10 @@ class MoreLoginMenuButton extends StatelessWidget {
                 //   width: 30,
                 // ),
                 const SizedBox(width: 18),
-                Text(L10n.of(context).menuStore, style: TextStyle(color: theme.colorScheme.loginMenuTextColor),
-),
+                Text(
+                  L10n.of(context).menuStore,
+                  style: TextStyle(color: theme.colorScheme.loginMenuTextColor),
+                ),
               ],
             ),
           ),
@@ -80,8 +89,10 @@ class MoreLoginMenuButton extends StatelessWidget {
                 //   width: 30,
                 // ),
                 const SizedBox(width: 18),
-                Text(L10n.of(context).menuCourse, style: TextStyle(color: theme.colorScheme.loginMenuTextColor),
-),
+                Text(
+                  L10n.of(context).menuCourse,
+                  style: TextStyle(color: theme.colorScheme.loginMenuTextColor),
+                ),
               ],
             ),
           ),
@@ -89,14 +100,16 @@ class MoreLoginMenuButton extends StatelessWidget {
             value: MoreLoginActions.podcasts,
             child: Row(
               children: [
-                 theme.colorScheme.menuIconPodcast,
+                theme.colorScheme.menuIconPodcast,
                 // SvgPicture.asset(
                 //   'assets/icons/podcast.svg',
                 //   width: 30,
                 // ),
                 const SizedBox(width: 18),
-                Text(L10n.of(context).menuPodcasts, style: TextStyle(color: theme.colorScheme.loginMenuTextColor),
-),
+                Text(
+                  L10n.of(context).menuPodcasts,
+                  style: TextStyle(color: theme.colorScheme.loginMenuTextColor),
+                ),
               ],
             ),
           ),
@@ -105,12 +118,13 @@ class MoreLoginMenuButton extends StatelessWidget {
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(3),
-                  child: Theme.of(context).colorScheme.menuIconInfo
-                ),
+                    padding: const EdgeInsets.all(3),
+                    child: Theme.of(context).colorScheme.menuIconInfo),
                 const SizedBox(width: 12),
-                Text(L10n.of(context).about,style: TextStyle(color: theme.colorScheme.loginMenuTextColor),
-),
+                Text(
+                  L10n.of(context).about,
+                  style: TextStyle(color: theme.colorScheme.loginMenuTextColor),
+                ),
               ],
             ),
           ),

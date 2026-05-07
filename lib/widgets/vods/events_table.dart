@@ -35,7 +35,7 @@ class _EventsTableState extends State<EventsTable> {
   List<Events> allEvents = [];
 
   // Future<void> _fetchEvents() async {
-  //   final baseUrl = 'http://localhost:3333';
+  //   final baseUrl = dotenv.env['BACKEND_GET_EVENTS_URL']!;
   //   final url = Uri.parse('$baseUrl/api/calendar/events');
 
   //   try {
@@ -105,7 +105,7 @@ class _EventsTableState extends State<EventsTable> {
   }
 
   // Future<void> _fetchEvents() async {
-  //   final baseUrl = 'http://localhost:3333';
+  //   final baseUrl = dotenv.env['BACKEND_GET_EVENTS_URL']!;
   //   final url = Uri.parse('$baseUrl/api/calendar/events');
 
   //   try {

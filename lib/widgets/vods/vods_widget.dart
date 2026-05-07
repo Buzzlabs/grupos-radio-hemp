@@ -61,91 +61,90 @@ class _VodsWidgetState extends State<VodsWidget> {
   }
 
   Future<void> _fetchLives({bool append = false}) async {
-  if (isLoading) return;
-  setState(() => isLoading = true);
+    if (isLoading) return;
+    setState(() => isLoading = true);
 
-  await Future.delayed(const Duration(milliseconds: 600)); 
+    await Future.delayed(const Duration(milliseconds: 600));
 
-  try {
-    const int totalPagesMock = 3;
-    lastPage = totalPagesMock;
+    try {
+      const int totalPagesMock = 3;
+      lastPage = totalPagesMock;
 
-    final List<Map<String, dynamic>> mockData = List.generate(10, (index) {
-      final int idNumber = ((currentPage - 1) * 10) + index + 1;
+      final List<Map<String, dynamic>> mockData = List.generate(10, (index) {
+        final int idNumber = ((currentPage - 1) * 10) + index + 1;
 
-      return {
-        "id": idNumber,
-        "title": idNumber % 2 == 0 ? "Main Channel" : "Podcast #$idNumber",
-        "recordingStartedAt": "2026-02-${(idNumber % 28) + 1}T20:00:00",
-        "isLive": idNumber % 3 == 0,
-        "recordedRelativeTime": "há ${idNumber} dias",
-        "latestThumbnail": "https://via.placeholder.com/300",
-        "avatarUrl": null,
-        "masterPlaylistUrl": "https://test-stream-$idNumber.m3u8",
-      };
-    });
+        return {
+          "id": idNumber,
+          "title": idNumber % 2 == 0 ? "Main Channel" : "Podcast #$idNumber",
+          "recordingStartedAt": "2026-02-${(idNumber % 28) + 1}T20:00:00",
+          "isLive": idNumber % 3 == 0,
+          "recordedRelativeTime": "há ${idNumber} dias",
+          "latestThumbnail": "https://via.placeholder.com/300",
+          "avatarUrl": null,
+          "masterPlaylistUrl": "https://test-stream-$idNumber.m3u8",
+        };
+      });
 
-    final List<LiveShow> fetchedLives = mockData.map<LiveShow>((map) {
-      String title = map['title'] ?? 'Sem título';
+      final List<LiveShow> fetchedLives = mockData.map<LiveShow>((map) {
+        String title = map['title'] ?? 'Sem título';
 
-      final startedAtRaw = map['recordingStartedAt'];
-      DateTime? startedAt;
+        final startedAtRaw = map['recordingStartedAt'];
+        DateTime? startedAt;
 
-      if (startedAtRaw != null) {
-        startedAt = DateTime.tryParse(startedAtRaw);
+        if (startedAtRaw != null) {
+          startedAt = DateTime.tryParse(startedAtRaw);
+        }
+
+        if (title == 'Main Channel' && startedAt != null) {
+          final formatted = '${startedAt.day.toString().padLeft(2, '0')}/'
+              '${startedAt.month.toString().padLeft(2, '0')}/'
+              '${startedAt.year.toString().substring(2)}';
+
+          title = 'Live $formatted';
+        }
+
+        return LiveShow(
+          id: map['id'].toString(),
+          title: title,
+          category: map['isLive'] == true ? 'Ao vivo' : 'Gravação',
+          date: map['recordedRelativeTime'] ?? '',
+          startedAt: map['recordingStartedAt'] ?? '',
+          thumbnailUrl: map['latestThumbnail'] ?? '',
+          avatarUrl: map['avatarUrl'] ?? 'assets/logo_single_comfundo.png',
+          videoUrl: map['masterPlaylistUrl'] ?? '',
+          isLive: map['isLive'] ?? false,
+        );
+      }).toList();
+
+      if (append) {
+        allLives.addAll(fetchedLives);
+      } else {
+        allLives = fetchedLives;
       }
 
-      if (title == 'Main Channel' && startedAt != null) {
-        final formatted =
-            '${startedAt.day.toString().padLeft(2, '0')}/'
-            '${startedAt.month.toString().padLeft(2, '0')}/'
-            '${startedAt.year.toString().substring(2)}';
+      loadedCount = filteredLives.length;
 
-        title = 'Live $formatted';
-      }
-
-      return LiveShow(
-        id: map['id'].toString(),
-        title: title,
-        category: map['isLive'] == true ? 'Ao vivo' : 'Gravação',
-        date: map['recordedRelativeTime'] ?? '',
-        startedAt: map['recordingStartedAt'] ?? '',
-        thumbnailUrl: map['latestThumbnail'] ?? '',
-        avatarUrl: map['avatarUrl'] ?? 'assets/logo_single_comfundo.png',
-        videoUrl: map['masterPlaylistUrl'] ?? '',
-        isLive: map['isLive'] ?? false,
-      );
-    }).toList();
-
-    if (append) {
-      allLives.addAll(fetchedLives);
-    } else {
-      allLives = fetchedLives;
+      setState(() {
+        _applyFilter();
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
     }
 
-    loadedCount = filteredLives.length;
-
-    setState(() {
-      _applyFilter();
-      isLoading = false;
-    });
-  } catch (e) {
-    setState(() => isLoading = false);
+    if (widget.filter.isNotEmpty &&
+        filteredLives.length < visibleCount &&
+        currentPage < lastPage) {
+      currentPage++;
+      _fetchLives(append: true);
+    }
   }
-
-  if (widget.filter.isNotEmpty &&
-      filteredLives.length < visibleCount &&
-      currentPage < lastPage) {
-    currentPage++;
-    _fetchLives(append: true);
-  }
-}
 
   // Future<void> _fetchLives({bool append = false}) async {
   //   if (isLoading) return;
   //   setState(() => isLoading = true);
 
-  //   final baseUrl = 'http://localhost:3333';
+  //   final baseUrl = dotenv.env['BACKEND_GET_VODS_URL']!;
   //   final url = Uri.parse(
   //       '$baseUrl/dashboard/api/streams/vods?page=$currentPage&limit=10');
 
@@ -168,7 +167,6 @@ class _VodsWidgetState extends State<VodsWidget> {
   //        if (startedAtRaw != null) {
   //         startedAt = DateTime.tryParse(startedAtRaw);
   //       }
-        
   //       if (title == 'Main Channel' && startedAt != null) {
   //         final formatted =
   //             '${startedAt.day.toString().padLeft(2, '0')}/${startedAt.month.toString().padLeft(2, '0')}/${startedAt.year.toString().substring(2)}';
@@ -214,14 +212,17 @@ class _VodsWidgetState extends State<VodsWidget> {
 
   bool _applyFilter() {
     filteredLives = allLives
-        .where((live) =>
-            live.title.toLowerCase().contains(widget.filter.toLowerCase()),)
+        .where(
+          (live) =>
+              live.title.toLowerCase().contains(widget.filter.toLowerCase()),
+        )
         .toList();
     return filteredLives.length >= visibleCount;
   }
 
   void _showMore() {
-    if (widget.onShowMorePressed != null && widget.initialVisibleCount == visibleCount) {
+    if (widget.onShowMorePressed != null &&
+        widget.initialVisibleCount == visibleCount) {
       widget.onShowMorePressed!.call();
     }
     final remainingVisible = loadedCount - visibleCount;
@@ -270,9 +271,9 @@ class _VodsWidgetState extends State<VodsWidget> {
                 Row(
                   children: [
                     const SizedBox(width: 10),
-                    IconButton(   
-                    icon: const Icon(Icons.arrow_back),
-                    color: theme.colorScheme.vodsBackButtonColor,
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      color: theme.colorScheme.vodsBackButtonColor,
                       onPressed: () {
                         setState(() {
                           currentPage = 1;
@@ -283,7 +284,6 @@ class _VodsWidgetState extends State<VodsWidget> {
                         _fetchLives();
                         widget.onBackPressed?.call();
                       },
-                      
                     ),
                   ],
                 ),
@@ -365,8 +365,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                   child: Container(
                     height: 1,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
-                    color:
-                        theme.colorScheme.vodsShowMoreColor.withOpacity(0.6),
+                    color: theme.colorScheme.vodsShowMoreColor.withOpacity(0.6),
                   ),
                 ),
                 TextButton(
@@ -390,8 +389,7 @@ class _VodsWidgetState extends State<VodsWidget> {
                   child: Container(
                     height: 1,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
-                    color:
-                        theme.colorScheme.vodsShowMoreColor.withOpacity(0.6),
+                    color: theme.colorScheme.vodsShowMoreColor.withOpacity(0.6),
                   ),
                 ),
               ],
