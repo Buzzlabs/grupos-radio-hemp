@@ -66,7 +66,7 @@ class _ScreenVodState extends State<ScreenVod> {
   }
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     if (_loading) {
       return const Scaffold(
@@ -97,7 +97,10 @@ class _ScreenVodState extends State<ScreenVod> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: IconButton(
-                          icon: Icon(Icons.arrow_back, color: theme.colorScheme.vodCardBackgroundColor,),
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: theme.colorScheme.vodCardIconColor,
+                          ),
                           onPressed: () {
                             final router = GoRouter.of(context);
                             if (router.canPop()) {
@@ -154,7 +157,11 @@ class _ScreenVodState extends State<ScreenVod> {
                             top: 8,
                             left: 0,
                             child: IconButton(
-                              icon: Icon(Icons.arrow_back, color: theme.colorScheme.vodScreenBackButtonColor,),
+                              icon: Icon(
+                                Icons.arrow_back,
+                                color:
+                                    theme.colorScheme.vodScreenBackButtonColor,
+                              ),
                               onPressed: () {
                                 final router = GoRouter.of(context);
                                 if (router.canPop()) {

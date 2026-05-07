@@ -328,26 +328,30 @@ extension ColorId on ColorScheme {
       ];
   Color get scaffoldBorderColor => primary;
 
-  // chatlist 
-  // discover 
+  // chatlist
+  // discover
   Color get chatlistDiscoverTextColor => tertiary;
   Color get chatlistDiscoverNotingFoundTextColor => onSecondaryContainer;
   Color get chatlistDiscoverRoomTileGroupNameTextColor => tertiary;
   Color get chatlistDiscoverRoomTilePriceDescriptionTextColor => tertiary;
-  Color get chatlistDiscoverRoomTileBackgroundColor => secondary.withValues(alpha: 0.4);
-  Color get chatlistDiscoverRoomTileDescriptionTextColor => onSecondaryContainer;
+  Color get chatlistDiscoverRoomTileBackgroundColor =>
+      secondary.withValues(alpha: 0.4);
+  Color get chatlistDiscoverRoomTileDescriptionTextColor =>
+      onSecondaryContainer;
   Color get chatlistDiscoverRoomButtonTextColor => tertiary;
   Color get chatlistDiscoverRoomAccessButtonColor => secondary;
   Color get chatlistDiscoverRoomButtonColor => primary.withValues(alpha: 0.6);
 
-  
   Color get chatlistDiscoverBundleTileGroupNameTextColor => tertiary;
   Color get chatlistDiscoverBundleTilePriceDescriptionTextColor => tertiary;
-  Color get chatlistDiscoverBundleTileBackgroundColor => Color.fromARGB(255, 109, 100, 209).withValues(alpha: 0.4);
-  Color get chatlistDiscoverBundleTileDescriptionTextColor => onSecondaryContainer;
+  Color get chatlistDiscoverBundleTileBackgroundColor =>
+      Color.fromARGB(255, 109, 100, 209).withValues(alpha: 0.4);
+  Color get chatlistDiscoverBundleTileDescriptionTextColor =>
+      onSecondaryContainer;
   Color get chatlistDiscoverBundleMenuItemTextColor => tertiary;
   Color get chatlistDiscoverBundleButtonTextColor => tertiary;
-  Color get chatlistDiscoverBundleAccessButtonColor => Color.fromARGB(255, 109, 100, 209);
+  Color get chatlistDiscoverBundleAccessButtonColor =>
+      Color.fromARGB(255, 109, 100, 209);
   Color get chatlistDiscoverBundleButtonColor => primary.withValues(alpha: 0.6);
 
   // new private chat
@@ -610,6 +614,12 @@ extension ColorId on ColorScheme {
   Color get vodCardIconColor => tertiary;
   Color get vodCardDateChipColor => secondary.withOpacity(0.2);
   Color get vodCardCategoryChipColor => primary.withOpacity(0.2);
+
+  // future events table
+  Color get eventsTableBackgroundColor => surface;
+  Color get eventsTableTextColor => tertiary;
+  Color get eventsTableTodayEventColor => primary;
+  Color get eventsTableOtherDayEventColor => secondary;
 
   // vod screen
   Color get vodScreenBackButtonColor => tertiary;

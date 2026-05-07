@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
@@ -64,51 +65,44 @@ class _EventsTableState extends State<EventsTable> {
   //   }
   // }
   Future<void> _fetchEvents() async {
-  await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300));
 
-  try {
-    final mockResponse = {
-      "items": [
-        {
-          "summary": "Live Especial",
-          "start": {
-            "dateTime": "2026-02-15T20:00:00"
-          }
-        },
-        {
-          "summary": "Podcast Semanal",
-          "start": {
-            "dateTime": "2026-02-16T18:00:00"
-          }
-        },
-        {
-          "summary": "Evento Presencial",
-          "start": {
-            "dateTime": "2026-02-20T19:30:00"
-          }
-        },
-      ]
-    };
+    try {
+      final mockResponse = {
+        "items": [
+          {
+            "summary": "Live Especial",
+            "start": {"dateTime": "2026-02-15T20:00:00"}
+          },
+          {
+            "summary": "Podcast Semanal",
+            "start": {"dateTime": "2026-02-16T18:00:00"}
+          },
+          {
+            "summary": "Evento Presencial",
+            "start": {"dateTime": "2026-02-20T19:30:00"}
+          },
+        ]
+      };
 
-    final items = mockResponse['items'];
+      final items = mockResponse['items'];
 
-    if (items == null || items is! List) {
-      throw Exception('Campo "items" ausente ou inválido');
+      if (items == null || items is! List) {
+        throw Exception('Campo "items" ausente ou inválido');
+      }
+
+      final fetchedEvents =
+          items.map<Events>((dynamic item) => Events.fromJson(item)).toList();
+
+      if (!mounted) return;
+
+      setState(() {
+        allEvents = fetchedEvents;
+      });
+    } catch (e, st) {
+      debugPrint('Erro mock ao buscar eventos: $e\n$st');
     }
-
-    final fetchedEvents =
-        items.map<Events>((dynamic item) => Events.fromJson(item)).toList();
-
-    if (!mounted) return;
-
-    setState(() {
-      allEvents = fetchedEvents;
-    });
-  } catch (e, st) {
-    debugPrint('Erro mock ao buscar eventos: $e\n$st');
   }
-}
-
 
   // Future<void> _fetchEvents() async {
   //   final baseUrl = 'http://localhost:3333';
@@ -152,9 +146,9 @@ class _EventsTableState extends State<EventsTable> {
     final tomorrow = today.add(const Duration(days: 1));
 
     if (_isSameDay(eventDate, today)) {
-      return theme.colorScheme.primary;
+      return theme.colorScheme.eventsTableTodayEventColor;
     } else {
-      return theme.colorScheme.secondary;
+      return theme.colorScheme.eventsTableOtherDayEventColor;
     }
   }
 
@@ -184,7 +178,7 @@ class _EventsTableState extends State<EventsTable> {
 
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: theme.colorScheme.eventsTableBackgroundColor,
         borderRadius: BorderRadius.circular(20),
       ),
       padding: const EdgeInsets.all(16),
@@ -226,7 +220,9 @@ class _EventsTableState extends State<EventsTable> {
                                       ),
                                     ),
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 10,),
+                                      horizontal: 12,
+                                      vertical: 10,
+                                    ),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -245,8 +241,9 @@ class _EventsTableState extends State<EventsTable> {
                                             event.summary,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style:  TextStyle(
-                                              color: theme.colorScheme.tertiary,
+                                            style: TextStyle(
+                                              color: theme.colorScheme
+                                                  .eventsTableTextColor,
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500,
                                             ),
